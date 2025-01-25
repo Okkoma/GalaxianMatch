@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r11">
+    <folder id="0">
+        <file id="0" name="ciel.png" width="200" height="164" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="1" name="vaisseau.png" width="181" height="94" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="2" name="fumee1.png" width="51" height="199" pivot_x="0.5" pivot_y="0"/>
+        <file id="3" name="fumee2.png" width="128" height="226" pivot_x="0.5" pivot_y="0"/>
+        <file id="4" name="fumee3.png" width="112" height="254" pivot_x="0.5" pivot_y="0"/>
+        <file id="5" name="fumee4.png" width="90" height="254" pivot_x="0.5" pivot_y="0"/>
+        <file id="6" name="fumee5.png" width="88" height="228" pivot_x="0.5" pivot_y="0"/>
+        <file id="7" name="nuage1.png" width="176" height="97" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="8" name="nuage2.png" width="94" height="43" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="9" name="nuage3.png" width="272" height="122" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="10" name="nuage4.png" width="337" height="101" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="11" name="nuage5.png" width="204" height="102" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="12" name="sketch03_fond2.png" width="1971" height="643" pivot_x="0.5" pivot_y="0"/>
+        <file id="13" name="sable.png" width="1845" height="582" pivot_x="0.5" pivot_y="0.5"/>
+    </folder>
+    <folder id="1">
+        <file id="0" name="sketch03_capri1.png" width="656" height="761" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="1" name="sketch03_capri2.png" width="497" height="775" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="2" name="sketch03_caprichevelure.png" width="321" height="184" pivot_x="0" pivot_y="0.5"/>
+        <file id="3" name="sketch03_singe.png" width="462" height="391" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="4" name="sketch03_singeombre.png" width="245" height="158" pivot_x="0.871235" pivot_y="0.657813"/>
+        <file id="5" name="sketch03_corne1.png" width="59" height="601" pivot_x="0.5" pivot_y="0"/>
+        <file id="6" name="sketch03_corne2.png" width="53" height="595" pivot_x="0.5" pivot_y="0"/>
+    </folder>
+    <entity id="0" name="entity">
+        <obj_info name="bone_000" type="bone" w="268.263" h="10"/>
+        <obj_info name="bone_001" type="bone" w="237.076" h="10"/>
+        <obj_info name="bone_002" type="bone" w="379.381" h="10"/>
+        <obj_info name="bone_003" type="bone" w="260.002" h="10"/>
+        <animation id="0" name="playscene" length="3000" interval="100" looping="false">
+            <mainline>
+                <key id="0">
+                    <bone_ref id="0" timeline="17" key="0"/>
+                    <bone_ref id="1" timeline="18" key="0"/>
+                    <bone_ref id="2" timeline="19" key="0"/>
+                    <bone_ref id="3" timeline="20" key="0"/>
+                    <object_ref id="0" timeline="1" key="0" z_index="0"/>
+                    <object_ref id="1" parent="3" timeline="11" key="0" z_index="1"/>
+                    <object_ref id="2" parent="3" timeline="10" key="0" z_index="2"/>
+                    <object_ref id="3" parent="3" timeline="9" key="0" z_index="3"/>
+                    <object_ref id="4" parent="3" timeline="8" key="0" z_index="4"/>
+                    <object_ref id="5" timeline="21" key="0" z_index="5"/>
+                    <object_ref id="6" timeline="0" key="0" z_index="6"/>
+                    <object_ref id="7" timeline="2" key="0" z_index="7"/>
+                    <object_ref id="8" parent="1" timeline="4" key="0" z_index="8"/>
+                    <object_ref id="9" parent="1" timeline="3" key="0" z_index="9"/>
+                    <object_ref id="10" parent="2" timeline="7" key="0" z_index="10"/>
+                    <object_ref id="11" timeline="22" key="0" z_index="11"/>
+                    <object_ref id="12" timeline="23" key="0" z_index="12"/>
+                    <object_ref id="13" timeline="5" key="0" z_index="13"/>
+                    <object_ref id="14" timeline="6" key="0" z_index="14"/>
+                    <object_ref id="15" parent="0" timeline="13" key="0" z_index="15"/>
+                    <object_ref id="16" parent="0" timeline="12" key="0" z_index="16"/>
+                    <object_ref id="17" parent="0" timeline="14" key="0" z_index="17"/>
+                    <object_ref id="18" parent="0" timeline="15" key="0" z_index="18"/>
+                    <object_ref id="19" parent="0" timeline="16" key="0" z_index="19"/>
+                    <object_ref id="20" timeline="24" key="0" z_index="20"/>
+                </key>
+                <key id="1" time="3000">
+                    <bone_ref id="0" timeline="17" key="1"/>
+                    <bone_ref id="1" timeline="18" key="1"/>
+                    <bone_ref id="2" timeline="19" key="1"/>
+                    <bone_ref id="3" timeline="20" key="1"/>
+                    <object_ref id="0" timeline="1" key="1" z_index="0"/>
+                    <object_ref id="1" parent="3" timeline="11" key="1" z_index="1"/>
+                    <object_ref id="2" parent="3" timeline="10" key="1" z_index="2"/>
+                    <object_ref id="3" parent="3" timeline="9" key="1" z_index="3"/>
+                    <object_ref id="4" parent="3" timeline="8" key="1" z_index="4"/>
+                    <object_ref id="5" timeline="21" key="1" z_index="5"/>
+                    <object_ref id="6" timeline="0" key="1" z_index="6"/>
+                    <object_ref id="7" timeline="2" key="1" z_index="7"/>
+                    <object_ref id="8" parent="1" timeline="4" key="1" z_index="8"/>
+                    <object_ref id="9" parent="1" timeline="3" key="1" z_index="9"/>
+                    <object_ref id="10" parent="2" timeline="7" key="1" z_index="10"/>
+                    <object_ref id="11" timeline="22" key="1" z_index="11"/>
+                    <object_ref id="12" timeline="23" key="1" z_index="12"/>
+                    <object_ref id="13" timeline="5" key="1" z_index="13"/>
+                    <object_ref id="14" timeline="6" key="1" z_index="14"/>
+                    <object_ref id="15" parent="0" timeline="13" key="1" z_index="15"/>
+                    <object_ref id="16" parent="0" timeline="12" key="1" z_index="16"/>
+                    <object_ref id="17" parent="0" timeline="14" key="1" z_index="17"/>
+                    <object_ref id="18" parent="0" timeline="15" key="1" z_index="18"/>
+                    <object_ref id="19" parent="0" timeline="16" key="1" z_index="19"/>
+                    <object_ref id="20" timeline="24" key="1" z_index="20"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="sketch03_fond2">
+                <key id="0" spin="0">
+                    <object folder="0" file="12" x="-97.822649" y="-317.888889" angle="0" scale_x="1.11341"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <object folder="0" file="12" x="-97.822649" y="-317.888889" angle="0" scale_x="1.11341"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="ciel">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" y="395.967742" angle="0" scale_x="11.920398" scale_y="10.792541"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <object folder="0" file="0" y="395.967742" angle="0" scale_x="11.920398" scale_y="10.792541"/>
+                </key>
+            </timeline>
+            <timeline id="2" name="vaisseau">
+                <key id="0" spin="0">
+                    <object folder="0" file="1" x="252.379032" y="237.5" angle="0"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <object folder="0" file="1" x="252.379032" y="237.5" angle="0"/>
+                </key>
+            </timeline>
+            <timeline id="3" name="sketch03_singe">
+                <key id="0" spin="0">
+                    <object folder="1" file="3" x="153.786771" y="59.292033" angle="271.450216"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <object folder="1" file="3" x="153.786771" y="59.292033" angle="271.450216"/>
+                </key>
+            </timeline>
+            <timeline id="4" name="sketch03_singeombre">
+                <key id="0">
+                    <object folder="1" file="4" x="-41.034648" y="26.334663" angle="271.450216" scale_x="2" scale_y="2"/>
+                </key>
+                <key id="1" time="3000" spin="-1">
+                    <object folder="1" file="4" x="-41.034648" y="26.334663" angle="278.254411" scale_x="2" scale_y="2"/>
+                </key>
+            </timeline>
+            <timeline id="5" name="sketch03_capri1">
+                <key id="0" spin="0">
+                    <object folder="1" file="0" x="-537.583333" y="-484.416667" angle="0" scale_x="1.499493" scale_y="1.499493"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <object folder="1" file="0" x="-537.583333" y="-484.416667" angle="0" scale_x="1.499493" scale_y="1.499493"/>
+                </key>
+            </timeline>
+            <timeline id="6" name="sketch03_capri2">
+                <key id="0" spin="0">
+                    <object folder="1" file="1" x="-548.166667" y="-316.416667" angle="0" scale_x="2" scale_y="2"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <object folder="1" file="1" x="-548.166667" y="-316.416667" angle="0" scale_x="2" scale_y="2"/>
+                </key>
+            </timeline>
+            <timeline id="7" name="sketch03_caprichevelure">
+                <key id="0" spin="-1">
+                    <object folder="1" file="2" x="-108.696337" y="-9.213251" angle="2.568274" scale_x="2" scale_y="2"/>
+                </key>
+                <key id="1" time="3000">
+                    <object folder="1" file="2" x="-108.696337" y="-9.213251" angle="356.55945" scale_x="2.14413" scale_y="1.903567"/>
+                </key>
+            </timeline>
+            <timeline id="8" name="nuage1">
+                <key id="0" spin="0">
+                    <object folder="0" file="7" x="383.345883" y="45.859276" angle="179.779633"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <object folder="0" file="7" x="383.345883" y="45.859276" angle="179.779633"/>
+                </key>
+            </timeline>
+            <timeline id="9" name="nuage2">
+                <key id="0" spin="0">
+                    <object folder="0" file="8" x="37.37889" y="11.77299" angle="179.779633"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <object folder="0" file="8" x="37.37889" y="11.77299" angle="179.779633"/>
+                </key>
+            </timeline>
+            <timeline id="10" name="nuage3">
+                <key id="0" spin="0">
+                    <object folder="0" file="9" x="-1024.52832" y="167.941707" angle="179.779633"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <object folder="0" file="9" x="-1024.52832" y="167.941707" angle="179.779633"/>
+                </key>
+            </timeline>
+            <timeline id="11" name="nuage5">
+                <key id="0" spin="0">
+                    <object folder="0" file="11" x="-460.81454" y="-59.228088" angle="179.779633"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <object folder="0" file="11" x="-460.81454" y="-59.228088" angle="179.779633"/>
+                </key>
+            </timeline>
+            <timeline id="12" name="fumee1">
+                <key id="0" spin="0">
+                    <object folder="0" file="2" x="1.658425" y="4.051246" angle="280.807595"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <object folder="0" file="2" x="1.658425" y="4.051246" angle="280.807595"/>
+                </key>
+            </timeline>
+            <timeline id="13" name="fumee2">
+                <key id="0" spin="0">
+                    <object folder="0" file="3" x="-5.41576" y="-13.650649" angle="275.561828"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <object folder="0" file="3" x="-5.41576" y="-13.650649" angle="275.561828"/>
+                </key>
+            </timeline>
+            <timeline id="14" name="fumee3">
+                <key id="0" spin="0">
+                    <object folder="0" file="4" x="12.241699" y="-14.917682" angle="275.561828"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <object folder="0" file="4" x="12.241699" y="-14.917682" angle="275.561828"/>
+                </key>
+            </timeline>
+            <timeline id="15" name="fumee4">
+                <key id="0">
+                    <object folder="0" file="5" x="9.934307" y="-22.306536" angle="275.561828"/>
+                </key>
+                <key id="1" time="3000" spin="-1">
+                    <object folder="0" file="5" x="8.729507" y="-14.681809" angle="279.380991"/>
+                </key>
+            </timeline>
+            <timeline id="16" name="fumee5">
+                <key id="0" spin="0">
+                    <object folder="0" file="6" x="-2.374899" y="-6.730107" angle="266.150574" scale_x="0.390039"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <object folder="0" file="6" x="-2.374899" y="-6.730107" angle="266.150574" scale_x="0.613863"/>
+                </key>
+            </timeline>
+            <timeline id="17" obj="0" name="bone_000" object_type="bone">
+                <key id="0" spin="0">
+                    <bone x="265" y="233" angle="83.682268" scale_x="4.181628" scale_y="3.699066"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <bone x="265" y="233" angle="83.682268" scale_x="4.364246" scale_y="5.677452"/>
+                </key>
+            </timeline>
+            <timeline id="18" obj="1" name="bone_001" object_type="bone">
+                <key id="0" spin="-1">
+                    <bone x="303" y="-360" angle="88.549784"/>
+                </key>
+                <key id="1" time="3000">
+                    <bone x="303" y="-360" angle="84.780735" scale_x="1.02435"/>
+                </key>
+            </timeline>
+            <timeline id="19" obj="2" name="bone_002" object_type="bone">
+                <key id="0">
+                    <bone x="-433" y="-537" angle="357.431726"/>
+                </key>
+                <key id="1" time="3000" spin="-1">
+                    <bone x="-433" y="-537" angle="0.498212" scale_x="1.230257"/>
+                </key>
+            </timeline>
+            <timeline id="20" obj="3" name="bone_003" object_type="bone">
+                <key id="0" spin="0">
+                    <bone x="-321" y="389" angle="180.220367"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <bone x="-625" y="379" angle="180.220367" scale_x="1.083701"/>
+                </key>
+            </timeline>
+            <timeline id="21" name="sable">
+                <key id="0" spin="0">
+                    <object folder="0" file="13" y="-570.585412" angle="0" scale_x="1.294691" scale_y="1.617132"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <object folder="0" file="13" y="-570.585412" angle="0" scale_x="1.294691" scale_y="1.617132"/>
+                </key>
+            </timeline>
+            <timeline id="22" name="sketch03_corne2">
+                <key id="0" spin="0">
+                    <object folder="1" file="6" x="-269" y="14" angle="348.340707" scale_x="1.592593" scale_y="1.592593"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <object folder="1" file="6" x="-269" y="14" angle="348.340707" scale_x="1.592593" scale_y="1.592593"/>
+                </key>
+            </timeline>
+            <timeline id="23" name="sketch03_corne1">
+                <key id="0" spin="0">
+                    <object folder="1" file="5" x="-186" y="-29" angle="342.181111" scale_x="1.677203" scale_y="1.677203"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <object folder="1" file="5" x="-186" y="-29" angle="342.181111" scale_x="1.677203" scale_y="1.677203"/>
+                </key>
+            </timeline>
+            <timeline id="24" name="sketch03_fond_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="12" x="1820.510684" y="-318.68599" angle="0" scale_x="-0.867658"/>
+                </key>
+                <key id="1" time="3000" spin="0">
+                    <object folder="0" file="12" x="1820.510684" y="-318.68599" angle="0" scale_x="-0.867658"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

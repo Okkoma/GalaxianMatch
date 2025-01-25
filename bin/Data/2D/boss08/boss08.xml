@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="boss08.webp">
+	<SubTexture name="boss08_asteroid" x="1" y="1" width="209" height="217" />
+	<SubTexture name="boss08_bulbe" x="346" y="181" width="66" height="63" />
+	<SubTexture name="boss08_epine1" x="575" y="120" width="33" height="28" />
+	<SubTexture name="boss08_epine2" x="575" y="149" width="32" height="27" />
+	<SubTexture name="boss08_feuille1" x="941" y="76" width="66" height="24" />
+	<SubTexture name="boss08_feuille2" x="471" y="219" width="48" height="24" />
+	<SubTexture name="boss08_feuille3" x="520" y="219" width="52" height="21" />
+	<SubTexture name="boss08_fleur_centre" x="834" y="1" width="106" height="101" />
+	<SubTexture name="boss08_fleur_couronne" x="211" y="1" width="202" height="179" />
+	<SubTexture name="boss08_petale" x="125" y="219" width="45" height="54" />
+	<SubTexture name="boss08_petalehalo" x="752" y="108" width="59" height="70" />
+	<SubTexture name="boss08_rock01" x="922" y="103" width="88" height="91" />
+	<SubTexture name="boss08_rock01b" x="834" y="103" width="87" height="91" />
+	<SubTexture name="boss08_rock02" x="211" y="181" width="134" height="79" />
+	<SubTexture name="boss08_rock02b" x="876" y="195" width="110" height="78" />
+	<SubTexture name="boss08_rock03" x="616" y="112" width="135" height="90" />
+	<SubTexture name="boss08_rock03b" x="752" y="195" width="123" height="79" />
+	<SubTexture name="boss08_rock04" x="729" y="1" width="104" height="106" />
+	<SubTexture name="boss08_rock04b" x="616" y="1" width="112" height="110" />
+	<SubTexture name="boss08_rock05" x="414" y="133" width="160" height="85" />
+	<SubTexture name="boss08_rock05b" x="575" y="203" width="153" height="79" />
+	<SubTexture name="boss08_rock06" x="414" y="1" width="107" height="131" />
+	<SubTexture name="boss08_rock06b" x="522" y="1" width="93" height="118" />
+	<SubTexture name="boss08_tige1" x="471" y="244" width="58" height="23" />
+	<SubTexture name="boss08_tige2" x="413" y="219" width="57" height="28" />
+	<SubTexture name="boss08_tronc1" x="941" y="1" width="71" height="74" />
+	<SubTexture name="boss08_tronc2" x="1" y="219" width="123" height="72" />
+</TextureAtlas>

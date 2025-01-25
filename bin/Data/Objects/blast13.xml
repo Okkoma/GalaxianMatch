@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<node>
+	<attribute name="Is Enabled" value="true" />
+	<attribute name="Name" value="Blast" />
+	<attribute name="Position" value="0.0 0.0 0" />
+	<attribute name="Rotation" value="1 0 0 0" />
+	<attribute name="Scale" value="1 1 1" />
+	<attribute name="Variables">
+	</attribute>
+	<component type="AnimatedSprite2D">
+		<attribute name="Layer" value="550" />
+		<attribute name="Animation Set" value="AnimationSet2D;2D/boss13/boss13_blast.scml" />
+		<attribute name="Animation" value="use" />
+	</component>
+	<component type="RigidBody2D">
+		<attribute name="Body Type" value="Dynamic" />
+	</component>
+	<component type="CollisionCircle2D">
+		<attribute name="Radius" value="0.2" />
+		<attribute name="Center" value="0 0" />
+		<attribute name="Trigger" value="true" />
+	</component>
+	<component type="BlastLogic">
+		<attribute name="Steering Mode" value="Missile" />
+		<attribute name="Auto Targeting" value="true" />
+		<attribute name="Life Time" value="3" />
+		<attribute name="Speed" value="1" />
+		<attribute name="Die On Contact" value="false" />
+		<attribute name="Effects On Die" value="0 1" />
+	</component>
+</node>

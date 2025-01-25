@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r11">
+    <folder id="0">
+        <file id="0" name="buttonhalo.png" width="215" height="64" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="1" name="yellowbutton-off.png" width="200" height="64" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="2" name="yellowbutton-on.png" width="200" height="64" pivot_x="0.5" pivot_y="0.5"/>
+    </folder>
+    <entity id="0" name="Button">
+        <animation id="0" name="unselected" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="0" z_index="1"/>
+                </key>
+                <key id="1" time="2495">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="1" z_index="1"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="yellowbutton-off">
+                <key id="0" spin="0">
+                    <object folder="0" file="1" angle="0"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="buttonhalo">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="-1" angle="0" scale_x="1.055556" a="0.45522"/>
+                </key>
+                <key id="1" time="2495" spin="0">
+                    <object folder="0" file="0" x="-1" angle="0" scale_x="0.699474" scale_y="0.578704" a="0.45522"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="selected" length="1000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="0" z_index="1"/>
+                </key>
+                <key id="1" time="499">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="1" z_index="1"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="yellowbutton-on">
+                <key id="0" spin="0">
+                    <object folder="0" file="2" angle="0"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="buttonhalo">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" y="-1" angle="0" scale_x="1.185185" scale_y="1.25"/>
+                </key>
+                <key id="1" time="499" spin="0">
+                    <object folder="0" file="0" angle="0" scale_x="1.203704" scale_y="1.40625" a="0.53731"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

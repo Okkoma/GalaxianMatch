@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="constellation01-03.webp">
+	<SubTexture name="ciel2" x="1421" y="924" width="256" height="246" />
+	<SubTexture name="sketch04_eclairage1" x="712" y="984" width="425" height="149" />
+	<SubTexture name="sketch04_eclairage2" x="1678" y="924" width="337" height="90" />
+	<SubTexture name="sketch04_eclairage3" x="1678" y="1015" width="302" height="85" />
+	<SubTexture name="sketch04_fond" x="1" y="1" width="1419" height="982" />
+	<SubTexture name="sketch04_halo1" x="1421" y="349" width="116" height="85" />
+	<SubTexture name="sketch04_halo2" x="1801" y="610" width="228" height="141" />
+	<SubTexture name="sketch04_ombrage1" x="1421" y="656" width="379" height="267" />
+	<SubTexture name="sketch04_ombrage2" x="1593" y="345" width="186" height="310" />
+	<SubTexture name="sketch04_ombrage3" x="1421" y="1" width="171" height="347" />
+	<SubTexture name="sketch04_rayonteleporteur1" x="1593" y="1" width="202" height="343" />
+	<SubTexture name="sketch04_rayonteleporteur2" x="1796" y="1" width="202" height="343" />
+	<SubTexture name="sketch04_rayonteleporteursol" x="1421" y="435" width="166" height="78" />
+	<SubTexture name="sketch04_singe" x="1780" y="345" width="252" height="264" />
+	<SubTexture name="sketch04_vaisseau" x="1" y="984" width="710" height="406" />
+</TextureAtlas>

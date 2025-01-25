@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="boss04.webp">
+	<SubTexture name="boss4_missile1" x="486" y="238" width="12" height="29" />
+	<SubTexture name="boss4_missile2" x="486" y="268" width="12" height="29" />
+	<SubTexture name="boss4_missile3" x="499" y="238" width="12" height="29" />
+	<SubTexture name="boss4_missileexhaust1" x="1" y="269" width="33" height="28" />
+	<SubTexture name="boss4_missileexhaust2" x="462" y="238" width="23" height="41" />
+	<SubTexture name="boss4_missileexhaust3" x="443" y="280" width="28" height="19" />
+	<SubTexture name="boss4_missileexhaust4" x="35" y="269" width="22" height="20" />
+	<SubTexture name="boss4_missileflame" x="499" y="268" width="8" height="21" />
+</TextureAtlas>

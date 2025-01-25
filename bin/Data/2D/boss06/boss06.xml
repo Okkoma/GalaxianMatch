@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="boss06.webp">
+	<SubTexture name="boss06_corpse" x="57" y="1" width="125" height="160" />
+	<SubTexture name="boss06_dent1" x="258" y="118" width="40" height="31" />
+	<SubTexture name="boss06_dent2" x="380" y="117" width="25" height="35" />
+	<SubTexture name="boss06_dent3" x="258" y="150" width="33" height="31" />
+	<SubTexture name="boss06_dent4" x="380" y="153" width="37" height="23" />
+	<SubTexture name="boss06_eye" x="488" y="1" width="21" height="23" />
+	<SubTexture name="boss06_head1" x="183" y="1" width="118" height="116" />
+	<SubTexture name="boss06_head2" x="421" y="109" width="77" height="78" />
+	<SubTexture name="boss06_head3" x="302" y="117" width="77" height="78" />
+	<SubTexture name="boss06_mouth" x="57" y="162" width="57" height="54" />
+	<SubTexture name="boss06_partcorpse" x="302" y="1" width="118" height="115" />
+	<SubTexture name="boss06_sting" x="421" y="1" width="66" height="107" />
+	<SubTexture name="boss06_tail1" x="1" y="1" width="55" height="162" />
+	<SubTexture name="boss06_tail2" x="183" y="118" width="74" height="69" />
+</TextureAtlas>

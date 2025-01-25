@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="boss04.webp">
+	<SubTexture name="boss4_bras" x="1" y="210" width="62" height="58" />
+	<SubTexture name="boss4_canon" x="193" y="148" width="79" height="95" />
+	<SubTexture name="boss4_caps1" x="324" y="138" width="137" height="136" />
+	<SubTexture name="boss4_caps2" x="324" y="1" width="137" height="136" />
+	<SubTexture name="boss4_capshub1" x="193" y="244" width="85" height="94" />
+	<SubTexture name="boss4_capshub2" x="357" y="275" width="85" height="68" />
+	<SubTexture name="boss4_crete1" x="462" y="1" width="24" height="128" />
+	<SubTexture name="boss4_crete2" x="487" y="1" width="22" height="126" />
+	<SubTexture name="boss4_dirt" x="71" y="148" width="121" height="135" />
+	<SubTexture name="boss4_insideman" x="273" y="145" width="48" height="67" />
+	<SubTexture name="boss4_main" x="279" y="275" width="77" height="91" />
+	<SubTexture name="boss4_mainpower1" x="279" y="213" width="39" height="41" />
+	<SubTexture name="boss4_mainpower2" x="1" y="151" width="61" height="58" />
+	<SubTexture name="boss4_mainpower3" x="115" y="1" width="146" height="146" />
+	<SubTexture name="boss4_smoke1" x="262" y="1" width="61" height="143" />
+	<SubTexture name="boss4_smoke2" x="71" y="1" width="43" height="146" />
+	<SubTexture name="boss4_smoke3" x="1" y="1" width="69" height="149" />
+</TextureAtlas>

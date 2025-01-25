@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<node>
+	<attribute name="Is Enabled" value="true" />
+	<attribute name="Name" value="GameTutorialFrame" />
+	<attribute name="Tags" />
+	<attribute name="Position" value="0 0 0" />
+	<attribute name="Rotation" value="1 0 0 0" />
+	<attribute name="Scale" value="0.75 0.75 1" />
+	<attribute name="Variables" />
+	<node>
+		<attribute name="Is Enabled" value="true" />
+		<attribute name="Name" value="Frame" />
+		<attribute name="Tags" />
+		<attribute name="Position" value="0 0 0" />
+		<attribute name="Rotation" value="1 0 0 0" />
+		<attribute name="Scale" value="1 1 1" />
+		<attribute name="Variables" />
+		<component type="StaticSprite2D">
+			<attribute name="Sprite" value="Sprite2D;UI/Tutorial/middleframe.png" />
+			<attribute name="Alpha" value="0.9" />
+		</component>
+	</node>
+	<node>
+		<attribute name="Is Enabled" value="true" />
+		<attribute name="Name" value="Content" />
+		<attribute name="Position" value="0 0 0" />
+		<attribute name="Rotation" value="1 0 0 0" />
+		<attribute name="Scale" value="1 1 1" />
+		<attribute name="Variables" />
+		<component type="AnimatedSprite2D">
+			<attribute name="Animation Set" value="AnimationSet2D;UI/Tutorial/Powers.scml" />
+			<attribute name="Animation" value="NoPower" />
+		</component>
+	</node>
+</node>

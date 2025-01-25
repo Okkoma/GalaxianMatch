@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<node>
+	<attribute name="Is Enabled" value="true" />
+	<attribute name="Name" value="Ground3" />
+	<attribute name="Position" value="0.0 0.0 0" />
+	<attribute name="Rotation" value="1 0 0 0" />
+	<attribute name="Scale" value="0.5 0.5 1" />
+	<attribute name="Variables" />
+	<component type="StaticSprite2D">
+		<attribute name="Sprite" value="SpriteSheet2D;2D/tiles.xml@ground3" />
+		<attribute name="Layer" value="101" />
+		<attribute name="Alpha" value="1" />
+	</component>
+	<component type="RigidBody2D">
+		<attribute name="Body Type" value="Static" />
+	</component>
+	<component type="CollisionCircle2D">
+		<attribute name="Radius" value="0.6" />
+		<attribute name="Center" value="0.0 0.0" />
+		<attribute name="Category Bits" value="1" />		
+	</component>
+</node>

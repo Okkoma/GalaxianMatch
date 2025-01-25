@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<node>
+	<attribute name="Is Enabled" value="false" />
+	<attribute name="Name" value="GainFrame" />
+	<attribute name="Position" value="0 0 0" />
+	<attribute name="Rotation" value="1 0 0 0" />
+	<attribute name="Scale" value="1 1 1" />
+	<attribute name="Variables" />
+	<node>
+		<attribute name="Is Enabled" value="true" />
+		<attribute name="Name" value="Frame" />
+		<attribute name="Position" value="0 0 0" />
+		<attribute name="Rotation" value="1 0 0 0" />
+		<attribute name="Scale" value="0.9 1 1" />
+		<attribute name="Variables" />
+		<component type="StaticSprite2D">
+			<attribute name="Sprite" value="Sprite2D;UI/InteractiveFrame/bigframe01.png" />
+		</component>
+	</node>
+	<node>
+		<attribute name="Is Enabled" value="true" />
+		<attribute name="Name" value="Message" />
+		<attribute name="Tags" />
+		<attribute name="Position" value="0 0.5 0" />
+		<attribute name="Rotation" value="1 0 0 0" />
+		<attribute name="Scale" value="1 1 1" />
+		<attribute name="Variables" />
+		<component type="Text3D">
+			<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+			<attribute name="Font Size" value="40" />
+			<attribute name="Text" value="title" />
+			<attribute name="Text Alignment" value="Center" />
+			<attribute name="Can Be Occluded" value="false" />
+			<attribute name="Face Camera Mode" value="Direction" />
+			<attribute name="Width" value="400" />
+			<attribute name="Horiz Alignment" value="Center" />
+			<attribute name="Vert Alignment" value="Center" />
+			<attribute name="Color" value="1 0 0 1" />
+			<attribute name="Top Left Color" value="1 0 0 1" />
+			<attribute name="Top Right Color" value="1 1 0 1" />
+			<attribute name="Bottom Left Color" value="1 1 0 1" />
+			<attribute name="Bottom Right Color" value="1 1 0 1" />
+			<attribute name="Text Effect" value="Shadow" />
+			<attribute name="Shadow Offset" value="0 5" />
+			<attribute name="Stroke Thickness" value="0" />
+			<attribute name="Effect Color" value="0.5 0.2 0 1" />
+			<attribute name="Effect Depth Bias" value="1" />
+			<attribute name="Auto Localizable" value="true" />
+			<attribute name="Word Wrap" value="true" />
+		</component>
+	</node>
+	<node>
+		<attribute name="Is Enabled" value="true" />
+		<attribute name="Name" value="Interactive_OK" />
+		<attribute name="Position" value="1 -1.7 0" />
+		<attribute name="Rotation" value="1 0 0 0" />
+		<attribute name="Scale" value="1 1 1" />
+		<attribute name="Variables" />
+		<node>
+    		<attribute name="Position" value="0 0.1 0" />
+		    <attribute name="Scale" value="1.5 1.5 1" />		    
+		    <component type="Text3D"> 
+		        <attribute name="Font" value="Font;Fonts/BlueHighway.sdf" />
+		        <attribute name="Font Size" value="50" />
+		        <attribute name="Text" value="yes" />		       
+		        <attribute name="Vert Alignment" value="Center" />
+		        <attribute name="Horiz Alignment" value="Center" />
+		        <attribute name="Text Alignment" value="Center" />
+		        <attribute name="Auto Localizable" value="true" />
+		        <attribute name="Width" value="350" />
+		        <attribute name="Word Wrap" value="true" />
+		        <attribute name="Color" value="1 1 1 1" />
+            </component>
+        </node>			
+		<component type="AnimatedSprite2D">
+			<attribute name="Entity" value="Button" />
+			<attribute name="Animation Set" value="AnimationSet2D;UI/InteractiveFrame/YellowButton.scml" />
+			<attribute name="Animation" value="unselected" />
+		</component>
+		<component type="RigidBody2D" />
+		<component type="CollisionBox2D">
+		    <attribute name="Category Bits" value="8" />
+		    <attribute name="Mask Bits" value="8" />		
+			<attribute name="Size" value="1.5 0.5" />
+			<attribute name="Center" value="0 0" />
+		</component>
+	</node>
+	<node>
+		<attribute name="Is Enabled" value="true" />
+		<attribute name="Name" value="Interactive_NOK" />
+		<attribute name="Position" value="-1 -1.7 0" />
+		<attribute name="Rotation" value="1 0 0 0" />
+		<attribute name="Scale" value="1 1 1" />
+		<attribute name="Variables" />
+		<node>
+    		<attribute name="Position" value="0 0.1 0" />
+		    <attribute name="Scale" value="1.5 1.5 1" />		    
+		    <component type="Text3D"> 
+		        <attribute name="Font" value="Font;Fonts/BlueHighway.sdf" />
+		        <attribute name="Font Size" value="50" />
+		        <attribute name="Text" value="no" />		       
+		        <attribute name="Vert Alignment" value="Center" />
+		        <attribute name="Horiz Alignment" value="Center" />
+		        <attribute name="Text Alignment" value="Center" />
+		        <attribute name="Auto Localizable" value="true" />
+		        <attribute name="Width" value="350" />
+		        <attribute name="Word Wrap" value="true" />
+		        <attribute name="Color" value="1 1 1 1" />
+            </component>
+        </node>			
+		<component type="AnimatedSprite2D">
+			<attribute name="Entity" value="Button" />
+			<attribute name="Animation Set" value="AnimationSet2D;UI/InteractiveFrame/YellowButton.scml" />
+			<attribute name="Animation" value="unselected" />
+		</component>
+		<component type="RigidBody2D" />
+		<component type="CollisionBox2D">
+		    <attribute name="Category Bits" value="8" />
+		    <attribute name="Mask Bits" value="8" />		
+			<attribute name="Size" value="1.5 0.5" />
+			<attribute name="Center" value="0 0" />
+		</component>
+	</node>
+</node>

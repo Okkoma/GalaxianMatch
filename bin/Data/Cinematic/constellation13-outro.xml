@@ -1,0 +1,367 @@
+<?xml version="1.0"?>
+<node>
+	<attribute name="Is Enabled" value="true" />
+	<attribute name="Name" value="LocalScene" />
+	<attribute name="Tags" />
+	<attribute name="Position" value="0 0 0" />
+	<attribute name="Rotation" value="1 0 0 0" />
+	<attribute name="Scale" value="1 1 1" />
+	<attribute name="Variables" />
+	<node>
+    	<attribute name="Name" value="credits1" />
+		<attribute name="Is Enabled" value="false" />
+		<attribute name="Position" value="0 0 0" />
+		<attribute name="Rotation" value="1 0 0 0" />
+		<attribute name="Scale" value="1 1 1" />
+        <attribute name="Variables">
+            <variant name="GOA_Duration" hash="-992211654" type="float" value="3" />
+        </attribute>
+		<component type="StaticSprite2D">
+			<attribute name="Layer" value="1000" />
+			<attribute name="Sprite" value="Sprite2D;Cinematic/Sketchs/sketch05.webp" />
+			<attribute name="Color" value="1 1 1 0.8" />
+		</component>
+	    <node>
+		    <attribute name="Is Enabled" value="true" />
+		    <attribute name="Position" value="0 3 0" />
+		    <attribute name="Rotation" value="1 0 0 0" />
+		    <attribute name="Scale" value="1 1 1" />
+		    <attribute name="Variables" />
+		    <component type="Text3D"> 
+		        <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		        <attribute name="Font Size" value="50" />
+		        <attribute name="Text" value="Game Design and Development" />		       
+		        <attribute name="Vert Alignment" value="Center" />
+		        <attribute name="Horiz Alignment" value="Center" />
+		        <attribute name="Text Alignment" value="Center" />
+		        <attribute name="Width" value="1000" />
+		        <attribute name="Word Wrap" value="true" />
+		        <attribute name="Color" value="1 1 1 1" />
+            </component>    
+	    </node>
+	    <node>
+		    <attribute name="Is Enabled" value="true" />
+		    <attribute name="Position" value="0 -1 0" />
+		    <attribute name="Rotation" value="1 0 0 0" />
+		    <attribute name="Scale" value="1 1 1" />
+		    <attribute name="Variables" />
+		    <component type="Text3D"> 
+		        <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		        <attribute name="Font Size" value="60" />
+		        <attribute name="Text" value="Christophe Ville" />		       
+		        <attribute name="Vert Alignment" value="Center" />
+		        <attribute name="Horiz Alignment" value="Center" />
+		        <attribute name="Text Alignment" value="Center" />
+		        <attribute name="Width" value="1000" />
+		        <attribute name="Word Wrap" value="true" />
+		        <attribute name="Color" value="1 1 1 1" />
+            </component>    
+	    </node>		    		
+	</node>
+	<node>
+    	<attribute name="Name" value="credits2" />
+		<attribute name="Is Enabled" value="false" />
+		<attribute name="Position" value="0 0 0" />
+		<attribute name="Rotation" value="1 0 0 0" />
+		<attribute name="Scale" value="1 1 1" />
+        <attribute name="Variables">
+            <variant name="GOA_Duration" hash="-992211654" type="float" value="2" />
+        </attribute>
+		<component type="StaticSprite2D">
+			<attribute name="Layer" value="1000" />
+			<attribute name="Sprite" value="Sprite2D;Cinematic/Sketchs/sketch15.webp" />
+			<attribute name="Color" value="1 1 1 0.8" />
+		</component>
+	    <node>
+		    <attribute name="Is Enabled" value="true" />
+		    <attribute name="Position" value="0 3 0" />
+		    <attribute name="Rotation" value="1 0 0 0" />
+		    <attribute name="Scale" value="1 1 1" />
+		    <attribute name="Variables" />
+		    <component type="Text3D"> 
+		        <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		        <attribute name="Font Size" value="50" />
+		        <attribute name="Text" value="Graphics" />		       
+		        <attribute name="Vert Alignment" value="Center" />
+		        <attribute name="Horiz Alignment" value="Center" />
+		        <attribute name="Text Alignment" value="Center" />
+		        <attribute name="Width" value="1000" />
+		        <attribute name="Word Wrap" value="true" />
+		        <attribute name="Color" value="1 1 1 1" />
+            </component>    
+	    </node>
+	    <node>
+		    <attribute name="Is Enabled" value="true" />
+		    <attribute name="Position" value="0 0 0" />
+		    <attribute name="Rotation" value="1 0 0 0" />
+		    <attribute name="Scale" value="1 1 1" />
+		    <attribute name="Variables" />
+		    <component type="Text3D"> 
+		        <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		        <attribute name="Font Size" value="60" />
+		        <attribute name="Text" value="Christophe Ville" />		       
+		        <attribute name="Vert Alignment" value="Center" />
+		        <attribute name="Horiz Alignment" value="Center" />
+		        <attribute name="Text Alignment" value="Center" />
+		        <attribute name="Width" value="1000" />
+		        <attribute name="Word Wrap" value="true" />
+		        <attribute name="Color" value="1 1 1 1" />
+            </component>    
+	    </node>				
+	</node>	
+	<node>
+    	<attribute name="Name" value="credits3" />
+		<attribute name="Is Enabled" value="false" />
+		<attribute name="Position" value="0 0 0" />
+		<attribute name="Rotation" value="1 0 0 0" />
+		<attribute name="Scale" value="1 1 1" />
+        <attribute name="Variables">
+            <variant name="GOA_Duration" hash="-992211654" type="float" value="2" />
+        </attribute>
+		<component type="StaticSprite2D">
+			<attribute name="Layer" value="1000" />
+			<attribute name="Sprite" value="Sprite2D;Cinematic/Sketchs/sketch18.webp" />
+			<attribute name="Color" value="1 1 1 0.8" />
+		</component>
+	    <node>
+		    <attribute name="Is Enabled" value="true" />
+		    <attribute name="Position" value="0 3 0" />
+		    <attribute name="Rotation" value="1 0 0 0" />
+		    <attribute name="Scale" value="1 1 1" />
+		    <attribute name="Variables" />
+		    <component type="Text3D"> 
+		        <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		        <attribute name="Font Size" value="50" />
+		        <attribute name="Text" value="Sounds and Musics" />		       
+		        <attribute name="Vert Alignment" value="Center" />
+		        <attribute name="Horiz Alignment" value="Center" />
+		        <attribute name="Text Alignment" value="Center" />
+		        <attribute name="Width" value="1000" />
+		        <attribute name="Word Wrap" value="true" />
+		        <attribute name="Color" value="1 1 1 1" />
+            </component>    
+	    </node>
+	    <node>
+		    <attribute name="Is Enabled" value="true" />
+		    <attribute name="Position" value="0 -1 0" />
+		    <attribute name="Rotation" value="1 0 0 0" />
+		    <attribute name="Scale" value="1 1 1" />
+		    <attribute name="Variables" />
+		    <component type="Text3D"> 
+		        <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		        <attribute name="Font Size" value="60" />
+		        <attribute name="Text" value="Christophe Ville  Dorian Ville" />		       
+		        <attribute name="Vert Alignment" value="Center" />
+		        <attribute name="Horiz Alignment" value="Center" />
+		        <attribute name="Text Alignment" value="Center" />
+		        <attribute name="Width" value="800" />
+		        <attribute name="Word Wrap" value="true" />
+		        <attribute name="Color" value="1 1 1 1" />
+            </component>    
+	    </node>				
+	</node>
+	<node>
+    	<attribute name="Name" value="credits4" />
+		<attribute name="Is Enabled" value="false" />
+		<attribute name="Position" value="0 0 0" />
+		<attribute name="Rotation" value="1 0 0 0" />
+		<attribute name="Scale" value="1 1 1" />
+        <attribute name="Variables">
+            <variant name="GOA_Duration" hash="-992211654" type="float" value="2" />
+        </attribute>
+		<component type="StaticSprite2D">
+			<attribute name="Layer" value="1000" />
+			<attribute name="Sprite" value="Sprite2D;Cinematic/Sketchs/sketch35.webp" />
+			<attribute name="Color" value="1 1 1 0.8" />
+		</component>
+	    <node>
+		    <attribute name="Is Enabled" value="true" />
+		    <attribute name="Position" value="0 3 0" />
+		    <attribute name="Rotation" value="1 0 0 0" />
+		    <attribute name="Scale" value="1 1 1" />
+		    <attribute name="Variables" />
+		    <component type="Text3D"> 
+		        <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		        <attribute name="Font Size" value="50" />
+		        <attribute name="Text" value="Tests" />		       
+		        <attribute name="Vert Alignment" value="Center" />
+		        <attribute name="Horiz Alignment" value="Center" />
+		        <attribute name="Text Alignment" value="Center" />
+		        <attribute name="Width" value="1000" />
+		        <attribute name="Word Wrap" value="true" />
+		        <attribute name="Color" value="1 1 1 1" />
+            </component>    
+	    </node>
+	    <node>
+		    <attribute name="Is Enabled" value="true" />
+		    <attribute name="Position" value="0 0 0" />
+		    <attribute name="Rotation" value="1 0 0 0" />
+		    <attribute name="Scale" value="1 1 1" />
+		    <attribute name="Variables" />
+		    <component type="Text3D"> 
+		        <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		        <attribute name="Font Size" value="60" />
+		        <attribute name="Text" value="Dorian Ville Leo Ville" />		       
+		        <attribute name="Vert Alignment" value="Center" />
+		        <attribute name="Horiz Alignment" value="Center" />
+		        <attribute name="Text Alignment" value="Center" />
+		        <attribute name="Width" value="500" />
+		        <attribute name="Word Wrap" value="true" />
+		        <attribute name="Color" value="1 1 1 1" />
+            </component>    
+	    </node>				
+	</node>
+	<node>
+    	<attribute name="Name" value="credits5" />
+		<attribute name="Is Enabled" value="false" />
+		<attribute name="Position" value="0 0 0" />
+		<attribute name="Rotation" value="1 0 0 0" />
+		<attribute name="Scale" value="1 1 1" />
+        <attribute name="Variables">
+            <variant name="GOA_Duration" hash="-992211654" type="float" value="2" />
+        </attribute>
+		<component type="StaticSprite2D">
+			<attribute name="Layer" value="1000" />
+			<attribute name="Sprite" value="Sprite2D;Cinematic/Sketchs/sketch45.webp" />
+			<attribute name="Color" value="1 1 1 0.8" />
+		</component>
+	    <node>
+		    <attribute name="Is Enabled" value="true" />
+		    <attribute name="Position" value="0 3 0" />
+		    <attribute name="Rotation" value="1 0 0 0" />
+		    <attribute name="Scale" value="1 1 1" />
+		    <attribute name="Variables" />
+		    <component type="Text3D"> 
+		        <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		        <attribute name="Font Size" value="50" />
+		        <attribute name="Text" value="Engine" />		       
+		        <attribute name="Vert Alignment" value="Center" />
+		        <attribute name="Horiz Alignment" value="Center" />
+		        <attribute name="Text Alignment" value="Center" />
+		        <attribute name="Width" value="1000" />
+		        <attribute name="Word Wrap" value="true" />
+		        <attribute name="Color" value="1 1 1 1" />
+            </component>    
+	    </node>
+	    <node>
+		    <attribute name="Is Enabled" value="true" />
+		    <attribute name="Position" value="0 -1 0" />
+		    <attribute name="Rotation" value="1 0 0 0" />
+		    <attribute name="Scale" value="1 1 1" />
+		    <attribute name="Variables" />
+		    <component type="Text3D"> 
+		        <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		        <attribute name="Font Size" value="60" />
+		        <attribute name="Text" value="Urho3D" />		       
+		        <attribute name="Vert Alignment" value="Center" />
+		        <attribute name="Horiz Alignment" value="Center" />
+		        <attribute name="Text Alignment" value="Center" />
+		        <attribute name="Width" value="1000" />
+		        <attribute name="Word Wrap" value="true" />
+		        <attribute name="Color" value="1 1 1 1" />
+            </component>    
+	    </node>				
+	</node>
+	<node>
+    	<attribute name="Name" value="credits6" />
+		<attribute name="Is Enabled" value="false" />
+		<attribute name="Position" value="0 0 0" />
+		<attribute name="Rotation" value="1 0 0 0" />
+		<attribute name="Scale" value="1 1 1" />
+        <attribute name="Variables">
+            <variant name="GOA_Duration" hash="-992211654" type="float" value="2" />
+        </attribute>
+		<component type="StaticSprite2D">
+			<attribute name="Layer" value="1000" />
+			<attribute name="Sprite" value="Sprite2D;Cinematic/Sketchs/sketch75.webp" />
+			<attribute name="Color" value="1 1 1 0.8" />
+		</component>
+	    <node>
+		    <attribute name="Is Enabled" value="true" />
+		    <attribute name="Position" value="0 3 0" />
+		    <attribute name="Rotation" value="1 0 0 0" />
+		    <attribute name="Scale" value="1 1 1" />
+		    <attribute name="Variables" />
+		    <component type="Text3D"> 
+		        <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		        <attribute name="Font Size" value="50" />
+		        <attribute name="Text" value="Animation Software" />		       
+		        <attribute name="Vert Alignment" value="Center" />
+		        <attribute name="Horiz Alignment" value="Center" />
+		        <attribute name="Text Alignment" value="Center" />
+		        <attribute name="Width" value="1000" />
+		        <attribute name="Word Wrap" value="true" />
+		        <attribute name="Color" value="1 1 1 1" />
+            </component>    
+	    </node>
+	    <node>
+		    <attribute name="Is Enabled" value="true" />
+		    <attribute name="Position" value="0 0 0" />
+		    <attribute name="Rotation" value="1 0 0 0" />
+		    <attribute name="Scale" value="1 1 1" />
+		    <attribute name="Variables" />
+		    <component type="Text3D"> 
+		        <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		        <attribute name="Font Size" value="60" />
+		        <attribute name="Text" value="Spriter" />		       
+		        <attribute name="Vert Alignment" value="Center" />
+		        <attribute name="Horiz Alignment" value="Center" />
+		        <attribute name="Text Alignment" value="Center" />
+		        <attribute name="Width" value="1000" />
+		        <attribute name="Word Wrap" value="true" />
+		        <attribute name="Color" value="1 1 1 1" />
+            </component>    
+	    </node>				
+	</node>	
+	<node>
+    	<attribute name="Name" value="credits7" />
+		<attribute name="Is Enabled" value="false" />
+		<attribute name="Position" value="0 0 0" />
+		<attribute name="Rotation" value="1 0 0 0" />
+		<attribute name="Scale" value="1 1 1" />
+        <attribute name="Variables">
+            <variant name="GOA_Duration" hash="-992211654" type="float" value="100" />
+        </attribute>
+		<component type="StaticSprite2D">
+			<attribute name="Layer" value="1000" />
+			<attribute name="Sprite" value="Sprite2D;Cinematic/Sketchs/sketch76.webp" />
+			<attribute name="Color" value="1 1 1 1" />
+		</component>
+	    <node>
+		    <attribute name="Is Enabled" value="true" />
+		    <attribute name="Position" value="0 3 0" />
+		    <attribute name="Rotation" value="1 0 0 0" />
+		    <attribute name="Scale" value="1 1 1" />
+		    <attribute name="Variables" />
+		    <component type="Text3D"> 
+		        <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		        <attribute name="Font Size" value="50" />
+		        <attribute name="Text" value="Special Thanks" />		       
+		        <attribute name="Vert Alignment" value="Center" />
+		        <attribute name="Horiz Alignment" value="Center" />
+		        <attribute name="Text Alignment" value="Center" />
+		        <attribute name="Width" value="1000" />
+		        <attribute name="Word Wrap" value="true" />
+		        <attribute name="Color" value="1 1 1 0.8" />
+            </component>    
+	    </node>
+	    <node>
+		    <attribute name="Is Enabled" value="true" />
+		    <attribute name="Position" value="0 -1 0" />
+		    <attribute name="Rotation" value="1 0 0 0" />
+		    <attribute name="Scale" value="1 1 1" />
+		    <attribute name="Variables" />
+		    <component type="Text3D"> 
+		        <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		        <attribute name="Font Size" value="60" />
+		        <attribute name="Text" value="To my wife and sons" />		       
+		        <attribute name="Vert Alignment" value="Center" />
+		        <attribute name="Horiz Alignment" value="Center" />
+		        <attribute name="Text Alignment" value="Center" />
+		        <attribute name="Width" value="1000" />
+		        <attribute name="Word Wrap" value="true" />
+		        <attribute name="Color" value="1 1 1 1" />
+            </component>    
+	    </node>				
+	</node>		
+</node>

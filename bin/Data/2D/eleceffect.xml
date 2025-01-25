@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="tiles.webp">
+	<SubTexture name="eleceffect01" x="101" y="662" width="89" height="66" />
+	<SubTexture name="eleceffect02" x="947" y="619" width="67" height="80" />
+	<SubTexture name="eleceffect03" x="959" y="443" width="62" height="47" />
+	<SubTexture name="eleceffect04" x="191" y="662" width="65" height="64" />
+	<SubTexture name="eleceffect05" x="302" y="809" width="78" height="41" />
+</TextureAtlas>

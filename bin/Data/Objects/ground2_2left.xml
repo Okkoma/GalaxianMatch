@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<node>
+	<attribute name="Is Enabled" value="true" />
+	<attribute name="Name" value="Ground2_2Left" />
+	<attribute name="Position" value="0.0 0.0 0" />
+	<attribute name="Rotation" value="1 0 0 0" />
+	<attribute name="Scale" value="0.5 0.5 1" />
+	<attribute name="Variables" />
+	<component type="AnimatedSprite2D">		
+		<attribute name="Animation Set" value="AnimationSet2D;2D/tilearrow2.scml" />
+		<attribute name="Entity" value="tilearrow" />
+		<attribute name="Animation" value="anime" />	
+		<attribute name="Layer" value="101" />
+		<attribute name="Alpha" value="1" />
+		<attribute name="Flip X" value="true" />
+	</component>
+	<component type="RigidBody2D">
+		<attribute name="Body Type" value="Static" />
+	</component>
+	<component type="CollisionBox2D">
+		<attribute name="Size" value="1.35 1.35" />
+		<attribute name="Center" value="0.0 0.0" />
+		<attribute name="Category Bits" value="1" />		
+	</component>
+</node>

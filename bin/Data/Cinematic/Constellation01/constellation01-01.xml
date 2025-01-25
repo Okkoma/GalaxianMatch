@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="constellation01-01.webp">
+	<SubTexture name="sketch01_asteroid" x="1866" y="1229" width="105" height="98" />
+	<SubTexture name="sketch01_flammes" x="383" y="1051" width="372" height="289" />
+	<SubTexture name="sketch01_impact1" x="1979" y="589" width="63" height="115" />
+	<SubTexture name="sketch01_impact2" x="1979" y="705" width="57" height="75" />
+	<SubTexture name="sketch01_impact3" x="1997" y="1" width="26" height="70" />
+	<SubTexture name="sketch01_tir1" x="134" y="998" width="134" height="36" />
+	<SubTexture name="sketch01_tir2" x="1" y="1010" width="131" height="33" />
+	<SubTexture name="sketch01_tir3" x="1866" y="1328" width="132" height="32" />
+	<SubTexture name="sketch01_ufo" x="383" y="1341" width="302" height="166" />
+	<SubTexture name="sketch01_vaisseau" x="304" y="611" width="734" height="439" />
+	<SubTexture name="sketch05_asteroid" x="1" y="887" width="132" height="122" />
+	<SubTexture name="sketch05_asteroid-front" x="304" y="1" width="727" height="609" />
+	<SubTexture name="sketch05_capri" x="1032" y="1" width="376" height="593" />
+	<SubTexture name="sketch05_line1" x="686" y="1435" width="279" height="25" />
+	<SubTexture name="sketch05_line2" x="686" y="1487" width="728" height="54" />
+	<SubTexture name="sketch05_line3" x="1578" y="1482" width="435" height="46" />
+	<SubTexture name="sketch05_line4" x="1" y="1409" width="244" height="46" />
+	<SubTexture name="sketch05_line5" x="1866" y="1361" width="162" height="25" />
+	<SubTexture name="sketch05_planete" x="1469" y="589" width="452" height="442" />
+	<SubTexture name="sketch05_pop" x="756" y="1217" width="193" height="115" />
+	<SubTexture name="sketch06_boss" x="1469" y="1032" width="396" height="361" />
+	<SubTexture name="sketch06_capricorne1" x="1409" y="589" width="59" height="464" />
+	<SubTexture name="sketch06_capricorne2" x="1922" y="589" width="56" height="374" />
+	<SubTexture name="sketch06_capricorps" x="1" y="1" width="302" height="683" />
+	<SubTexture name="sketch06_capripatte1" x="756" y="1333" width="267" height="101" />
+	<SubTexture name="sketch06_capripatte2" x="1578" y="1394" width="322" height="87" />
+	<SubTexture name="sketch06_capripatte3" x="1263" y="1394" width="314" height="92" />
+	<SubTexture name="sketch06_capritete" x="1" y="1051" width="381" height="357" />
+	<SubTexture name="sketch06_etoile" x="134" y="887" width="93" height="110" />
+	<SubTexture name="sketch06_etoilehalo" x="1" y="685" width="280" height="201" />
+	<SubTexture name="sketch06_etoilehalo2" x="1024" y="1379" width="238" height="97" />
+	<SubTexture name="sketch06_goutte1" x="1997" y="72" width="28" height="40" />
+	<SubTexture name="sketch06_goutte2" x="1997" y="142" width="39" height="20" />
+	<SubTexture name="sketch06_goutte3" x="1997" y="163" width="31" height="19" />
+	<SubTexture name="sketch06_goutte4" x="2024" y="1" width="22" height="35" />
+	<SubTexture name="sketch06_goutte5" x="1997" y="113" width="43" height="28" />
+	<SubTexture name="sketch06_goutte6" x="1979" y="781" width="53" height="31" />
+	<SubTexture name="sketch06_queue" x="1866" y="1032" width="127" height="196" />
+	<SubTexture name="sketch06_soucoupe1" x="1039" y="595" width="328" height="424" />
+	<SubTexture name="sketch06_soucoupe2" x="756" y="1051" width="183" height="165" />
+	<SubTexture name="sketch07_etoile_halo" x="1039" y="1020" width="366" height="358" />
+	<SubTexture name="sketch07_etoiles" x="1409" y="1" width="587" height="587" />
+</TextureAtlas>

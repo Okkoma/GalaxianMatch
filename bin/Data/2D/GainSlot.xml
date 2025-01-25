@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="tiles.webp">
+	<SubTexture name="bonus2coins" x="1" y="670" width="76" height="52" />
+	<SubTexture name="bonus2moves" x="862" y="756" width="83" height="52" />
+	<SubTexture name="bonus4moves" x="465" y="757" width="83" height="51" />
+	<SubTexture name="slothalo" x="185" y="1" width="159" height="154" />
+	<SubTexture name="slotv1" x="130" y="543" width="129" height="118" />
+</TextureAtlas>

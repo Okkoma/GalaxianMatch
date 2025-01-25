@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r11">
+    <folder id="0">
+        <file id="0" name="companion_touch_frame.png" width="426" height="398" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="1" name="companion_arrow_tl.png" width="207" height="204" pivot_x="0.207729" pivot_y="0.764706"/>
+        <file id="2" name="companion_arrow_br.png" width="206" height="203" pivot_x="0.81068" pivot_y="0.221675"/>
+        <file id="3" name="companion_touch_circle.png" width="153" height="155" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="4" name="companion_touch_empty.png" width="211" height="211" pivot_x="0.5" pivot_y="0.5"/>
+    </folder>
+    <entity id="0" name="cursor_zoom">
+        <animation id="0" name="play" length="800" interval="100">
+            <mainline>
+                <key id="0" curve_type="quartic" c1="0" c2="0" c3="0.800948">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="6" key="0" z_index="1"/>
+                    <object_ref id="2" timeline="4" key="0" z_index="2"/>
+                    <object_ref id="3" timeline="3" key="0" z_index="3"/>
+                    <object_ref id="4" timeline="5" key="0" z_index="4"/>
+                    <object_ref id="5" timeline="1" key="0" z_index="5"/>
+                    <object_ref id="6" timeline="2" key="0" z_index="6"/>
+                </key>
+                <key id="1" time="800">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                    <object_ref id="1" timeline="4" key="1" z_index="1"/>
+                    <object_ref id="2" timeline="6" key="1" z_index="2"/>
+                    <object_ref id="3" timeline="5" key="1" z_index="3"/>
+                    <object_ref id="4" timeline="3" key="1" z_index="4"/>
+                    <object_ref id="5" timeline="1" key="1" z_index="5"/>
+                    <object_ref id="6" timeline="2" key="1" z_index="6"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="companion_touch_frame">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" angle="0" scale_x="0.721311" scale_y="0.746867" a="0.5597"/>
+                </key>
+                <key id="1" time="800" spin="0">
+                    <object folder="0" file="0" angle="0" scale_x="1.114754" scale_y="1.154249" a="0.74627"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="companion_arrow_br">
+                <key id="0" spin="0">
+                    <object folder="0" file="2" x="81" y="-69" angle="0" scale_x="0.5" scale_y="0.5" a="0.50746"/>
+                </key>
+                <key id="1" time="800" spin="0">
+                    <object folder="0" file="2" x="217" y="-195" angle="0"/>
+                </key>
+            </timeline>
+            <timeline id="2" name="companion_arrow_tl">
+                <key id="0" spin="0">
+                    <object folder="0" file="1" x="-75" y="72" angle="0" scale_x="0.5" scale_y="0.5" a="0.50746"/>
+                </key>
+                <key id="1" time="800" spin="0">
+                    <object folder="0" file="1" x="-212" y="205" angle="0"/>
+                </key>
+            </timeline>
+            <timeline id="3" name="companion_touch_circle">
+                <key id="0" spin="0">
+                    <object folder="0" file="3" x="-151" y="141" angle="0" a="0.73134"/>
+                </key>
+                <key id="1" time="800" spin="0">
+                    <object folder="0" file="3" x="-233.768764" y="223.135853" angle="0" scale_x="1.16242" scale_y="1.16242" a="0.26866"/>
+                </key>
+            </timeline>
+            <timeline id="4" name="companion_touch_circle_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="3" x="143" y="-143" angle="0" a="0.73134"/>
+                </key>
+                <key id="1" time="800" spin="0">
+                    <object folder="0" file="3" x="235.805755" y="-219.978417" angle="0" a="0.3209"/>
+                </key>
+            </timeline>
+            <timeline id="5" name="companion_touch_empty">
+                <key id="0" spin="0">
+                    <object folder="0" file="4" x="-150" y="141" angle="0" a="0.5"/>
+                </key>
+                <key id="1" time="800" spin="0">
+                    <object folder="0" file="4" x="-234.177215" y="223.911392" angle="0" scale_x="1.628667" scale_y="1.628667" a="0"/>
+                </key>
+            </timeline>
+            <timeline id="6" name="companion_touch_empty_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="4" x="143.840491" y="-143.773006" angle="0" a="0.5"/>
+                </key>
+                <key id="1" time="800" spin="0">
+                    <object folder="0" file="4" x="235.926822" y="-222.190272" angle="0" scale_x="1.44419" scale_y="1.44419" a="0"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+    <entity id="1" name="cursor_dezoom">
+        <animation id="0" name="play" length="800" interval="100">
+            <mainline>
+                <key id="0" curve_type="quartic" c1="0" c2="0" c3="0.800948">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="6" key="0" z_index="1"/>
+                    <object_ref id="2" timeline="4" key="0" z_index="2"/>
+                    <object_ref id="3" timeline="3" key="0" z_index="3"/>
+                    <object_ref id="4" timeline="5" key="0" z_index="4"/>
+                    <object_ref id="5" timeline="1" key="0" z_index="5"/>
+                    <object_ref id="6" timeline="2" key="0" z_index="6"/>
+                </key>
+                <key id="1" time="800">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                    <object_ref id="1" timeline="4" key="1" z_index="1"/>
+                    <object_ref id="2" timeline="6" key="1" z_index="2"/>
+                    <object_ref id="3" timeline="5" key="1" z_index="3"/>
+                    <object_ref id="4" timeline="3" key="1" z_index="4"/>
+                    <object_ref id="5" timeline="1" key="1" z_index="5"/>
+                    <object_ref id="6" timeline="2" key="1" z_index="6"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="companion_touch_frame">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" angle="0" scale_x="1.114754" scale_y="1.154249" a="0.50746"/>
+                </key>
+                <key id="1" time="800" spin="0">
+                    <object folder="0" file="0" angle="0" scale_x="0.777518" scale_y="0.802005" a="0.74627"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="companion_arrow_br">
+                <key id="0" spin="0">
+                    <object folder="0" file="2" x="-78" y="89" angle="0" a="0.48507"/>
+                </key>
+                <key id="1" time="800" spin="0">
+                    <object folder="0" file="2" x="-14.25" y="24" angle="0" scale_x="0.5" scale_y="0.5"/>
+                </key>
+            </timeline>
+            <timeline id="2" name="companion_arrow_tl">
+                <key id="0" spin="0">
+                    <object folder="0" file="1" x="102" y="-83" angle="357.563352" a="0.5"/>
+                </key>
+                <key id="1" time="800" spin="0">
+                    <object folder="0" file="1" x="19.5" y="-10.5" angle="357.563352" scale_x="0.5" scale_y="0.5"/>
+                </key>
+            </timeline>
+            <timeline id="3" name="companion_touch_circle">
+                <key id="0" spin="0">
+                    <object folder="0" file="3" x="-233.768764" y="223.135853" angle="0" scale_x="1.16242" scale_y="1.16242" a="0.61194"/>
+                </key>
+                <key id="1" time="800" spin="0">
+                    <object folder="0" file="3" x="-147.518764" y="145.635853" angle="0" scale_x="1.16242" scale_y="1.16242" a="0.24627"/>
+                </key>
+            </timeline>
+            <timeline id="4" name="companion_touch_circle_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="3" x="235.805755" y="-219.978417" angle="0" a="0.73881"/>
+                </key>
+                <key id="1" time="800" spin="0">
+                    <object folder="0" file="3" x="153.305755" y="-147.478417" angle="0" a="0.44776"/>
+                </key>
+            </timeline>
+            <timeline id="5" name="companion_touch_empty">
+                <key id="0" spin="0">
+                    <object folder="0" file="4" x="-234.177215" y="223.911392" angle="0" scale_x="1.199785" scale_y="1.225579" a="0.57463"/>
+                </key>
+                <key id="1" time="800" spin="0">
+                    <object folder="0" file="4" x="-147.927215" y="146.411392" angle="0" scale_x="1.6988" scale_y="1.6029" a="0"/>
+                </key>
+            </timeline>
+            <timeline id="6" name="companion_touch_empty_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="4" x="235.926822" y="-222.190272" angle="0" scale_x="1.06437" scale_y="1.017073" a="0.65672"/>
+                </key>
+                <key id="1" time="800" spin="0">
+                    <object folder="0" file="4" x="153.426822" y="-149.690272" angle="0" scale_x="1.466291" scale_y="1.466291" a="0"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+    <entity id="2" name="cursor_arrow_ontop">
+        <animation id="0" name="play" length="700" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="350">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="companion_arrow_tl">
+                <key id="0" spin="0">
+                    <object folder="0" file="1" x="39" y="80" angle="104.489763" scale_x="0.5" scale_y="0.5" a="0.67164"/>
+                </key>
+                <key id="1" time="350" spin="0">
+                    <object folder="0" file="1" x="16" y="13" angle="104.489763" scale_x="0.6" scale_y="0.6" a="0.85075"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+    <entity id="3" name="cursor_arrow_onbottom">
+        <animation id="0" name="play" length="700" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="350">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="companion_arrow_tl">
+                <key id="0" spin="0">
+                    <object folder="0" file="2" x="-39" y="-80" angle="104.489763" scale_x="0.5" scale_y="0.5" a="0.67164"/>
+                </key>
+                <key id="1" time="350" spin="0">
+                    <object folder="0" file="2" x="-20" y="-13" angle="104.489763" scale_x="0.6" scale_y="0.6" a="0.85075"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="boss13.webp">
+	<SubTexture name="boss13_armd" x="928" y="421" width="37" height="87" />
+	<SubTexture name="boss13_armg1" x="36" y="381" width="91" height="59" />
+	<SubTexture name="boss13_armg2" x="866" y="329" width="61" height="100" />
+	<SubTexture name="boss13_blast" x="167" y="381" width="48" height="49" />
+	<SubTexture name="boss13_blasteffect1" x="385" y="626" width="255" height="151" />
+	<SubTexture name="boss13_blasteffect2" x="1" y="1" width="224" height="235" />
+	<SubTexture name="boss13_corpse" x="866" y="1" width="145" height="192" />
+	<SubTexture name="boss13_eyes1" x="902" y="559" width="92" height="49" />
+	<SubTexture name="boss13_eyes2" x="902" y="509" width="97" height="49" />
+	<SubTexture name="boss13_feeteffect" x="1" y="445" width="383" height="206" />
+	<SubTexture name="boss13_footd" x="128" y="381" width="38" height="58" />
+	<SubTexture name="boss13_footg" x="1" y="381" width="34" height="59" />
+	<SubTexture name="boss13_hair" x="1" y="237" width="219" height="143" />
+	<SubTexture name="boss13_head" x="866" y="194" width="123" height="134" />
+	<SubTexture name="boss13_hood1" x="766" y="626" width="169" height="121" />
+	<SubTexture name="boss13_hood2" x="641" y="626" width="124" height="133" />
+	<SubTexture name="boss13_mantle1" x="546" y="223" width="319" height="221" />
+	<SubTexture name="boss13_mantle2" x="385" y="445" width="516" height="180" />
+	<SubTexture name="boss13_mantle3" x="546" y="1" width="319" height="221" />
+	<SubTexture name="boss13_mantleback1" x="226" y="223" width="319" height="221" />
+	<SubTexture name="boss13_mantleback2" x="1" y="778" width="438" height="129" />
+	<SubTexture name="boss13_mantleback3" x="226" y="1" width="319" height="221" />
+	<SubTexture name="boss13_mantlefront" x="1" y="652" width="146" height="49" />
+</TextureAtlas>

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="boss09.webp">
+	<SubTexture name="bigpinkcloud" x="858" y="1" width="441" height="524" />
+	<SubTexture name="bijou" x="1300" y="481" width="415" height="478" />
+	<SubTexture name="bijou2" x="1300" y="1" width="405" height="479" />
+	<SubTexture name="bijou_back" x="858" y="526" width="400" height="462" />
+	<SubTexture name="bijou_halo" x="1" y="1" width="565" height="628" />
+	<SubTexture name="blast" x="1989" y="380" width="48" height="216" />
+	<SubTexture name="blob_cerveau" x="1991" y="744" width="56" height="76" />
+	<SubTexture name="blob_cerveau3" x="763" y="768" width="53" height="72" />
+	<SubTexture name="blob_corps" x="1706" y="1" width="296" height="378" />
+	<SubTexture name="blob_eye" x="1716" y="804" width="61" height="44" />
+	<SubTexture name="blob_eyefond" x="1989" y="597" width="58" height="47" />
+	<SubTexture name="blob_nezcourt" x="735" y="691" width="80" height="76" />
+	<SubTexture name="blob_nezcourt_1" x="1962" y="667" width="80" height="76" />
+	<SubTexture name="blob_nezcourt_2" x="753" y="614" width="80" height="76" />
+	<SubTexture name="blob_nezcourt_3" x="753" y="537" width="80" height="76" />
+	<SubTexture name="blob_nezlong" x="1848" y="789" width="142" height="88" />
+	<SubTexture name="blob_nezlong_1" x="1801" y="967" width="142" height="88" />
+	<SubTexture name="blob_nezlong_2" x="620" y="888" width="142" height="88" />
+	<SubTexture name="blob_nezlong_3" x="1801" y="878" width="142" height="88" />
+	<SubTexture name="blob_nezlong_4" x="620" y="799" width="142" height="88" />
+	<SubTexture name="blob_pupil" x="2003" y="1" width="20" height="18" />
+	<SubTexture name="bluedust" x="1" y="630" width="618" height="401" />
+	<SubTexture name="cristalstardust" x="620" y="989" width="409" height="256" />
+	<SubTexture name="diamant" x="1848" y="667" width="113" height="121" />
+	<SubTexture name="diamant2" x="620" y="677" width="114" height="121" />
+	<SubTexture name="diamant2_halo" x="1716" y="667" width="131" height="136" />
+	<SubTexture name="diamant_halo" x="620" y="537" width="132" height="139" />
+	<SubTexture name="eclat" x="1" y="1032" width="412" height="197" />
+	<SubTexture name="medpinkcloud" x="567" y="1" width="290" height="535" />
+	<SubTexture name="nez_mort" x="810" y="841" width="46" height="37" />
+	<SubTexture name="nez_mort_1" x="567" y="537" width="46" height="37" />
+	<SubTexture name="nez_mort_2" x="567" y="575" width="46" height="37" />
+	<SubTexture name="nez_mort_3" x="1778" y="804" width="46" height="37" />
+	<SubTexture name="nez_mort_4" x="1991" y="821" width="46" height="37" />
+	<SubTexture name="nez_mort_5" x="763" y="841" width="46" height="37" />
+	<SubTexture name="smallpinkcloud" x="1716" y="380" width="272" height="286" />
+	<SubTexture name="tornade" x="1259" y="960" width="541" height="339" />
+</TextureAtlas>

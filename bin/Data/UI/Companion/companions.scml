@@ -1,0 +1,744 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r11">
+    <folder id="0">
+        <file id="0" name="companion_capricorne_corps.png" width="228" height="316" pivot_x="0.429825" pivot_y="0.091772"/>
+        <file id="1" name="companion_capricorne_tete.png" width="184" height="258" pivot_x="0.722892" pivot_y="0.405983"/>
+        <file id="2" name="companion_capricorne_chevelure.png" width="252" height="113" pivot_x="0.896825" pivot_y="0.477876"/>
+        <file id="3" name="companion_capricorne_oeil1.png" width="28" height="23" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="4" name="companion_capricorne_oeil2.png" width="31" height="22" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="5" name="companion_capricorne_oreille2.png" width="65" height="46" pivot_x="0.215385" pivot_y="0.717391"/>
+        <file id="6" name="companion_capricorne_oreille1.png" width="96" height="68" pivot_x="0.78125" pivot_y="0.676471"/>
+        <file id="7" name="companion_capricorne_corne1.png" width="59" height="384" pivot_x="0.59322" pivot_y="0.052083"/>
+        <file id="8" name="companion_capricorne_corne2.png" width="73" height="386" pivot_x="0.516667" pivot_y="0.059561"/>
+        <file id="9" name="companion_capricorne_paupiere1.png" width="28" height="23" pivot_x="0" pivot_y="1"/>
+        <file id="10" name="companion_capricorne_paupiere2.png" width="33" height="20" pivot_x="0" pivot_y="1"/>
+        <file id="11" name="companion_rosi_bouche1.png" width="38" height="22" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="12" name="companion_rosi_bouche2.png" width="47" height="22" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="13" name="companion_rosi_bouche3.png" width="35" height="29" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="14" name="companion_rosi_nageoire1.png" width="188" height="215" pivot_x="0.648045" pivot_y="0.965854"/>
+        <file id="15" name="companion_rosi_nageoire2.png" width="303" height="209" pivot_x="0.066007" pivot_y="0.0669856"/>
+        <file id="16" name="companion_rosi_nageoire3.png" width="350" height="272" pivot_x="0.08" pivot_y="0.591912"/>
+        <file id="17" name="companion_rosi_nageoire4.png" width="89" height="94" pivot_x="0.741573" pivot_y="0.106383"/>
+        <file id="18" name="companion_rosi_nageoire5.png" width="156" height="69" pivot_x="0.935897" pivot_y="0.492754"/>
+        <file id="19" name="companion_rosi_oeil1.png" width="41" height="41" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="20" name="companion_rosi_oeil2.png" width="29" height="26" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="21" name="companion_rosi_oeil3.png" width="44" height="34" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="22" name="companion_rosi_tete.png" width="237" height="222" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="23" name="companion_jona_antenne1.png" width="88" height="162" pivot_x="0.795455" pivot_y="0.037037"/>
+        <file id="24" name="companion_jona_antenne2.png" width="85" height="178" pivot_x="0.435294" pivot_y="0.0224719"/>
+        <file id="25" name="companion_jona_bouche.png" width="87" height="67" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="26" name="companion_jona_corps.png" width="212" height="169" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="27" name="companion_jona_nage1.png" width="116" height="111" pivot_x="0.439655" pivot_y="0.081081"/>
+        <file id="28" name="companion_jona_nage2.png" width="214" height="202" pivot_x="0.196262" pivot_y="0.361386"/>
+        <file id="29" name="companion_jona_oeil1.png" width="42" height="39" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="30" name="companion_jona_oeil2.png" width="25" height="23" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="31" name="companion_jona_oeil3.png" width="44" height="44" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="32" name="companion_jona_oeil4.png" width="28" height="27" pivot_x="0.5" pivot_y="0.5"/>
+    </folder>
+    <entity id="0" name="capi">
+        <obj_info name="bone_000" type="bone" w="197.01" h="10"/>
+        <obj_info name="bone_001" type="bone" w="217.504" h="10"/>
+        <animation id="0" name="static" length="2500" interval="100">
+            <mainline>
+                <key id="0">
+                    <bone_ref id="0" timeline="3" key="0"/>
+                    <object_ref id="0" parent="0" timeline="2" key="0" z_index="0"/>
+                    <object_ref id="1" parent="0" timeline="7" key="0" z_index="1"/>
+                    <object_ref id="2" parent="0" timeline="0" key="0" z_index="2"/>
+                    <object_ref id="3" parent="0" timeline="1" key="0" z_index="3"/>
+                    <object_ref id="4" parent="0" timeline="4" key="0" z_index="4"/>
+                    <object_ref id="5" parent="0" timeline="5" key="0" z_index="5"/>
+                    <object_ref id="6" parent="0" timeline="6" key="0" z_index="6"/>
+                    <object_ref id="7" timeline="8" key="0" z_index="7"/>
+                    <object_ref id="8" timeline="9" key="0" z_index="8"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="companion_capricorne_corps">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="-16.968716" y="-3.172526" angle="270.581663"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="companion_capricorne_tete">
+                <key id="0" spin="0">
+                    <object folder="0" file="1" x="126.524018" y="22.273541" angle="270.581663"/>
+                </key>
+            </timeline>
+            <timeline id="2" name="companion_capricorne_chevelure">
+                <key id="0" spin="0">
+                    <object folder="0" file="2" x="29.191376" y="-18.70452" angle="270.581663"/>
+                </key>
+            </timeline>
+            <timeline id="3" obj="0" name="bone_000" object_type="bone">
+                <key id="0" spin="0">
+                    <bone angle="89.418337"/>
+                </key>
+            </timeline>
+            <timeline id="4" name="companion_capricorne_oeil1">
+                <key id="0" spin="0">
+                    <object folder="0" file="3" x="150.155659" y="103.073697" angle="270.581663"/>
+                </key>
+            </timeline>
+            <timeline id="5" name="companion_capricorne_oeil2">
+                <key id="0" spin="0">
+                    <object folder="0" file="4" x="136.296598" y="49.054572" angle="270.581663"/>
+                </key>
+            </timeline>
+            <timeline id="6" name="companion_capricorne_oreille2">
+                <key id="0" spin="0">
+                    <object folder="0" file="5" x="171.378835" y="8.465597" angle="281.365399"/>
+                </key>
+            </timeline>
+            <timeline id="7" name="companion_capricorne_oreille1">
+                <key id="0" spin="0">
+                    <object folder="0" file="6" x="200.089634" y="94.264099" angle="270.581663"/>
+                </key>
+            </timeline>
+            <timeline id="8" name="companion_capricorne_corne1">
+                <key id="0" spin="0">
+                    <object folder="0" file="7" x="-80.544061" y="227.709717" angle="1.1245"/>
+                </key>
+            </timeline>
+            <timeline id="9" name="companion_capricorne_corne2">
+                <key id="0" spin="0">
+                    <object folder="0" file="8" x="-20.207254" y="221.761658" angle="348.310631"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="idle" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <bone_ref id="0" timeline="3" key="0"/>
+                    <bone_ref id="1" parent="0" timeline="10" key="0"/>
+                    <object_ref id="0" parent="0" timeline="2" key="0" z_index="0"/>
+                    <object_ref id="1" parent="1" timeline="7" key="0" z_index="1"/>
+                    <object_ref id="2" parent="0" timeline="0" key="0" z_index="2"/>
+                    <object_ref id="3" parent="1" timeline="1" key="0" z_index="3"/>
+                    <object_ref id="4" parent="1" timeline="4" key="0" z_index="4"/>
+                    <object_ref id="5" parent="1" timeline="5" key="0" z_index="5"/>
+                    <object_ref id="6" parent="1" timeline="6" key="0" z_index="6"/>
+                    <object_ref id="7" parent="1" timeline="8" key="0" z_index="7"/>
+                    <object_ref id="8" parent="1" timeline="9" key="0" z_index="8"/>
+                </key>
+                <key id="1" time="2604">
+                    <bone_ref id="0" timeline="3" key="1"/>
+                    <bone_ref id="1" parent="0" timeline="10" key="1"/>
+                    <object_ref id="0" parent="0" timeline="2" key="1" z_index="0"/>
+                    <object_ref id="1" parent="1" timeline="7" key="1" z_index="1"/>
+                    <object_ref id="2" parent="0" timeline="0" key="0" z_index="2"/>
+                    <object_ref id="3" parent="1" timeline="1" key="0" z_index="3"/>
+                    <object_ref id="4" parent="1" timeline="4" key="1" z_index="4"/>
+                    <object_ref id="5" parent="1" timeline="5" key="1" z_index="5"/>
+                    <object_ref id="6" parent="1" timeline="6" key="1" z_index="6"/>
+                    <object_ref id="7" parent="1" timeline="8" key="0" z_index="7"/>
+                    <object_ref id="8" parent="1" timeline="9" key="0" z_index="8"/>
+                </key>
+                <key id="2" time="4789">
+                    <bone_ref id="0" timeline="3" key="1"/>
+                    <bone_ref id="1" parent="0" timeline="10" key="2"/>
+                    <object_ref id="0" parent="0" timeline="2" key="1" z_index="0"/>
+                    <object_ref id="1" parent="1" timeline="7" key="1" z_index="1"/>
+                    <object_ref id="2" parent="0" timeline="0" key="0" z_index="2"/>
+                    <object_ref id="3" parent="1" timeline="1" key="0" z_index="3"/>
+                    <object_ref id="4" parent="1" timeline="4" key="1" z_index="4"/>
+                    <object_ref id="5" parent="1" timeline="5" key="1" z_index="5"/>
+                    <object_ref id="6" parent="1" timeline="6" key="1" z_index="6"/>
+                    <object_ref id="7" parent="1" timeline="8" key="0" z_index="7"/>
+                    <object_ref id="8" parent="1" timeline="9" key="0" z_index="8"/>
+                    <object_ref id="9" parent="1" timeline="11" key="0" z_index="9"/>
+                    <object_ref id="10" parent="1" timeline="12" key="0" z_index="10"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="companion_capricorne_corps">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="-16.968716" y="-3.172526" angle="270.581663"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="companion_capricorne_tete">
+                <key id="0" spin="0">
+                    <object folder="0" file="1" x="61.255462" y="47.842107" angle="110.131962"/>
+                </key>
+            </timeline>
+            <timeline id="2" name="companion_capricorne_chevelure">
+                <key id="0">
+                    <object folder="0" file="2" x="29.191376" y="-18.70452" angle="270.581663"/>
+                </key>
+                <key id="1" time="2604" spin="-1">
+                    <object folder="0" file="2" x="29.191376" y="-18.70452" angle="275.433021" scale_x="1.027503" scale_y="0.911689"/>
+                </key>
+            </timeline>
+            <timeline id="3" obj="0" name="bone_000" object_type="bone">
+                <key id="0" spin="-1">
+                    <bone angle="91.250801"/>
+                </key>
+                <key id="1" time="2604">
+                    <bone angle="87.557585"/>
+                </key>
+            </timeline>
+            <timeline id="4" name="companion_capricorne_oeil1">
+                <key id="0" spin="0">
+                    <object folder="0" file="3" x="66.024731" y="-36.207722" angle="110.131962"/>
+                </key>
+                <key id="1" time="2604" spin="0">
+                    <object folder="0" file="3" x="66.905049" y="-36.039068" angle="110.131962" scale_y="0.889"/>
+                </key>
+            </timeline>
+            <timeline id="5" name="companion_capricorne_oeil2">
+                <key id="0" spin="0">
+                    <object folder="0" file="4" x="61.008141" y="19.334814" angle="110.131962"/>
+                </key>
+                <key id="1" time="2604" spin="0">
+                    <object folder="0" file="4" x="60.522249" y="19.349093" angle="110.131962" scale_y="0.860601"/>
+                </key>
+            </timeline>
+            <timeline id="6" name="companion_capricorne_oreille2">
+                <key id="0">
+                    <object folder="0" file="5" x="14.366" y="45.844039" angle="120.915698"/>
+                </key>
+                <key id="1" time="2604" spin="-1">
+                    <object folder="0" file="5" x="14.366" y="45.844039" angle="127.345386"/>
+                </key>
+            </timeline>
+            <timeline id="7" name="companion_capricorne_oreille1">
+                <key id="0" spin="-1">
+                    <object folder="0" file="6" x="16.021552" y="-44.615632" angle="110.131962"/>
+                </key>
+                <key id="1" time="2604">
+                    <object folder="0" file="6" x="16.021552" y="-44.615632" angle="103.424474"/>
+                </key>
+            </timeline>
+            <timeline id="8" name="companion_capricorne_corne1">
+                <key id="0" spin="0">
+                    <object folder="0" file="7" x="-13.043623" y="-42.826134" angle="111.256462"/>
+                </key>
+            </timeline>
+            <timeline id="9" name="companion_capricorne_corne2">
+                <key id="0" spin="0">
+                    <object folder="0" file="8" x="-28.225911" y="15.871463" angle="98.442593"/>
+                </key>
+            </timeline>
+            <timeline id="10" obj="1" name="bone_001" object_type="bone">
+                <key id="0" spin="-1">
+                    <bone x="200.257593" y="46.859283" angle="160.449701"/>
+                </key>
+                <key id="1" time="2604">
+                    <bone x="200.257593" y="46.859283" angle="157.560708"/>
+                </key>
+                <key id="2" time="4789">
+                    <bone x="200.257593" y="46.859283" angle="160.195286"/>
+                </key>
+            </timeline>
+            <timeline id="11" name="companion_capricorne_paupiere1">
+                <key id="0" time="4789" spin="0">
+                    <object folder="0" file="9" x="58.733012" y="-52.728123" angle="108.87915"/>
+                </key>
+            </timeline>
+            <timeline id="12" name="companion_capricorne_paupiere2">
+                <key id="0" time="4789" spin="0">
+                    <object folder="0" file="10" x="55.697012" y="0.77192" angle="108.87915"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+    <entity id="1" name="rosi">
+        <obj_info name="bone_000" type="bone" w="423" h="10"/>
+        <obj_info name="bone_001" type="bone" w="70.4835" h="10"/>
+        <obj_info name="bone_002" type="bone" w="74.2742" h="10"/>
+        <animation id="0" name="static" length="2500" interval="100">
+            <mainline>
+                <key id="0">
+                    <bone_ref id="0" timeline="1" key="0"/>
+                    <bone_ref id="1" parent="0" timeline="16" key="0"/>
+                    <bone_ref id="2" parent="0" timeline="15" key="0"/>
+                    <object_ref id="0" parent="0" timeline="7" key="0" z_index="0"/>
+                    <object_ref id="1" parent="0" timeline="6" key="0" z_index="1"/>
+                    <object_ref id="2" parent="0" timeline="5" key="0" z_index="2"/>
+                    <object_ref id="3" parent="0" timeline="19" key="0" z_index="3"/>
+                    <object_ref id="4" parent="0" timeline="3" key="0" z_index="4"/>
+                    <object_ref id="5" parent="0" timeline="0" key="0" z_index="5"/>
+                    <object_ref id="6" parent="0" timeline="2" key="0" z_index="6"/>
+                    <object_ref id="7" parent="2" timeline="8" key="0" z_index="7"/>
+                    <object_ref id="8" parent="1" timeline="9" key="0" z_index="8"/>
+                    <object_ref id="9" parent="2" timeline="10" key="0" z_index="9"/>
+                    <object_ref id="10" parent="1" timeline="11" key="0" z_index="10"/>
+                    <object_ref id="11" parent="1" timeline="12" key="0" z_index="11"/>
+                    <object_ref id="12" parent="2" timeline="13" key="0" z_index="12"/>
+                    <object_ref id="13" parent="0" timeline="14" key="0" z_index="13"/>
+                    <object_ref id="14" parent="0" timeline="4" key="0" z_index="14"/>
+                    <object_ref id="15" parent="0" timeline="17" key="0" z_index="15"/>
+                    <object_ref id="16" parent="0" timeline="18" key="0" z_index="16"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="companion_rosi_tete">
+                <key id="0" spin="0">
+                    <object folder="0" file="22" x="56" y="-8" angle="270"/>
+                </key>
+            </timeline>
+            <timeline id="1" obj="0" name="bone_000" object_type="bone">
+                <key id="0" spin="0">
+                    <bone x="0.518135" y="-30.569948" angle="90"/>
+                </key>
+            </timeline>
+            <timeline id="2" name="companion_rosi_nageoire2">
+                <key id="0" spin="0">
+                    <object folder="0" file="15" x="143.398964" y="-2" angle="318.409412"/>
+                </key>
+            </timeline>
+            <timeline id="3" name="companion_rosi_nageoire1">
+                <key id="0" spin="0">
+                    <object folder="0" file="14" x="91.960183" y="63.50225" angle="202.866719" scale_x="0.738258" scale_y="0.859372"/>
+                </key>
+            </timeline>
+            <timeline id="4" name="companion_rosi_nageoire1_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="14" x="70.937824" y="-95.84456" angle="315.817657" scale_x="0.948341" scale_y="0.871831"/>
+                </key>
+            </timeline>
+            <timeline id="5" name="companion_rosi_nageoire4">
+                <key id="0" spin="0">
+                    <object folder="0" file="17" x="129.046" y="34.514975" angle="270"/>
+                </key>
+            </timeline>
+            <timeline id="6" name="companion_rosi_nageoire5">
+                <key id="0" spin="0">
+                    <object folder="0" file="18" x="128.818021" y="33.491217" angle="270"/>
+                </key>
+            </timeline>
+            <timeline id="7" name="companion_rosi_nageoire3">
+                <key id="0" spin="0">
+                    <object folder="0" file="16" x="165.062176" y="-70.367876" angle="243.761337"/>
+                </key>
+            </timeline>
+            <timeline id="8" name="companion_rosi_oeil1">
+                <key id="0" spin="0">
+                    <object folder="0" file="19" x="13.845226" y="9.702325" angle="276.473948" scale_x="0.86141" scale_y="0.835877"/>
+                </key>
+            </timeline>
+            <timeline id="9" name="companion_rosi_oeil1_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="19" x="2.336967" y="-19.151995" angle="261.291855"/>
+                </key>
+            </timeline>
+            <timeline id="10" name="companion_rosi_oeil2">
+                <key id="0" spin="0">
+                    <object folder="0" file="20" x="11.882681" y="13.126967" angle="253.557345" scale_x="0.873435" scale_y="0.865296"/>
+                </key>
+            </timeline>
+            <timeline id="11" name="companion_rosi_oeil3">
+                <key id="0" spin="0">
+                    <object folder="0" file="21" x="13.051324" y="-21.025357" angle="269.939409" scale_x="1.123503"/>
+                </key>
+            </timeline>
+            <timeline id="12" name="companion_rosi_oeil2_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="20" x="-1.878403" y="-13.545192" angle="230.77723" scale_x="0.938622" scale_y="0.929519"/>
+                </key>
+            </timeline>
+            <timeline id="13" name="companion_rosi_oeil3_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="21" x="25.325036" y="5.671916" angle="248.110801" scale_x="0.946266"/>
+                </key>
+            </timeline>
+            <timeline id="14" name="companion_rosi_bouche1">
+                <key id="0" spin="0">
+                    <object folder="0" file="11" x="-35.7786" y="74.546369" angle="270"/>
+                </key>
+            </timeline>
+            <timeline id="15" obj="1" name="bone_001" object_type="bone">
+                <key id="0" spin="0">
+                    <bone x="21.761658" y="79.274611" angle="358.736327"/>
+                </key>
+            </timeline>
+            <timeline id="16" obj="2" name="bone_002" object_type="bone">
+                <key id="0" spin="0">
+                    <bone x="13.989637" y="38.341969" angle="355.999814"/>
+                </key>
+            </timeline>
+            <timeline id="17" name="companion_rosi_nageoire2_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="15" x="139.772021" y="-15.471503" angle="297.287305"/>
+                </key>
+            </timeline>
+            <timeline id="18" name="companion_rosi_nageoire2_001">
+                <key id="0" spin="0">
+                    <object folder="0" file="15" x="145.989637" y="-35.678756" angle="278.612264" scale_x="0.765605" scale_y="0.689358"/>
+                </key>
+            </timeline>
+            <timeline id="19" name="companion_rosi_nageoire5_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="18" x="74.413876" y="-45.783394" angle="14.041193"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="idle" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <bone_ref id="0" timeline="1" key="0"/>
+                    <bone_ref id="1" parent="0" timeline="16" key="0"/>
+                    <bone_ref id="2" parent="0" timeline="15" key="0"/>
+                    <object_ref id="0" parent="0" timeline="7" key="0" z_index="0"/>
+                    <object_ref id="1" parent="0" timeline="6" key="0" z_index="1"/>
+                    <object_ref id="2" parent="0" timeline="5" key="0" z_index="2"/>
+                    <object_ref id="3" parent="0" timeline="19" key="0" z_index="3"/>
+                    <object_ref id="4" parent="0" timeline="3" key="0" z_index="4"/>
+                    <object_ref id="5" parent="0" timeline="0" key="0" z_index="5"/>
+                    <object_ref id="6" parent="0" timeline="2" key="0" z_index="6"/>
+                    <object_ref id="7" parent="2" timeline="8" key="0" z_index="7"/>
+                    <object_ref id="8" parent="1" timeline="9" key="0" z_index="8"/>
+                    <object_ref id="9" parent="2" timeline="10" key="0" z_index="9"/>
+                    <object_ref id="10" parent="1" timeline="12" key="0" z_index="10"/>
+                    <object_ref id="11" parent="1" timeline="11" key="0" z_index="11"/>
+                    <object_ref id="12" parent="2" timeline="13" key="0" z_index="12"/>
+                    <object_ref id="13" parent="0" timeline="14" key="0" z_index="13"/>
+                    <object_ref id="14" parent="0" timeline="4" key="0" z_index="14"/>
+                    <object_ref id="15" parent="0" timeline="17" key="0" z_index="15"/>
+                    <object_ref id="16" parent="0" timeline="18" key="0" z_index="16"/>
+                </key>
+                <key id="1" time="2500">
+                    <bone_ref id="0" timeline="1" key="1"/>
+                    <bone_ref id="1" parent="0" timeline="16" key="0"/>
+                    <bone_ref id="2" parent="0" timeline="15" key="0"/>
+                    <object_ref id="0" parent="0" timeline="7" key="1" z_index="0"/>
+                    <object_ref id="1" parent="0" timeline="6" key="1" z_index="1"/>
+                    <object_ref id="2" parent="0" timeline="5" key="1" z_index="2"/>
+                    <object_ref id="3" parent="0" timeline="19" key="1" z_index="3"/>
+                    <object_ref id="4" parent="0" timeline="3" key="1" z_index="4"/>
+                    <object_ref id="5" parent="0" timeline="0" key="0" z_index="5"/>
+                    <object_ref id="6" parent="0" timeline="2" key="1" z_index="6"/>
+                    <object_ref id="7" parent="2" timeline="8" key="0" z_index="7"/>
+                    <object_ref id="8" parent="1" timeline="9" key="0" z_index="8"/>
+                    <object_ref id="9" parent="2" timeline="10" key="0" z_index="9"/>
+                    <object_ref id="10" parent="1" timeline="12" key="0" z_index="10"/>
+                    <object_ref id="11" parent="1" timeline="11" key="1" z_index="11"/>
+                    <object_ref id="12" parent="2" timeline="13" key="1" z_index="12"/>
+                    <object_ref id="13" parent="0" timeline="14" key="1" z_index="13"/>
+                    <object_ref id="14" parent="0" timeline="4" key="1" z_index="14"/>
+                    <object_ref id="15" parent="0" timeline="17" key="1" z_index="15"/>
+                    <object_ref id="16" parent="0" timeline="18" key="1" z_index="16"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="companion_rosi_tete">
+                <key id="0" spin="0">
+                    <object folder="0" file="22" x="56" y="-8" angle="270"/>
+                </key>
+            </timeline>
+            <timeline id="1" obj="0" name="bone_000" object_type="bone">
+                <key id="0">
+                    <bone x="0.518135" y="-30.569948" angle="90"/>
+                </key>
+                <key id="1" time="2500" spin="-1">
+                    <bone x="0.518135" y="-30.569948" angle="90.902768"/>
+                </key>
+            </timeline>
+            <timeline id="2" name="companion_rosi_nageoire2">
+                <key id="0">
+                    <object folder="0" file="15" x="135.644953" y="12.438503" angle="318.409412"/>
+                </key>
+                <key id="1" time="2500" spin="-1">
+                    <object folder="0" file="15" x="135.054513" y="11.502132" angle="323.026833"/>
+                </key>
+            </timeline>
+            <timeline id="3" name="companion_rosi_nageoire1">
+                <key id="0">
+                    <object folder="0" file="14" x="91.960183" y="63.50225" angle="202.866719" scale_x="0.738258" scale_y="0.859372"/>
+                </key>
+                <key id="1" time="2500" spin="-1">
+                    <object folder="0" file="14" x="91.960183" y="63.50225" angle="204.365559" scale_x="0.738258" scale_y="0.872738"/>
+                </key>
+            </timeline>
+            <timeline id="4" name="companion_rosi_nageoire1_000">
+                <key id="0">
+                    <object folder="0" file="14" x="70.937824" y="-95.84456" angle="315.817657" scale_x="0.948341" scale_y="0.871831"/>
+                </key>
+                <key id="1" time="2500" spin="-1">
+                    <object folder="0" file="14" x="70.987455" y="-95.795075" angle="318.933411" scale_x="0.951299" scale_y="0.907061"/>
+                </key>
+            </timeline>
+            <timeline id="5" name="companion_rosi_nageoire4">
+                <key id="0">
+                    <object folder="0" file="17" x="129.046" y="34.514975" angle="270"/>
+                </key>
+                <key id="1" time="2500" spin="-1">
+                    <object folder="0" file="17" x="129.046" y="34.514975" angle="275.00437" scale_y="1.112012"/>
+                </key>
+            </timeline>
+            <timeline id="6" name="companion_rosi_nageoire5">
+                <key id="0">
+                    <object folder="0" file="18" x="128.299886" y="33.491217" angle="270"/>
+                </key>
+                <key id="1" time="2500" spin="-1">
+                    <object folder="0" file="18" x="128.299886" y="33.491217" angle="278.571803" scale_x="1.012042" scale_y="1.122496"/>
+                </key>
+            </timeline>
+            <timeline id="7" name="companion_rosi_nageoire3">
+                <key id="0">
+                    <object folder="0" file="16" x="165.062176" y="-70.367876" angle="243.761337"/>
+                </key>
+                <key id="1" time="2500" spin="-1">
+                    <object folder="0" file="16" x="165.062176" y="-70.367876" angle="247.645513" scale_y="1.082603"/>
+                </key>
+            </timeline>
+            <timeline id="8" name="companion_rosi_oeil1">
+                <key id="0" spin="0">
+                    <object folder="0" file="19" x="13.845226" y="9.702325" angle="276.473948" scale_x="0.86141" scale_y="0.835877"/>
+                </key>
+            </timeline>
+            <timeline id="9" name="companion_rosi_oeil1_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="19" x="2.336967" y="-19.151995" angle="261.291855"/>
+                </key>
+            </timeline>
+            <timeline id="10" name="companion_rosi_oeil2">
+                <key id="0" spin="0">
+                    <object folder="0" file="20" x="11.882681" y="13.126967" angle="253.557345" scale_x="0.873435" scale_y="0.865296"/>
+                </key>
+            </timeline>
+            <timeline id="11" name="companion_rosi_oeil3">
+                <key id="0" spin="0">
+                    <object folder="0" file="21" x="13.051324" y="-21.025357" angle="269.939409" scale_x="1.123503"/>
+                </key>
+                <key id="1" time="2500" spin="0">
+                    <object folder="0" file="21" x="10.576184" y="-19.820439" angle="269.939409" scale_x="1.123503"/>
+                </key>
+            </timeline>
+            <timeline id="12" name="companion_rosi_oeil2_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="20" x="-1.878403" y="-13.545192" angle="230.77723" scale_x="0.938622" scale_y="0.929519"/>
+                </key>
+            </timeline>
+            <timeline id="13" name="companion_rosi_oeil3_000">
+                <key id="0">
+                    <object folder="0" file="21" x="25.325036" y="5.671916" angle="248.110801" scale_x="0.946266"/>
+                </key>
+                <key id="1" time="2500" spin="-1">
+                    <object folder="0" file="21" x="22.91193" y="6.726255" angle="253.609469" scale_x="0.946266"/>
+                </key>
+            </timeline>
+            <timeline id="14" name="companion_rosi_bouche1">
+                <key id="0" spin="0">
+                    <object folder="0" file="11" x="-35.7786" y="74.546369" angle="270"/>
+                </key>
+                <key id="1" time="2500" spin="0">
+                    <object folder="0" file="11" x="-35.7786" y="74.546369" angle="270" scale_x="1.242847"/>
+                </key>
+            </timeline>
+            <timeline id="15" obj="1" name="bone_001" object_type="bone">
+                <key id="0" spin="0">
+                    <bone x="21.761658" y="79.274611" angle="358.736327"/>
+                </key>
+            </timeline>
+            <timeline id="16" obj="2" name="bone_002" object_type="bone">
+                <key id="0" spin="0">
+                    <bone x="13.989637" y="38.341969" angle="355.999814"/>
+                </key>
+            </timeline>
+            <timeline id="17" name="companion_rosi_nageoire2_000">
+                <key id="0">
+                    <object folder="0" file="15" x="130.413732" y="-0.76562" angle="297.287305"/>
+                </key>
+                <key id="1" time="2500" spin="-1">
+                    <object folder="0" file="15" x="131.42757" y="-1.969371" angle="304.614289" scale_y="1.030405"/>
+                </key>
+            </timeline>
+            <timeline id="18" name="companion_rosi_nageoire2_001">
+                <key id="0">
+                    <object folder="0" file="15" x="138.235627" y="-21.240254" angle="278.612264" scale_x="0.765605" scale_y="0.689358"/>
+                </key>
+                <key id="1" time="2500" spin="-1">
+                    <object folder="0" file="15" x="138.421949" y="-23.793342" angle="281.436186" scale_x="0.765605" scale_y="0.735608"/>
+                </key>
+            </timeline>
+            <timeline id="19" name="companion_rosi_nageoire5_000">
+                <key id="0" spin="-1">
+                    <object folder="0" file="18" x="74.413876" y="-45.783394" angle="39.969594"/>
+                </key>
+                <key id="1" time="2500">
+                    <object folder="0" file="18" x="79.741523" y="-36.539763" angle="31.67187"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+    <entity id="2" name="jona">
+        <obj_info name="bone_000" type="bone" w="269.35" h="10"/>
+        <animation id="0" name="static" length="1000" interval="100">
+            <mainline>
+                <key id="0">
+                    <bone_ref id="0" timeline="10" key="0"/>
+                    <object_ref id="0" parent="0" timeline="5" key="0" z_index="0"/>
+                    <object_ref id="1" parent="0" timeline="1" key="0" z_index="1"/>
+                    <object_ref id="2" parent="0" timeline="0" key="0" z_index="2"/>
+                    <object_ref id="3" parent="0" timeline="3" key="0" z_index="3"/>
+                    <object_ref id="4" parent="0" timeline="4" key="0" z_index="4"/>
+                    <object_ref id="5" parent="0" timeline="2" key="0" z_index="5"/>
+                    <object_ref id="6" parent="0" timeline="6" key="0" z_index="6"/>
+                    <object_ref id="7" parent="0" timeline="7" key="0" z_index="7"/>
+                    <object_ref id="8" parent="0" timeline="8" key="0" z_index="8"/>
+                    <object_ref id="9" parent="0" timeline="9" key="0" z_index="9"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="companion_jona_corps">
+                <key id="0" spin="0">
+                    <object folder="0" file="26" x="42.951967" y="-3.406973" angle="271.119645"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="companion_jona_bouche">
+                <key id="0" spin="0">
+                    <object folder="0" file="25" x="-13.730059" y="42.096699" angle="271.119645"/>
+                </key>
+            </timeline>
+            <timeline id="2" name="companion_jona_antenne2">
+                <key id="0" spin="0">
+                    <object folder="0" file="24" x="92.431117" y="-27.444728" angle="271.119645"/>
+                </key>
+            </timeline>
+            <timeline id="3" name="companion_jona_antenne1">
+                <key id="0" spin="0">
+                    <object folder="0" file="23" x="118.608529" y="66.084643" angle="271.119645"/>
+                </key>
+            </timeline>
+            <timeline id="4" name="companion_jona_nage1">
+                <key id="0" spin="0">
+                    <object folder="0" file="27" x="116.984685" y="-4.357973" angle="271.119645"/>
+                </key>
+            </timeline>
+            <timeline id="5" name="companion_jona_nage2">
+                <key id="0" spin="0">
+                    <object folder="0" file="28" x="86.343539" y="-90.60138" angle="271.119645"/>
+                </key>
+            </timeline>
+            <timeline id="6" name="companion_jona_oeil3">
+                <key id="0" spin="0">
+                    <object folder="0" file="31" x="20.838926" y="2.161996" angle="271.119645"/>
+                </key>
+            </timeline>
+            <timeline id="7" name="companion_jona_oeil4">
+                <key id="0" spin="0">
+                    <object folder="0" file="32" x="22.71291" y="6.661012" angle="271.119645"/>
+                </key>
+            </timeline>
+            <timeline id="8" name="companion_jona_oeil1">
+                <key id="0" spin="0">
+                    <object folder="0" file="29" x="47.426682" y="74.695376" angle="271.119645"/>
+                </key>
+            </timeline>
+            <timeline id="9" name="companion_jona_oeil2">
+                <key id="0" spin="0">
+                    <object folder="0" file="30" x="44.069268" y="77.207174" angle="271.119645"/>
+                </key>
+            </timeline>
+            <timeline id="10" obj="0" name="bone_000" object_type="bone">
+                <key id="0" spin="0">
+                    <bone x="-60" y="-11" angle="88.880355"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="idle" length="2500" interval="100">
+            <mainline>
+                <key id="0">
+                    <bone_ref id="0" timeline="10" key="0"/>
+                    <object_ref id="0" parent="0" timeline="5" key="0" z_index="0"/>
+                    <object_ref id="1" parent="0" timeline="1" key="0" z_index="1"/>
+                    <object_ref id="2" parent="0" timeline="0" key="0" z_index="2"/>
+                    <object_ref id="3" parent="0" timeline="3" key="0" z_index="3"/>
+                    <object_ref id="4" parent="0" timeline="4" key="0" z_index="4"/>
+                    <object_ref id="5" parent="0" timeline="2" key="0" z_index="5"/>
+                    <object_ref id="6" parent="0" timeline="6" key="0" z_index="6"/>
+                    <object_ref id="7" parent="0" timeline="7" key="0" z_index="7"/>
+                    <object_ref id="8" parent="0" timeline="8" key="0" z_index="8"/>
+                    <object_ref id="9" parent="0" timeline="9" key="0" z_index="9"/>
+                </key>
+                <key id="1" time="1201">
+                    <bone_ref id="0" timeline="10" key="1"/>
+                    <object_ref id="0" parent="0" timeline="5" key="1" z_index="0"/>
+                    <object_ref id="1" parent="0" timeline="1" key="1" z_index="1"/>
+                    <object_ref id="2" parent="0" timeline="0" key="0" z_index="2"/>
+                    <object_ref id="3" parent="0" timeline="3" key="1" z_index="3"/>
+                    <object_ref id="4" parent="0" timeline="4" key="1" z_index="4"/>
+                    <object_ref id="5" parent="0" timeline="2" key="1" z_index="5"/>
+                    <object_ref id="6" parent="0" timeline="6" key="0" z_index="6"/>
+                    <object_ref id="7" parent="0" timeline="7" key="1" z_index="7"/>
+                    <object_ref id="8" parent="0" timeline="8" key="0" z_index="8"/>
+                    <object_ref id="9" parent="0" timeline="9" key="1" z_index="9"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="companion_jona_corps">
+                <key id="0" spin="0">
+                    <object folder="0" file="26" x="42.951967" y="-3.406973" angle="271.119645"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="companion_jona_bouche">
+                <key id="0" spin="0">
+                    <object folder="0" file="25" x="-13.730059" y="42.096699" angle="271.119645"/>
+                </key>
+                <key id="1" time="1201" spin="0">
+                    <object folder="0" file="25" x="-17.530581" y="44.235338" angle="271.119645"/>
+                </key>
+            </timeline>
+            <timeline id="2" name="companion_jona_antenne2">
+                <key id="0" spin="-1">
+                    <object folder="0" file="24" x="92.431117" y="-27.444728" angle="271.119645"/>
+                </key>
+                <key id="1" time="1201">
+                    <object folder="0" file="24" x="92.431117" y="-27.444728" angle="268.036729" scale_x="1"/>
+                </key>
+            </timeline>
+            <timeline id="3" name="companion_jona_antenne1">
+                <key id="0">
+                    <object folder="0" file="23" x="118.608529" y="66.084643" angle="271.119645"/>
+                </key>
+                <key id="1" time="1201" spin="-1">
+                    <object folder="0" file="23" x="118.608529" y="66.084643" angle="276.006604" scale_x="1"/>
+                </key>
+            </timeline>
+            <timeline id="4" name="companion_jona_nage1">
+                <key id="0" spin="-1">
+                    <object folder="0" file="27" x="116.984685" y="-4.357973" angle="271.119645"/>
+                </key>
+                <key id="1" time="1201">
+                    <object folder="0" file="27" x="116.984685" y="-4.357973" angle="267.602659" scale_y="1.029924"/>
+                </key>
+            </timeline>
+            <timeline id="5" name="companion_jona_nage2">
+                <key id="0" spin="-1">
+                    <object folder="0" file="28" x="82.315601" y="-81.337659" angle="271.119645"/>
+                </key>
+                <key id="1" time="1201">
+                    <object folder="0" file="28" x="83.092861" y="-88.459313" angle="266.359146" scale_x="1" scale_y="0.962004"/>
+                </key>
+            </timeline>
+            <timeline id="6" name="companion_jona_oeil3">
+                <key id="0" spin="0">
+                    <object folder="0" file="31" x="20.838926" y="2.161996" angle="271.119645"/>
+                </key>
+            </timeline>
+            <timeline id="7" name="companion_jona_oeil4">
+                <key id="0" spin="0">
+                    <object folder="0" file="32" x="22.71291" y="6.661012" angle="271.119645"/>
+                </key>
+                <key id="1" time="1201" spin="0">
+                    <object folder="0" file="32" x="23.027261" y="4.260279" angle="271.119645"/>
+                </key>
+            </timeline>
+            <timeline id="8" name="companion_jona_oeil1">
+                <key id="0" spin="0">
+                    <object folder="0" file="29" x="47.426682" y="74.695376" angle="271.119645"/>
+                </key>
+            </timeline>
+            <timeline id="9" name="companion_jona_oeil2">
+                <key id="0" spin="0">
+                    <object folder="0" file="30" x="42.004689" y="78.189514" angle="271.119645"/>
+                </key>
+                <key id="1" time="1201" spin="0">
+                    <object folder="0" file="30" x="44.630049" y="75.88098" angle="271.119645"/>
+                </key>
+            </timeline>
+            <timeline id="10" obj="0" name="bone_000" object_type="bone">
+                <key id="0" spin="0">
+                    <bone x="-60" y="-11" angle="88.880355"/>
+                </key>
+                <key id="1" time="1201" spin="0">
+                    <bone x="-61" y="-0" angle="88.880355"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="tiles.webp">
+	<SubTexture name="ground3" x="861" y="259" width="128" height="128" />
+	<SubTexture name="ground3" x="130" y="414" width="128" height="128" />
+	<SubTexture name="tilearrow" x="1" y="568" width="99" height="101" />
+	<SubTexture name="tilearrow" x="904" y="517" width="99" height="101" />
+</TextureAtlas>

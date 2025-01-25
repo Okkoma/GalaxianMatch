@@ -1,0 +1,57 @@
+# Code::Blocks project settings
+/*.cbp
+
+# Codelite project settings
+/*.project
+/*.workspace
+
+# Gradle project settings
+/local.properties
+.gradle/
+build/
+.cxx/
+
+# JetBrains IDE project settings
+/.idea/
+/cmake-build-*/
+*.iml
+
+# KDevelop project settings
+/*.kdev?
+
+# Qt Creator project settings
+/CMakeLists.txt.user
+
+# Visual Studio project settings
+/CMakeSettings.json
+/.vs/
+/out/
+
+# Misc.
+*~
+*.swp
+.DS_Store
+*.log
+*.bak
+Thumbs.db
+.directory
+.cache
+
+# project
+local.properties
+Local
+source-tool/
+bin-*/
+appn*/
+appt*/
+exe/
+keystore.properties
+bin/server/node_*/
+app/
+app/java/
+app/Android*
+script/bake
+script/archive
+script/zipper
+TODO.txt
+*.workspace*

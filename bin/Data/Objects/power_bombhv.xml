@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<node>
+	<attribute name="Is Enabled" value="true" />
+	<attribute name="Name" value="power_bombhv" />
+	<attribute name="Position" value="0.0 0.0 0" />
+	<attribute name="Rotation" value="1 0 0 0" />
+	<attribute name="Scale" value="0.5 0.5 1" />
+	<!-- HORIZONTAL OR VERTICAL BOMB -->
+	<attribute name="Variables">
+		<variant name="GOA_Bonus" hash="1750376793" type="IntVector2" value="3 0" />
+	</attribute>
+	<component type="StaticSprite2D">
+		<attribute name="Sprite" value="SpriteSheet2D;2D/tiles.xml@power_bombhv" />
+	</component>
+</node>

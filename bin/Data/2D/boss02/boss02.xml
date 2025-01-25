@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="boss02.webp">
+	<SubTexture name="boss2antenna1" x="629" y="276" width="33" height="70" />
+	<SubTexture name="boss2antenna1_2" x="595" y="276" width="33" height="70" />
+	<SubTexture name="boss2antenna1_3" x="561" y="276" width="33" height="70" />
+	<SubTexture name="boss2antenna1_4" x="527" y="276" width="33" height="70" />
+	<SubTexture name="boss2antenna1_5" x="493" y="276" width="33" height="70" />
+	<SubTexture name="boss2antenna2" x="459" y="276" width="33" height="72" />
+	<SubTexture name="boss2antenna2_2" x="425" y="276" width="33" height="72" />
+	<SubTexture name="boss2antenna2_3" x="391" y="276" width="33" height="72" />
+	<SubTexture name="boss2antenna2_4" x="983" y="140" width="33" height="72" />
+	<SubTexture name="boss2antenna2_5" x="949" y="140" width="33" height="72" />
+	<SubTexture name="boss2antennabroken" x="631" y="347" width="30" height="57" />
+	<SubTexture name="boss2antennachunk1" x="1002" y="1" width="11" height="14" />
+	<SubTexture name="boss2antennachunk2" x="1002" y="16" width="11" height="11" />
+	<SubTexture name="boss2antennahalo" x="903" y="265" width="118" height="118" />
+	<SubTexture name="boss2backhalo" x="1" y="1" width="389" height="383" />
+	<SubTexture name="boss2corpse" x="391" y="1" width="287" height="274" />
+	<SubTexture name="boss2eye1" x="903" y="384" width="63" height="58" />
+	<SubTexture name="boss2eye2" x="391" y="349" width="62" height="58" />
+	<SubTexture name="boss2halo" x="679" y="1" width="269" height="263" />
+	<SubTexture name="boss2mouth1" x="1" y="385" width="117" height="55" />
+	<SubTexture name="boss2mouth2" x="493" y="347" width="137" height="64" />
+	<SubTexture name="boss2mouth3" x="119" y="385" width="119" height="17" />
+	<SubTexture name="elecbullet" x="949" y="1" width="52" height="138" />
+	<SubTexture name="elecsplash" x="679" y="265" width="223" height="168" />
+</TextureAtlas>

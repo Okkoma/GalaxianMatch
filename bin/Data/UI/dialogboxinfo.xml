@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<element>
+    <attribute name="Name" value="MissionDialogBox" />
+    <attribute name="Size" value="540 960" />
+    <element type="Sprite">
+        <attribute name="Name" value="Frame" />
+        <attribute name="Position" value="270 150" />
+        <attribute name="Size" value="500 150" />
+		<attribute name="Hotspot" value="250 74" />
+        <attribute name="Texture" value="Texture2D;UI/dialogframe1.png" />
+        <attribute name="Border" value="40 40 40 40" />
+		<attribute name="Blend Mode" value="alpha" />
+		<attribute name="Is Visible" value="true" />
+        <element type="Text">
+            <attribute name="Name" value="Name" />
+            <attribute name="Position" value="0 7" />
+            <attribute name="Horiz Alignment" value="Center" />
+			<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+			<attribute name="Font Size" value="12" />
+            <attribute name="Text Alignment" value="Center" />
+            <attribute name="Color" value="1 1 1 1" />
+            <attribute name="Text" value="Name" />
+        </element>    		
+        <element type="Text">
+            <attribute name="Name" value="Content" />
+            <attribute name="Horiz Alignment" value="Center" />
+            <attribute name="Vert Alignment" value="Center" />
+            <attribute name="Color" value="1 1 1 1" />
+			<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+			<attribute name="Font Size" value="14" />
+			<attribute name="Size" value="450 130" />
+            <attribute name="Text" value="Content" />
+		    <attribute name="Word Wrap" value="true" />            
+        </element>    
+    </element>
+</element>

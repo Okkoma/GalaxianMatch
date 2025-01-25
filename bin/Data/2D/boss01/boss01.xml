@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="boss01.webp">
+	<SubTexture name="boss01_01" x="365" y="531" width="199" height="126" />
+	<SubTexture name="boss01_02" x="780" y="490" width="199" height="127" />
+	<SubTexture name="boss01_03" x="565" y="531" width="171" height="113" />
+	<SubTexture name="boss_dead" x="843" y="1" width="177" height="198" />
+	<SubTexture name="boss_oeil" x="185" y="336" width="33" height="27" />
+	<SubTexture name="cockpit_01" x="232" y="281" width="288" height="237" />
+	<SubTexture name="cockpit_02" x="365" y="658" width="256" height="76" />
+	<SubTexture name="dust_gray" x="1" y="1" width="230" height="334" />
+	<SubTexture name="eclat_verre" x="622" y="645" width="52" height="52" />
+	<SubTexture name="explosion_center" x="550" y="1" width="292" height="274" />
+	<SubTexture name="explosion_line" x="1" y="735" width="1020" height="71" />
+	<SubTexture name="explosion_radius" x="232" y="1" width="317" height="279" />
+	<SubTexture name="halo_vert_01" x="737" y="618" width="248" height="102" />
+	<SubTexture name="halo_vert_02" x="942" y="200" width="81" height="63" />
+	<SubTexture name="halo_vert_03" x="843" y="200" width="98" height="63" />
+	<SubTexture name="soucoupe_01" x="1" y="519" width="363" height="213" />
+	<SubTexture name="soucoupe_break_1" x="780" y="276" width="243" height="213" />
+	<SubTexture name="soucoupe_break_2" x="550" y="276" width="229" height="254" />
+</TextureAtlas>

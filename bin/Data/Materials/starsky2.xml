@@ -1,0 +1,7 @@
+<material>
+	<technique name="Techniques/DiffVColUnlitAlpha.xml" quality="0" />
+	<texture unit="diffuse" name="Textures/Background/starsky2.webp" />
+	<cull value="none" />
+    <parameter name="UOffset" value="1 0 0 0" />
+    <parameter name="VOffset" value="0 1 0 0" />	
+</material>

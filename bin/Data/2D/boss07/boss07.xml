@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="boss07.webp">
+	<SubTexture name="boss07_aile" x="368" y="1" width="87" height="117" />
+	<SubTexture name="boss07_attack3_effect" x="1" y="1" width="293" height="249" />
+	<SubTexture name="boss07_corpsfond" x="295" y="1" width="72" height="123" />
+	<SubTexture name="boss07_machoire" x="456" y="62" width="42" height="44" />
+	<SubTexture name="boss07_pattehaut" x="295" y="181" width="25" height="34" />
+	<SubTexture name="boss07_plume1" x="1" y="251" width="246" height="130" />
+	<SubTexture name="boss07_plume2" x="295" y="217" width="167" height="81" />
+	<SubTexture name="boss07_plume3" x="248" y="299" width="132" height="71" />
+	<SubTexture name="boss07_plume4" x="381" y="299" width="103" height="70" />
+	<SubTexture name="boss07_plume5" x="381" y="370" width="87" height="58" />
+	<SubTexture name="boss07_plume6" x="248" y="371" width="74" height="56" />
+	<SubTexture name="boss07_queue_demi" x="463" y="197" width="45" height="42" />
+	<SubTexture name="boss07_serre1" x="463" y="240" width="32" height="40" />
+	<SubTexture name="boss07_tete1" x="456" y="1" width="47" height="60" />
+	<SubTexture name="boss07_tete2" x="295" y="125" width="57" height="55" />
+	<SubTexture name="boss07_torse1" x="435" y="119" width="59" height="77" />
+	<SubTexture name="boss07_torse2" x="368" y="119" width="66" height="97" />
+</TextureAtlas>

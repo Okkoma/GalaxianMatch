@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<element>
+    <attribute name="Name" value="CompanionBox" />
+    <attribute name="Size" value="540 960" />
+    <element type="Sprite">
+        <attribute name="Name" value="Frame" />
+        <attribute name="Position" value="340 800" />
+        <attribute name="Blend Mode" value="alpha" />
+        <attribute name="Color" value="0 0 0 0" />
+        <attribute name="Size" value="400 150" />
+		<attribute name="Priority" value="1" />
+        <element type="Button">
+            <attribute name="Name" value="FrameBtn" />            
+            <attribute name="Size" value="400 150" />
+            <attribute name="Color" value="0 0 0 0" />
+        </element>		
+        <element type="Sprite">
+            <attribute name="Name" value="Rect" />
+            <attribute name="Horiz Alignment" value="Center" />  
+			<attribute name="Vert Alignment" value="Center" />
+            <attribute name="Size" value="400 150" />
+		    <attribute name="Hotspot" value="0 0" />
+            <attribute name="Texture" value="Texture2D;UI/dialogframe1.png" />
+            <attribute name="Border" value="40 40 40 40" />
+		    <attribute name="Blend Mode" value="alpha" />
+		    <attribute name="Is Visible" value="true" />
+		    <attribute name="Priority" value="1" />		    
+            <element type="Text">
+                <attribute name="Name" value="Name" />
+                <attribute name="Position" value="0 7" />
+                <attribute name="Horiz Alignment" value="Center" />
+			    <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+			    <attribute name="Font Size" value="12" />
+                <attribute name="Text Alignment" value="Center" />
+                <attribute name="Color" value="1 1 1 1" />
+                <attribute name="Text" value="Name" />
+                <attribute name="Priority" value="2" />
+            </element>    		
+            <element type="Text">
+                <attribute name="Name" value="Content" />
+                <attribute name="Horiz Alignment" value="Center" />
+                <attribute name="Vert Alignment" value="Center" />
+                <attribute name="Color" value="1 1 1 1" />
+			    <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+			    <attribute name="Font Size" value="14" />
+			    <attribute name="Size" value="350 130" />
+                <attribute name="Text" value="Content" />
+		        <attribute name="Word Wrap" value="true" /> 
+		        <attribute name="Priority" value="3" />          
+            </element>
+        </element>
+        <element type="AnimatedSprite">
+            <attribute name="Name" value="Companion" />
+			<attribute name="Horiz Alignment" value="Right" />  
+			<attribute name="Vert Alignment" value="Top" />       
+            <attribute name="Position" value="0 -215" />
+            <attribute name="Size" value="225 225" />
+		    <attribute name="HotSpot" value="0.75 1" />
+			<attribute name="Animation Set" value="AnimationSet2D;UI/Companion/companions.scml" />		    
+			<attribute name="Entity" value="capi" />
+			<attribute name="Animation" value="idle" />
+		    <attribute name="Blend Mode" value="alpha" />
+		    <attribute name="Is Visible" value="true" />
+		    <attribute name="Priority" value="4" />
+	     </element>        
+    </element>
+</element>

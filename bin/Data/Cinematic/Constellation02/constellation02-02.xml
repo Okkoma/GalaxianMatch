@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="constellation02-02.webp">
+	<SubTexture name="sketch07_etoile_halo" x="1093" y="443" width="366" height="358" />
+	<SubTexture name="sketch07_etoiles" x="1" y="1" width="587" height="587" />
+	<SubTexture name="sketch07_poisson_queue2" x="1" y="589" width="457" height="329" />
+	<SubTexture name="sketch09_boss2_corps" x="1460" y="443" width="379" height="352" />
+	<SubTexture name="sketch09_boss2_elec1" x="1921" y="1" width="62" height="169" />
+	<SubTexture name="sketch09_boss2_elec2" x="964" y="445" width="64" height="118" />
+	<SubTexture name="sketch09_boss2_elec3" x="1984" y="1" width="35" height="48" />
+	<SubTexture name="sketch09_boss2_eye1" x="809" y="445" width="122" height="109" />
+	<SubTexture name="sketch09_boss2_eye2" x="1921" y="310" width="105" height="92" />
+	<SubTexture name="sketch09_boss2_halo" x="589" y="557" width="374" height="341" />
+	<SubTexture name="sketch09_poisson_corps" x="809" y="1" width="283" height="443" />
+	<SubTexture name="sketch09_poisson_nageoire1" x="964" y="802" width="477" height="273" />
+	<SubTexture name="sketch09_poisson_nageoire2" x="459" y="899" width="394" height="178" />
+	<SubTexture name="sketch09_poisson_nageoire3" x="1809" y="870" width="155" height="63" />
+	<SubTexture name="sketch09_poisson_queue1" x="1093" y="1" width="596" height="441" />
+	<SubTexture name="sketch09_poisson_queue3" x="589" y="1" width="219" height="555" />
+	<SubTexture name="sketch09_watersplash1" x="1840" y="404" width="176" height="342" />
+	<SubTexture name="sketch09_watersplash2" x="1690" y="1" width="230" height="402" />
+	<SubTexture name="sketch09_watersplash3" x="1921" y="171" width="123" height="138" />
+	<SubTexture name="sketch09_watersplash4" x="1840" y="747" width="160" height="122" />
+	<SubTexture name="sketch09_watersplash5" x="1460" y="796" width="348" height="317" />
+</TextureAtlas>

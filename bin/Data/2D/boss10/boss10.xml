@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="boss10.webp">
+	<SubTexture name="boss10_corps" x="477" y="1" width="417" height="474" />
+	<SubTexture name="boss10_cross" x="737" y="476" width="192" height="84" />
+	<SubTexture name="boss10_grid" x="477" y="476" width="259" height="211" />
+	<SubTexture name="boss10_halo" x="1" y="1" width="475" height="543" />
+	<SubTexture name="boss10_rond1" x="895" y="67" width="50" height="47" />
+	<SubTexture name="boss10_rond2" x="953" y="1" width="57" height="65" />
+	<SubTexture name="case1_circle" x="930" y="499" width="50" height="47" />
+	<SubTexture name="case1_cross" x="930" y="451" width="50" height="47" />
+	<SubTexture name="case2_circle" x="946" y="211" width="50" height="47" />
+	<SubTexture name="case2_cross" x="946" y="403" width="50" height="47" />
+	<SubTexture name="case3_circle" x="895" y="211" width="50" height="47" />
+	<SubTexture name="case3_cross" x="895" y="403" width="50" height="47" />
+	<SubTexture name="case4_circle" x="946" y="163" width="50" height="47" />
+	<SubTexture name="case4_cross" x="946" y="355" width="50" height="47" />
+	<SubTexture name="case5_circle" x="895" y="163" width="50" height="47" />
+	<SubTexture name="case5_cross" x="895" y="355" width="50" height="47" />
+	<SubTexture name="case6_circle" x="946" y="115" width="50" height="47" />
+	<SubTexture name="case6_cross" x="946" y="307" width="50" height="47" />
+	<SubTexture name="case7_circle" x="895" y="115" width="50" height="47" />
+	<SubTexture name="case7_cross" x="895" y="307" width="50" height="47" />
+	<SubTexture name="case8_circle" x="946" y="67" width="50" height="47" />
+	<SubTexture name="case8_cross" x="946" y="259" width="50" height="47" />
+	<SubTexture name="case9_circle" x="895" y="1" width="57" height="65" />
+	<SubTexture name="case9_cross" x="895" y="259" width="50" height="47" />
+</TextureAtlas>

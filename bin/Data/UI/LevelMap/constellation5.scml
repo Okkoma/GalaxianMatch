@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r11">
+    <folder id="0">
+        <file id="0" name="constellation5_symbole.webp" width="744" height="1052" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="1" name="constellation5_etoiles.webp" width="744" height="1052" pivot_x="0.5" pivot_y="0.5"/>
+    </folder>
+    <entity id="0" name="Constellation5">
+        <animation id="0" name="animation" length="3000" interval="100" looping="false">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="0" z_index="1"/>
+                </key>
+                <key id="1" time="1001">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="1" z_index="1"/>
+                </key>
+                <key id="2" time="1996">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="2" z_index="1"/>
+                </key>
+                <key id="3" time="2147">
+                    <object_ref id="0" timeline="0" key="2" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="2" z_index="1"/>
+                </key>
+                <key id="4" time="3000">
+                    <object_ref id="0" timeline="0" key="3" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="3" z_index="1"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="constellation5_symbole">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" scale_x="0.5" scale_y="0.5" a="0"/>
+                </key>
+                <key id="1" time="1001" spin="0">
+                    <object folder="0" file="0" a="0.44776"/>
+                </key>
+                <key id="2" time="2147" spin="0">
+                    <object folder="0" file="0" scale_x="1.05" scale_y="1.05" a="1"/>
+                </key>
+                <key id="3" time="3000" spin="0">
+                    <object folder="0" file="0" scale_x="10" scale_y="10" a="0"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="constellation5_etoiles">
+                <key id="0" spin="0">
+                    <object folder="0" file="1" a="0"/>
+                </key>
+                <key id="1" time="1001" spin="0">
+                    <object folder="0" file="1" a="0"/>
+                </key>
+                <key id="2" time="1996" spin="0">
+                    <object folder="0" file="1"/>
+                </key>
+                <key id="3" time="3000" spin="0">
+                    <object folder="0" file="1" angle="0" a="0"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="keep" length="6000" interval="100">
+            <mainline>
+                <key id="0" curve_type="cubic" c1="0" c2="0.995261">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="0" z_index="1"/>
+                </key>
+                <key id="1" time="3972" curve_type="cubic" c1="0" c2="0.995261">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="1" z_index="1"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="constellation5_symbole">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" angle="0" scale_x="1.05" scale_y="1.05" a="0"/>
+                </key>
+                <key id="1" time="3972" spin="0">
+                    <object folder="0" file="0" angle="0" scale_x="1.05" scale_y="1.05" a="0.25"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="constellation5_etoiles">
+                <key id="0" spin="0">
+                    <object folder="0" file="1" angle="0" a="0"/>
+                </key>
+                <key id="1" time="3972" spin="0">
+                    <object folder="0" file="1" angle="0" a="0.25"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

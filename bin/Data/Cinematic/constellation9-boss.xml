@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<node>
+	<attribute name="Is Enabled" value="true" />
+	<attribute name="Name" value="LocalScene" />
+	<attribute name="Tags" />
+	<attribute name="Position" value="0 0 0" />
+	<attribute name="Rotation" value="1 0 0 0" />
+	<attribute name="Scale" value="0.6 0.6 1" />
+	<attribute name="Variables" />
+	<node>
+    	<attribute name="Name" value="play47" />
+		<attribute name="Is Enabled" value="false" />
+		<attribute name="Position" value="0 0 0" />
+		<attribute name="Rotation" value="1 0 0 0" />
+		<attribute name="Scale" value="0.6 0.6 1" />
+		<attribute name="Variables" />
+		<component type="StaticSprite2D">
+			<attribute name="Layer" value="1000" />
+			<attribute name="Sprite" value="Sprite2D;Cinematic/Sketchs/sketch47.png" />
+		</component>		
+	</node>	
+</node>

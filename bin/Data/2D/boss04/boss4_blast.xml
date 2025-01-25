@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="boss04.webp">
+	<SubTexture name="boss4_cretehalo" x="462" y="130" width="48" height="107" />
+</TextureAtlas>

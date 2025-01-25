@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="boss03.webp">
+	<SubTexture name="boss03_bouche" x="951" y="1" width="44" height="45" />
+	<SubTexture name="boss03_bouche2" x="996" y="1" width="23" height="37" />
+	<SubTexture name="boss03_corps" x="413" y="1" width="257" height="211" />
+	<SubTexture name="boss03_langue" x="671" y="1" width="279" height="57" />
+	<SubTexture name="boss03_oeil" x="973" y="47" width="20" height="19" />
+	<SubTexture name="boss03_oeil2" x="951" y="47" width="21" height="20" />
+	<SubTexture name="boss03_orbite" x="996" y="39" width="26" height="23" />
+	<SubTexture name="boss03_vapeur" x="1" y="1" width="411" height="360" />
+</TextureAtlas>

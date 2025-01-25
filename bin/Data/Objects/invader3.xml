@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<node>
+	<attribute name="Is Enabled" value="true" />
+	<attribute name="Name" value="Invader3" />
+	<attribute name="Position" value="0.0 0.0 0" />
+	<attribute name="Rotation" value="1 0 0 0" />
+	<attribute name="Scale" value="0.5 0.5 1" />
+	<attribute name="Variables">
+		<variant name="GOA_MatchType" hash="-600126471" type="int" value="5" />
+	</attribute>
+	<component type="StaticSprite2D">
+		<attribute name="Sprite" value="SpriteSheet2D;2D/tiles.xml@invader3" />
+	</component>		
+</node>

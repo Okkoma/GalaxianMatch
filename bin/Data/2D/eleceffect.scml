@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r11">
+    <folder id="0">
+        <file id="0" name="eleceffect01.png" width="79" height="57" pivot_x="0" pivot_y="1"/>
+        <file id="1" name="eleceffect02.png" width="67" height="80" pivot_x="0" pivot_y="1"/>
+        <file id="2" name="eleceffect03.png" width="62" height="47" pivot_x="0" pivot_y="1"/>
+        <file id="3" name="eleceffect04.png" width="65" height="64" pivot_x="0" pivot_y="1"/>
+        <file id="4" name="eleceffect05.png" width="78" height="41" pivot_x="0" pivot_y="1"/>
+    </folder>
+    <entity id="0" name="eleceffect">
+        <animation id="0" name="use" length="400" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="0" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="0" z_index="2"/>
+                    <object_ref id="3" timeline="3" key="0" z_index="3"/>
+                    <object_ref id="4" timeline="4" key="0" z_index="4"/>
+                </key>
+                <key id="1" time="117">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="1" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="1" z_index="2"/>
+                    <object_ref id="3" timeline="3" key="1" z_index="3"/>
+                    <object_ref id="4" timeline="4" key="1" z_index="4"/>
+                </key>
+                <key id="2" time="119">
+                    <object_ref id="0" timeline="0" key="2" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="2" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="2" z_index="2"/>
+                    <object_ref id="3" timeline="3" key="2" z_index="3"/>
+                    <object_ref id="4" timeline="4" key="2" z_index="4"/>
+                </key>
+                <key id="3" time="248">
+                    <object_ref id="0" timeline="0" key="3" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="3" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="3" z_index="2"/>
+                    <object_ref id="3" timeline="3" key="3" z_index="3"/>
+                    <object_ref id="4" timeline="4" key="3" z_index="4"/>
+                </key>
+                <key id="4" time="251">
+                    <object_ref id="0" timeline="0" key="4" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="4" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="4" z_index="2"/>
+                    <object_ref id="3" timeline="3" key="4" z_index="3"/>
+                    <object_ref id="4" timeline="4" key="4" z_index="4"/>
+                </key>
+                <key id="5" time="400">
+                    <object_ref id="0" timeline="0" key="5" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="5" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="5" z_index="2"/>
+                    <object_ref id="3" timeline="3" key="5" z_index="3"/>
+                    <object_ref id="4" timeline="4" key="5" z_index="4"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="eleceffect01">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="-50.75" y="-7.711538"/>
+                </key>
+                <key id="1" time="117" spin="0">
+                    <object folder="0" file="0" x="-50.75" y="-7.711538"/>
+                </key>
+                <key id="2" time="119" spin="0">
+                    <object folder="0" file="1" x="-50.75" y="-7.711538"/>
+                </key>
+                <key id="3" time="248" spin="0">
+                    <object folder="0" file="1" x="-50.75" y="-7.711538"/>
+                </key>
+                <key id="4" time="251" spin="0">
+                    <object folder="0" file="2" x="-50.75" y="-7.711538"/>
+                </key>
+                <key id="5" time="400" spin="0">
+                    <object folder="0" file="2" x="-50.75" y="-7.711538" a="0"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="eleceffect02">
+                <key id="0" spin="0">
+                    <object folder="0" file="1" x="7" y="95"/>
+                </key>
+                <key id="1" time="117" spin="0">
+                    <object folder="0" file="1" x="7" y="95"/>
+                </key>
+                <key id="2" time="119" spin="0">
+                    <object folder="0" file="2" x="8.442308" y="59.423077"/>
+                </key>
+                <key id="3" time="248">
+                    <object folder="0" file="2" x="8.442308" y="59.423077"/>
+                </key>
+                <key id="4" time="251" spin="0">
+                    <object folder="0" file="0" x="-13.673077" y="33.942308" angle="44.465911" scale_x="1" scale_y="1"/>
+                </key>
+                <key id="5" time="400" spin="-1">
+                    <object folder="0" file="0" x="-13.673077" y="33.942308" angle="44.465911" scale_x="1" scale_y="1" a="0"/>
+                </key>
+            </timeline>
+            <timeline id="2" name="eleceffect03">
+                <key id="0" spin="0">
+                    <object folder="0" file="2" x="-82.076923" y="14.153846"/>
+                </key>
+                <key id="1" time="117" spin="0">
+                    <object folder="0" file="2" x="-82.076923" y="14.153846"/>
+                </key>
+                <key id="2" time="119" spin="0">
+                    <object folder="0" file="4" x="-82.076923" y="14.153846"/>
+                </key>
+                <key id="3" time="248" spin="0">
+                    <object folder="0" file="4" x="-82.076923" y="14.153846"/>
+                </key>
+                <key id="4" time="251" spin="0">
+                    <object folder="0" file="3" x="-82.076923" y="14.153846"/>
+                </key>
+                <key id="5" time="400" spin="0">
+                    <object folder="0" file="3" x="-82.076923" y="14.153846" a="0"/>
+                </key>
+            </timeline>
+            <timeline id="3" name="eleceffect04">
+                <key id="0" spin="0">
+                    <object folder="0" file="3" x="-60.634615" y="84.153846"/>
+                </key>
+                <key id="1" time="117" spin="0">
+                    <object folder="0" file="3" x="-60.634615" y="84.153846"/>
+                </key>
+                <key id="2" time="119" spin="0">
+                    <object folder="0" file="1" x="-60.634615" y="84.153846"/>
+                </key>
+                <key id="3" time="248" spin="0">
+                    <object folder="0" file="1" x="-60.634615" y="84.153846"/>
+                </key>
+                <key id="4" time="251" spin="0">
+                    <object folder="0" file="2" x="-60.634615" y="84.153846"/>
+                </key>
+                <key id="5" time="400" spin="0">
+                    <object folder="0" file="2" x="-60.634615" y="84.153846" a="0"/>
+                </key>
+            </timeline>
+            <timeline id="4" name="eleceffect05">
+                <key id="0" spin="0">
+                    <object folder="0" file="4" x="11.076923" y="14.25"/>
+                </key>
+                <key id="1" time="117" spin="0">
+                    <object folder="0" file="4" x="11.076923" y="14.25"/>
+                </key>
+                <key id="2" time="119" spin="0">
+                    <object folder="0" file="3" x="11.076923" y="14.25"/>
+                </key>
+                <key id="3" time="248" spin="0">
+                    <object folder="0" file="3" x="11.076923" y="14.25"/>
+                </key>
+                <key id="4" time="251" spin="0">
+                    <object folder="0" file="0" x="11.076923" y="14.25"/>
+                </key>
+                <key id="5" time="400" spin="0">
+                    <object folder="0" file="0" x="11.076923" y="14.25" a="0"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

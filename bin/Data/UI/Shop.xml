@@ -1,0 +1,964 @@
+<?xml version="1.0"?>
+<element>
+	<attribute name="Size" value="540 960" />
+	<attribute name="Pivot" value="0.5 0.5" />
+<element type="Window">
+	<attribute name="Size" value="530 400" />
+	<attribute name="Position" value="270 480" />
+	<attribute name="Pivot" value="0.5 0.5" />
+	<attribute name="Opacity" value="0.9" />
+	<attribute name="Image Rect" value="48 0 64 16" />
+
+	<element type="Text">
+		<attribute name="Position" value="0 15" />
+		<attribute name="Min Anchor" value="0.5 0" />
+		<attribute name="Max Anchor" value="0.5 0" />
+		<attribute name="Pivot" value="0.5 0" />
+		<attribute name="Top Left Color" value="0.85 0.85 0.85 1" />
+		<attribute name="Top Right Color" value="0.85 0.85 0.85 1" />
+		<attribute name="Bottom Left Color" value="0.85 0.85 0.85 1" />
+		<attribute name="Bottom Right Color" value="0.85 0.85 0.85 1" />
+		<attribute name="Font Size" value="32" />
+		<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		<attribute name="Text" value="shop" />
+		<attribute name="Text Alignment" value="Center" />
+		<attribute name="Auto Localizable" value="true" />
+	</element>
+
+	<element>
+		<attribute name="Position" value="40 40" />
+		<attribute name="Min Anchor" value="0.75 0" />
+		<attribute name="Max Anchor" value="0.75 0" />
+		<attribute name="Pivot" value="0.5 0.5" />
+		<element type="BorderImage" style="BorderImage">
+			<attribute name="Texture" value="Texture2D;UI/coin.png" />
+			<attribute name="Image Rect" value="0 0 128 128" />
+			<attribute name="Blend Mode" value="alpha" />
+	        <attribute name="Min Size" value="64 64" />
+        	<attribute name="Max Size" value="64 64" />
+			<element type="Text">
+    			<attribute name="Name" value="Coins" /> 			
+				<attribute name="Min Anchor" value="0.5 0.5" />
+				<attribute name="Max Anchor" value="0.5 0.5" />
+				<attribute name="Pivot" value="0 0" />
+				<attribute name="Top Left Color" value="1 1 0.5 1" />
+				<attribute name="Top Right Color" value="1 1 1 1" />
+				<attribute name="Bottom Left Color" value="1 1 1 1" />
+				<attribute name="Bottom Right Color" value="1 1 0.5 1" />
+				<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+				<attribute name="Font Size" value="30" />
+				<attribute name="Text Effect" value="Stroke" />
+				<attribute name="Round Stroke" value="true" />
+				<attribute name="Effect Color" value="1 0.5 0 1" />
+				<attribute name="Text" value="X" />
+			</element>			
+		</element>
+	</element>
+
+	<element>
+		<attribute name="Name" value="TabbedWindow" />
+		<attribute name="Layout Mode" value="Free" />
+		<attribute name="Pivot" value="0 0" />
+		<attribute name="Position" value="15 112" />
+		<element>
+			<attribute name="Name" value="TabSwitches" />
+			<attribute name="Size" value="512 64" />
+			<attribute name="Min Size" value="512 64" />
+			<attribute name="Max Size" value="512 64" />
+			<attribute name="Pivot" value="0 0" />
+			<attribute name="Color" value="0 0 0 0" />
+			<attribute name="Indent Spacing" value="0" />
+			<element type="Button" style="WindowButton" >
+				<attribute name="Name" value="Switch1" />
+				<attribute name="Size" value="64 65" />
+				<attribute name="Pivot" value="0 0" />
+				<!-- <attribute name="Color" value="0 0.8 0.8 1" /> -->
+				<attribute name="Focus Mode" value="NotFocusable" />
+				<element type="Sprite" style="none" >
+					<attribute name="Texture" value="Texture2D;UI/Shop/pur_star.png" />
+					<attribute name="Size" value="61 60" />
+				</element>
+			</element>
+			<element type="Button" style="WindowButton" >
+				<attribute name="Name" value="Switch2" />
+				<attribute name="Position" value="64 0" />
+				<attribute name="Size" value="64 65" />
+				<attribute name="Pivot" value="0 0" />
+				<!-- <attribute name="Color" value="0 1 1 1" /> -->
+				<attribute name="Focus Mode" value="NotFocusable" />
+				<element type="Sprite" style="none" >
+					<attribute name="Texture" value="Texture2D;UI/Shop/pur_bonus.png" />
+					<attribute name="Size" value="61 60" />
+				</element>
+			</element>
+			<element type="Button" style="WindowButton" >
+				<attribute name="Name" value="Switch3" />
+				<attribute name="Position" value="128 0" />
+				<attribute name="Size" value="64 65" />
+				<attribute name="Pivot" value="0 0" />
+				<!-- <attribute name="Color" value="0 1 1 1" /> -->
+				<attribute name="Focus Mode" value="NotFocusable" />
+				<element type="Sprite" style="none" >
+					<attribute name="Texture" value="Texture2D;UI/Shop/pur_gen.png" />
+					<attribute name="Size" value="61 60" />
+				</element>
+			</element>
+			<element type="Button" style="WindowButton" >
+				<attribute name="Name" value="Switch4" />
+				<attribute name="Position" value="192 0" />
+				<attribute name="Size" value="64 65" />
+				<attribute name="Pivot" value="0 0" />
+				<!-- <attribute name="Color" value="0 1 1 1" /> -->
+				<attribute name="Focus Mode" value="NotFocusable" />
+				<element type="Sprite" style="none" >
+					<attribute name="Texture" value="Texture2D;UI/Shop/pur_coin.png" />
+					<attribute name="Size" value="61 60" />
+				</element>
+			</element>
+		</element>
+		<element type="ListView" style="none">
+			<attribute name="Name" value="Tab1" />
+			<attribute name="Position" value="0 64" />
+			<attribute name="Size" value="512 144" />
+			<attribute name="Pivot" value="0 0" />
+			<!-- <attribute name="Border" value="0 0 0 0" /> -->
+			<element type="ScrollBar" internal="true" style="none">
+				<attribute name="Size" value="512 16" />
+				<attribute name="Min Anchor" value="0 1" />
+				<attribute name="Max Anchor" value="0 1" />
+				<attribute name="Pivot" value="0 1" />
+				<attribute name="Color" value="0 0 0 0" />
+				<element type="Button" internal="true" style="none">
+					<attribute name="Size" value="8 16" />
+					<attribute name="Pivot" value="0 0" />
+					<attribute name="Color" value="0 0 0 1" />
+				</element>
+				<element type="Slider" internal="true" style="none">
+					<attribute name="Position" value="8 0" />
+					<attribute name="Size" value="496 16" />
+					<attribute name="Pivot" value="0 0" />
+					<attribute name="Color" value="0 0 0 1" />
+					<element type="Sprite" internal="true" style="none">
+						<attribute name="Pivot" value="0 0" />
+						<attribute name="Color" value="1 1 1 1" />
+					</element>
+				</element>
+				<element type="Button" internal="true" style="none">
+					<attribute name="Position" value="504 0" />
+					<attribute name="Size" value="8 16" />
+					<attribute name="Pivot" value="0 0" />
+					<attribute name="Color" value="0 0 0 1" />
+				</element>
+			</element>
+			<element type="ScrollBar" internal="true" style="none">
+				<!-- <attribute name="Size" value="16 128" /> -->
+				<attribute name="Min Anchor" value="1 0" />
+				<attribute name="Max Anchor" value="1 0" />
+				<attribute name="Pivot" value="1 0" />
+				<attribute name="Color" value="0 0 0 0" />
+				<attribute name="Is Visible" value="false" />
+				<element type="Button" internal="true" style="none">
+					<attribute name="Size" value="16 16" />
+					<attribute name="Pivot" value="0 0" />
+				</element>
+				<element type="Slider" internal="true" style="none">
+					<attribute name="Position" value="0 16" />
+					<attribute name="Size" value="16 96" />
+					<attribute name="Pivot" value="0 0" />
+				</element>
+				<element type="Button" internal="true" style="none">
+					<attribute name="Position" value="0 112" />
+					<attribute name="Size" value="16 16" />
+					<attribute name="Pivot" value="0 0" />
+				</element>
+			</element>
+			<element type="BorderImage" internal="true" style="Window" >
+				<attribute name="Name" value="TabContainer" />
+				<attribute name="Pivot" value="0 0" />
+				<attribute name="Min Size" value="512 144" />
+				<attribute name="Max Size" value="2147483647 144" />
+				<attribute name="Color" value="0 1 1 1" />
+				<element internal="true" style="none">
+					<attribute name="Name" value="Stars" />
+					<attribute name="Min Size" value="512 128" />
+					<attribute name="Max Size" value="2147483647 128" />
+					<attribute name="Pivot" value="0 0" />
+					<attribute name="Layout Mode" value="Horizontal" />
+					<element type="Button" style="none">
+							<attribute name="Name" value="star" />
+							<attribute name="Min Size" value="128 128" />
+							<attribute name="Max Size" value="128 128" />
+							<attribute name="Pivot" value="0 0" />
+							<attribute name="Layout Mode" value="Free" />
+							<attribute name="Focus Mode" value="NotFocusable" />
+							<attribute name="Focus Mode" value="Focusable" />
+							<attribute name="Texture" value="Texture2D;UI/star.png" />
+							<attribute name="Blend Mode" value="alpha" />
+							<attribute name="Hover Image Offset" value="0 0" />
+							<attribute name="Pressed Image Offset" value="1 1" />
+							<attribute name="Pressed Child Offset" value="-1 -1" />
+							<element type="Text">
+								<attribute name="Name" value="qty" />
+								<attribute name="Color" value="1 1 0 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="32" />
+								<attribute name="Text" value="5" />
+								<attribute name="Text Alignment" value="Center" />
+								<attribute name="Horiz Alignment" value="Center" />
+								<attribute name="Vert Alignment" value="Top" />
+							</element>
+							<element type="Text">
+								<attribute name="Name" value="value" />
+								<attribute name="Color" value="1 1 1 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="24" />
+								<attribute name="Text" value="5c" />
+								<attribute name="Text Alignment" value="Center" />
+								<attribute name="Horiz Alignment" value="Center" />
+								<attribute name="Vert Alignment" value="Bottom" />
+							</element>
+						</element>
+						<element type="Button" style="none">
+							<attribute name="Name" value="star" />
+							<attribute name="Min Size" value="128 128" />
+							<attribute name="Max Size" value="128 128" />
+							<attribute name="Pivot" value="0 0" />
+							<attribute name="Layout Mode" value="Free" />
+							<attribute name="Focus Mode" value="Focusable" />
+							<attribute name="Texture" value="Texture2D;UI/star.png" />
+							<attribute name="Blend Mode" value="alpha" />
+							<attribute name="Hover Image Offset" value="0 0" />
+							<attribute name="Pressed Image Offset" value="1 1" />
+							<attribute name="Pressed Child Offset" value="-1 -1" />
+							<element type="Text">
+								<attribute name="Name" value="qty" />
+								<attribute name="Min Anchor" value="0.5 0" />
+								<attribute name="Max Anchor" value="0.5 0" />
+								<attribute name="Pivot" value="0.5 0" />
+								<attribute name="Color" value="1 1 0 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="32" />
+								<attribute name="Text" value="10" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+							<element type="Text">
+								<attribute name="Name" value="value" />
+								<attribute name="Min Anchor" value="0.5 1" />
+								<attribute name="Max Anchor" value="0.5 1" />
+								<attribute name="Pivot" value="0.5 1" />
+								<attribute name="Color" value="1 1 1 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="24" />
+								<attribute name="Text" value="9c" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+						</element>
+						<element type="Button" style="none">
+							<attribute name="Name" value="star" />
+							<attribute name="Min Size" value="128 128" />
+							<attribute name="Max Size" value="128 128" />
+							<attribute name="Pivot" value="0 0" />
+							<attribute name="Layout Mode" value="Free" />
+							<attribute name="Focus Mode" value="Focusable" />
+							<attribute name="Texture" value="Texture2D;UI/star.png" />
+							<attribute name="Blend Mode" value="alpha" />
+							<attribute name="Hover Image Offset" value="0 0" />
+							<attribute name="Pressed Image Offset" value="1 1" />
+							<attribute name="Pressed Child Offset" value="-1 -1" />
+							<element type="Text">
+								<attribute name="Name" value="qty" />
+								<attribute name="Min Anchor" value="0.5 0" />
+								<attribute name="Max Anchor" value="0.5 0" />
+								<attribute name="Pivot" value="0.5 0" />
+								<attribute name="Color" value="1 1 0 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="32" />
+								<attribute name="Text" value="50" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+							<element type="Text">
+								<attribute name="Name" value="value" />
+								<attribute name="Min Anchor" value="0.5 1" />
+								<attribute name="Max Anchor" value="0.5 1" />
+								<attribute name="Pivot" value="0.5 1" />
+								<attribute name="Color" value="1 1 1 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="24" />
+								<attribute name="Text" value="45c" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+						</element>
+						<element type="Button" style="none">
+							<attribute name="Name" value="star" />
+							<attribute name="Min Size" value="128 128" />
+							<attribute name="Max Size" value="128 128" />
+							<attribute name="Pivot" value="0 0" />
+							<attribute name="Layout Mode" value="Free" />
+							<attribute name="Focus Mode" value="Focusable" />
+							<attribute name="Texture" value="Texture2D;UI/star.png" />
+							<attribute name="Blend Mode" value="alpha" />
+							<attribute name="Hover Image Offset" value="0 0" />
+							<attribute name="Pressed Image Offset" value="1 1" />
+							<attribute name="Pressed Child Offset" value="-1 -1" />
+							<element type="Text">
+								<attribute name="Name" value="qty" />
+								<attribute name="Min Anchor" value="0.5 0" />
+								<attribute name="Max Anchor" value="0.5 0" />
+								<attribute name="Pivot" value="0.5 0" />
+								<attribute name="Color" value="1 1 0 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="32" />
+								<attribute name="Text" value="100" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+							<element type="Text">
+								<attribute name="Name" value="value" />
+								<attribute name="Min Anchor" value="0.5 1" />
+								<attribute name="Max Anchor" value="0.5 1" />
+								<attribute name="Pivot" value="0.5 1" />
+								<attribute name="Color" value="1 1 1 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="24" />
+								<attribute name="Text" value="90c" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+						</element>
+					</element>
+			</element>
+		</element>
+		<element type="ListView" style="none">
+				<attribute name="Name" value="Tab2" />
+				<attribute name="Position" value="0 64" />
+				<attribute name="Size" value="512 144" />
+				<attribute name="Pivot" value="0 0" />
+				<!-- <attribute name="Border" value="0 0 0 0" /> -->
+				<element type="ScrollBar" internal="true" style="none">
+					<!-- <attribute name="Size" value="512 16" /> -->
+					<attribute name="Min Size" value="0 16" />
+					<attribute name="Max Size" value="2147483647 16" />
+					<attribute name="Min Anchor" value="0 1" />
+					<attribute name="Max Anchor" value="0 1" />
+					<attribute name="Pivot" value="0 1" />
+					<attribute name="Color" value="0 0 0 0" />
+					<element type="Button" internal="true" style="none">
+						<attribute name="Size" value="8 16" />
+						<attribute name="Pivot" value="0 0" />
+						<attribute name="Color" value="0 0 0 1" />
+					</element>
+					<element type="Slider" internal="true" style="none">
+						<attribute name="Position" value="8 0" />
+						<attribute name="Min Size" value="496 16" />
+						<attribute name="Max Size" value="2147483647 16" />
+						<!-- <attribute name="Size" value="496 16" /> -->
+						<attribute name="Pivot" value="0 0" />
+						<attribute name="Color" value="0 0 0 1" />
+						<element type="Sprite" internal="true" style="none">
+							<attribute name="Pivot" value="0 0" />
+							<attribute name="Color" value="1 1 1 1" />
+						</element>
+					</element>
+					<element type="Button" internal="true" style="none">
+						<attribute name="Position" value="504 0" />
+						<attribute name="Size" value="8 16" />
+						<attribute name="Pivot" value="0 0" />
+						<attribute name="Color" value="0 0 0 1" />
+					</element>
+				</element>
+				<element type="ScrollBar" internal="true" style="none">
+					<!-- <attribute name="Size" value="16 128" /> -->
+					<attribute name="Min Anchor" value="1 0" />
+					<attribute name="Max Anchor" value="1 0" />
+					<attribute name="Pivot" value="1 0" />
+					<attribute name="Color" value="0 0 0 0" />
+					<attribute name="Is Visible" value="false" />
+					<element type="Button" internal="true" style="none">
+						<attribute name="Size" value="16 16" />
+						<attribute name="Pivot" value="0 0" />
+					</element>
+					<element type="Slider" internal="true" style="none">
+						<attribute name="Position" value="0 16" />
+						<attribute name="Size" value="16 96" />
+						<attribute name="Pivot" value="0 0" />
+					</element>
+					<element type="Button" internal="true" style="none">
+						<attribute name="Position" value="0 112" />
+						<attribute name="Size" value="16 16" />
+						<attribute name="Pivot" value="0 0" />
+					</element>
+				</element>
+				<element type="BorderImage" internal="true" style="Window" >
+					<attribute name="Name" value="TabContainer" />
+					<attribute name="Pivot" value="0 0" />
+					<attribute name="Min Size" value="512 128" />
+					<attribute name="Max Size" value="2147483647 128" />
+					<attribute name="Color" value="0 1 1 1" />
+					<element internal="true" style="none">
+						<attribute name="Name" value="Powers" />
+						<attribute name="Min Size" value="512 128" />
+						<attribute name="Max Size" value="2147483647 128" />
+						<attribute name="Pivot" value="0 0" />
+						<attribute name="Layout Mode" value="Horizontal" />
+						<element type="Button" style="none">
+							<attribute name="Name" value="power_bombh" />
+								<attribute name="Min Size" value="128 128" />
+								<attribute name="Max Size" value="128 128" />
+								<attribute name="Pivot" value="0 0" />
+								<attribute name="Focus Mode" value="Focusable" />
+								<attribute name="Texture" value="Texture2D;2D/power_bombh.png" />
+								<attribute name="Blend Mode" value="alpha" />
+								<attribute name="Hover Image Offset" value="0 0" />
+								<attribute name="Pressed Image Offset" value="1 1" />
+								<attribute name="Pressed Child Offset" value="-1 -1" />
+								<element type="Text">
+									<attribute name="Name" value="qty" />
+									<attribute name="Min Anchor" value="0.5 0" />
+									<attribute name="Max Anchor" value="0.5 0" />
+									<attribute name="Pivot" value="0.5 0" />
+									<attribute name="Color" value="1 1 0 1" />
+									<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+									<attribute name="Font Size" value="32" />
+									<attribute name="Text" value="1" />
+									<attribute name="Text Alignment" value="Center" />
+								</element>
+								<element type="Text">
+									<attribute name="Name" value="value" />
+									<attribute name="Min Anchor" value="0.5 1" />
+									<attribute name="Max Anchor" value="0.5 1" />
+									<attribute name="Pivot" value="0.5 1" />
+									<attribute name="Color" value="1 1 1 1" />
+									<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+									<attribute name="Font Size" value="24" />
+									<attribute name="Text" value="1c" />
+									<attribute name="Text Alignment" value="Center" />
+								</element>
+						</element>
+						<element type="Button" style="none">
+							<attribute name="Name" value="power_bombv" />
+								<attribute name="Min Size" value="128 128" />
+								<attribute name="Max Size" value="128 128" />
+								<attribute name="Pivot" value="0 0" />
+								<attribute name="Focus Mode" value="Focusable" />
+								<attribute name="Texture" value="Texture2D;2D/power_bombv.png" />
+								<attribute name="Blend Mode" value="alpha" />
+								<attribute name="Hover Image Offset" value="0 0" />
+								<attribute name="Pressed Image Offset" value="1 1" />
+								<attribute name="Pressed Child Offset" value="-1 -1" />
+								<element type="Text">
+									<attribute name="Name" value="qty" />
+									<attribute name="Min Anchor" value="0.5 0" />
+									<attribute name="Max Anchor" value="0.5 0" />
+									<attribute name="Pivot" value="0.5 0" />
+									<attribute name="Color" value="1 1 0 1" />
+									<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+									<attribute name="Font Size" value="32" />
+									<attribute name="Text" value="1" />
+									<attribute name="Text Alignment" value="Center" />
+								</element>
+								<element type="Text">
+									<attribute name="Name" value="value" />
+									<attribute name="Min Anchor" value="0.5 1" />
+									<attribute name="Max Anchor" value="0.5 1" />
+									<attribute name="Pivot" value="0.5 1" />
+									<attribute name="Color" value="1 1 1 1" />
+									<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+									<attribute name="Font Size" value="24" />
+									<attribute name="Text" value="1c" />
+									<attribute name="Text Alignment" value="Center" />
+								</element>
+						</element>
+						<element type="Button" style="none">
+							<attribute name="Name" value="power_bombhv" />
+							<attribute name="Min Size" value="128 128" />
+							<attribute name="Max Size" value="128 128" />
+							<attribute name="Pivot" value="0 0" />
+							<attribute name="Focus Mode" value="Focusable" />
+							<attribute name="Texture" value="Texture2D;2D/power_bombhv.png" />
+							<attribute name="Blend Mode" value="alpha" />
+							<attribute name="Hover Image Offset" value="0 0" />
+							<attribute name="Pressed Image Offset" value="1 1" />
+							<attribute name="Pressed Child Offset" value="-1 -1" />
+							<element type="Text">
+								<attribute name="Name" value="qty" />
+								<attribute name="Min Anchor" value="0.5 0" />
+								<attribute name="Max Anchor" value="0.5 0" />
+								<attribute name="Pivot" value="0.5 0" />
+								<attribute name="Color" value="1 1 0 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="32" />
+								<attribute name="Text" value="1" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+							<element type="Text">
+								<attribute name="Name" value="value" />
+								<attribute name="Min Anchor" value="0.5 1" />
+								<attribute name="Max Anchor" value="0.5 1" />
+								<attribute name="Pivot" value="0.5 1" />
+								<attribute name="Color" value="1 1 1 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="24" />
+								<attribute name="Text" value="2c" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+						</element>
+						<element type="Button" style="none">
+							<attribute name="Name" value="power_bombhv" />
+								<attribute name="Min Size" value="128 128" />
+								<attribute name="Max Size" value="128 128" />
+								<attribute name="Pivot" value="0 0" />
+								<attribute name="Focus Mode" value="Focusable" />
+								<attribute name="Texture" value="Texture2D;2D/power_bombhv.png" />
+								<attribute name="Blend Mode" value="alpha" />
+								<attribute name="Hover Image Offset" value="0 0" />
+								<attribute name="Pressed Image Offset" value="1 1" />
+								<attribute name="Pressed Child Offset" value="-1 -1" />
+								<element type="Text">
+									<attribute name="Name" value="qty" />
+									<attribute name="Min Anchor" value="0.5 0" />
+									<attribute name="Max Anchor" value="0.5 0" />
+									<attribute name="Pivot" value="0.5 0" />
+									<attribute name="Color" value="1 1 0 1" />
+									<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+									<attribute name="Font Size" value="32" />
+									<attribute name="Text" value="10" />
+									<attribute name="Text Alignment" value="Center" />
+								</element>
+								<element type="Text">
+									<attribute name="Name" value="value" />
+									<attribute name="Min Anchor" value="0.5 1" />
+									<attribute name="Max Anchor" value="0.5 1" />
+									<attribute name="Pivot" value="0.5 1" />
+									<attribute name="Color" value="1 1 1 1" />
+									<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+									<attribute name="Font Size" value="24" />
+									<attribute name="Text" value="15c" />
+									<attribute name="Text Alignment" value="Center" />
+								</element>
+						</element>
+						<element type="Button" style="none">
+							<attribute name="Name" value="power_rockb" />
+							<attribute name="Min Size" value="128 128" />
+							<attribute name="Max Size" value="128 128" />
+							<attribute name="Pivot" value="0 0" />
+							<attribute name="Focus Mode" value="Focusable" />
+							<attribute name="Texture" value="Texture2D;2D/power_rockb.png" />
+							<attribute name="Blend Mode" value="alpha" />
+							<attribute name="Hover Image Offset" value="0 0" />
+							<attribute name="Pressed Image Offset" value="1 1" />
+							<attribute name="Pressed Child Offset" value="-1 -1" />
+							<element type="Text">
+								<attribute name="Name" value="qty" />
+								<attribute name="Min Anchor" value="0.5 0" />
+								<attribute name="Max Anchor" value="0.5 0" />
+								<attribute name="Pivot" value="0.5 0" />
+								<attribute name="Color" value="1 1 0 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="32" />
+								<attribute name="Text" value="1" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+							<element type="Text">
+								<attribute name="Name" value="value" />
+								<attribute name="Min Anchor" value="0.5 1" />
+								<attribute name="Max Anchor" value="0.5 1" />
+								<attribute name="Pivot" value="0.5 1" />
+								<attribute name="Color" value="1 1 1 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="24" />
+								<attribute name="Text" value="1c" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+						</element>
+						<element type="Button" style="none">
+							<attribute name="Name" value="power_matchc" />
+							<attribute name="Min Size" value="128 128" />
+							<attribute name="Max Size" value="128 128" />
+							<attribute name="Pivot" value="0 0" />
+							<attribute name="Focus Mode" value="Focusable" />
+							<attribute name="Texture" value="Texture2D;2D/power_matchc.png" />
+							<attribute name="Blend Mode" value="alpha" />
+							<attribute name="Hover Image Offset" value="0 0" />
+							<attribute name="Pressed Image Offset" value="1 1" />
+							<attribute name="Pressed Child Offset" value="-1 -1" />
+							<element type="Text">
+								<attribute name="Name" value="qty" />
+								<attribute name="Min Anchor" value="0.5 0" />
+								<attribute name="Max Anchor" value="0.5 0" />
+								<attribute name="Pivot" value="0.5 0" />
+								<attribute name="Color" value="1 1 0 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="32" />
+								<attribute name="Text" value="1" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+							<element type="Text">
+								<attribute name="Name" value="value" />
+								<attribute name="Min Anchor" value="0.5 1" />
+								<attribute name="Max Anchor" value="0.5 1" />
+								<attribute name="Pivot" value="0.5 1" />
+								<attribute name="Color" value="1 1 1 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="24" />
+								<attribute name="Text" value="1c" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+						</element>
+						<element type="Button" style="none">
+							<attribute name="Name" value="power_neighd" />
+							<attribute name="Min Size" value="128 128" />
+							<attribute name="Max Size" value="128 128" />
+							<attribute name="Pivot" value="0 0" />
+							<attribute name="Focus Mode" value="Focusable" />
+							<attribute name="Texture" value="Texture2D;2D/power_neighd.png" />
+							<attribute name="Blend Mode" value="alpha" />
+							<attribute name="Hover Image Offset" value="0 0" />
+							<attribute name="Pressed Image Offset" value="1 1" />
+							<attribute name="Pressed Child Offset" value="-1 -1" />
+							<element type="Text">
+								<attribute name="Name" value="qty" />
+								<attribute name="Min Anchor" value="0.5 0" />
+								<attribute name="Max Anchor" value="0.5 0" />
+								<attribute name="Pivot" value="0.5 0" />
+								<attribute name="Color" value="1 1 0 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="32" />
+								<attribute name="Text" value="1" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+							<element type="Text">
+								<attribute name="Name" value="value" />
+								<attribute name="Min Anchor" value="0.5 1" />
+								<attribute name="Max Anchor" value="0.5 1" />
+								<attribute name="Pivot" value="0.5 1" />
+								<attribute name="Color" value="1 1 1 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="24" />
+								<attribute name="Text" value="1c" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+						</element>
+					</element>
+				</element>
+		</element>
+		<element type="ListView" style="none">
+			<attribute name="Name" value="Tab3" />
+			<attribute name="Position" value="0 64" />
+			<attribute name="Size" value="512 144" />
+			<attribute name="Pivot" value="0 0" />
+			<!-- <attribute name="Border" value="0 0 0 0" /> -->
+			<element type="ScrollBar" internal="true" style="none">
+				<attribute name="Size" value="512 16" />
+				<attribute name="Min Anchor" value="0 1" />
+				<attribute name="Max Anchor" value="0 1" />
+				<attribute name="Pivot" value="0 1" />
+				<attribute name="Color" value="0 0 0 0" />
+				<element type="Button" internal="true" style="none">
+					<attribute name="Size" value="8 16" />
+					<attribute name="Pivot" value="0 0" />
+					<attribute name="Color" value="0 0 0 1" />
+				</element>
+				<element type="Slider" internal="true" style="none">
+					<attribute name="Position" value="8 0" />
+					<attribute name="Size" value="496 16" />
+					<attribute name="Pivot" value="0 0" />
+					<attribute name="Color" value="0 0 0 1" />
+					<element type="Sprite" internal="true" style="none">
+						<attribute name="Pivot" value="0 0" />
+						<attribute name="Color" value="1 1 1 1" />
+					</element>
+				</element>
+				<element type="Button" internal="true" style="none">
+					<attribute name="Position" value="504 0" />
+					<attribute name="Size" value="8 16" />
+					<attribute name="Pivot" value="0 0" />
+					<attribute name="Color" value="0 0 0 1" />
+				</element>
+			</element>
+			<element type="ScrollBar" internal="true" style="none">
+					<!-- <attribute name="Size" value="16 128" /> -->
+					<attribute name="Min Anchor" value="1 0" />
+					<attribute name="Max Anchor" value="1 0" />
+					<attribute name="Pivot" value="1 0" />
+					<attribute name="Color" value="0 0 0 0" />
+					<attribute name="Is Visible" value="false" />
+					<element type="Button" internal="true" style="none">
+						<attribute name="Size" value="16 16" />
+						<attribute name="Pivot" value="0 0" />
+					</element>
+					<element type="Slider" internal="true" style="none">
+						<attribute name="Position" value="0 16" />
+						<attribute name="Size" value="16 96" />
+						<attribute name="Pivot" value="0 0" />
+						<element type="Sprite" internal="true" style="none">
+							<attribute name="Pivot" value="0 0" />
+						</element>
+					</element>
+					<element type="Button" internal="true" style="none">
+						<attribute name="Position" value="0 112" />
+						<attribute name="Size" value="16 16" />
+						<attribute name="Pivot" value="0 0" />
+					</element>
+			</element>
+			<element type="BorderImage" internal="true" style="Window" >
+					<attribute name="Name" value="TabContainer" />
+					<attribute name="Pivot" value="0 0" />
+					<attribute name="Min Size" value="512 144" />
+					<attribute name="Max Size" value="2147483647 144" />
+					<attribute name="Color" value="0 1 1 1" />
+					<element internal="true" style="none">
+						<attribute name="Name" value="Specials" />
+						<attribute name="Min Size" value="512 128" />
+						<attribute name="Max Size" value="2147483647 128" />
+						<attribute name="Pivot" value="0 0" />
+						<attribute name="Layout Mode" value="Horizontal" />
+						<element type="Button" style="none">
+							<attribute name="Name" value="Special1" />
+							<attribute name="Min Size" value="128 128" />
+							<attribute name="Max Size" value="128 128" />
+							<attribute name="Pivot" value="0 0" />
+							<attribute name="Focus Mode" value="Focusable" />
+							<attribute name="Color" value="0 0 0 0" />
+							<attribute name="Hover Image Offset" value="0 0" />
+							<attribute name="Pressed Image Offset" value="1 1" />
+							<attribute name="Pressed Child Offset" value="-1 -1" />
+							<element type="Text">
+								<attribute name="Name" value="qty" />
+								<attribute name="Min Anchor" value="0.5 0.5" />
+								<attribute name="Max Anchor" value="0.5 0.5" />
+								<attribute name="Pivot" value="0.5 0.5" />
+								<attribute name="Color" value="1 1 0 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="32" />
+								<attribute name="Text" value="NoAds" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+							<element type="Text">
+								<attribute name="Name" value="value" />
+								<attribute name="Min Anchor" value="0.5 1" />
+								<attribute name="Max Anchor" value="0.5 1" />
+								<attribute name="Pivot" value="0.5 1" />
+								<attribute name="Color" value="1 1 1 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="24" />
+								<attribute name="Text" value="95c" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+						</element>
+					</element>
+			</element>
+		</element>
+		<element type="ListView" style="none">
+			<attribute name="Name" value="Tab4" />
+			<attribute name="Position" value="0 64" />
+			<attribute name="Size" value="512 144" />
+			<attribute name="Pivot" value="0 0" />
+			<!-- <attribute name="Border" value="0 0 0 0" /> -->
+			<element type="ScrollBar" internal="true" style="none">
+				<attribute name="Size" value="512 16" />
+				<attribute name="Min Anchor" value="0 1" />
+				<attribute name="Max Anchor" value="0 1" />
+				<attribute name="Pivot" value="0 1" />
+				<attribute name="Color" value="0 0 0 0" />
+				<element type="Button" internal="true" style="none">
+					<attribute name="Size" value="8 16" />
+					<attribute name="Pivot" value="0 0" />
+					<attribute name="Color" value="0 0 0 1" />
+				</element>
+				<element type="Slider" internal="true" style="none">
+					<attribute name="Position" value="8 0" />
+					<attribute name="Size" value="496 16" />
+					<attribute name="Pivot" value="0 0" />
+					<attribute name="Color" value="0 0 0 1" />
+					<element type="BorderImage" internal="true" style="none">
+						<attribute name="Pivot" value="0 0" />
+						<attribute name="Color" value="1 1 1 1" />
+					</element>
+				</element>
+				<element type="Button" internal="true" style="none">
+					<attribute name="Position" value="504 0" />
+					<attribute name="Size" value="8 16" />
+					<attribute name="Pivot" value="0 0" />
+					<attribute name="Color" value="0 0 0 1" />
+				</element>
+			</element>
+			<element type="ScrollBar" internal="true" style="none">
+					<!-- <attribute name="Size" value="16 128" /> -->
+					<attribute name="Min Anchor" value="1 0" />
+					<attribute name="Max Anchor" value="1 0" />
+					<attribute name="Pivot" value="1 0" />
+					<attribute name="Color" value="0 0 0 0" />
+					<attribute name="Is Visible" value="false" />
+					<element type="Button" internal="true" style="none">
+						<attribute name="Size" value="16 16" />
+						<attribute name="Pivot" value="0 0" />
+					</element>
+					<element type="Slider" internal="true" style="none">
+						<attribute name="Position" value="0 16" />
+						<attribute name="Size" value="16 96" />
+						<attribute name="Pivot" value="0 0" />
+						<element type="Sprite" internal="true" style="none">
+							<attribute name="Pivot" value="0 0" />
+						</element>
+					</element>
+					<element type="Button" internal="true" style="none">
+						<attribute name="Position" value="0 112" />
+						<attribute name="Size" value="16 16" />
+						<attribute name="Pivot" value="0 0" />
+					</element>
+			</element>
+			<element type="BorderImage" internal="true" style="Window" >
+					<attribute name="Name" value="TabContainer" />
+					<attribute name="Pivot" value="0 0" />
+					<attribute name="Min Size" value="512 144" />
+					<attribute name="Max Size" value="2147483647 144" />
+					<attribute name="Color" value="0 1 1 1" />
+					<element internal="true" style="none">
+						<attribute name="Name" value="Coins" />
+						<attribute name="Min Size" value="512 128" />
+						<attribute name="Max Size" value="2147483647 128" />
+						<attribute name="Pivot" value="0 0" />
+						<attribute name="Layout Mode" value="Horizontal" />
+						<element type="Button" style="none">
+							<attribute name="Name" value="coin" />
+							<attribute name="Min Size" value="128 128" />
+							<attribute name="Max Size" value="128 128" />
+							<attribute name="Pivot" value="0 0" />
+							<attribute name="Focus Mode" value="Focusable" />
+							<attribute name="Texture" value="Texture2D;UI/Shop/coin.png" />
+							<attribute name="Image Rect" value="0 0 116 129" />
+							<attribute name="Blend Mode" value="alpha" />
+							<attribute name="Hover Image Offset" value="0 0" />
+							<attribute name="Pressed Image Offset" value="1 1" />
+							<attribute name="Pressed Child Offset" value="-1 -1" />
+							<element type="Text">
+								<attribute name="Name" value="qty" />
+								<attribute name="Min Anchor" value="0.5 0" />
+								<attribute name="Max Anchor" value="0.5 0" />
+								<attribute name="Pivot" value="0.5 0" />
+								<attribute name="Color" value="1 1 0 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="32" />
+								<attribute name="Text" value="10" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+							<element type="Text">
+								<attribute name="Name" value="value" />
+								<attribute name="Min Anchor" value="0.5 1" />
+								<attribute name="Max Anchor" value="0.5 1" />
+								<attribute name="Pivot" value="0.5 1" />
+								<attribute name="Color" value="1 1 1 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="24" />
+								<attribute name="Text" value="0.5€" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+						</element>
+						<element type="Button" style="none">
+							<attribute name="Name" value="coin" />
+							<attribute name="Min Size" value="128 128" />
+							<attribute name="Max Size" value="128 128" />
+							<attribute name="Pivot" value="0 0" />
+							<attribute name="Focus Mode" value="Focusable" />
+							<attribute name="Texture" value="Texture2D;UI/Shop/coin.png" />
+							<attribute name="Image Rect" value="0 0 116 129" />
+							<attribute name="Blend Mode" value="alpha" />
+							<attribute name="Hover Image Offset" value="0 0" />
+							<attribute name="Pressed Image Offset" value="1 1" />
+							<attribute name="Pressed Child Offset" value="-1 -1" />
+							<element type="Text">
+								<attribute name="Name" value="qty" />
+								<attribute name="Min Anchor" value="0.5 0" />
+								<attribute name="Max Anchor" value="0.5 0" />
+								<attribute name="Pivot" value="0.5 0" />
+								<attribute name="Color" value="1 1 0 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="32" />
+								<attribute name="Text" value="50" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+							<element type="Text">
+								<attribute name="Name" value="value" />
+								<attribute name="Min Anchor" value="0.5 1" />
+								<attribute name="Max Anchor" value="0.5 1" />
+								<attribute name="Pivot" value="0.5 1" />
+								<attribute name="Color" value="1 1 1 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="24" />
+								<attribute name="Text" value="2.3€" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+						</element>
+						<element type="Button" style="none">
+							<attribute name="Name" value="coin" />
+							<attribute name="Min Size" value="128 128" />
+							<attribute name="Max Size" value="128 128" />
+							<attribute name="Pivot" value="0 0" />
+							<attribute name="Focus Mode" value="Focusable" />
+							<attribute name="Texture" value="Texture2D;UI/Shop/coin.png" />
+							<attribute name="Image Rect" value="0 0 116 129" />
+							<attribute name="Blend Mode" value="alpha" />
+							<attribute name="Hover Image Offset" value="0 0" />
+							<attribute name="Pressed Image Offset" value="1 1" />
+							<attribute name="Pressed Child Offset" value="-1 -1" />
+							<element type="Text">
+								<attribute name="Name" value="qty" />
+								<attribute name="Min Anchor" value="0.5 0" />
+								<attribute name="Max Anchor" value="0.5 0" />
+								<attribute name="Pivot" value="0.5 0" />
+								<attribute name="Color" value="1 1 0 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="32" />
+								<attribute name="Text" value="100" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+							<element type="Text">
+								<attribute name="Name" value="value" />
+								<attribute name="Min Anchor" value="0.5 1" />
+								<attribute name="Max Anchor" value="0.5 1" />
+								<attribute name="Pivot" value="0.5 1" />
+								<attribute name="Color" value="1 1 1 1" />
+								<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+								<attribute name="Font Size" value="24" />
+								<attribute name="Text" value="4€" />
+								<attribute name="Text Alignment" value="Center" />
+							</element>
+						</element>
+					</element>
+			</element>
+		</element>
+	</element>
+
+	<element type="Button" style="CloseButton">
+		<attribute name="Name" value="closebutton" />
+		<attribute name="Is Visible" value="false" />
+		<attribute name="Position" value="271 365" />
+		<attribute name="Size" value="120 40" />
+		<attribute name="Min Size" value="120 40" />
+		<attribute name="Max Size" value="120 40" />
+		<attribute name="Pivot" value="0.5 0.5" />
+		<attribute name="Color" value="0.85 0.85 0.85 1" />
+		<attribute name="Top Left Color" value="0.85 0.85 0.85 1" />
+		<attribute name="Top Right Color" value="0.85 0.85 0.85 1" />
+		<attribute name="Bottom Left Color" value="0.85 0.85 0.85 1" />
+		<attribute name="Bottom Right Color" value="0.85 0.85 0.85 1" />
+		<attribute name="Focus Mode" value="NotFocusable" />
+		<attribute name="Image Rect" value="16 0 32 16" />
+		<attribute name="Border" value="4 4 4 4" />
+		<attribute name="Hover Image Offset" value="0 16" />
+		<attribute name="Pressed Image Offset" value="16 0" />
+		<attribute name="Pressed Child Offset" value="-1 1" />
+		<element type="Text">
+			<attribute name="Min Anchor" value="0.5 0.5" />
+			<attribute name="Max Anchor" value="0.5 0.5" />
+			<attribute name="Pivot" value="0.5 0.5" />
+			<attribute name="Top Left Color" value="0.85 0.85 0.85 1" />
+			<attribute name="Top Right Color" value="0.85 0.85 0.85 1" />
+			<attribute name="Bottom Left Color" value="0.85 0.85 0.85 1" />
+			<attribute name="Bottom Right Color" value="0.85 0.85 0.85 1" />
+			<attribute name="Font Size" value="24" />
+			<attribute name="Text" value="back" />
+			<attribute name="Auto Localizable" value="true" />
+			<attribute name="Text Alignment" value="Center" />
+		</element>
+	</element>
+</element>
+</element>

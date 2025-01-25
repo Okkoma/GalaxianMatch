@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<element>
+    <attribute name="Name" value="ScreenJoystick" />
+    <attribute name="Size" value="640 960" />
+<!--     <element type="Button">
+        <attribute name="Name" value="Button0" />
+        <attribute name="Position" value="-12 -120" />
+        <attribute name="Size" value="84 84" />
+        <attribute name="Horiz Alignment" value="Right" />
+        <attribute name="Vert Alignment" value="Bottom" />
+        <attribute name="Texture" value="Texture2D;Textures/joystick_thumb.png" />
+        <attribute name="Image Rect" value="0 0 84 84" />
+        <attribute name="Hover Image Offset" value="0 0" />
+        <attribute name="Pressed Image Offset" value="0 0" />
+		<attribute name="Blend Mode" value="addalpha" />
+		<attribute name="Is Visible" value="true" />
+        <element type="Text">
+            <attribute name="Name" value="Label" />
+            <attribute name="Horiz Alignment" value="Center" />
+            <attribute name="Vert Alignment" value="Center" />
+            <attribute name="Color" value="0 0 0 1" />
+            <attribute name="Text" value="Hit" />
+        </element>
+		<element type="Text">
+			<attribute name="Name" value="KeyBinding" />
+			<attribute name="Text" value="F" />	
+        </element>
+    </element>
+    <element type="Button">
+        <attribute name="Name" value="Button1" />
+        <attribute name="Position" value="-12 -12" />
+        <attribute name="Size" value="84 84" />
+        <attribute name="Horiz Alignment" value="Right" />
+        <attribute name="Vert Alignment" value="Bottom" />
+        <attribute name="Texture" value="Texture2D;Textures/joystick_thumb.png" />
+        <attribute name="Image Rect" value="0 0 84 84" />
+        <attribute name="Hover Image Offset" value="0 0" />
+        <attribute name="Pressed Image Offset" value="0 0" />
+		<attribute name="Blend Mode" value="addalpha" />
+		<attribute name="Is Visible" value="true" />
+        <element type="Text">
+            <attribute name="Name" value="Label" />
+            <attribute name="Horiz Alignment" value="Center" />
+            <attribute name="Vert Alignment" value="Center" />
+            <attribute name="Color" value="0 0 0 1" />
+            <attribute name="Text" value="Jump" />
+		</element>			
+		<element type="Text">
+			<attribute name="Name" value="KeyBinding" />
+			<attribute name="Text" value="SPACE" />	
+        </element>		
+    </element>
+    <element type="Button">
+        <attribute name="Name" value="Hat0" />
+        <attribute name="Position" value="12 -12" />
+        <attribute name="Size" value="180 180" />
+		<attribute name="Horiz Alignment" value="Left" />
+        <attribute name="Vert Alignment" value="Bottom" />
+        <attribute name="Texture" value="Texture2D;Textures/joystick_back.png" />
+        <attribute name="Image Rect" value="0 0 180 180" />
+        <attribute name="Hover Image Offset" value="0 0" />
+        <attribute name="Pressed Image Offset" value="0 0" />
+		<attribute name="Blend Mode" value="addalpha" />
+        <element type="Text">
+            <attribute name="Name" value="KeyBinding" />
+            <attribute name="Text" value="ZSQD" />
+        </element>		
+    </element> -->
+    <element type="Button">
+        <attribute name="Name" value="Button2" />		
+        <attribute name="Position" value="-5 -5" />
+        <attribute name="Size" value="64 64" />
+		<attribute name="Horiz Alignment" value="Right" />
+        <attribute name="Vert Alignment" value="Bottom" />		
+        <attribute name="Opacity" value="0.5" />
+        <attribute name="Texture" value="Texture2D;Textures/TouchInput.png" />
+        <attribute name="Image Rect" value="192 0 240 48" />
+        <attribute name="Hover Image Offset" value="0 0" />
+        <attribute name="Pressed Image Offset" value="0 0" />
+	<element type="Text">
+		<attribute name="Name" value="KeyBinding" />
+		<attribute name="Text" value="SELECT" />
+	</element>
+    </element>
+</element>

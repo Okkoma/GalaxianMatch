@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="bossestatics.webp">
+	<SubTexture name="boss10_static" x="403" y="202" width="200" height="200" />
+	<SubTexture name="boss11_static" x="604" y="202" width="200" height="200" />
+	<SubTexture name="boss12_static" x="805" y="202" width="200" height="200" />
+	<SubTexture name="boss13_static" x="1" y="403" width="200" height="200" />
+	<SubTexture name="boss1_static" x="202" y="403" width="200" height="199" />
+	<SubTexture name="boss2_static" x="1" y="1" width="200" height="200" />
+	<SubTexture name="boss3_static" x="202" y="1" width="200" height="200" />
+	<SubTexture name="boss4_static" x="403" y="1" width="200" height="200" />
+	<SubTexture name="boss5_static" x="403" y="403" width="200" height="198" />
+	<SubTexture name="boss6_static" x="604" y="1" width="200" height="200" />
+	<SubTexture name="boss7_static" x="805" y="1" width="200" height="200" />
+	<SubTexture name="boss8_static" x="1" y="202" width="200" height="200" />
+	<SubTexture name="boss9_static" x="202" y="202" width="200" height="200" />
+</TextureAtlas>

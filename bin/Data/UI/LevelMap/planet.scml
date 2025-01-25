@@ -1,0 +1,918 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r11">
+    <folder id="0">
+        <file id="0" name="planet1.png" width="200" height="200" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="1" name="planet2.png" width="200" height="200" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="2" name="planet3.png" width="200" height="200" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="3" name="planet4.png" width="200" height="200" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="4" name="planet5.png" width="200" height="200" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="5" name="planet6.png" width="200" height="200" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="6" name="planet7.png" width="200" height="200" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="7" name="planet8.png" width="200" height="200" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="8" name="planet9.png" width="200" height="200" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="9" name="planet10.png" width="200" height="200" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="10" name="planet11.png" width="200" height="200" pivot_x="0.5" pivot_y="0.5"/> 
+        <file id="11" name="planet12.png" width="200" height="200" pivot_x="0.5" pivot_y="0.5"/>
+    </folder>
+
+    <entity id="0" name="Planet0">
+        <animation id="0" name="locked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet0">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="0"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="0" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="unlocked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet0">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="0"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="0" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="2" name="selected" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet0">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="0"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="0" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="3" name="completed" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet0">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="0"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="0" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+
+    <entity id="1" name="Planet1">
+        <animation id="0" name="locked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet1">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="1"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="1" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="unlocked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet1">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="1"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="1" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="2" name="selected" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet1">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="1"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="1" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="3" name="completed" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet1">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="1"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="1" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+
+    <entity id="2" name="Planet2">
+        <animation id="0" name="locked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet2">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="2"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="2" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="unlocked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet2">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="2"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="2" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="2" name="selected" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet2">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="2"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="2" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="3" name="completed" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet2">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="2"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="2" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+
+    <entity id="3" name="Planet3">
+        <animation id="0" name="locked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet3">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="3"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="3" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="unlocked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet3">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="3"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="3" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="2" name="selected" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet3">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="3"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="3" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="3" name="completed" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet3">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="3"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="3" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+
+    <entity id="4" name="Planet4">
+        <animation id="0" name="locked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet4">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="4"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="4" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="unlocked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet4">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="4"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="4" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="2" name="selected" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet4">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="4"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="4" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="3" name="completed" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet4">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="4"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="4" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+
+    <entity id="5" name="Planet5">
+        <animation id="0" name="locked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet5">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="5"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="5" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="unlocked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet5">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="5"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="5" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="2" name="selected" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet5">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="5"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="5" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="3" name="completed" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet5">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="5"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="5" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+
+    <entity id="6" name="Planet6">
+        <animation id="0" name="locked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet6">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="6"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="6" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="unlocked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet6">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="6"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="6" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="2" name="selected" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet6">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="6"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="6" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="3" name="completed" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet6">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="6"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="6" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+
+    <entity id="7" name="Planet7">
+        <animation id="0" name="locked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet7">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="7"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="7" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="unlocked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet7">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="7"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="7" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="2" name="selected" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet7">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="7"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="7" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="3" name="completed" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet7">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="7"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="7" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+
+    <entity id="8" name="Planet8">
+        <animation id="0" name="locked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet8">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="8"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="8" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="unlocked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet8">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="8"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="8" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="2" name="selected" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet8">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="8"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="8" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="3" name="completed" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet8">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="8"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="8" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+
+    <entity id="9" name="Planet9">
+        <animation id="0" name="locked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet9">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="9"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="9" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="unlocked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet9">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="9"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="9" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="2" name="selected" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet9">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="9"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="9" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="3" name="completed" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet9">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="9"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="9" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+
+    <entity id="10" name="Planet10">
+        <animation id="0" name="locked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet10">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="10"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="10" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="unlocked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet10">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="10"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="10" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="2" name="selected" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet10">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="10"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="10" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="3" name="completed" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet10">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="10"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="10" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+
+    <entity id="11" name="Planet11">
+        <animation id="0" name="locked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet11">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="11"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="11" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="unlocked" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet11">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="11"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="11" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="2" name="selected" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet11">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="11"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="11" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="3" name="completed" length="5000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="2493">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="planet11">
+                <key id="0" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261" spin="-1">
+                    <object folder="0" file="11"/>
+                </key>
+                <key id="1" time="2493" curve_type="bezier" c1="0.641541" c2="0" c3="0.314908" c4="0.995261">
+                    <object folder="0" file="11" angle="355.270473" scale_x="0.85" scale_y="0.85"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+
+</spriter_data>

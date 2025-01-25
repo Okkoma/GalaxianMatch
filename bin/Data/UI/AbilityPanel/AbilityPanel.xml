@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<node>
+	<attribute name="Is Enabled" value="false" />
+	<attribute name="Name" value="AbilityPanel" />
+	<attribute name="Position" value="0 -10 0" />
+	<attribute name="Rotation" value="1 0 0 0" />
+	<attribute name="Scale" value="1 1 1" />
+	<attribute name="Variables" />
+</node>

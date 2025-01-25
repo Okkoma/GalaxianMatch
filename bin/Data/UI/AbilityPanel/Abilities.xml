@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="Abilities.png">
+	<SubTexture name="bonus1" x="1" y="1" width="128" height="128" />
+	<SubTexture name="bonus2" x="130" y="1" width="128" height="128" />
+	<SubTexture name="bonus3" x="259" y="1" width="128" height="128" />
+	<SubTexture name="bonus4" x="1" y="130" width="128" height="128" />
+	<SubTexture name="bonus5" x="130" y="130" width="128" height="128" />
+	<SubTexture name="bonus6" x="259" y="130" width="128" height="128" />
+</TextureAtlas>

@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<element>
+    <attribute name="Name" value="ScreenJoystickSettings" />
+    <attribute name="Size" value="640 960" />
+    <element type="Button">
+        <attribute name="Name" value="Button3" />
+        <attribute name="Position" value="-50 -25" />
+		<attribute name="Vert Alignment" value="Bottom" />
+        <attribute name="Horiz Alignment" value="Right" />
+		<attribute name="Size" value="96 96" />
+        <attribute name="Texture" value="Texture2D;Textures/TouchInput.png" />
+        <attribute name="Image Rect" value="96 0 192 96" />
+        <attribute name="Hover Image Offset" value="0 0" />
+        <attribute name="Pressed Image Offset" value="0 0" />
+        <element type="Text">
+            <attribute name="Name" value="Label" />
+            <attribute name="Horiz Alignment" value="Center" />
+            <attribute name="Vert Alignment" value="Center" />
+            <attribute name="Color" value="0 0 0 1" />
+            <attribute name="Text" value="Debug" />
+        </element>
+        <element type="Text">
+            <attribute name="Name" value="KeyBinding" />
+            <attribute name="Text" value="G" />
+        </element>
+    </element>
+        <element type="Button">
+            <attribute name="Name" value="Button5" />
+        <attribute name="Position" value="-125 -25" />
+		<attribute name="Vert Alignment" value="Bottom" />
+        <attribute name="Horiz Alignment" value="Right" />
+		<attribute name="Size" value="96 96" />
+            <attribute name="Texture" value="Texture2D;Textures/TouchInput.png" />
+            <attribute name="Image Rect" value="96 0 192 96" />
+            <attribute name="Hover Image Offset" value="0 0" />
+            <attribute name="Pressed Image Offset" value="0 0" />
+            <element type="Text">
+                <attribute name="Name" value="Label" />
+                <attribute name="Horiz Alignment" value="Center" />
+                <attribute name="Vert Alignment" value="Center" />
+                <attribute name="Color" value="0 0 0 1" />
+                <attribute name="Text" value="Shake" />
+            </element>
+            <element type="Text">
+                <attribute name="Name" value="KeyBinding" />
+                <attribute name="Text" value="J" />
+            </element>
+        </element>
+        <element type="Button">
+            <attribute name="Name" value="Button6" />
+        <attribute name="Position" value="-200 -25" />
+		<attribute name="Vert Alignment" value="Bottom" />
+        <attribute name="Horiz Alignment" value="Right" />
+		<attribute name="Size" value="96 96" />
+            <attribute name="Texture" value="Texture2D;Textures/TouchInput.png" />
+            <attribute name="Image Rect" value="96 0 192 96" />
+            <attribute name="Hover Image Offset" value="0 0" />
+            <attribute name="Pressed Image Offset" value="0 0" />
+            <element type="Text">
+                <attribute name="Name" value="Label" />
+                <attribute name="Horiz Alignment" value="Center" />
+                <attribute name="Vert Alignment" value="Center" />
+                <attribute name="Color" value="0 0 0 1" />
+                <attribute name="Text" value="Next" />
+            </element>
+            <element type="Text">
+                <attribute name="Name" value="KeyBinding" />
+                <attribute name="Text" value="N" />
+            </element>
+        </element>
+        <element type="Button">
+            <attribute name="Name" value="Button7" />
+        <attribute name="Position" value="-275 -25" />
+		<attribute name="Vert Alignment" value="Bottom" />
+        <attribute name="Horiz Alignment" value="Right" />
+		<attribute name="Size" value="96 96" />
+            <attribute name="Texture" value="Texture2D;Textures/TouchInput.png" />
+            <attribute name="Image Rect" value="96 0 192 96" />
+            <attribute name="Hover Image Offset" value="0 0" />
+            <attribute name="Pressed Image Offset" value="0 0" />
+            <element type="Text">
+                <attribute name="Name" value="Label" />
+                <attribute name="Horiz Alignment" value="Center" />
+                <attribute name="Vert Alignment" value="Center" />
+                <attribute name="Color" value="0 0 0 1" />
+                <attribute name="Text" value="Win" />
+            </element>
+            <element type="Text">
+                <attribute name="Name" value="KeyBinding" />
+                <attribute name="Text" value="W" />
+            </element>
+        </element>
+        <element type="Button">
+            <attribute name="Name" value="Button8" />
+        <attribute name="Position" value="-350 -25" />
+		<attribute name="Vert Alignment" value="Bottom" />
+        <attribute name="Horiz Alignment" value="Right" />
+		<attribute name="Size" value="96 96" />
+            <attribute name="Texture" value="Texture2D;Textures/TouchInput.png" />
+            <attribute name="Image Rect" value="96 0 192 96" />
+            <attribute name="Hover Image Offset" value="0 0" />
+            <attribute name="Pressed Image Offset" value="0 0" />
+            <element type="Text">
+                <attribute name="Name" value="Label" />
+                <attribute name="Horiz Alignment" value="Center" />
+                <attribute name="Vert Alignment" value="Center" />
+                <attribute name="Color" value="0 0 0 1" />
+                <attribute name="Text" value="Hit" />
+            </element>
+            <element type="Text">
+                <attribute name="Name" value="KeyBinding" />
+                <attribute name="Text" value="X" />
+            </element>
+        </element>	        	        		
+</element>

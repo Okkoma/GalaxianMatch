@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<node>
+	<attribute name="Is Enabled" value="true" />
+	<attribute name="Name" value="LocalScene" />
+	<attribute name="Tags" />
+	<attribute name="Position" value="0 0 0" />
+	<attribute name="Rotation" value="1 0 0 0" />
+	<attribute name="Scale" value="1 1 1" />
+	<attribute name="Variables" />
+	<node>
+    	<attribute name="Name" value="tobecontinued" />
+		<attribute name="Is Enabled" value="false" />
+		<attribute name="Position" value="0 0 0" />
+		<attribute name="Rotation" value="1 0 0 0" />
+		<attribute name="Scale" value="1 1 1" />
+        <attribute name="Variables">
+            <variant name="GOA_Duration" hash="-992211654" type="float" value="100" />
+        </attribute>
+		<component type="StaticSprite2D">
+			<attribute name="Layer" value="1000" />
+			<attribute name="Sprite" value="Sprite2D;Cinematic/Sketchs/sketch15.webp" />
+			<attribute name="Color" value="1 1 1 1" />
+		</component>
+	    <node>
+		    <attribute name="Is Enabled" value="true" />
+		    <attribute name="Position" value="0 3 0" />
+		    <attribute name="Rotation" value="1 0 0 0" />
+		    <attribute name="Scale" value="1 1 1" />
+		    <attribute name="Variables" />
+		    <component type="Text3D"> 
+		        <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		        <attribute name="Font Size" value="60" />
+		        <attribute name="Text" value="tobecontinued" />		       
+		        <attribute name="Vert Alignment" value="Center" />
+		        <attribute name="Horiz Alignment" value="Center" />
+		        <attribute name="Text Alignment" value="Center" />
+		        <attribute name="Width" value="2000" />
+		        <attribute name="Word Wrap" value="true" />
+		        <attribute name="Auto Localizable" value="true" />
+		        <attribute name="Color" value="1 1 1 1" />
+            </component>    
+	    </node>			
+	</node>	
+</node>

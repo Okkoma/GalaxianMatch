@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<node>
+	<attribute name="Is Enabled" value="true" />
+	<attribute name="Name" value="Explosion3" />
+	<attribute name="Position" value="0.0 0.0 0" />
+	<attribute name="Rotation" value="1 0 0 0" />
+	<attribute name="Scale" value="0.5 0.5 1" />
+	<component type="StaticSprite2D">
+		<attribute name="Sprite" value="SpriteSheet2D;2D/tiles.xml@explosion3" />
+	</component>	
+	<component type="RigidBody2D">
+	</component>
+	<component type="CollisionBox2D">
+		<attribute name="Size" value="5 1" />	
+		<attribute name="Trigger" value="true" />
+		<attribute name="Category Bits" value="2" />
+		<attribute name="Mask Bits" value="4" />				
+	</component>	
+</node>

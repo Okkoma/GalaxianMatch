@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r11">
+    <folder id="0">
+        <file id="0" name="boss07_plume3.png" width="132" height="71" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="1" name="boss07_plume4.png" width="103" height="70" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="2" name="boss07_plume5.png" width="87" height="58" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="3" name="boss07_plume6.png" width="74" height="56" pivot_x="0.5" pivot_y="0.5"/>
+    </folder>
+    <entity id="0" name="blast">
+        <obj_info name="bone_000" type="bone" w="94.6429" h="10"/>
+        <animation id="0" name="use" length="300" interval="100">
+            <mainline>
+                <key id="0">
+                    <bone_ref id="0" timeline="3" key="0"/>
+                    <object_ref id="0" parent="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" parent="0" timeline="1" key="0" z_index="1"/>
+                    <object_ref id="2" parent="0" timeline="2" key="0" z_index="2"/>
+                </key>
+                <key id="1" time="149">
+                    <bone_ref id="0" timeline="3" key="1"/>
+                    <object_ref id="0" parent="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" parent="0" timeline="1" key="0" z_index="1"/>
+                    <object_ref id="2" parent="0" timeline="2" key="1" z_index="2"/>
+                </key>
+                <key id="2" time="275">
+                    <bone_ref id="0" timeline="3" key="2"/>
+                    <object_ref id="0" parent="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" parent="0" timeline="1" key="0" z_index="1"/>
+                    <object_ref id="2" parent="0" timeline="2" key="1" z_index="2"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="plume3">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="-18.031968" y="24.413087" angle="217.341769"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="plume5">
+                <key id="0" spin="0">
+                    <object folder="0" file="2" x="14.994381" y="26.392358" angle="307.869919"/>
+                </key>
+            </timeline>
+            <timeline id="2" name="plume6">
+                <key id="0" spin="0">
+                    <object folder="0" file="3" x="19.059066" y="-4.763986" angle="230.084522"/>
+                </key>
+                <key id="1" time="149" spin="0">
+                    <object folder="0" file="3" x="26.595062" y="-4.245271" angle="230.084522"/>
+                </key>
+            </timeline>
+            <timeline id="3" obj="0" name="bone_000" object_type="bone">
+                <key id="0">
+                    <bone angle="90" a="0.74627"/>
+                </key>
+                <key id="1" time="149">
+                    <bone angle="263.5584" scale_x="2.247739" scale_y="2.025839"/>
+                </key>
+                <key id="2" time="275">
+                    <bone angle="65.095231" scale_y="0.824291" a="0.62687"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

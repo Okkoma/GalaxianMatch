@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<particleEmitterConfig>
+	<texture name="greenspiral.png" />
+	<sourcePosition x="0" y="0" />
+	<sourcePositionVariance x="0" y="0" />
+	<speed value="100" />
+	<speedVariance value="0" />
+	<particleLifeSpan value="1" />
+	<particleLifespanVariance value="0" />
+	<angle value="0" />
+	<angleVariance value="360" />
+	<gravity x="0" y="-1000" />
+	<radialAcceleration value="-100" />
+	<tangentialAcceleration value="0" />
+	<radialAccelVariance value="0" />
+	<tangentialAccelVariance value="0" />
+	<startColor red="1" green="1" blue="1" alpha="0.6" />
+	<startColorVariance red="0" green="0" blue="0" alpha="0" />
+	<finishColor red="0.69" green="0" blue="0.7" alpha="0" />
+	<finishColorVariance red="0" green="0" blue="0" alpha="0" />
+	<maxParticles value="100" />
+	<startParticleSize value="50" />
+	<startParticleSizeVariance value="100" />
+	<finishParticleSize value="0" />
+	<FinishParticleSizeVariance value="0" />
+	<duration value="-1" />
+	<emitterType value="1" />
+	<maxRadius value="0" />
+	<maxRadiusVariance value="180" />
+	<minRadius value="200" />
+	<minRadiusVariance value="0" />
+	<rotatePerSecond value="0" />
+	<rotatePerSecondVariance value="50" />
+	<blendFuncSource value="1" />
+	<blendFuncDestination value="1" />
+	<rotationStart value="0" />
+	<rotationStartVariance value="25.45" />
+	<rotationEnd value="90" />
+	<rotationEndVariance value="0" />
+</particleEmitterConfig>

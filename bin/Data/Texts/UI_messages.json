@@ -1,0 +1,206 @@
+{
+	"lang":{
+		"en":"Language",
+		"fr":"Langue"
+	},
+	"english":{
+		"en":"English",
+		"fr":"Anglais"
+	},
+	"french":{
+		"en":"French",
+		"fr":"Français"
+	},		
+	"story":{
+		"en":"Story",
+		"fr":"Histoire"
+	},
+	"versus":{
+		"en":"Versus",
+		"fr":"Versus"
+	},
+	"gamequit":{
+		"en":"Quit Game",
+		"fr":"Quitter"
+	},
+	"gameover":{
+		"en":"Game Over",
+		"fr":"Perdu"
+	},
+	"gamewin":{
+		"en":"You Win !",
+		"fr":"Victoire !"
+	},
+	"gamepause":{
+		"en":"Paused !",
+		"fr":"Pause !"
+	},
+	"gamereset":{
+		"en":"Reset the progression",
+		"fr":"Remise à zéro"
+	},
+	"nomatches":{
+		"en":"No More Matches !",
+		"fr":"Aucun coup !"
+	},
+	"worsescore":{
+		"en":"Worse Score !",
+		"fr":"Moins bon !"
+	},	
+	"shake":{
+		"en":"Shake",
+		"fr":"Secouer"
+	},
+	"ok":{
+		"en":"Ok",
+		"fr":"Ok"
+	},
+	"yes":{
+		"en":"Yes",
+		"fr":"Oui"
+	},
+	"no":{
+		"en":"No",
+		"fr":"Non"
+	},
+	"notry":{
+		"en":"No life",
+		"fr":"Aucune vie"
+	},
+	"levelgo":{
+		"en":"Good Luck",
+		"fr":"En Avant"
+	},
+	"nextlevel":{
+		"en":"Next Level",
+		"fr":"Niv.suivant"
+	},
+	"continue":{
+		"en":"Continue",
+		"fr":"Continuer"
+	},
+	"purchase":{
+		"en":"Purchase",
+		"fr":"Acheter"
+	},
+	"Star":{
+		"en":"Star",
+		"fr":"Etoile"
+	},
+	"Coin":{
+		"en":"Coin",
+		"fr":"Monnaie"
+	},
+	"Special1":{
+		"en":"Show Ad",
+		"fr":"Voir Pub"
+	},
+	"power_bombh":{
+		"en":"H Bomb",
+		"fr":"Bombe H"
+	},
+	"power_bombv":{
+		"en":"V Bomb",
+		"fr":"Bombe V"
+	},
+	"power_bombhv":{
+		"en":"A Bomb",
+		"fr":"Bombe A"
+	},
+	"power_rockb":{
+		"en":"Rock Bomb",
+		"fr":"Brise Roche"
+	},
+	"power_matchc":{
+		"en":"Changer",
+		"fr":"Changeur"
+	},
+	"power_neighd":{
+		"en":"P Bomb",
+		"fr":"Bombe P"
+	},		
+	"unlockedpower":{
+		"en":"Power Unlocked",
+		"fr":"Nouveau Pouvoir"		
+	},
+    "gamelanguage":{
+		"en":"Language",
+		"fr":"Langue"
+	},	
+    "gamedifficulty":{
+		"en":"Game Difficulty",
+		"fr":"Difficulte du jeu"
+	},	
+    "graphiceffects":{
+		"en":"Graphic Effects",
+		"fr":"Effets graphiques"
+	},	
+	"sound":{
+		"en":"Sound",
+		"fr":"Bruitage"
+	},
+	"music":{
+		"en":"Music",
+		"fr":"Musique"
+	},
+	"tutorial":{
+		"en":"Tutorial",
+		"fr":"Tutorial"
+	},
+	"game":{
+		"en":"Game",
+		"fr":"Jeu"
+	},		
+	"reset":{
+		"en":"Reset",
+		"fr":"Effacer"
+	},
+	"shop":{
+		"en":"Shop",
+		"fr":"Boutique"
+	},	
+	"morestars":{
+	    "en":"Need More Stars ?",
+	    "fr":"Plus d'Etoiles ?"
+	},	  
+	"youwin":{
+	    "en":"You win",
+	    "fr":"Vous gagnez"
+	},
+	"goshop":{
+	    "en":"Go Shop",
+	    "fr":"Boutique"
+	},
+	"showad":{
+	    "en":"Watch an Ad and earn a Star",
+	    "fr":"Regarde une Pub et gagne une Etoile"
+	},	
+	"map":{
+	    "en":"Map",
+	    "fr":"Carte"
+	},		
+	"back":{
+		"en":"Back",
+		"fr":"Retour"
+	},
+	"tobecontinued":{
+		"en":"To be continued ...",
+		"fr":"La suite bientot ..."
+	},
+	"warning":{
+		"en":"WARNING",
+		"fr":"WARNING"
+	},
+	"missioncompleted":{
+		"en":"Mission Completed",
+		"fr":"Mission Completée"
+	},
+	"constellationcompleted":{
+		"en":"Constellation Completed",
+		"fr":"Constellation Completée"
+	},
+	"watchcinematic":{
+		"en":"Watch the animation again?",
+		"fr":"Revoir l'animation ?"
+	}	
+}

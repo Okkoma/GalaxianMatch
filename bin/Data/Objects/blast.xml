@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<node>
+	<attribute name="Is Enabled" value="true" />
+	<attribute name="Name" value="Blast" />
+	<attribute name="Position" value="0.0 0.0 0" />
+	<attribute name="Rotation" value="1 0 0 0" />
+	<attribute name="Scale" value="0.5 0.5 1" />
+	<attribute name="Variables">
+	</attribute>
+	<component type="AnimatedSprite2D">
+		<attribute name="Layer" value="550" />
+		<attribute name="Animation Set" value="AnimationSet2D;2D/boss01/boss01_blast.scml" />
+		<attribute name="Animation" value="use" />
+	</component>
+	<component type="RigidBody2D">
+		<attribute name="Body Type" value="Dynamic" />
+	</component>
+	<component type="CollisionBox2D">
+		<attribute name="Size" value="1 0.2" />
+		<attribute name="Center" value="0.0 0.0" />
+		<attribute name="Trigger" value="true" />
+	</component>
+	<component type="BlastLogic">
+		<attribute name="Die On Contact" value="true" />
+		<attribute name="Effects On Die" value="0 5" />
+		<attribute name="Speed" value="6" />
+	</component>
+</node>

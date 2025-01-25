@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r11">
+    <folder id="0">
+        <file id="0" name="shake.png" width="128" height="128" pivot_x="0.5" pivot_y="0.5"/>
+    </folder>
+    <entity id="0" name="ShakeButton">
+        <animation id="0" name="unselect" length="1000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="176">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+                <key id="2" time="594">
+                    <object_ref id="0" timeline="0" key="2" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="shake">
+                <key id="0">
+                    <object folder="0" file="0"/>
+                </key>
+                <key id="1" time="176" spin="-1">
+                    <object folder="0" file="0" angle="47.489553" scale_x="1.193352" scale_y="1.193352"/>
+                </key>
+                <key id="2" time="594">
+                    <object folder="0" file="0" angle="313.308211"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

@@ -1,0 +1,362 @@
+{
+	"story_captured":{
+		"en":" ",
+		"fr":" "
+	},
+	"story_captured_c":{
+		"en":"Celestan has been captured ! We must rescue him.",
+		"fr":"Celestan a été capturé ! Nous devons le secourir."
+	},
+	"story_hello1":{
+		"en":"... I'm Capi",
+		"fr":"... Je m'appelle Capi"
+	},
+	"story_hello1_c":{
+		"en":"I'll show you tips if needed.",
+		"fr":"Je te donnerai des conseils si besoin."
+	},
+	"tuto_startmission":{
+		"en":"Mission",
+		"fr":"Mission"
+	},
+	"tuto_startmission_c":{
+		"en":"Tap on a planet to start a mission.",
+		"fr":"Appuie sur une planète pour lancer une mission."
+	},
+	"tuto_zoom":{
+		"en":"Tip",
+		"fr":"Conseil"
+	},
+	"tuto_zoom_c":{
+		"en":"Use 2 fingers to shrink or enlarge the map.",
+		"fr":"Utilise 2 doigts pour rétrécir ou agrandir la carte."
+	},
+	"tuto_objective":{
+		"en":"Mission objectives",
+		"fr":"Les objectifs de mission"
+	},
+	"tuto_objective_c":{
+		"en":"Look on the top right for the items needed to complete the mission.",
+		"fr":"Regarde en haut à droite les objets nécessaires pour accomplir la mission."
+	},
+	"tuto_match3":{
+		"en":"Match3",
+		"fr":"Match3"
+	},
+	"tuto_match3_c":{
+		"en":"To advance in the mission, you need to align at least 3 items of the same color.",
+		"fr":"Pour avancer dans la mission, il te faut aligner au minimum 3 objets de même couleur."
+	},	
+	"tuto_msquare":{
+		"en":"Square",
+		"fr":"Carré"
+	},
+	"tuto_msquare_c":{
+		"en":"You can also form a square with 4 items of the same color.",
+		"fr":"Tu peux aussi former un carré avec 4 objets de même couleur."
+	},
+	"tuto_powers":{
+		"en":"Power",
+		"fr":"Pouvoir"
+	},	
+	"tuto_powers_c":{
+		"en":"You have unlocked powers. You can get some in the store.",
+		"fr":"Tu as débloqué des pouvoirs. Tu peux en obtenir dans la boutique."
+	},
+	"tuto_powers2":{
+		"en":"Power",
+		"fr":"Pouvoir"
+	},	
+	"tuto_powers2_c":{
+		"en":"a 'Power' item appears on the grid if a match4 is made.",
+		"fr":"un objet 'Pouvoir' apparait si un match4 est réalisé."
+	},
+	"tuto_activationPower1":{
+		"en":"Activation of a power",
+		"fr":"Activation d'un pouvoir"
+	},
+	"tuto_activationPower1_c":{
+		"en":"Here's how to activate the bomb.",
+		"fr":"Voici comment activer la bombe."
+	},	
+	"tuto_activationPower2":{
+		"en":"Activation of a power",
+		"fr":"Activation d'un pouvoir"
+	},
+	"tuto_activationPower2_c":{
+		"en":"Here's how to activate the bomb.",
+		"fr":"Voici comment activer la bombe."
+	},
+	"tuto_activationPower3":{
+		"en":"Activation of a power",
+		"fr":"Activation d'un pouvoir"
+	},
+	"tuto_activationPower3_c":{
+		"en":"Here's how to activate the bomb.",
+		"fr":"Voici comment activer la bombe."
+	},	
+	"tuto_activationPower4":{
+		"en":"Activation of a power",
+		"fr":"Activation d'un pouvoir"
+	},
+	"tuto_activationPower4_c":{
+		"en":"Here's how to activate the rock crusher.",
+		"fr":"Voici comment activer l'éclate roche."
+	},
+	"tuto_activationPower5":{
+		"en":"Activation of a power",
+		"fr":"Activation d'un pouvoir"
+	},
+	"tuto_activationPower5_c":{
+		"en":"Here's how to activate the wall breaker.",
+		"fr":"Voici comment activer le casse-mur."
+	},			
+	"tuto_activationPower6":{
+		"en":"Activation of a power",
+		"fr":"Activation d'un pouvoir"
+	},
+	"tuto_activationPower6_c":{
+		"en":"Here's how to activate the electrical bomb.",
+		"fr":"Voici comment activer la bombe electrique."
+	},			
+	"tuto_poweruse1":{
+		"en":"Power",
+		"fr":"Pouvoir"
+	},
+	"tuto_poweruse1_c":{
+		"en":"When you gain or purchase a power, it is placed in the bar here.",
+		"fr":"Quand tu gagnes ou achetes un pouvoir, il est placé dans la barre ici."
+	},		
+	"tuto_poweruse2":{
+		"en":"Power",
+		"fr":"Pouvoir"
+	},	
+	"tuto_poweruse2_c":{
+		"en":"You can use it by clicking on it...",
+		"fr":"Tu peux l'utiliser en cliquant dessus..."
+	},		
+	"tuto_poweruse3":{
+		"en":"Power",
+		"fr":"Pouvoir"
+	},	
+	"tuto_poweruse3_c":{
+		"en":"...then on the grid, select the object to replace.",
+		"fr":"...puis sur la grille, selectionne l'objet à remplacer."
+	},			
+	"story_warnboss01":{
+		"en":" ",
+		"fr":" "
+	},	
+	"story_warnboss01_c":{
+		"en":"There's danger near this planet. Be careful!",
+		"fr":"Je sens un danger autour de cette planète. Sois prudent !"
+	},	
+	"story_boss01":{
+		"en":"Capi",
+		"fr":"Capi"
+	},	
+	"story_boss01_c":{
+		"en":"But it's the big villain who kidnapped Celestan!",
+		"fr":"Mais c'est le gros vilain qui a enlevé Celestan !"
+	},	
+	"tuto_boss01":{
+		"en":"Obtaining 'Power'",
+		"fr":"Obtention de 'Pouvoir'"
+	},	
+	"tuto_boss01_c":{
+		"en":"To help you here, all you need to do is match 3 to get a bomb!",
+		"fr":"Pour t'aider ici, il te suffit de faire un match 3 pour obtenir une bombe !"
+	},
+	"tuto_constellation1":{
+		"en":"Capi",
+		"fr":"Capi"
+	},
+	"tuto_constellation1_c":{
+		"en":"We have now access to the next constellation.",
+		"fr":"Nous pouvons aller à la prochaine constellation."
+	},	
+	"story_hello2_1":{
+		"en":"Capi",
+		"fr":"Capi"
+	},	
+	"story_hello2_1_c":{
+		"en":"I introduce you to Rosi",
+		"fr":"Je te présentes Rosi"
+	},		
+	"story_hello2_2":{
+		"en":"Hi,",
+		"fr":"Salut,"
+	},
+	"story_hello2_2_c":{
+		"en":"I am the guardian of this constellation...",
+		"fr":"Je suis le gardien de cette constellation..."
+	},	
+	"story_hello2_3":{
+		"en":"Rosi",
+		"fr":"Rosi"
+	},	
+	"story_hello2_3_c":{
+		"en":"Celestan sends us a distress message through this galactic foam...",
+		"fr":"Celestan nous envoit un message de détresse par cette écume galactique..."
+	},		
+	"story_hello2_4":{
+		"en":"Rosi",
+		"fr":"Rosi"
+	},
+	"story_hello2_4_c":{
+		"en":"This big slimy mercenary has already delivered Celestan... let's go!",
+		"fr":"Cette grosse limace de mercenaire a déjà livré Celestan... en route !"
+	},
+	"story_hello3_1":{
+		"en":" ",
+		"fr":" "
+	},	
+	"story_hello3_1_c":{
+		"en":"...an evil shadow has invaded my planet... ",
+		"fr":"... une ombre maléfique a envahi ma planète ..."
+	},
+	"story_hello3_2":{
+		"en":"Jona",
+		"fr":"Jona"
+	},	
+	"story_hello3_2_c":{
+		"en":"...we must find its source as quickly as possible.",
+		"fr":"... nous devons trouver sa source au plus vite."
+	},	
+	"story_branch1":{
+		"en":" ",
+		"fr":" "
+	},	
+	"story_branch1_c":{
+		"en":"We are at a crossroads. We must choose our path.",
+		"fr":"Nous sommes à un croisement. Il faut choisir notre route."
+	},
+	"story_branch2":{
+		"en":"Rosi",
+		"fr":"Rosi"
+	},	
+	"story_branch2_c":{
+		"en":"Let's find clues that will lead us to Celestan!",
+		"fr":"Trouvons des indices qui nous méneront vers Celestan !"
+	},		
+	"story_allmissions1":{
+		"en":"Capi",
+		"fr":"Capi"
+	},	
+	"story_allmissions1_c":{
+		"en":"Don't forget to complete all the missions, you never know..",
+		"fr":"N'oublie pas de complèter toutes les missions, sait-on jamais..."
+	},		
+	"story_allmissions2":{
+		"en":"Capi",
+		"fr":"Capi"
+	},	
+	"story_allmissions2_c":{
+		"en":"If you complete all the missions, you'll be rewarded.",
+		"fr":"si tu complètes toutes les missions, tu seras récompensé."
+	},	
+	"story_warnboss02":{
+		"en":" ",
+		"fr":" "
+	},	
+	"tuto_rocks_01":{
+		"en":" ",
+		"fr":" "
+	},		
+	"tuto_rocks_01_c":{
+		"en":"Be careful of the rocks...",
+		"fr":"Prends garde aux rochers ..."
+	},		
+	"tuto_rocks_02":{
+		"en":" ",
+		"fr":" "
+	},		
+	"tuto_rocks_02_c":{
+		"en":"Better destroy them while you can!",
+		"fr":"Mieux vaut en détruire tant que tu le peux !"
+	},		
+	"tuto_walls_01":{
+		"en":" ",
+		"fr":" "
+	},		
+	"tuto_walls_01_c":{
+		"en":"You won't be able to move objects if there is a wall between them!",
+		"fr":"Tu ne pourra pas déplacer les objets s'il y a un mur entre eux !"
+	},		
+	"story_warnboss02_c":{
+		"en":"We are at the last stage! get ready!",
+		"fr":"Nous arrivons à la dernière étape ! prépares-toi !"
+	},		
+	"story_warnboss03_1":{
+		"en":" ",
+		"fr":" "
+	},	
+	"story_warnboss03_1_c":{
+		"en":"I feel a threat very close ...",
+		"fr":"Je ressens une menace toute proche ..."
+	},		
+	"story_warnboss03_2":{
+		"en":" ",
+		"fr":" "
+	},	
+	"story_warnboss03_2_c":{
+		"en":"We have arrived at the source of this evil! get ready!",
+		"fr":"Nous sommes arrivé à la source de ce mal ! prépares-toi !"
+	},
+	"tuto_boss03_1":{
+		"en":" ",
+		"fr":" "
+	},	
+	"tuto_boss03_1_c":{
+		"en":"Be careful, this monster is only sensitive to bombs!",
+		"fr":"attention, ce monstre n'est sensible qu'aux bombes !"
+	},		
+	"starsbtn":{
+		"en":"Star",
+		"fr":"Etoile"
+	},		
+	"starsbtn_c":{
+		"en":"Using a star gives 10 moves.",
+		"fr":"Utiliser une étoile donne 10 mouvements."
+	},
+	"coinsbtn":{
+		"en":"Coin",
+		"fr":"Piece"
+	},
+	"coinsbtn_c":{
+		"en":"The coin is the currency used in the shop.",
+		"fr":"La pièce est la monnaie utilisée dans la boutique."
+	},	
+	"item1":{
+		"en":"Feather",
+		"fr":"Plume"
+	},
+	"item1_c":{
+		"en":"Allows you to generate a +2 moves bonus every 2 rocks destroyed.",
+		"fr":"Permet de générer un bonus de +2 mouvements chaque fois que vous détruisez 2 rochers."
+	},
+	"item2":{
+		"en":"Monkey",
+		"fr":"Singe"
+	},	
+	"item2_c":{
+		"en":"Enables a free shake whenever desired.",
+		"fr":"Permet d'effectuer un shake gratuit à tout moment pendant la partie."
+	},
+	"item3":{
+		"en":"Egg",
+		"fr":"Oeuf"
+	},
+	"item3_c":{
+		"en":"Allows you to collect half of the bonuses on the grid at the end of the mission.",
+		"fr":"Permet de ramasser la moitié des bonus sur la grille à la fin de la mission."
+	},
+	"item4":{
+		"en":"Diamond",
+		"fr":"Diamant"
+	},
+	"item4_c":{
+		"en":"Adds ...",
+		"fr":"Ajoute ..."
+	}					
+}

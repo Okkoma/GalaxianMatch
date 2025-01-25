@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="boss12.webp">
+	<SubTexture name="boss12_blast" x="1" y="1" width="81" height="187" />
+</TextureAtlas>

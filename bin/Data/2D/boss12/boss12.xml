@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="boss12.webp">
+	<SubTexture name="boss12_arm" x="557" y="238" width="77" height="82" />
+	<SubTexture name="boss12_armgun" x="1" y="189" width="55" height="82" />
+	<SubTexture name="boss12_bud_corps" x="477" y="244" width="54" height="45" />
+	<SubTexture name="boss12_bud_ear1" x="557" y="211" width="32" height="22" />
+	<SubTexture name="boss12_bud_ear2" x="557" y="144" width="29" height="34" />
+	<SubTexture name="boss12_bud_eye1" x="719" y="250" width="41" height="22" />
+	<SubTexture name="boss12_bud_eye2" x="677" y="250" width="41" height="22" />
+	<SubTexture name="boss12_bud_eye3" x="635" y="238" width="41" height="22" />
+	<SubTexture name="boss12_bud_hand1" x="906" y="107" width="17" height="16" />
+	<SubTexture name="boss12_bud_hand2" x="924" y="107" width="19" height="13" />
+	<SubTexture name="boss12_bud_teeth" x="193" y="163" width="23" height="21" />
+	<SubTexture name="boss12_carotte" x="222" y="144" width="334" height="99" />
+	<SubTexture name="boss12_carotte_halo" x="222" y="1" width="384" height="142" />
+	<SubTexture name="boss12_cmdpanel" x="761" y="250" width="71" height="21" />
+	<SubTexture name="boss12_corpse" x="83" y="1" width="138" height="161" />
+	<SubTexture name="boss12_corpshole_halo" x="83" y="163" width="109" height="96" />
+	<SubTexture name="boss12_flame" x="607" y="1" width="80" height="132" />
+	<SubTexture name="boss12_gunhole_halo" x="557" y="179" width="33" height="31" />
+	<SubTexture name="boss12_hand" x="193" y="244" width="78" height="78" />
+	<SubTexture name="boss12_helmet" x="906" y="1" width="106" height="105" />
+	<SubTexture name="boss12_joystick1" x="1013" y="1" width="9" height="26" />
+	<SubTexture name="boss12_joystick2" x="1013" y="28" width="9" height="21" />
+	<SubTexture name="boss12_leg" x="607" y="134" width="57" height="103" />
+	<SubTexture name="boss12_pioche" x="688" y="126" width="331" height="123" />
+	<SubTexture name="boss12_pioche_back" x="688" y="1" width="124" height="124" />
+	<SubTexture name="boss12_pioche_halo" x="272" y="244" width="204" height="49" />
+	<SubTexture name="boss12_pioche_plasma" x="813" y="1" width="92" height="106" />
+</TextureAtlas>

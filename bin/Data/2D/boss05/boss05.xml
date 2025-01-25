@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="boss05.webp">
+	<SubTexture name="boss05_arm" x="935" y="1" width="52" height="141" />
+	<SubTexture name="boss05_armball1" x="988" y="1" width="27" height="26" />
+	<SubTexture name="boss05_armball2" x="988" y="28" width="27" height="25" />
+	<SubTexture name="boss05_armhalo" x="550" y="1" width="120" height="201" />
+	<SubTexture name="boss05_armor" x="671" y="195" width="262" height="172" />
+	<SubTexture name="boss05_armorhalo" x="109" y="300" width="252" height="106" />
+	<SubTexture name="boss05_burst" x="934" y="279" width="88" height="88" />
+	<SubTexture name="boss05_corpse" x="671" y="1" width="174" height="193" />
+	<SubTexture name="boss05_corpsehalo1" x="109" y="1" width="254" height="298" />
+	<SubTexture name="boss05_corpsehalo2" x="364" y="1" width="185" height="273" />
+	<SubTexture name="boss05_energyball" x="364" y="275" width="102" height="102" />
+	<SubTexture name="boss05_energyballsmall" x="885" y="368" width="50" height="50" />
+	<SubTexture name="boss05_eyes" x="540" y="322" width="56" height="25" />
+	<SubTexture name="boss05_flame1" x="1" y="1" width="107" height="519" />
+	<SubTexture name="boss05_flame2" x="540" y="368" width="176" height="87" />
+	<SubTexture name="boss05_headhalo" x="717" y="368" width="93" height="65" />
+	<SubTexture name="boss05_mouth" x="811" y="368" width="73" height="64" />
+	<SubTexture name="boss05_smoke1" x="467" y="275" width="72" height="96" />
+	<SubTexture name="boss05_smoke2" x="846" y="1" width="88" height="145" />
+	<SubTexture name="boss05_smoke3" x="936" y="368" width="64" height="49" />
+	<SubTexture name="boss05_smoke4" x="846" y="147" width="46" height="33" />
+	<SubTexture name="boss05_smoke5" x="550" y="203" width="70" height="118" />
+	<SubTexture name="boss05_smoke6" x="935" y="143" width="50" height="135" />
+</TextureAtlas>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r11">
+    <folder id="0">
+        <file id="0" name="zonearrow.png" width="63" height="102" pivot_x="0.477273" pivot_y="0.343949"/>
+    </folder>
+    <entity id="0" name="zonebutton">
+        <animation id="0" name="unselected" length="2000" interval="100">
+            <mainline>
+                <key id="0" curve_type="cubic" c1="0" c2="0.995305">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="996" curve_type="cubic" c1="0" c2="0.995305">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="zonearrow">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" angle="0" a="0.4"/>
+                </key>
+                <key id="1" time="996" spin="0">
+                    <object folder="0" file="0" angle="0" a="0.55"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="selected" length="1000" interval="100">
+            <mainline>
+                <key id="0" curve_type="cubic" c1="0" c2="0.995305">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="498" curve_type="cubic" c1="0" c2="0.995305">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="zonearrow">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" y="-1" angle="0" a="0.71642"/>
+                </key>
+                <key id="1" time="498" spin="0">
+                    <object folder="0" file="0" y="15" angle="0"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

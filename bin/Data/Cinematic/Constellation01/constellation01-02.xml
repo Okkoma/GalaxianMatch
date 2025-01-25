@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<TextureAtlas>
+	<Texture imagePath="constellation01-02_0.webp">
+		<SubTexture name="ciel" x="1847" y="1382" width="200" height="164" />
+		<SubTexture name="fumee1" x="1973" y="1" width="51" height="199" />
+		<SubTexture name="fumee2" x="1847" y="1155" width="128" height="226" />
+		<SubTexture name="fumee3" x="1847" y="645" width="112" height="254" />
+		<SubTexture name="fumee4" x="1847" y="900" width="90" height="254" />
+		<SubTexture name="fumee5" x="1938" y="900" width="88" height="228" />
+		<SubTexture name="nuage1" x="1847" y="1547" width="176" height="97" />
+		<SubTexture name="nuage2" x="1156" y="1699" width="94" height="43" />
+		<SubTexture name="nuage3" x="1" y="1699" width="272" height="122" />
+		<SubTexture name="nuage4" x="479" y="1699" width="337" height="101" />
+		<SubTexture name="nuage5" x="274" y="1699" width="204" height="102" />
+		<SubTexture name="sable" x="1" y="645" width="1845" height="582" />
+		<SubTexture name="sketch02_fond" x="1" y="1228" width="1845" height="470" />
+		<SubTexture name="sketch03_fond2" x="1" y="1" width="1971" height="643" />
+		<SubTexture name="vaisseau" x="1847" y="1645" width="181" height="94" />
+		<SubTexture name="ventfond" x="817" y="1699" width="338" height="73" />
+	</Texture>
+	<Texture imagePath="constellation01-02_1.webp">
+		<SubTexture name="sketch02_avantplan" x="1" y="1" width="1967" height="906" />
+		<SubTexture name="sketch02_capricorne" x="1156" y="908" width="454" height="741" />
+		<SubTexture name="sketch03_capri1" x="499" y="908" width="656" height="761" />
+		<SubTexture name="sketch03_capri2" x="1" y="908" width="497" height="775" />
+		<SubTexture name="sketch03_caprichevelure" x="1611" y="908" width="321" height="184" />
+		<SubTexture name="sketch03_corne1" x="1969" y="1" width="59" height="601" />
+		<SubTexture name="sketch03_corne2" x="1969" y="603" width="53" height="595" />
+		<SubTexture name="sketch03_singe" x="1156" y="1650" width="462" height="391" />
+		<SubTexture name="sketch03_singeombre" x="1611" y="1093" width="245" height="158" />
+		<SubTexture name="vent1" x="499" y="1670" width="583" height="358" />
+	</Texture>
+</TextureAtlas>

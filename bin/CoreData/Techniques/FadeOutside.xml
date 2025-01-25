@@ -1,0 +1,4 @@
+<technique vs="FadeOutside" ps="FadeOutside" >
+<!--<technique vs="Urho2D" ps="Urho2D" >-->
+    <pass name="alpha" depthwrite="false" blend="alpha" />
+</technique>

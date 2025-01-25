@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<node>
+	<attribute name="Is Enabled" value="true" />
+	<attribute name="Name" value="Boss3" />
+	<attribute name="Position" value="0 0 0" />
+	<attribute name="Rotation" value="1 0 0 0" />
+	<attribute name="Scale" value="0.75 0.75 1" />
+	<attribute name="Variables">
+	</attribute>
+	<node>
+		<attribute name="Name" value="Boss3_Corps" />
+		<attribute name="Scale" value="1 1 1" />
+		<component type="AnimatedSprite2D">
+			<attribute name="Layer" value="500" />
+			<attribute name="Order in Layer" value="100" />
+			<attribute name="Animation Set" value="AnimationSet2D;2D/boss03/boss03.scml" />
+			<attribute name="Entity" value="boss03_corps" />
+			<attribute name="Animation" value="idle" />
+		</component>	
+		<component type="RigidBody2D">
+			<attribute name="Body Type" value="Static" />
+			<attribute name="Fixed Rotation" value="true" />
+			<attribute name="Allow Sleep" value="false" />
+		</component>
+		<component type="CollisionCircle2D">
+			<attribute name="Radius" value="1" />
+			<attribute name="Center" value="0 0" />
+			<attribute name="Category Bits" value="4" />
+			<attribute name="Mask Bits" value="2" />
+		</component>		
+	</node>	
+	<node>
+		<attribute name="Name" value="Boss3_Base" />
+		<attribute name="Scale" value="1 1 1" />
+		<component type="AnimatedSprite2D">
+			<attribute name="Layer" value="500" />
+			<attribute name="Order in Layer" value="0" />
+			<attribute name="Animation Set" value="AnimationSet2D;2D/boss03/boss03.scml" />
+			<attribute name="Entity" value="boss03_base" />
+			<attribute name="Animation" value="idle" />
+		</component>
+	</node>
+	<node>
+		<attribute name="Name" value="Boss3_Tentacule" />	
+		<attribute name="Scale" value="1.5 1.5 1" />
+		<component type="RigidBody2D">
+			<attribute name="Body Type" value="Dynamic" />
+			<attribute name="Allow Sleep" value="false" />
+		</component>
+		<component type="CollisionCircle2D">
+			<attribute name="Radius" value="0.5" />
+			<attribute name="Center" value="0 0" />
+			<attribute name="Category Bits" value="4" />
+			<attribute name="Mask Bits" value="2" />
+		</component>
+		<node>
+			<attribute name="Name" value="Trig_Attack" />	
+			<component type="CollisionCircle2D">
+				<attribute name="Radius" value="0.5" />
+				<attribute name="Trigger" value="true" />						
+			</component>
+		</node>
+		<component type="AnimatedSprite2D">
+			<attribute name="Layer" value="500" />
+			<attribute name="Order in Layer" value="200" />
+			<attribute name="Animation Set" value="AnimationSet2D;2D/boss03/boss03.scml" />
+			<attribute name="Entity" value="boss03_langue" />
+			<attribute name="Animation" value="attack1" />
+		</component>
+		<component type="BlastLogic">
+			<attribute name="Steering Mode" value="Tentacule" />
+			<attribute name="Auto Targeting" value="true" />		
+			<attribute name="Life Time" value="0" />
+			<attribute name="Die On Contact" value="false" />
+			<attribute name="Effects On Die" value="0 1" />
+		</component>		
+	</node>
+	<node>
+		<attribute name="Name" value="EffectNode" />	
+		<attribute name="Scale" value="3 3 1" />
+		
+	</node>	
+	<component type="BossLogic">
+		<attribute name="Life" value="30" />
+		<attribute name="Effects On Hurt" value="0 2" />
+	</component>
+</node>

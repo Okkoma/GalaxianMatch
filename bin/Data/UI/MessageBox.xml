@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<element type="Window"> <!-- style="DialogWindow"> -->
+  <attribute name="Name" value="MessageBox" />
+  <attribute name="Is Movable" value="false" />
+  <attribute name="Is Resizable" value="false" />
+  <attribute name="Size" value="400 300" />
+  <attribute name="Position" value="200 150" />
+  <attribute name="Layout Mode" value="Vertical" />
+  <attribute name="Layout Spacing" value="4" />
+  <attribute name="Layout Border" value="6 6 6 6" />
+  <attribute name="Resize Border" value="6 6 6 6" />
+  <attribute name="Opacity" value="0.3" />
+  <element>
+    <attribute name="Min Size" value="0 56" />
+    <attribute name="Max Size" value="2147483647 2147483647" />
+    <attribute name="Layout Mode" value="Vertical" />
+    <attribute name="Layout Spacing" value="4" />
+	<element type="Text">
+		<attribute name="Name" value="TitleText" />
+		<attribute name="Text" value="title text" />
+        <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		<attribute name="Font Size" value="48" />
+        <attribute name="Color" value="0.85 0.85 0.85" />
+		<attribute name="Text Alignment" value="Center" />
+	</element>
+	<element type="BorderImage" style="EditorDivider" />
+	<element type="Text">
+		<attribute name="Name" value="MessageText" />
+		<attribute name="Text" value="message text" />
+        <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		<attribute name="Font Size" value="32" />
+        <attribute name="Color" value="0.85 0.85 0.85" />
+		<attribute name="Text Alignment" value="Center" />
+	</element>
+    <element type="Button">
+      <attribute name="Name" value="OkButton" />
+      <attribute name="Min Size" value="70 56" />
+      <attribute name="Max Size" value="400 56" />
+      <attribute name="Layout Mode" value="Horizontal" />
+      <attribute name="Layout Border" value="1 5 1 1" />
+      <element type="Text">
+		<attribute name="Name" value="Text" />
+        <attribute name="Text" value="yes" />
+        <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		<attribute name="Font Size" value="32" />
+        <attribute name="Color" value="0.85 0.85 0.85" />
+        <attribute name="Text Alignment" value="Center" />
+      </element>
+    </element>
+    <element type="Button">
+      <attribute name="Name" value="CancelButton" />
+      <attribute name="Min Size" value="70 56" />
+      <attribute name="Max Size" value="400 56" />
+      <attribute name="Layout Mode" value="Horizontal" />
+      <attribute name="Layout Border" value="1 5 1 1" />
+      <element type="Text">
+		<attribute name="Name" value="Text" />
+        <attribute name="Text" value="NO" />
+        <attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
+		<attribute name="Font Size" value="32" />
+        <attribute name="Color" value="0.85 0.85 0.85" />
+        <attribute name="Text Alignment" value="Center" />
+      </element>
+    </element>
+  </element>
+</element>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<node>
+	<attribute name="Is Enabled" value="true" />
+	<attribute name="Name" value="coin2" />
+	<attribute name="Position" value="0.0 0.0 0" />
+	<attribute name="Rotation" value="1 0 0 0" />
+	<attribute name="Scale" value="1 1 1" />
+	<attribute name="Variables">
+		<variant name="GOA_Bonus" hash="1750376793" type="int" value="1" />
+	</attribute>
+	<component type="StaticSprite2D">
+		<attribute name="Sprite" value="SpriteSheet2D;2D/tiles.xml@coin" />
+	</component>
+</node>

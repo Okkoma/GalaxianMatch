@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r11">
+    <folder id="0">
+        <file id="0" name="sketch07_etoile_halo.png" width="366" height="358" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="1" name="sketch07_etoiles.png" width="587" height="587" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="2" name="sketch09_boss2_corps.png" width="379" height="352" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="3" name="sketch09_boss2_elec1.png" width="62" height="169" pivot_x="0.5" pivot_y="1"/>
+        <file id="4" name="sketch09_boss2_elec2.png" width="64" height="118" pivot_x="0.53125" pivot_y="0.881356"/>
+        <file id="5" name="sketch09_boss2_elec3.png" width="35" height="48" pivot_x="0.542857" pivot_y="0.916667"/>
+        <file id="6" name="sketch09_boss2_eye1.png" width="122" height="109" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="7" name="sketch09_boss2_eye2.png" width="105" height="92" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="8" name="sketch09_boss2_halo.png" width="374" height="341" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="9" name="sketch09_poisson_corps.png" width="283" height="443" pivot_x="0.614841" pivot_y="0.765237"/>
+        <file id="10" name="sketch09_poisson_nageoire1.png" width="477" height="273" pivot_x="0.922432" pivot_y="0.879121"/>
+        <file id="11" name="sketch09_poisson_nageoire2.png" width="394" height="178" pivot_x="0.030457" pivot_y="0.702247"/>
+        <file id="12" name="sketch09_poisson_nageoire3.png" width="155" height="63" pivot_x="0.922581" pivot_y="0.873016"/>
+        <file id="13" name="sketch09_poisson_queue1.png" width="596" height="441" pivot_x="0.021812" pivot_y="0.825397"/>
+        <file id="14" name="sketch07_poisson_queue2.png" width="457" height="329" pivot_x="0.951178" pivot_y="0.823991"/>
+        <file id="15" name="sketch09_poisson_queue3.png" width="219" height="555" pivot_x="0.652968" pivot_y="0.893694"/>
+        <file id="16" name="sketch09_watersplash1.png" width="176" height="342" pivot_x="0.323864" pivot_y="0.959064"/>
+        <file id="17" name="sketch09_watersplash2.png" width="230" height="402" pivot_x="0.773913" pivot_y="0.935323"/>
+        <file id="18" name="sketch09_watersplash3.png" width="123" height="138" pivot_x="0.089431" pivot_y="0.0362319"/>
+        <file id="19" name="sketch09_watersplash4.png" width="160" height="122" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="20" name="sketch09_watersplash5.png" width="348" height="317" pivot_x="0.0608202" pivot_y="0.172232"/>
+    </folder>
+    <entity id="0" name="entity">
+        <obj_info name="bone_000" type="bone" w="255.838" h="10"/>
+        <obj_info name="bone_001" type="bone" w="283.409" h="10"/>
+        <obj_info name="bone_002" type="bone" w="297.115" h="10"/>
+        <animation id="0" name="playscene" length="5000" interval="100" looping="false">
+            <mainline>
+                <key id="0">
+                    <bone_ref id="0" timeline="17" key="0"/>
+                    <bone_ref id="1" parent="0" timeline="27" key="0"/>
+                    <bone_ref id="2" timeline="32" key="0"/>
+                    <object_ref id="0" timeline="29" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="0" key="0" z_index="1"/>
+                    <object_ref id="2" timeline="31" key="0" z_index="2"/>
+                    <object_ref id="3" timeline="30" key="0" z_index="3"/>
+                    <object_ref id="4" timeline="1" key="0" z_index="4"/>
+                    <object_ref id="5" timeline="22" key="0" z_index="5"/>
+                    <object_ref id="6" parent="2" timeline="21" key="0" z_index="6"/>
+                    <object_ref id="7" timeline="11" key="0" z_index="7"/>
+                    <object_ref id="8" parent="2" timeline="16" key="0" z_index="8"/>
+                    <object_ref id="9" parent="2" timeline="14" key="0" z_index="9"/>
+                    <object_ref id="10" parent="2" timeline="15" key="0" z_index="10"/>
+                    <object_ref id="11" parent="2" timeline="10" key="0" z_index="11"/>
+                    <object_ref id="12" parent="2" timeline="13" key="0" z_index="12"/>
+                    <object_ref id="13" parent="2" timeline="12" key="0" z_index="13"/>
+                    <object_ref id="14" parent="0" timeline="9" key="0" z_index="14"/>
+                    <object_ref id="15" parent="0" timeline="3" key="0" z_index="15"/>
+                    <object_ref id="16" parent="0" timeline="2" key="0" z_index="16"/>
+                    <object_ref id="17" parent="0" timeline="6" key="0" z_index="17"/>
+                    <object_ref id="18" parent="0" timeline="5" key="0" z_index="18"/>
+                    <object_ref id="19" parent="0" timeline="4" key="0" z_index="19"/>
+                    <object_ref id="20" parent="0" timeline="7" key="0" z_index="20"/>
+                    <object_ref id="21" parent="0" timeline="8" key="0" z_index="21"/>
+                    <object_ref id="22" parent="2" timeline="18" key="0" z_index="22"/>
+                    <object_ref id="23" parent="2" timeline="19" key="0" z_index="23"/>
+                    <object_ref id="24" parent="2" timeline="20" key="0" z_index="24"/>
+                    <object_ref id="25" parent="1" timeline="23" key="0" z_index="25"/>
+                    <object_ref id="26" parent="1" timeline="24" key="0" z_index="26"/>
+                    <object_ref id="27" parent="1" timeline="25" key="0" z_index="27"/>
+                    <object_ref id="28" parent="1" timeline="26" key="0" z_index="28"/>
+                    <object_ref id="29" parent="1" timeline="28" key="0" z_index="29"/>
+                </key>
+                <key id="1" time="2192">
+                    <bone_ref id="0" timeline="17" key="1"/>
+                    <bone_ref id="1" parent="0" timeline="27" key="1"/>
+                    <bone_ref id="2" timeline="32" key="1"/>
+                    <object_ref id="0" timeline="29" key="1" z_index="0"/>
+                    <object_ref id="1" timeline="0" key="1" z_index="1"/>
+                    <object_ref id="2" timeline="31" key="1" z_index="2"/>
+                    <object_ref id="3" timeline="30" key="1" z_index="3"/>
+                    <object_ref id="4" timeline="1" key="1" z_index="4"/>
+                    <object_ref id="5" timeline="22" key="1" z_index="5"/>
+                    <object_ref id="6" parent="2" timeline="21" key="1" z_index="6"/>
+                    <object_ref id="7" timeline="11" key="1" z_index="7"/>
+                    <object_ref id="8" parent="2" timeline="16" key="1" z_index="8"/>
+                    <object_ref id="9" parent="2" timeline="14" key="1" z_index="9"/>
+                    <object_ref id="10" parent="2" timeline="15" key="1" z_index="10"/>
+                    <object_ref id="11" parent="2" timeline="10" key="1" z_index="11"/>
+                    <object_ref id="12" parent="2" timeline="13" key="1" z_index="12"/>
+                    <object_ref id="13" parent="2" timeline="12" key="1" z_index="13"/>
+                    <object_ref id="14" parent="0" timeline="9" key="1" z_index="14"/>
+                    <object_ref id="15" parent="0" timeline="3" key="1" z_index="15"/>
+                    <object_ref id="16" parent="0" timeline="2" key="1" z_index="16"/>
+                    <object_ref id="17" parent="0" timeline="6" key="1" z_index="17"/>
+                    <object_ref id="18" parent="0" timeline="5" key="1" z_index="18"/>
+                    <object_ref id="19" parent="0" timeline="4" key="1" z_index="19"/>
+                    <object_ref id="20" parent="0" timeline="7" key="1" z_index="20"/>
+                    <object_ref id="21" parent="0" timeline="8" key="1" z_index="21"/>
+                    <object_ref id="22" parent="2" timeline="18" key="1" z_index="22"/>
+                    <object_ref id="23" parent="2" timeline="19" key="1" z_index="23"/>
+                    <object_ref id="24" parent="2" timeline="20" key="1" z_index="24"/>
+                    <object_ref id="25" parent="1" timeline="23" key="1" z_index="25"/>
+                    <object_ref id="26" parent="1" timeline="24" key="1" z_index="26"/>
+                    <object_ref id="27" parent="1" timeline="25" key="1" z_index="27"/>
+                    <object_ref id="28" parent="1" timeline="26" key="1" z_index="28"/>
+                    <object_ref id="29" parent="1" timeline="28" key="1" z_index="29"/>
+                </key>
+                <key id="2" time="5000">
+                    <bone_ref id="0" timeline="17" key="2"/>
+                    <bone_ref id="1" parent="0" timeline="27" key="2"/>
+                    <bone_ref id="2" timeline="32" key="2"/>
+                    <object_ref id="0" timeline="29" key="2" z_index="0"/>
+                    <object_ref id="1" timeline="0" key="2" z_index="1"/>
+                    <object_ref id="2" timeline="31" key="2" z_index="2"/>
+                    <object_ref id="3" timeline="30" key="2" z_index="3"/>
+                    <object_ref id="4" timeline="1" key="2" z_index="4"/>
+                    <object_ref id="5" timeline="22" key="2" z_index="5"/>
+                    <object_ref id="6" parent="2" timeline="21" key="2" z_index="6"/>
+                    <object_ref id="7" timeline="11" key="2" z_index="7"/>
+                    <object_ref id="8" parent="2" timeline="16" key="2" z_index="8"/>
+                    <object_ref id="9" parent="2" timeline="14" key="2" z_index="9"/>
+                    <object_ref id="10" parent="2" timeline="15" key="2" z_index="10"/>
+                    <object_ref id="11" parent="2" timeline="10" key="2" z_index="11"/>
+                    <object_ref id="12" parent="2" timeline="13" key="2" z_index="12"/>
+                    <object_ref id="13" parent="2" timeline="12" key="2" z_index="13"/>
+                    <object_ref id="14" parent="0" timeline="9" key="2" z_index="14"/>
+                    <object_ref id="15" parent="0" timeline="3" key="2" z_index="15"/>
+                    <object_ref id="16" parent="0" timeline="2" key="2" z_index="16"/>
+                    <object_ref id="17" parent="0" timeline="6" key="2" z_index="17"/>
+                    <object_ref id="18" parent="0" timeline="5" key="2" z_index="18"/>
+                    <object_ref id="19" parent="0" timeline="4" key="2" z_index="19"/>
+                    <object_ref id="20" parent="0" timeline="7" key="2" z_index="20"/>
+                    <object_ref id="21" parent="0" timeline="8" key="2" z_index="21"/>
+                    <object_ref id="22" parent="2" timeline="18" key="2" z_index="22"/>
+                    <object_ref id="23" parent="2" timeline="19" key="2" z_index="23"/>
+                    <object_ref id="24" parent="2" timeline="20" key="2" z_index="24"/>
+                    <object_ref id="25" parent="1" timeline="28" key="3" z_index="25"/>
+                    <object_ref id="26" parent="1" timeline="23" key="2" z_index="26"/>
+                    <object_ref id="27" parent="1" timeline="24" key="2" z_index="27"/>
+                    <object_ref id="28" parent="1" timeline="25" key="2" z_index="28"/>
+                    <object_ref id="29" parent="1" timeline="26" key="2" z_index="29"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="sketch07_etoiles">
+                <key id="0" spin="0">
+                    <object folder="0" file="1" x="-319.522787" y="-526.261917" angle="0" scale_x="2" scale_y="2"/>
+                </key>
+                <key id="1" time="2192" spin="0">
+                    <object folder="0" file="1" x="-319.522787" y="-526.261917" angle="0" scale_x="2" scale_y="2"/>
+                </key>
+                <key id="2" time="5000" spin="0">
+                    <object folder="0" file="1" x="-319.522787" y="-526.261917" angle="0" scale_x="2" scale_y="2"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="sketch07_etoile_halo">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="106.96711" y="211.378175" angle="10.185422" scale_x="7.717752" scale_y="-4.35994"/>
+                </key>
+                <key id="1" time="2192" spin="0">
+                    <object folder="0" file="0" x="106.96711" y="211.378175" angle="10.185422" scale_x="7.717752" scale_y="-4.35994"/>
+                </key>
+                <key id="2" time="5000" spin="0">
+                    <object folder="0" file="0" x="106.96711" y="211.378175" angle="10.185422" scale_x="7.717752" scale_y="-4.35994"/>
+                </key>
+            </timeline>
+            <timeline id="2" name="sketch09_poisson_corps">
+                <key id="0" spin="0">
+                    <object folder="0" file="9" x="-4.299599" y="5.874815" angle="322.144658"/>
+                </key>
+                <key id="1" time="2192" spin="0">
+                    <object folder="0" file="9" x="-4.299599" y="5.874815" angle="322.144658"/>
+                </key>
+                <key id="2" time="5000" spin="0">
+                    <object folder="0" file="9" x="-4.299599" y="5.874815" angle="322.144658"/>
+                </key>
+            </timeline>
+            <timeline id="3" name="sketch09_poisson_nageoire1">
+                <key id="0" spin="-1">
+                    <object folder="0" file="10" x="-136.852313" y="91.167124" angle="224.460767"/>
+                </key>
+                <key id="1" time="2192">
+                    <object folder="0" file="10" x="-127.013439" y="90.073254" angle="202.428318"/>
+                </key>
+                <key id="2" time="5000">
+                    <object folder="0" file="10" x="-127.013439" y="90.073254" angle="203.278514"/>
+                </key>
+            </timeline>
+            <timeline id="4" name="sketch09_poisson_queue1">
+                <key id="0" spin="-1">
+                    <object folder="0" file="13" x="-8.947074" y="3.154342" angle="231.795426"/>
+                </key>
+                <key id="1" time="2192" spin="-1">
+                    <object folder="0" file="13" x="-8.947074" y="3.154342" angle="224.081907"/>
+                </key>
+                <key id="2" time="5000">
+                    <object folder="0" file="13" x="-8.947074" y="3.154342" angle="221.463751"/>
+                </key>
+            </timeline>
+            <timeline id="5" name="sketch09_poisson_queue2">
+                <key id="0">
+                    <object folder="0" file="14" x="-158.370624" y="-266.737632" angle="65.024567"/>
+                </key>
+                <key id="1" time="2192">
+                    <object folder="0" file="14" x="-165.865916" y="-250.963584" angle="78.175943"/>
+                </key>
+                <key id="2" time="5000" spin="-1">
+                    <object folder="0" file="14" x="-165.865916" y="-250.963584" angle="83.050717" scale_x="1.078115" scale_y="0.923029"/>
+                </key>
+            </timeline>
+            <timeline id="6" name="sketch09_poisson_queue3">
+                <key id="0">
+                    <object folder="0" file="15" x="-175.845763" y="-268.615464" angle="40.253676"/>
+                </key>
+                <key id="1" time="2192">
+                    <object folder="0" file="15" x="-175.064853" y="-267.990821" angle="44.381721"/>
+                </key>
+                <key id="2" time="5000" spin="-1">
+                    <object folder="0" file="15" x="-175.064853" y="-267.990821" angle="51.908752"/>
+                </key>
+            </timeline>
+            <timeline id="7" name="sketch09_poisson_queue1_000">
+                <key id="0" spin="-1">
+                    <object folder="0" file="13" x="-179.632166" y="91.852478" angle="247.865508" scale_x="1.042998" scale_y="0.796628"/>
+                </key>
+                <key id="1" time="2192" spin="-1">
+                    <object folder="0" file="13" x="-184.072473" y="105.828998" angle="217.673184" scale_x="1.108076" scale_y="0.70537"/>
+                </key>
+                <key id="2" time="5000">
+                    <object folder="0" file="13" x="-184.072473" y="105.828998" angle="214.523134" scale_x="1.108076" scale_y="0.70537"/>
+                </key>
+            </timeline>
+            <timeline id="8" name="sketch09_poisson_nageoire2">
+                <key id="0">
+                    <object folder="0" file="11" x="-100.825586" y="-105.281533" angle="319.783869"/>
+                </key>
+                <key id="1" time="2192" spin="-1">
+                    <object folder="0" file="11" x="-83.802252" y="-99.348061" angle="336.45216"/>
+                </key>
+                <key id="2" time="5000" spin="-1">
+                    <object folder="0" file="11" x="-83.802252" y="-99.348061" angle="333.972362"/>
+                </key>
+            </timeline>
+            <timeline id="9" name="sketch09_poisson_nageoire3">
+                <key id="0" spin="0">
+                    <object folder="0" file="12" x="-84.846714" y="102.674413" angle="228.810808"/>
+                </key>
+                <key id="1" time="2192">
+                    <object folder="0" file="12" x="-72.197584" y="88.46176" angle="228.810808"/>
+                </key>
+                <key id="2" time="5000" spin="-1">
+                    <object folder="0" file="12" x="-72.197584" y="88.46176" angle="234.325587"/>
+                </key>
+            </timeline>
+            <timeline id="10" name="sketch09_boss2_corps">
+                <key id="0" spin="0">
+                    <object folder="0" file="2" x="-14.573329" y="56.632208" angle="26.664179"/>
+                </key>
+                <key id="1" time="2192" spin="0">
+                    <object folder="0" file="2" x="-14.573329" y="56.632208" angle="26.664179"/>
+                </key>
+                <key id="2" time="5000" spin="0">
+                    <object folder="0" file="2" x="-14.573329" y="56.632208" angle="26.664179"/>
+                </key>
+            </timeline>
+            <timeline id="11" name="sketch09_boss2_halo">
+                <key id="0" spin="0">
+                    <object folder="0" file="8" x="114.494253" y="274.045977" angle="0" scale_x="2.432" scale_y="2.701754" a="0.40299"/>
+                </key>
+                <key id="1" time="2192" spin="0">
+                    <object folder="0" file="8" x="114.494253" y="274.045977" angle="0" scale_x="3.754955" scale_y="3.918209" a="0.40299"/>
+                </key>
+                <key id="2" time="5000" spin="0">
+                    <object folder="0" file="8" x="114.494253" y="274.045977" angle="0" scale_x="2.173364" scale_y="2.16986" a="0.24627"/>
+                </key>
+            </timeline>
+            <timeline id="12" name="sketch09_boss2_eye1">
+                <key id="0" spin="0">
+                    <object folder="0" file="6" x="-75.500287" y="117.795152" angle="26.664179" scale_x="0.616391" scale_y="0.554441"/>
+                </key>
+                <key id="1" time="2192" spin="0">
+                    <object folder="0" file="6" x="-75.500287" y="117.795152" angle="26.664179" scale_x="0.616391" scale_y="0.554441"/>
+                </key>
+                <key id="2" time="5000" spin="0">
+                    <object folder="0" file="6" x="-75.500287" y="117.795152" angle="26.664179" scale_x="0.616391" scale_y="0.554441"/>
+                </key>
+            </timeline>
+            <timeline id="13" name="sketch09_boss2_eye2">
+                <key id="0" spin="0">
+                    <object folder="0" file="7" x="37.18499" y="125.145537" angle="26.664179" scale_x="0.737584" scale_y="0.784823"/>
+                </key>
+                <key id="1" time="2192" spin="0">
+                    <object folder="0" file="7" x="37.18499" y="125.145537" angle="26.664179" scale_x="0.737584" scale_y="0.784823"/>
+                </key>
+                <key id="2" time="5000" spin="0">
+                    <object folder="0" file="7" x="37.18499" y="125.145537" angle="26.664179" scale_x="0.737584" scale_y="0.784823"/>
+                </key>
+            </timeline>
+            <timeline id="14" name="sketch09_boss2_elec3">
+                <key id="0" spin="0">
+                    <object folder="0" file="5" x="141.258712" y="-59.82111" angle="39.756072"/>
+                </key>
+                <key id="1" time="2192" spin="0">
+                    <object folder="0" file="5" x="141.258712" y="-59.82111" angle="39.756072"/>
+                </key>
+                <key id="2" time="5000" spin="0">
+                    <object folder="0" file="5" x="141.258712" y="-59.82111" angle="39.756072"/>
+                </key>
+            </timeline>
+            <timeline id="15" name="sketch09_boss2_elec2">
+                <key id="0">
+                    <object folder="0" file="4" x="-223.744574" y="132.073138" angle="253.298026"/>
+                </key>
+                <key id="1" time="2192">
+                    <object folder="0" file="4" x="-352.625975" y="102.06925" angle="298.73686"/>
+                </key>
+                <key id="2" time="5000" spin="-1">
+                    <object folder="0" file="4" x="-426.314282" y="-4.355958" angle="326.614552"/>
+                </key>
+            </timeline>
+            <timeline id="16" name="sketch09_boss2_elec1">
+                <key id="0" spin="0">
+                    <object folder="0" file="3" x="-15.799682" y="248.485006" angle="185.626668"/>
+                </key>
+                <key id="1" time="2192" spin="0">
+                    <object folder="0" file="3" x="-15.799682" y="248.485006" angle="185.626668"/>
+                </key>
+                <key id="2" time="5000" spin="0">
+                    <object folder="0" file="3" x="-15.799682" y="248.485006" angle="185.626668"/>
+                </key>
+            </timeline>
+            <timeline id="17" obj="0" name="bone_000" object_type="bone">
+                <key id="0" spin="0">
+                    <bone x="-128.896552" y="-72.896552" angle="51.343998"/>
+                </key>
+                <key id="1" time="2192" spin="-1">
+                    <bone x="-98.896552" y="-23.896552" angle="51.343998"/>
+                </key>
+                <key id="2" time="5000">
+                    <bone x="-98.896552" y="-23.896552" angle="49.500625"/>
+                </key>
+            </timeline>
+            <timeline id="18" name="sketch09_boss2_elec1_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="3" x="141.757764" y="168.706243" angle="130.173983"/>
+                </key>
+                <key id="1" time="2192" spin="0">
+                    <object folder="0" file="3" x="141.757764" y="168.706243" angle="130.173983"/>
+                </key>
+                <key id="2" time="5000" spin="0">
+                    <object folder="0" file="3" x="141.757764" y="168.706243" angle="130.173983"/>
+                </key>
+            </timeline>
+            <timeline id="19" name="sketch09_boss2_elec3_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="5" x="-188.204908" y="121.62509" angle="248.484349"/>
+                </key>
+                <key id="1" time="2192" spin="0">
+                    <object folder="0" file="5" x="-188.204908" y="121.62509" angle="248.484349"/>
+                </key>
+                <key id="2" time="5000" spin="0">
+                    <object folder="0" file="5" x="-188.204908" y="121.62509" angle="248.484349"/>
+                </key>
+            </timeline>
+            <timeline id="20" name="sketch09_boss2_elec3_001">
+                <key id="0" spin="0">
+                    <object folder="0" file="5" x="-158.79176" y="-77.33437" angle="318.308614"/>
+                </key>
+                <key id="1" time="2192" spin="0">
+                    <object folder="0" file="5" x="-158.79176" y="-77.33437" angle="318.308614"/>
+                </key>
+                <key id="2" time="5000" spin="0">
+                    <object folder="0" file="5" x="-158.79176" y="-77.33437" angle="318.308614"/>
+                </key>
+            </timeline>
+            <timeline id="21" name="sketch09_boss2_halo_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="8" x="-15.482455" y="65.127706" angle="26.664179" scale_x="1.402667" scale_y="1.549708"/>
+                </key>
+                <key id="1" time="2192" spin="0">
+                    <object folder="0" file="8" x="-15.482455" y="65.127706" angle="26.664179" scale_x="1.380125" scale_y="1.456511"/>
+                </key>
+                <key id="2" time="5000" spin="0">
+                    <object folder="0" file="8" x="-15.482455" y="65.127706" angle="26.664179" scale_x="1.380125" scale_y="1.456511" a="0"/>
+                </key>
+            </timeline>
+            <timeline id="22" name="sketch07_etoile_halo_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="100.064755" y="-206.847364" angle="343.779229" scale_x="7.482934" scale_y="5.768683"/>
+                </key>
+                <key id="1" time="2192" spin="0">
+                    <object folder="0" file="0" x="99.238309" y="-206.020918" angle="343.779229" scale_x="7.482934" scale_y="5.768683"/>
+                </key>
+                <key id="2" time="5000" spin="0">
+                    <object folder="0" file="0" x="99.238309" y="-206.020918" angle="343.779229" scale_x="7.482934" scale_y="5.768683"/>
+                </key>
+            </timeline>
+            <timeline id="23" name="sketch09_watersplash1">
+                <key id="0">
+                    <object folder="0" file="16" x="-94.923889" y="19.37609" angle="98.414769" a="0.20896"/>
+                </key>
+                <key id="1" time="2192">
+                    <object folder="0" file="16" x="-10.706777" y="27.515891" angle="105.22523" scale_x="0.842477" scale_y="0.852593"/>
+                </key>
+                <key id="2" time="5000" spin="-1">
+                    <object folder="0" file="16" x="73.258439" y="35.631346" angle="112.01532" scale_x="3.076865" scale_y="0.705626" a="0"/>
+                </key>
+            </timeline>
+            <timeline id="24" name="sketch09_watersplash2">
+                <key id="0" spin="-1">
+                    <object folder="0" file="17" x="-109.234435" y="-2.93484" angle="80.789389" a="0.20896"/>
+                </key>
+                <key id="1" time="2192" spin="-1">
+                    <object folder="0" file="17" x="-24.038607" y="-15.54891" angle="76.600982" scale_x="0.817954" scale_y="0.776822"/>
+                </key>
+                <key id="2" time="5000">
+                    <object folder="0" file="17" x="60.902398" y="-28.125251" angle="72.425102" scale_x="2.855922" scale_y="0.554312" a="0"/>
+                </key>
+            </timeline>
+            <timeline id="25" name="sketch09_watersplash3">
+                <key id="0">
+                    <object folder="0" file="18" x="-109.121754" y="28.482801" angle="14.720342" a="0.20896"/>
+                </key>
+                <key id="1" time="2192">
+                    <object folder="0" file="18" x="-45.847086" y="30.092914" angle="17.454968" scale_x="0.839851" scale_y="0.877104"/>
+                </key>
+                <key id="2" time="5000" spin="-1">
+                    <object folder="0" file="18" x="17.238325" y="31.698212" angle="20.181414" scale_x="1.994025" scale_y="0.754576" a="0"/>
+                </key>
+            </timeline>
+            <timeline id="26" name="sketch09_watersplash4">
+                <key id="0" spin="-1">
+                    <object folder="0" file="19" x="-108.138352" y="-83.794034" angle="327.323313" a="0.20896"/>
+                </key>
+                <key id="1" time="2192" spin="-1">
+                    <object folder="0" file="19" x="-59.288872" y="-92.254764" angle="320.933073" scale_x="0.825662" scale_y="1.055094"/>
+                </key>
+                <key id="2" time="5000">
+                    <object folder="0" file="19" x="-9.779698" y="-100.506136" angle="314.561946" scale_x="1.970819" scale_y="1.110023" a="0"/>
+                </key>
+            </timeline>
+            <timeline id="27" obj="1" name="bone_001" object_type="bone">
+                <key id="0" spin="-1">
+                    <bone x="184.969847" y="7.027109" angle="9.199133" scale_x="0.494806" scale_y="0.299673"/>
+                </key>
+                <key id="1" time="2192">
+                    <bone x="306.052819" y="10.333397" angle="3.802258" scale_x="1.285999" scale_y="1.487685"/>
+                </key>
+                <key id="2" time="5000">
+                    <bone x="342.754327" y="20.482253" angle="8.682274" scale_x="1.285999" scale_y="3.493253"/>
+                </key>
+            </timeline>
+            <timeline id="28" name="sketch09_watersplash5">
+                <key id="0" spin="0">
+                    <object folder="0" file="20" x="-105.647266" y="61.099348" angle="335.677664" scale_x="1.551197" scale_y="1.589952" a="0.12279"/>
+                </key>
+                <key id="1" time="2192" spin="0">
+                    <object folder="0" file="20" x="-104.395783" y="-7.477279" angle="335.677664" scale_x="1.129232" scale_y="1.314205" a="0.52985"/>
+                </key>
+                <key id="2" time="5000" spin="0">
+                    <object folder="0" file="20" x="-153.68005" y="-37.438762" pivot_x="0.06082" pivot_y="0.172232" angle="335.677664" scale_x="2.4959" scale_y="1.040876" a="0"/>
+                </key>
+                <key id="3" time="5000" spin="0">
+                    <object folder="0" file="20" x="232.246522" y="-13.259024" pivot_x="0.442565" pivot_y="0.477698" angle="335.677664" scale_x="2.4959" scale_y="1.040876" a="0"/>
+                </key>
+            </timeline>
+            <timeline id="29" name="sketch07_etoiles_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="1" x="294.654269" y="-525.678366" angle="0" scale_x="2" scale_y="2"/>
+                </key>
+                <key id="1" time="2192" spin="0">
+                    <object folder="0" file="1" x="294.654269" y="-525.678366" angle="0" scale_x="2" scale_y="2"/>
+                </key>
+                <key id="2" time="5000" spin="0">
+                    <object folder="0" file="1" x="294.654269" y="-525.678366" angle="0" scale_x="2" scale_y="2"/>
+                </key>
+            </timeline>
+            <timeline id="30" name="sketch07_etoiles_001">
+                <key id="0" spin="0">
+                    <object folder="0" file="1" x="-321.6967" y="377.911996" angle="0" scale_x="2" scale_y="2"/>
+                </key>
+                <key id="1" time="2192" spin="0">
+                    <object folder="0" file="1" x="-321.6967" y="377.911996" angle="0" scale_x="2" scale_y="2"/>
+                </key>
+                <key id="2" time="5000" spin="0">
+                    <object folder="0" file="1" x="-321.6967" y="377.911996" angle="0" scale_x="2" scale_y="2"/>
+                </key>
+            </timeline>
+            <timeline id="31" name="sketch07_etoiles_002">
+                <key id="0" spin="0">
+                    <object folder="0" file="1" x="292.480356" y="376.321634" angle="0" scale_x="2" scale_y="2"/>
+                </key>
+                <key id="1" time="2192" spin="0">
+                    <object folder="0" file="1" x="292.480356" y="376.321634" angle="0" scale_x="2" scale_y="2"/>
+                </key>
+                <key id="2" time="5000" spin="0">
+                    <object folder="0" file="1" x="292.480356" y="376.321634" angle="0" scale_x="2" scale_y="2"/>
+                </key>
+            </timeline>
+            <timeline id="32" obj="2" name="bone_002" object_type="bone">
+                <key id="0" spin="-1">
+                    <bone x="97.701149" y="210.344828" angle="333.335821"/>
+                </key>
+                <key id="1" time="2192" spin="-1">
+                    <bone x="101.701149" y="218.344828" angle="329.947466"/>
+                </key>
+                <key id="2" time="5000">
+                    <bone x="101.701149" y="218.344828" angle="321.709337"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

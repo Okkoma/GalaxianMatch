@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r11">
+    <folder id="0">
+        <file id="0" name="boss12_blast.png" width="81" height="187" pivot_x="0.506173" pivot_y="0.850267"/>
+    </folder>
+    <entity id="0" name="blast">
+        <animation id="0" name="use" length="250" interval="100">
+            <mainline>
+                <key id="0" curve_type="instant">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="0" z_index="1"/>
+                </key>
+                <key id="1" time="125" curve_type="instant">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                    <object_ref id="1" timeline="2" key="0" z_index="1"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="blast">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" angle="90"/>
+                </key>
+                <key id="1" time="125" spin="0">
+                    <object folder="0" file="0" angle="90" scale_x="-1.320854" scale_y="0.854916"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="blast_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="8" angle="90" a="0.48507"/>
+                </key>
+            </timeline>
+            <timeline id="2" name="blast_001">
+                <key id="0" time="125" spin="0">
+                    <object folder="0" file="0" x="8" angle="90" scale_x="-1.320854" scale_y="0.854916" a="0.64179"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<node>
+	<attribute name="Is Enabled" value="true" />
+	<attribute name="Name" value="Boss1" />
+	<attribute name="Position" value="0.0 2.0 0" />
+	<attribute name="Rotation" value="1 0 0 0" />
+	<attribute name="Scale" value="0.5 0.5 1" />
+	<attribute name="Variables">		
+	</attribute>
+	<component type="AnimatedSprite2D">
+		<attribute name="Layer" value="500" />		
+		<attribute name="Animation Set" value="AnimationSet2D;2D/boss01/boss01.scml" />
+		<attribute name="Animation" value="idle" />
+	</component>
+	<component type="RigidBody2D">
+		<attribute name="Body Type" value="Static" />
+		<attribute name="Fixed Rotation" value="true" />
+		<attribute name="Allow Sleep" value="false" />
+	</component>
+	<component type="CollisionCircle2D">
+		<attribute name="Radius" value="1.5" />
+		<attribute name="Center" value="0.0 0.0" />	
+		<attribute name="Category Bits" value="4" />
+		<attribute name="Mask Bits" value="2" />			
+	</component>
+	<component type="BossLogic">	
+		<attribute name="Life" value="20" />	
+		<attribute name="Number Of Attacks" value="1" />		
+		<attribute name="Effects On Hurt" value="0 5" />	
+	</component>	
+</node>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r11">
+    <folder id="0">
+        <file id="0" name="missionscorestar.png" width="124" height="128" pivot_x="0.5" pivot_y="0.5"/>
+    </folder>
+    <entity id="0" name="1">
+        <animation id="0" name="idle" length="1000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="missionscorestar_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" angle="0"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="play" length="1000" interval="100" looping="false">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="597">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="missionscorestar_000">
+                <key id="0">
+                    <object folder="0" file="0" angle="182.202598" scale_x="0.2" scale_y="0.2" a="0"/>
+                </key>
+                <key id="1" time="597" spin="-1">
+                    <object folder="0" file="0" angle="0"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+    <entity id="1" name="2">
+        <animation id="0" name="idle" length="1000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="0" z_index="1"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="missionscorestar">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="57" angle="0"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="missionscorestar_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="-48" angle="0" scale_x="1.25" scale_y="1.25"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="play" length="1000" interval="100" looping="false">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="0" z_index="1"/>
+                </key>
+                <key id="1" time="498">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="1" z_index="1"/>
+                </key>
+                <key id="2" time="991">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="2" z_index="1"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="missionscorestar">
+                <key id="0">
+                    <object folder="0" file="0" x="57" angle="181.789911" scale_x="0.2" scale_y="0.2" a="0"/>
+                </key>
+                <key id="1" time="498" spin="-1">
+                    <object folder="0" file="0" x="57" angle="0"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="missionscorestar_000">
+                <key id="0">
+                    <object folder="0" file="0" x="-48" angle="180.763898" scale_x="0.2" scale_y="0.2" a="0"/>
+                </key>
+                <key id="1" time="498">
+                    <object folder="0" file="0" x="-48" angle="182.045408" scale_x="0.2" scale_y="0.2" a="0"/>
+                </key>
+                <key id="2" time="991" spin="-1">
+                    <object folder="0" file="0" x="-48" angle="0" scale_x="1.25" scale_y="1.25"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+    <entity id="2" name="3">
+        <animation id="0" name="idle" length="1000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="0" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="0" z_index="2"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="missionscorestar">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="86" angle="0"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="missionscorestar_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="-86" angle="0" scale_x="1.25" scale_y="1.25"/>
+                </key>
+            </timeline>
+            <timeline id="2" name="missionscorestar_001">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" y="-24" angle="0" scale_x="1.5" scale_y="1.5"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="play" length="1000" interval="100" looping="false">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="0" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="0" z_index="2"/>
+                </key>
+                <key id="1" time="302">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="1" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="1" z_index="2"/>
+                </key>
+                <key id="2" time="550">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="2" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="1" z_index="2"/>
+                </key>
+                <key id="3" time="600">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="2" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="2" z_index="2"/>
+                </key>
+                <key id="4" time="912">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="2" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="3" z_index="2"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="missionscorestar">
+                <key id="0" spin="-1">
+                    <object folder="0" file="0" x="86" angle="180" scale_x="0.2" scale_y="0.2" a="0"/>
+                </key>
+                <key id="1" time="302">
+                    <object folder="0" file="0" x="86" angle="0"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="missionscorestar_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="-86" angle="180" scale_x="0.2" scale_y="0.2" a="0"/>
+                </key>
+                <key id="1" time="302" spin="-1">
+                    <object folder="0" file="0" x="-86" angle="180" scale_x="0.2" scale_y="0.2" a="0"/>
+                </key>
+                <key id="2" time="550">
+                    <object folder="0" file="0" x="-86" angle="0" scale_x="1.25" scale_y="1.25"/>
+                </key>
+            </timeline>
+            <timeline id="2" name="missionscorestar_001">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" y="-24" angle="180" scale_x="0.2" scale_y="0.2" a="0"/>
+                </key>
+                <key id="1" time="302" spin="0">
+                    <object folder="0" file="0" y="-24" angle="180" scale_x="0.2" scale_y="0.2" a="0"/>
+                </key>
+                <key id="2" time="600" spin="-1">
+                    <object folder="0" file="0" y="-24" angle="180" scale_x="0.2" scale_y="0.2" a="0"/>
+                </key>
+                <key id="3" time="912">
+                    <object folder="0" file="0" y="-24" angle="0" scale_x="1.5" scale_y="1.5"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

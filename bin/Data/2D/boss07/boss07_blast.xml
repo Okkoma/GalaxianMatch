@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<TextureAtlas imagePath="boss07.webp">
+	<SubTexture name="boss07_plume3" x="248" y="299" width="132" height="71" />
+	<SubTexture name="boss07_plume4" x="381" y="299" width="103" height="70" />
+	<SubTexture name="boss07_plume5" x="381" y="370" width="87" height="58" />
+	<SubTexture name="boss07_plume6" x="248" y="371" width="74" height="56" />
+</TextureAtlas>
