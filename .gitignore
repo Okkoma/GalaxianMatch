@@ -47,9 +47,9 @@ appt*/
 exe/
 keystore.properties
 bin/server/node_*/
-app/
-app/java/
+app/src/main/java/
 app/Android*
+app/google*
 script/bake
 script/archive
 script/zipper
