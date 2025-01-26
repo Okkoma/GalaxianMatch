@@ -3,15 +3,6 @@ cmake_minimum_required(VERSION 3.10.2)
 # Define target name
 set (TARGET_NAME GalaxianMatch)
 
-option (SPACEMATCH_WEB "GalaxianMatch : export to wasm (EmScripten)" OFF)
-option (SPACEMATCH_NO_MEDIA "libdatachannel : Disable media support" ON)
-option (SPACEMATCH_NO_EXAMPLES "libdatachannel : Disable examples" ON)
-option (SPACEMATCH_NO_TESTS "libdatachannel : Disable tests " ON)
-set (WEB ${SPACEMATCH_WEB})
-set (NO_MEDIA ${SPACEMATCH_NO_MEDIA} CACHE BOOLEAN "Disable media transport support" FORCE)
-set (NO_EXAMPLES ${SPACEMATCH_NO_EXAMPLES} CACHE BOOLEAN "Disable examples" FORCE)
-set (NO_TESTS ${SPACEMATCH_NO_TESTS} CACHE BOOLEAN "Disable tests build" FORCE)
-
 if (WITH_ADS)
     message ("-- adding definition ACTIVE_ADS")
     add_definitions (-DACTIVE_ADS)
@@ -47,7 +38,7 @@ target_include_directories (${TARGET_NAME} PRIVATE ${SRC_ROOT}/Components/ ${SRC
                                                   
 add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty)
 
-if (WEB)
+if (EMSCRIPTEN)
     target_link_libraries (${TARGET_NAME} datachannel-wasm)
 else ()
     target_link_libraries (${TARGET_NAME} datachannel-static)    

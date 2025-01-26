@@ -37,14 +37,18 @@ Thumbs.db
 .directory
 .cache
 
-# project
+# Project
 local.properties
 Local
 source-tool/
 bin-*/
 appn*/
 appt*/
-exe/
+exe/server/package-lock*
+exe/server/node*/
+exe/bin/CoreData/
+exe/bin/Data/
+exe/bin/Galaxian*
 keystore.properties
 bin/server/node_*/
 app/src/main/java/

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<engine_cfg>
+	<parameter name="WindowTitle" value="GalaxianMatch" />
+	<parameter name="WindowIcon" value="Textures/icone.png" />
+	<parameter name="ResourcePaths" value="CoreData;Data" />
+	<parameter name="LogName" value="GalaxianMatch.log" />
+
+    <parameter name="WindowWidth" value="1080" />
+	<parameter name="WindowHeight" value="1920" />
+
+	<parameter name="WorkerThreads" value="true" />
+	<parameter name="FullScreen" value="false" />
+	<parameter name="WindowResizable" value="true" />
+	<parameter name="Headless" value="false" />
+	<parameter name="Shadows" value="false" />
+	<parameter name="TripleBuffer" value="true" />
+	<!-- VSync is better for World2D (no lag), but in some cases, it can break down fps to 1-2 in OPENGL with FullScreen Off => Solution : fullscreen on if VSync -->
+	<parameter name="VSync" value="true" />
+	<parameter name="LogQuiet" value="false" />
+	<parameter name="LogLevel" value="0" />
+	<parameter name="MaterialQuality" value ="0" />
+	<parameter name="TextureQuality" value ="2" />
+	<parameter name="TextureFilterMode" value ="2" />
+	<parameter name="MultiSample" value ="1" />
+	<parameter name="UIEnable" value="true" />
+	<variable name="language_" value ="1" />
+	<variable name="SoundEnabled_" value ="true" />
+	<variable name="MusicEnabled_" value ="true" />
+	<variable name="touchEnabled_" value ="false" />
+	<variable name="forceTouch_" value ="false" />
+	<variable name="HUDEnabled_" value ="true" />
+	<variable name="networkMode_" value ="local" />
+	<variable name="networkServerIP_" value="10.0.0.4" />
+	<variable name="networkServerPort_" value="2345" />
+	<variable name="ctrlCameraEnabled_" value ="false" />
+	<variable name="debugRenderEnabled_" value ="true" />
+	<variable name="physics3DEnabled_" value ="false" />
+	<variable name="physics2DEnabled_" value ="true" />
+	<variable name="enlightScene_" value ="false" />
+	<variable name="debugPhysics_" value ="true" />
+	<variable name="debugLights_" value ="false" />
+	<variable name="debugUI_" value ="true" />
+	<variable name="debugAnimatedSprite2D" value ="false" />
+<!--	<variable name="initState_" value ="MainMenu" /> -->
+</engine_cfg>
