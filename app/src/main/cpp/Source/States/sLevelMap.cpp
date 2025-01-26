@@ -446,14 +446,14 @@ void LevelMapState::UpdatePeerOffers()
 
 void LevelMapState::ReceivePeerOffers()
 {
-    // TODO
-
-    // Test to remove - Simulate a net received
+    // TODO    
+#if 0
+    // Test - Simulate a net received
     for (unsigned i=0; i < NBMAXLVL; i++)
     {
         receivedPeerOffers_[i] = random() % 2;
     }
-
+#endif
     receivedPeerUpdate_ = true;
 }
 
