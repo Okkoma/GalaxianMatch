@@ -23,7 +23,7 @@ set (SRC_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/Source")
 file (GLOB_RECURSE SOURCE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" ./Source/*.cpp ./Source/*.h)
 
 # Add specific TODO.txt file
-set (SOURCE_FILES "${SOURCE_FILES}" "../../../../TODO.txt")
+#set (SOURCE_FILES "${SOURCE_FILES}" "../../../../TODO.txt")
 
 # Setup target with resource copying
 setup_main_executable ()
