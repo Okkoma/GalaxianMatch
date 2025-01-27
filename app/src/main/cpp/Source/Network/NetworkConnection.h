@@ -44,7 +44,7 @@ public:
     void Disconnect(int waitMSec = 0);
     void Disconnect(NetworkTransport* transport, int waitMSec=0);
 
-    void SendMessage(const String& data, const String& channel=String::EMPTY, const String& peer=String::EMPTY);
+    void Send(const String& data, const String& channel=String::EMPTY, const String& peer=String::EMPTY);
     void SendBuffer(const VectorBuffer& buffer, const String& channel=String::EMPTY, const String& peer=String::EMPTY);
 
     NetworkTransport* GetTransport() const;

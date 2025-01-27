@@ -74,8 +74,8 @@ public:
     void DisconnectAll(int waitMSec = 0);
     void Disconnect(const String& adress, int waitMSec=0);
 
-    void SendMessage(const String& message, const String& channel, const String& peer=String::EMPTY);
-    void SendMessage(NetworkConnection* connection, const String& message, const String& channel, const String& peer=String::EMPTY);
+    void Send(const String& message, const String& channel, const String& peer=String::EMPTY);
+    void Send(NetworkConnection* connection, const String& message, const String& channel, const String& peer=String::EMPTY);
     void SendBuffer(const VectorBuffer& buffer, const String& channel, const String& peer=String::EMPTY);
     void SendBuffer(NetworkConnection* connection, const VectorBuffer& buffer, const String& channel, const String& peer=String::EMPTY);
 

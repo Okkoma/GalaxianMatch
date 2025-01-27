@@ -95,7 +95,7 @@ void NetworkWebTransport::Disconnect(int waitMSec)
     websocket_ = nullptr;
 }
 
-void NetworkWebTransport::SendMessage(const String& order, const String& peer)
+void NetworkWebTransport::Send(const String& order, const String& peer)
 {
     if (!websocket_ || !websocket_->isOpen())
         return;
@@ -401,7 +401,7 @@ void NetworkPeerTransport::SetChannel(const String& channelname, std::optional<s
                                    std::bind(&DataChannelListener::OnChannelMessageString, listener.Get(), std::placeholders::_1));
 }
 
-void NetworkPeerTransport::SendMessage(const String& data, const String& channelname)
+void NetworkPeerTransport::Send(const String& data, const String& channelname)
 {
     SharedPtr<DataChannelListener>& listener = channelListeners_[channelname];
     if (listener && listener->channel_ && listener->channel_->isOpen())

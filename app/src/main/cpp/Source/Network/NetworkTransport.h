@@ -42,7 +42,7 @@ public:
     virtual void Connect(const String& adress, const String& type=String::EMPTY) { }
     virtual void Disconnect(int waitMSec = 0) { }
 
-    virtual void SendMessage(const String& data, const String& peer=String::EMPTY) { }
+    virtual void Send(const String& data, const String& peer=String::EMPTY) { }
     virtual void SendBuffer(const VectorBuffer& buffer, const String& channel) { }
 
     void ClearIncomingPackets();
@@ -81,7 +81,7 @@ public:
     void Connect(const String& wsadress, const String& type=String::EMPTY) override;
     void Disconnect(int waitMSec = 0) override;
 
-    void SendMessage(const String& message, const String& peer=String::EMPTY) override;
+    void Send(const String& message, const String& peer=String::EMPTY) override;
     void SendBuffer(const VectorBuffer& buffer, const String& peer=String::EMPTY) override;
 
     void PrepareMessage(const String& order, const String& peer);
@@ -155,7 +155,7 @@ public:
     void Connect(const String& peeridentity, const String& type=String::EMPTY) override;
     void Disconnect(int waitMSec = 0) override;
 
-    void SendMessage(const String& data, const String& channelname) override;
+    void Send(const String& data, const String& channelname) override;
     void SendBuffer(const VectorBuffer& buffer, const String& channel) override;
 
     void SetChannel(const String& channelname, std::optional<std::shared_ptr<rtc::DataChannel> > dataChannel = std::nullopt);

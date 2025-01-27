@@ -121,7 +121,7 @@ bool NetworkConnection::IsConnected(const String& identity) const
     return transport && transport->GetState() == NetworkConnectionState::Connected;
 }
 
-void NetworkConnection::SendMessage(const String& data, const String& channel, const String& peer)
+void NetworkConnection::Send(const String& data, const String& channel, const String& peer)
 {
     if (data.Empty())
         return;
@@ -134,21 +134,21 @@ void NetworkConnection::SendMessage(const String& data, const String& channel, c
             {
                 NetworkTransport* transport = *it;
                 if (transport->GetType() == NT_PEER)
-                    transport->SendMessage(data, channel);
+                    transport->Send(data, channel);
             }
         }
         else
         {
             NetworkTransport* peertransport = GetTransport(peer);
             if (peertransport)
-                peertransport->SendMessage(data, channel);
+                peertransport->Send(data, channel);
         }
     }
     else
     {
         NetworkTransport* wstransport = GetTransport();
         if (wstransport)
-            wstransport->SendMessage(data, peer);
+            wstransport->Send(data, peer);
     }
 }
 

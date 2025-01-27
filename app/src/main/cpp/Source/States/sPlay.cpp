@@ -2045,7 +2045,7 @@ void PlayState::OnNetworkAvailablePeersUpdate(const StringVector* peers)
                 {
                     URHO3D_LOGINFOF("PlayState() - OnNetworkAvailablePeersUpdate : firstserverpong_ !");
                     firstserverpong_ = false;
-                    Network::Get()->SendMessage(NeedOffer, String::EMPTY, Asterix);
+                    Network::Get()->Send(NeedOffer, String::EMPTY, Asterix);
                 }
             }
         }

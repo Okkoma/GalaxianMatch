@@ -128,16 +128,16 @@ void Network::Disconnect(const String& adress, int waitMSec)
         it->second_->Disconnect(waitMSec);
 }
 
-void Network::SendMessage(const String& data, const String& channel, const String& peer)
+void Network::Send(const String& data, const String& channel, const String& peer)
 {
     if (GetConnection())
-        GetConnection()->SendMessage(data, channel, peer);
+        GetConnection()->Send(data, channel, peer);
 }
 
-void Network::SendMessage(NetworkConnection* connection, const String& data, const String& channel, const String& peer)
+void Network::Send(NetworkConnection* connection, const String& data, const String& channel, const String& peer)
 {
     if (connection)
-        connection->SendMessage(data, channel, peer);
+        connection->Send(data, channel, peer);
 }
 
 void Network::SendBuffer(const VectorBuffer& buffer, const String& channel, const String& peer)
