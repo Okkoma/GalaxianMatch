@@ -933,6 +933,7 @@ void PlayState::CreateUI()
     }
 
     // TEST NETWORK : Create Duo CheckBox
+#if defined(TEST_NETWORK)
     CheckBox* duocheck = uibuttons->GetChildStaticCast<CheckBox>(String("duo"));
     if (!duocheck)
     {
@@ -948,6 +949,7 @@ void PlayState::CreateUI()
         duocheck->SetOpacity(0.9f);
         duocheck->SetPriority(499);
     }
+#endif
     // update counter texts
     if (showHiScore_)
         hiscoreText->SetText(String(hiScore));
@@ -1037,10 +1039,12 @@ void PlayState::ResizeUI(bool instant)
         text->SetPosition(button->GetPosition().x_ + button->GetSize().x_ / 2, button->GetPosition().y_ + button->GetSize().y_ - text->GetFontSize()/2);
     }
 
-    // TEST NETWORK : Create Duo Button
+#if defined(TEST_NETWORK)
+    // TEST NETWORK : Move Duo Button
     CheckBox* duocheck = uibuttons->GetChildStaticCast<CheckBox>(String("duo"));
     if (duocheck)
         duocheck->SetPosition(width - duocheck->GetSize().x_ - border/2, height - duocheck->GetSize().y_ - border/2);
+#endif
 
     ResizeAbilityPanel(instant);
 }
@@ -1235,12 +1239,14 @@ void PlayState::SubscribeToEvents()
         SubscribeToEvent(button, E_PRESSED, URHO3D_HANDLER(PlayState, HandleShake));
     }
 
+#if defined(TEST_NETWORK)
     CheckBox* duocheckbox = uiplay_->GetChildStaticCast<CheckBox>(String("duo"), true);
     if (duocheckbox)
     {
         sDuoChecked_ = duocheckbox->IsChecked();
         SubscribeToEvent(duocheckbox, E_TOGGLED, URHO3D_HANDLER(PlayState, HandleDuoToggled));
     }
+#endif
 
     SubscribeToDebugEvents(drawDebug_);
 
@@ -1979,7 +1985,7 @@ void PlayState::HandleShake(StringHash eventType, VariantMap& eventData)
         MatchesManager::ShakeMatches();
 }
 
-
+#if defined(TEST_NETWORK)
 bool firstserverpong_;
 void PlayState::HandleDuoToggled(StringHash eventType, VariantMap& eventData)
 {
@@ -2127,7 +2133,7 @@ void PlayState::OnNetworkMessageReceived(NetworkTransport* transport, Vector<Vec
         }
     }
 }
-
+#endif
 
 void PlayState::HandleScreenResized(StringHash eventType, VariantMap& eventData)
 {

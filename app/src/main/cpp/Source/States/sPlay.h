@@ -19,6 +19,8 @@ using namespace Urho3D;
 
 class InteractiveFrame;
 
+//#define TEST_NETWORK
+
 class PlayState : public GameState
 {
 	URHO3D_OBJECT(PlayState, GameState);
@@ -36,10 +38,12 @@ public:
 
     virtual void OnAccessMenuOpenFrame(bool state);
 
+#if defined(TEST_NETWORK)
     // Network Callbacks
     void OnNetworkAvailablePeersUpdate(const StringVector* peers);
     void OnNetworkConnectedPeersUpdate(const StringVector* peers);
     void OnNetworkMessageReceived(NetworkTransport* transport, Vector<VectorBuffer >* packets);
+#endif
 
 public:
     void BeginNewLevel(GameLevelMode mode=LVL_NEW, unsigned seed=0);
@@ -103,9 +107,11 @@ private:
     void HandleAccessMenu(StringHash eventType, VariantMap& eventData);
     void HandleShake(StringHash eventType, VariantMap& eventData);
 
+#if defined(TEST_NETWORK)
     void HandleDuoToggled(StringHash eventType, VariantMap& eventData);
     void OnConnectPeer(const StringVector* peers);
     void OnDisconnectPeer();
+#endif
 
     void HandleScreenResized(StringHash eventType, VariantMap& eventData);
 
