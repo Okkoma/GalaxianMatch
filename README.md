@@ -6,12 +6,14 @@ A simple space-themed match-3 game and my first published game.
 
 
 
+
+
 ## Build Prerequisites
 
-- Ensure **CMake** is installed.
+- **CMake** installed.
 - Install the dependencies for **Urho3D**. You can refer to the official documentation here: [Urho3D Build Instructions](https://u3d.io/docs/_building.html).
 
-
+## 
 
 ## Build Instructions
 
@@ -21,11 +23,6 @@ A simple space-themed match-3 game and my first published game.
     cd build
     make -j $(nproc)
 
-### By default, the following options are used:
-
-- Build Type: Release
-- Installation Prefix: `exe/`
-
 
 
 ## Installation
@@ -34,7 +31,9 @@ Once the build is complete, you can install the project using the appropriate in
 
     make install
 
+Default installation path : ./exe/bin
 
+## 
 
 ## To Do
 
@@ -42,20 +41,20 @@ Complete the implementation of networked gameplay using WebSocket.
 
 
 
-## Third-Party Dependencies
+## Third-Party
 
 This project relies on the following third-party libraries:
 
 - Urho3D (includes SDL, Box2D, ETCPACK, FreeType, GLEW, LZ4, LibCpuId, Mustache, PugiXml, SQLite, STB, StanHull, WebP, nanodbc, rapidjson)
 - libdatachannel
 
+## 
 
+## Platforms
 
-## Compatible Platforms
+**Tested:** Windows, Linux, Android
 
-**Tested:** Windows, Linux, Android, Raspberry Pi **Not Tested:** macOS, iOS, Web
-
-
+## 
 
 ## License
 
