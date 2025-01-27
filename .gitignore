@@ -38,6 +38,7 @@ Thumbs.db
 .cache
 
 # Project
+rakefile
 local.properties
 Local
 source-tool/
@@ -54,6 +55,7 @@ exe/bin/Galaxian*
 keystore.properties
 bin/server/node_*/
 app/src/main/java/
+app/src/main/Android*
 app/Android*
 app/google*
 script/bake

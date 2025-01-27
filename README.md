@@ -21,7 +21,14 @@ A simple space-themed match-3 game and my first published game.
     cmake -S . -B build
     cmake --build build --config Release
 
+### Game Build Options: 
+    - WITH_DEMOMODE: Enable Demo Mode - only the 3 first constellations are playable.
+    - WITH_TIPS: Enable Keyboard Tips - key C adds a Coin, key S adds a Star.
+    - WITH_ADS: Enable Ads on Mobile.
+    - WITH_CINEMATICS: Enable Story Animations.
 
+    
+    
 ## Installation
 
 Once the build is complete, you can install the project using the appropriate installation command.
@@ -36,6 +43,9 @@ Default installation path: ./exe/bin
 
 Complete the implementation of networked gameplay using WebSocket.
 
+### WIP Options:
+    - TEST_NETWORK: enable code and ui for networked mode
+
 
 
 ## Third-Party
@@ -46,7 +56,6 @@ This project relies on the following third-party libraries:
     - includes SDL, Box2D, ETCPACK, FreeType, GLEW, LZ4, LibCpuId, Mustache, PugiXml, SQLite, STB, StanHull, WebP, nanodbc, rapidjson
 - libdatachannel
     - requires openssl
-
 
 
 ## Platforms

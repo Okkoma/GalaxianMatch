@@ -3,19 +3,34 @@ cmake_minimum_required(VERSION 3.10.2)
 # Define target name
 set (TARGET_NAME GalaxianMatch)
 
-if (WITH_ADS)
+if (SPACEMATCH_WITH_DEMOMODE)
+    message ("-- adding definition ACTIVE_DEMOMODE")
+    add_definitions (-DACTIVE_DEMOMODE)
+endif()
+
+if (SPACEMATCH_WITH_TIPS)
+    message ("-- adding definition ACTIVE_TIPS")
+    add_definitions (-DACTIVE_TIPS)
+endif()
+
+if (SPACEMATCH_WITH_ADS)
     message ("-- adding definition ACTIVE_ADS")
     add_definitions (-DACTIVE_ADS)
 endif()
 
-if (WITH_CINEMATICS)
+if (SPACEMATCH_WITH_CINEMATICS)
     message ("-- adding definition ACTIVE_CINEMATICS")
     add_definitions (-DACTIVE_CINEMATICS)
 endif()
 
-if (WITH_LOOPTESTS)
+if (SPACEMATCH_WITH_LOOPTESTS)
     message ("-- adding definition ACTIVE_GAMELOOPTESTING")
     add_definitions (-DACTIVE_GAMELOOPTESTING)
+endif()
+
+if (SPACEMATCH_WITH_NETWORK)
+    message ("-- adding definition TEST_NETWORK")
+    add_definitions (-DTEST_NETWORK)
 endif()
 
 # Define source files

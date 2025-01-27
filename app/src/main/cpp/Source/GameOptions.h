@@ -51,7 +51,6 @@
 //        #endif
     #endif
 
-    #define ACTIVE_CINEMATICS
     //#define ACTIVE_CINEMATICS_BUTTONONSCENE
 #endif
 
@@ -75,5 +74,7 @@
     #define TESTMODE_STARTZONE  1
 #endif
 
-#define DEMOMODE_MAXZONE 3
+#ifdef ACTIVE_DEMOMODE
+    #define DEMOMODE_MAXZONE 3
+#endif
 
