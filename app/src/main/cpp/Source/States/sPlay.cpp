@@ -2028,6 +2028,9 @@ void PlayState::HandleDuoToggled(StringHash eventType, VariantMap& eventData)
     }
 }
 
+const String NeedOffer("needoffer");
+const String Asterix("*");
+
 void PlayState::OnNetworkAvailablePeersUpdate(const StringVector* peers)
 {
     if (peers && peers->Size())
@@ -2042,7 +2045,7 @@ void PlayState::OnNetworkAvailablePeersUpdate(const StringVector* peers)
                 {
                     URHO3D_LOGINFOF("PlayState() - OnNetworkAvailablePeersUpdate : firstserverpong_ !");
                     firstserverpong_ = false;
-                    Network::Get()->SendMessage("needoffer", String::EMPTY, "*");
+                    Network::Get()->SendMessage(NeedOffer, String::EMPTY, Asterix);
                 }
             }
         }
