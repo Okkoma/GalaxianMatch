@@ -61,7 +61,7 @@ FEATURE(sctp, "Stream Control Transmission Protocol");
  */
 
 void
-sctp_init_sysctls()
+sctp_init_sysctls(void)
 {
 	SCTP_BASE_SYSCTL(sctp_sendspace) = SCTPCTL_MAXDGRAM_DEFAULT;
 	SCTP_BASE_SYSCTL(sctp_recvspace) = SCTPCTL_RECVSPACE_DEFAULT;
@@ -178,7 +178,7 @@ sctp_init_sysctls()
 #if defined(_WIN32) && !defined(__Userspace__)
 
 void
-sctp_finish_sysctls()
+sctp_finish_sysctls(void)
 {
 #if defined(SCTP_LOCAL_TRACE_BUF)
 	if (SCTP_BASE_SYSCTL(sctp_log) != NULL) {

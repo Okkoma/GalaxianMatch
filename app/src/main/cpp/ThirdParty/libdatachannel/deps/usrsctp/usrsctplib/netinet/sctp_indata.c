@@ -3320,7 +3320,7 @@ sctp_strike_gap_ack_chunks(struct sctp_tcb *stcb, struct sctp_association *asoc,
 	struct sctp_tmit_chunk *tp1;
 	int strike_flag = 0;
 	struct timeval now;
-	int tot_retrans = 0;
+    int tot_retrans __attribute__((unused)) = 0;
 	uint32_t sending_seq;
 	struct sctp_nets *net;
 	int num_dests_sacked = 0;

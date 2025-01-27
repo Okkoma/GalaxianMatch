@@ -10015,7 +10015,7 @@ sctp_chunk_retransmission(struct sctp_inpcb *inp,
 	struct mbuf *m, *endofchain;
 	struct sctp_nets *net = NULL;
 	uint32_t tsns_sent = 0;
-	int no_fragmentflg, bundle_at, cnt_thru;
+	int no_fragmentflg, bundle_at, cnt_thru __attribute__((unused));
 	unsigned int mtu;
 	int error, i, one_chunk, fwd_tsn, ctl_cnt, tmr_started;
 	struct sctp_auth_chunk *auth = NULL;
