@@ -19,18 +19,14 @@ A simple space-themed match-3 game and my first published game.
 ### Use CMake to generate the build files.
 
     cmake -S . -B build
-    cd build
-    make -j $(nproc)
-
-Default build type: Release
-
+    cmake --build build --config Release
 
 
 ## Installation
 
 Once the build is complete, you can install the project using the appropriate installation command.
 
-    make install
+    cmake --install build
 
 Default installation path: ./exe/bin
 

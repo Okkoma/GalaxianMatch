@@ -8,7 +8,7 @@
 # Gradle project settings
 /local.properties
 .gradle/
-build/
+build*/
 .cxx/
 
 # JetBrains IDE project settings
