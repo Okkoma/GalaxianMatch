@@ -25,11 +25,7 @@ set (NO_EXAMPLES ON CACHE STRING "Disable examples" FORCE)
 set (NO_TESTS ON CACHE STRING "Disable tests build" FORCE)
 mark_as_advanced (FORCE NO_MEDIA NO_EXAMPLES NO_TESTS)
 
-# Disable Wayland with this version of urho3d 
-# TODO : add dependency to wayland-client in UrhoCommon
-set (VIDEO_WAYLAND FALSE CACHE STRING "Use Wayland video driver" FORCE)
-
-# see more options in cmake/Modules/UrhoCommon.cmake
+# see Urho3D engine options in cmake/Modules/UrhoCommon.cmake
 
 if (URHO3D_HOME)
 	add_subdirectory (app/src/main/cpp ${ARGN})
