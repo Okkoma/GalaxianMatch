@@ -23,26 +23,26 @@ jobs:
       #
       # To add more build types (Release, Debug, RelWithDebInfo, etc.) customize the build_type list.
       matrix:
-        os: [ubuntu-latest] #, windows-latest]
+        os: [ubuntu-latest, windows-latest]
         build_type: [Release]
-        c_compiler: [gcc, clang] #, cl]
+        c_compiler: [gcc, clang, cl]
         include:
-          #- os: windows-latest
-          #  c_compiler: cl
-          #  cpp_compiler: cl
+          - os: windows-latest
+            c_compiler: cl
+            cpp_compiler: cl
           - os: ubuntu-latest
             c_compiler: gcc
             cpp_compiler: g++
           - os: ubuntu-latest
             c_compiler: clang
             cpp_compiler: clang++
-        #exclude:
-          #- os: windows-latest
-          #  c_compiler: gcc
-          #- os: windows-latest
-          #  c_compiler: clang
-          #- os: ubuntu-latest
-          #  c_compiler: cl
+        exclude:
+          - os: windows-latest
+            c_compiler: gcc
+          - os: windows-latest
+            c_compiler: clang
+          - os: ubuntu-latest
+            c_compiler: cl
 
     steps:
     - uses: actions/checkout@v4
@@ -53,20 +53,23 @@ jobs:
       shell: bash
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+        
     - name: Setup Build Environnement Linux
       run: |
-        sudo apt update && sudo apt upgrade -y
-        sudo apt install -y --no-install-recommends libgl1-mesa-dev libxcursor-dev libxi-dev libxinerama-dev 
+        sudo apt update
+        sudo apt install -y --no-install-recommends libgl1-mesa-dev libxcursor-dev libxi-dev libxinerama-dev
         sudo apt install -y --no-install-recommends libxrandr-dev libxrender-dev libxss-dev libxxf86vm-dev
-        sudo apt install -y --no-install-recommends libwayland-dev libxkbcommon-dev wayland-protocols wayland-scanner++
-        sudo apt install -y --no-install-recommends libasound2-dev libpulse-dev libpipewire-0.3-dev libibus-1.0-dev
+        sudo apt install -y --no-install-recommends libasound2-dev libpulse-dev libibus-1.0-dev
         sudo apt install -y --no-install-recommends libdbus-1-dev libreadline6-dev libssl-dev libudev-dev
       if: matrix.os == 'ubuntu-latest'
-    - name: Setup Build Environnement Windows
+      
+    - name: Setup Build Environment Windows
       shell: bash
       run: |
-        echo "TODO" >> "$GITHUB_OUTPUT"
+        # Install OpenSSL using Chocolatey
+        choco install openssl -y
       if: matrix.os == 'windows-latest'
+      
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
