@@ -19,7 +19,6 @@ using namespace Urho3D;
 
 class InteractiveFrame;
 
-//#define TEST_NETWORK
 
 class PlayState : public GameState
 {

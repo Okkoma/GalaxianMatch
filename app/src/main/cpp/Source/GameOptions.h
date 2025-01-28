@@ -44,7 +44,9 @@
 
     #ifdef _DEBUG
 //        #define ACTIVE_GAMELOOPTESTING
-        #define ACTIVE_TIPS
+        #ifndef ACTIVE_TIPS
+            #define ACTIVE_TIPS
+        #endif
 
 //        #ifdef ACTIVE_SERIALIZEGAMESTATE
 //            #undef ACTIVE_SERIALIZEGAMESTATE

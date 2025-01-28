@@ -172,8 +172,9 @@ void Game::Setup()
             config.splashviewed_ = true;
 
         config.networkMode_ = "local";
-        config.language_ = 1;
+        config.language_ = 0;
         config.touchEnabled_ = false;
+        config.forceTouch_ = false;
 
         config.HUDEnabled_ = false;
         config.ctrlCameraEnabled_ = false;
@@ -181,10 +182,12 @@ void Game::Setup()
         config.physics2DEnabled_ = true;
         config.enlightScene_ = false;
 
-        config.debugRenderEnabled_ = true;
-        config.debugPhysics_ = true;
+        config.debugRenderEnabled_ = false;
+        config.debugPhysics_ = false;
         config.debugLights_ = false;
         config.debugUI_ = false;
+
+        config.frameLimiter_ = 0;
     }
 
     if (config.frameLimiter_)
