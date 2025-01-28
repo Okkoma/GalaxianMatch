@@ -1007,7 +1007,8 @@ AnimatedSprite2D* GameHelpers::AddAnimatedSprite2D(Node* root, const String& lab
 
     if (reactive)
     {
-        node->CreateComponent<RigidBody2D>();
+        RigidBody2D* body = node->CreateComponent<RigidBody2D>();
+        body->SetAllowSleep(false);
         CollisionCircle2D* collider = node->CreateComponent<CollisionCircle2D>(LOCAL);
         collider->SetRadius(reactiveradius);
         collider->SetCenter(reactivecenter);

@@ -12,6 +12,11 @@ namespace Urho3D
 
 using namespace Urho3D;
 
+enum PlanetMode
+{
+    PlanetMode_Disable,
+    PlanetMode_Enable
+};
 
 class LevelMapState : public GameState
 {
@@ -50,10 +55,10 @@ private:
     void UpdateSceneRect();
     void UpdateScene();
     void UpdateStatics();
-
+#if defined(TEST_NETWORK)
     void UpdatePeerOffers();
     void ReceivePeerOffers();
-
+#endif
     bool CreateScene(bool reset=true);
 
     void SetEnableConstellation(bool enable);

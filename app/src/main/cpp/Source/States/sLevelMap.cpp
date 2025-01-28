@@ -250,7 +250,7 @@ bool LevelMapState::ResetMap(bool purge)
     if (purge)
     {
         cameraSmooth_ = SMOOTHCAMERA_NONE;
-        planetMode_ = 0;
+        planetMode_ = PlanetMode_Disable;
         lastaction_ = -2;
         lastSelectedLevelID_ = -1;
 
@@ -415,6 +415,7 @@ void LevelMapState::UpdateStatics()
     URHO3D_LOGINFOF("LevelMapState() - UpdateStatics... OK !");
 }
 
+#if defined(TEST_NETWORK)
 const unsigned DELAY_PEERUPDATE = 5000U;
 Timer peerUpdateTimer_;
 bool receivedPeerUpdate_;
@@ -446,16 +447,15 @@ void LevelMapState::UpdatePeerOffers()
 
 void LevelMapState::ReceivePeerOffers()
 {
-    // TODO    
-#if 0
+    // TODO
     // Test - Simulate a net received
     for (unsigned i=0; i < NBMAXLVL; i++)
     {
         receivedPeerOffers_[i] = random() % 2;
     }
-#endif
     receivedPeerUpdate_ = true;
 }
+#endif
 
 void LevelMapState::SetMissionNodes(Node* root)
 {
@@ -683,7 +683,8 @@ void LevelMapState::SetPlanetNodes(Node* root)
             if (mstate.state_ > GameStatics::MissionState::MISSION_LOCKED)
             {
                 // Set Physics for selection
-                node->CreateComponent<RigidBody2D>();
+                RigidBody2D* body = node->CreateComponent<RigidBody2D>();
+                body->SetAllowSleep(false);
                 CollisionCircle2D* collider = node->CreateComponent<CollisionCircle2D>();
                 collider->SetRadius(0.5f);
             }
@@ -784,7 +785,7 @@ void LevelMapState::UpdatePlanetSelection()
     selectableplanets_[iplanet]->SetScale2D(PLANETOBJECT_SCALESELECTED);
 
     // Set Planet Links
-    if (planetMode_ == 1)
+    if (planetMode_ == PlanetMode_Enable)
         SetPlanetLinkButtons();
 
     // Update Planet Infos : mission score, cinematic replay
@@ -792,7 +793,7 @@ void LevelMapState::UpdatePlanetSelection()
     Node* planetInfo = selectableplanets_[iplanet]->GetParent()->GetChild("PlanetInfo");
     if (planetInfo)
     {
-        if (planetMode_ == 1)
+        if (planetMode_ == PlanetMode_Enable)
         {
             Node* node = selectablenodes_[iplanet];
 
@@ -868,7 +869,7 @@ void LevelMapState::UpdatePlanetSelection()
                 leveltxt_->GetNode()->SetEnabled(false);
             Game::Get()->SetAccessMenuButtonVisible(3, false);
         }
-        planetInfo->SetEnabled(planetMode_ == 1);
+        planetInfo->SetEnabled(planetMode_ == PlanetMode_Enable);
     }
 }
 
@@ -1029,7 +1030,7 @@ bool LevelMapState::CreateScene(bool reset)
         cameraZoom_ = GameStatics::camera_->GetZoom();
         GameStatics::rootScene_->SetUpdateEnabled(true);
         lastSelectedLevelID_ = -1;
-        planetMode_ = 0;
+        planetMode_ = PlanetMode_Disable;
     }
 
     // Adjust LevelMaps Scene
@@ -1050,7 +1051,7 @@ bool LevelMapState::CreateScene(bool reset)
     SetVisibleUI(true);
 
     // Go in PlanetMode if zone is unblocked only
-    if (planetMode_ == 0 && (GameStatics::playerState_->zone == NBMAXZONE || GameStatics::playerState_->zonestates[GameStatics::playerState_->zone] < GameStatics::ZONE_UNBLOCKED))
+    if (planetMode_ == PlanetMode_Disable && (GameStatics::playerState_->zone == NBMAXZONE || GameStatics::playerState_->zonestates[GameStatics::playerState_->zone] < GameStatics::ZONE_UNBLOCKED))
     {
         selector_->SetPosition2D(selectablenodes_[selectedLevelID_-firstMissionID_]->GetPosition2D());
         GoToSelectedLevel();
@@ -1086,7 +1087,7 @@ void LevelMapState::UpdateScene()
     Node* levelscene = mapscene_->GetChild("LevelScene");
     Node* planets = levelscene->GetChild("Planets");
 
-    if (planetMode_ == 0)
+    if (planetMode_ == PlanetMode_Disable)
     {
         cameraSmooth_ = SMOOTHCAMERA_POSITION | SMOOTHCAMERA_ZOOM;
         cameraTargetPosition_ = Vector3::ZERO;
@@ -1118,7 +1119,7 @@ void LevelMapState::UpdateScene()
             GameHelpers::AddAnimation(backgrd2, "Alpha", backgrd2->GetDerivedComponent<StaticSprite2D>()->GetAlpha(), 0.f, SWITCHSCREENTIME);
         }
     }
-    else if (planetMode_ == 1 && planets && selectedLevelID_ > 0)
+    else if (planetMode_ == PlanetMode_Enable && planets && selectedLevelID_ > 0)
     {
         cameraSmooth_ = SMOOTHCAMERA_POSITION | SMOOTHCAMERA_ZOOM;
         cameraTargetPosition_ = selector_->GetWorldPosition();
@@ -1194,7 +1195,7 @@ void LevelMapState::SwitchPlanetMode()
     if (switchPlanetModeInformer_ && !switchPlanetModeInformer_->Expired())
         switchPlanetModeInformer_->Free();
 
-    if (planetMode_ == 0 && InteractiveFrame::HasRunningInstances())
+    if (planetMode_ == PlanetMode_Disable && InteractiveFrame::HasRunningInstances())
         return;
 
     if (selectedLevelID_ > 0)
@@ -1273,7 +1274,7 @@ void LevelMapState::OnGameNoMoreTries(StringHash eventType, VariantMap& eventDat
 {
     UnsubscribeFromEvent(this, GAME_UIFRAME_ADD);
 
-    if (planetMode_ == 1)
+    if (planetMode_ == PlanetMode_Enable)
         SwitchPlanetMode();
 
     GameStatics::AllowInputs(false);
@@ -1759,8 +1760,9 @@ void LevelMapState::HandleSceneUpdate(StringHash eventType, VariantMap& eventDat
         }
     }
 
-    // Test
+#if defined(TEST_NETWORK)
     UpdatePeerOffers();
+#endif
 }
 
 void LevelMapState::HandleChangePlanetMode(StringHash eventType, VariantMap& eventData)
@@ -1921,19 +1923,14 @@ void LevelMapState::HandleSelection(StringHash eventType, VariantMap& eventData)
         return;
     }
 
-    if (!GameStatics::allowInputs_)
+    if (!GameStatics::allowInputs_ || GameStatics::ui_->GetFocusElement())
         return;
 
-    if (GameStatics::ui_->GetFocusElement())
-    {
-        return;
-    }
-
-    static bool inside = false;
-    static IntVector2 beginposition;
-    static Node* touchbeginnode = 0;
-    static Node* touchendnode = 0;
-    static bool touchmultigesture = false;
+    IntVector2 beginposition;
+    Node* touchbeginnode = 0;
+    Node* touchendnode = 0;
+    bool inside = false;
+    bool touchmultigesture = false;
     bool launch = false;
     bool move = false;
 
@@ -2001,7 +1998,7 @@ void LevelMapState::HandleSelection(StringHash eventType, VariantMap& eventData)
                         selectedLevelID_ = missionid;
                         move = true;
 
-                        if (eventType == E_TOUCHMOVE && planetMode_ == 0)
+                        if (eventType == E_TOUCHMOVE && planetMode_ == PlanetMode_Disable)
                         {
                             URHO3D_LOGINFOF("LevelMapState() - HandleSelection : Break gesture !");
                             touchbeginnode = (Node*)1;
@@ -2013,13 +2010,13 @@ void LevelMapState::HandleSelection(StringHash eventType, VariantMap& eventData)
                 }
                 inside = true;
 
-                if (planetMode_ == 1 && leveltxt_ && (eventType == E_TOUCHMOVE || eventType == E_MOUSEMOVE))
+                if (planetMode_ == PlanetMode_Enable && leveltxt_ && (eventType == E_TOUCHMOVE || eventType == E_MOUSEMOVE))
                 {
                     leveltxt_->GetNode()->SetWorldPosition2D(selectableplanets_[selectedLevelID_ - firstMissionID_]->GetWorldPosition2D());
                     leveltxt_->SetEnabled(true);
                 }
             }
-            else if (planetMode_ == 1 && (eventType == E_MOUSEBUTTONDOWN || (eventType == E_TOUCHEND && touchbeginnode == touchendnode)))
+            else if (planetMode_ == PlanetMode_Enable && (eventType == E_MOUSEBUTTONDOWN || (eventType == E_TOUCHEND && touchbeginnode == touchendnode)))
             {
                 if (body->GetNode()->GetName().StartsWith(LABEL_LINK))
                 {
@@ -2043,7 +2040,7 @@ void LevelMapState::HandleSelection(StringHash eventType, VariantMap& eventData)
                 }
             #endif
             }
-            else if (planetMode_ == 0 && body->GetNode()->GetName().StartsWith(LABEL_ZONE))
+            else if (planetMode_ == PlanetMode_Disable && body->GetNode()->GetName().StartsWith(LABEL_ZONE))
             {
                 inside = true;
                 selectedLevelID_ = -1;
@@ -2055,7 +2052,7 @@ void LevelMapState::HandleSelection(StringHash eventType, VariantMap& eventData)
             if (eventType == E_TOUCHEND || eventType == E_MOUSEBUTTONDOWN)
             {
                 // allow the constellation swapping
-                if (planetMode_ == 0 && eventType == E_TOUCHEND)
+                if (planetMode_ == PlanetMode_Disable && eventType == E_TOUCHEND)
                 {
                     int deltay = position.y_ - beginposition.y_;
                     int deltax = position.x_ - beginposition.x_;
@@ -2084,7 +2081,7 @@ void LevelMapState::HandleSelection(StringHash eventType, VariantMap& eventData)
                     }
                 }
                 // allow to change to a nearest planet/mission
-                else if (planetMode_ == 1 && !touchmultigesture && selectedLevelID_ != -1)
+                else if (planetMode_ == PlanetMode_Enable && !touchmultigesture && selectedLevelID_ != -1)
                 {
                     const LevelGraphPoint* point = levelGraph_->GetOrderedPoints()[selectedLevelID_-firstMissionID_];
                     const Vector<LevelGraphPoint* >& linkedpoints = point->linkedpoints_;
@@ -2156,8 +2153,8 @@ void LevelMapState::HandleSelection(StringHash eventType, VariantMap& eventData)
 
 //                URHO3D_LOGINFOF("LevelMapState() - HandleSelection : E_MULTIGESTURE numfingers=%d dist=%F angle=%F!", numfingers, dist, angle);
 
-                if ((dist > 1.f && planetMode_ == 0) ||
-                    (dist < -1.f && planetMode_ == 1))
+                if ((dist > 1.f && planetMode_ == PlanetMode_Disable) ||
+                    (dist < -1.f && planetMode_ == PlanetMode_Enable))
                 {
                     if (selectedLevelID_ < firstMissionID_)
                         selectedLevelID_ = firstMissionID_;
@@ -2171,8 +2168,8 @@ void LevelMapState::HandleSelection(StringHash eventType, VariantMap& eventData)
         }
         else if (eventType == E_MOUSEWHEEL)
         {
-            if ((eventData[MouseWheel::P_WHEEL].GetInt() > 0 && planetMode_ == 0) ||
-                (eventData[MouseWheel::P_WHEEL].GetInt() < 0 && planetMode_ == 1))
+            if ((eventData[MouseWheel::P_WHEEL].GetInt() > 0 && planetMode_ == PlanetMode_Disable) ||
+                (eventData[MouseWheel::P_WHEEL].GetInt() < 0 && planetMode_ == PlanetMode_Enable))
             {
                 if (selectedLevelID_ < firstMissionID_)
                     selectedLevelID_ = firstMissionID_;
