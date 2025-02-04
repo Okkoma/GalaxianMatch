@@ -2,130 +2,105 @@
 const http = require('http');
 const websocket = require('websocket');
 
-const clients = {};
+const clientConnections = new Map(); // Map<clientid, connection>
+const clientInfos = new Map();       // Map<clientid, levelid>
 
-const httpServer = http.createServer((req, res) =>
-{
+const httpServer = http.createServer((req, res) => {
     console.log(`${req.method.toUpperCase()} ${req.url}`);
-
-    const respond = (code, data, contentType = 'text/plain') =>
-    {
-        res.writeHead(code,
-        {
-'Content-Type' : contentType,
-'Access-Control-Allow-Origin' : '*',
-        });
-        res.end(data);
-    };
-
-    respond(404, 'Not Found');
+    res.writeHead(404, { 'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*' });
+    res.end('Not Found');
 });
 
 const wsServer = new websocket.server({httpServer});
-wsServer.on('request', (req) =>
-{
-    console.log(`WebSocket request  ${req.resource}`);
+
+wsServer.on('request', (req) => {
 
     const {path} = req.resourceURL;
-    const splitted = path.split('/');
-    splitted.shift();
-    const connectionId = splitted[0];
+    const splitted = path.split('/').slice(1);
+    const clientid = splitted[0];
+    const levelid = parseInt(splitted[1], 10) || -1;
 
     const connection = req.accept(null, req.origin);
-    connection.on('message', (data) =>
-    {
-        if (data.type === 'utf8')
-        {
-            console.log(`Client ${connectionId} << ${data.utf8Data}`);
+    clientConnections.set(clientid, connection);
+    clientInfos.set(clientid, levelid);
 
-            const message = JSON.parse(data.utf8Data);
+    console.log(`WebSocket request ${req.resourceURL} clientid=${clientid} levelid=${levelid}`);
+
+    connection.on('message', (data) => {
+        if (data.type === 'utf8') {                  // receive an string message from a client
+            const message = JSON.parse(data.utf8Data)
             const destId = message.id;
-            const dest = clients[destId];
-            if (dest)
-            {
-                message.id = connectionId;
-                const data = JSON.stringify(message);
-                console.log(`Send >> Client ${destId}`);
-                dest.send(data);
-            }
-            else
-            {
-                console.error(`Client ${destId} not found`);
-            }
-        }
-        else if (data.type === 'binary')
-        {
-            console.log(`Client ${connectionId} << ${data.binaryData}`);
+            const destConn = clientConnections.get(destId);
+            console.log(`Client ${clientid} << receive message = ${message}`);
 
+            if (destConn) {                         // transfer the message to the destination client if exists
+                message.id = clientid;
+                destConn.send(JSON.stringify(message));
+                console.log(`... Transfer message to >> Client ${destId}`);
+            } else {
+                console.error(`... Transfer message ... Client ${destId} not found`);
+            }
+        } else if (data.type === 'binary' && levelid !== -1) {  // receive a binary message
             const iDestPeerId = data.binaryData.indexOf(0, 0);
             const destPeerId  = data.binaryData.toString('utf-8', 0, iDestPeerId > 0 ? iDestPeerId : 0);
-            if (destPeerId.length > 1)
-            {
-                // peer id : specific message for a peer
+            console.log(`Client ${clientid} << receive binary data`);
 
-                const dest = clients[destPeerId];
-                if (dest)
-                {
-                    console.log(`Send >> Client ${destPeerId}`);
-                    dest.sendBytes(data.binaryData);
-                }
-                else
-                {
+            if (destPeerId.length > 1) {            // peer id : specific message for a peer
+                const destConn = clientConnections.get(destPeerId);
+                if (destConn) {
+                    console.log(`... Transfer data to >> Client ${destPeerId}`);
+                    destConn.sendBytes(data.binaryData);
+                } else
                     console.error(`Client ${destPeerId} not found`);
-                }
             }
-            else
-            {
+            else {                                  // broadcast message to clients with always excluding the sender
                 const iSrcPeerId  = data.binaryData.indexOf(0, iDestPeerId > 0 ? iDestPeerId+1 : 0);
                 const srcPeerId   = data.binaryData.toString('utf-8', iDestPeerId > 0 ? iDestPeerId+1 : 0, iSrcPeerId > 0 ? iSrcPeerId : 0);
                 const iOrder      = data.binaryData.indexOf(0, iSrcPeerId > 0 ? iSrcPeerId+1 : 0);
                 const order       = data.binaryData.toString('utf-8', iSrcPeerId > 0 ? iSrcPeerId+1 : 0 , iOrder > 0 ? iOrder : 0);
-                if (order === 'needoffer')
-                {
-                    console.log(`needoffer from ${destPeerId}`);
-
+                if (order === 'needoffer') {
+                    console.log(` ... Client ${clientid} receiver an offer from ${destPeerId}`);
                 }
+                console.log(` ... >> to all excluding ${srcPeerId} (client=${clientid} lvl=${levelid})`);
 
-                // broadcast message to all clients excluding the sender
-
-                console.log(`Send >> to all excluding ${srcPeerId}`);
-
-                const ids = Object.keys(clients);
-                for (id of ids)
-                {
-                    if (id !== srcPeerId)
-                        clients[id].sendBytes(data.binaryData);
+                const ids = clientConnections.keys();
+                for (id of ids) {
+                    if (id !== srcPeerId) {
+                        const destConn = clientConnections.get(id);
+                        const destInfo = clientInfos.get(id);
+                        if (destInfo === levelid && destConn) { //
+                            destConn.sendBytes(data.binaryData);
+                        }
+                    }
                 }
             }
         }
     });
-    connection.on('close', () =>
-    {
-        delete clients[connectionId];
-        console.error(`Client ${connectionId} disconnected`);
 
-        sendAvailablePeers();
+    connection.on('close', () => {
+        console.error(`Client ${clientid} disconnected`);
+        clientConnections.delete(clientid);
+        clientInfos.delete(clientid);
+        sendPeerInfos();
     });
 
-    clients[connectionId] = connection;
-
-    sendAvailablePeers();
+    sendPeerInfos();
 });
 
-function sendAvailablePeers()
-{
-    const ids = Object.keys(clients);
-    if (ids.length)
-    {
-        // send the updated list of the available peers to all
-        const connections = Object.values(clients);
-        const data = JSON.stringify({ join: `${ids.toString()}` });
-        for (const connection of connections)
-            connection.send(data);
 
-        console.log(`WebSocket peersList Sent ${data} !`);
+function sendPeerInfos() {
+    if (clientConnections.size > 0) {
+        const data = JSON.stringify({ peers: Array.from(clientConnections.keys()), infos: Array.from(clientInfos.values())});
+
+        for (const connection of clientConnections.values()) {
+            connection.send(data);
+        }
+
+        console.log(`WebSocket peersList Sent: ${data}`);
+    } else {
+        console.log(`WebSocket empty peersList`);
     }
-};
+}
 
 
 const endpoint = process.env.PORT || '8080';

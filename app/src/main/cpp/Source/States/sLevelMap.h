@@ -56,8 +56,8 @@ private:
     void UpdateScene();
     void UpdateStatics();
 #if defined(TEST_NETWORK)
+    void OnNetworkAvailablePeersUpdate(const StringVector* peers);
     void UpdatePeerOffers();
-    void ReceivePeerOffers();
 #endif
     bool CreateScene(bool reset=true);
 

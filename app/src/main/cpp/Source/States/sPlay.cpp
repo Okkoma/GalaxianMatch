@@ -119,6 +119,7 @@ bool tipWinLevelEnable_;
 bool showHiScore_;
 static unsigned hiScore = 0;
 
+Vector<std::function<void()> > delayActions_;
 
 
 PlayState::PlayState(Context* context) :
@@ -161,6 +162,7 @@ void PlayState::Begin()
     rootScene_ = GameStatics::rootScene_;
     cameraNode_ = GameStatics::cameraNode_;
     scene_ = 0;
+	delayActions_.Clear();
 
     hiScore = GameStatics::playerState_->score;
     showHiScore_ = false;
@@ -180,15 +182,26 @@ void PlayState::Begin()
     GameState::Begin();
 
     URHO3D_LOGINFO("PlayState() - ---------------------------------------");
-    URHO3D_LOGINFO("PlayState() - Begin ... OK !                         -");
+    URHO3D_LOGINFO("PlayState() - Begin ... OK !                        -");
     URHO3D_LOGINFO("PlayState() - ---------------------------------------");
 }
 
 void PlayState::End()
 {
     URHO3D_LOGINFO("PlayState() - ---------------------------------------");
-    URHO3D_LOGINFO("PlayState() - End ...                                   -");
+    URHO3D_LOGINFO("PlayState() - End ...                               -");
     URHO3D_LOGINFO("PlayState() - ---------------------------------------");
+
+    delayActions_.Clear();
+
+#if defined(TEST_NETWORK)
+    // remove the peerconnection
+    Network* network = Network::Get(false);
+    URHO3D_LOGINFOF("PlayState() - End : Disconnecting network : state = %d", network->GetState());
+    if (network)// && network->GetState() == NetworkConnectionState::Connected)
+        network->DisconnectAll();
+    GameStatics::peerConnected_ = false;
+#endif
 
     rootScene_->GetComponent<Renderer2D>()->orthographicMode_ = true;
 
@@ -207,18 +220,10 @@ void PlayState::End()
 
     // .. Remove Managers here
 
-
-    // remove the peerconnection
-    Network* network = Network::Get(false);
-    if (network && network->GetState() == NetworkConnectionState::Connected)
-        network->DisconnectAll();
-
-    GameStatics::peerConnected_ = false;
-
 	GameState::End();
 
     URHO3D_LOGINFO("PlayState() - ---------------------------------------");
-    URHO3D_LOGINFO("PlayState() - End ... OK !                            -");
+    URHO3D_LOGINFO("PlayState() - End ... OK !                          -");
     URHO3D_LOGINFO("PlayState() - ---------------------------------------");
 }
 
@@ -1747,6 +1752,8 @@ void PlayState::HandleUpdate(StringHash eventType, VariantMap& eventData)
 {
 	using namespace Update;
 
+    OnDelayedActions();
+
 	// Take the frame time step, which is stored as a float
 	float timeStep = eventData[P_TIMESTEP].GetFloat();
 
@@ -1886,12 +1893,6 @@ void PlayState::HandleUpdate(StringHash eventType, VariantMap& eventData)
         if (GameStatics::camera_)
             GameStatics::camera_->SetZoom(GameStatics::camera_->GetZoom() * 0.99f);
     }
-    // Tip for generate an application crash
-//    if (input->GetKeyPress(KEY_C))
-//    {
-//        // Crash Test
-//        int a = 1 / 0;
-//    }
 }
 
 void PlayState::HandlePause(StringHash eventType, VariantMap& eventData)
@@ -1995,33 +1996,21 @@ void PlayState::HandleDuoToggled(StringHash eventType, VariantMap& eventData)
     {
         URHO3D_LOGINFOF("PlayState() - HandleDuoToggled : checked !");
 
-        Network* network = Network::Get(false);
+        NetworkPeer* network = static_cast<NetworkPeer*>(Network::Get(true, NetPeering));
         if (!network)
         {
-            NetworkPeer* networkpeer = static_cast<NetworkPeer*>(Network::Get(true, NetPeering));
-            if (!networkpeer)
-            {
-                URHO3D_LOGERROR("PlayState() - HandleDuoToggled : No Network !");
-                return;
-            }
-
-            if (GameStatics::netidentity_.Empty())
-            {
-                GameStatics::netidentity_ = GameHelpers::GetRandomString(10);
-                URHO3D_LOGINFOF("PlayState() - HandleDuoToggled : create netidentity = %s", GameStatics::netidentity_.CString());
-            }
-
-            networkpeer->RegisterChannel("griddata");
-            networkpeer->OnAvailablePeersUpdate(std::bind(&PlayState::OnNetworkAvailablePeersUpdate, this, std::placeholders::_1));
-            networkpeer->OnConnectedPeersUpdate(std::bind(&PlayState::OnNetworkConnectedPeersUpdate, this, std::placeholders::_1));
-            networkpeer->OnMessageReceived(std::bind(&PlayState::OnNetworkMessageReceived, this, std::placeholders::_1, std::placeholders::_2));
-
-            network = static_cast<Network*>(networkpeer);
+            URHO3D_LOGERROR("PlayState() - HandleDuoToggled : No Network !");
+            return;
         }
 
-        if (network && (!network->GetConnection() || !network->GetConnection()->IsConnected()))
+        network->RegisterChannel("griddata");
+        network->OnAvailablePeersUpdate(std::bind(&PlayState::OnNetworkAvailablePeersUpdate, this, std::placeholders::_1));
+        network->OnConnectedPeersUpdate(std::bind(&PlayState::OnNetworkConnectedPeersUpdate, this, std::placeholders::_1));
+        network->OnMessageReceived(std::bind(&PlayState::OnNetworkMessageReceived, this, std::placeholders::_1, std::placeholders::_2));
+
+        if (network && !network->IsConnected())
         {
-            network->Connect("ws://127.0.0.1:8080/", GameStatics::netidentity_);
+            network->Connect(GameStatics::netSignalingServer_, GameStatics::netIdentity_ + "/" + ToString("%d",GameStatics::currentLevel_));
             firstserverpong_ = true;
 //            network->GetConnection()->SetAutoConnectPeers(1);
         }
@@ -2037,6 +2026,8 @@ void PlayState::HandleDuoToggled(StringHash eventType, VariantMap& eventData)
 const String NeedOffer("needoffer");
 const String Asterix("*");
 
+/// 3 Callbacks used in Network::HandleBeginFrame
+
 void PlayState::OnNetworkAvailablePeersUpdate(const StringVector* peers)
 {
     if (peers && peers->Size())
@@ -2047,11 +2038,12 @@ void PlayState::OnNetworkAvailablePeersUpdate(const StringVector* peers)
         {
             for (unsigned i = 0; i < peers->Size(); i++)
             {
-                if (peers->At(i) == GameStatics::netidentity_ && firstserverpong_)
+                if (peers->At(i) == GameStatics::netIdentity_) // Send the need offer to all and wait for answers
                 {
                     URHO3D_LOGINFOF("PlayState() - OnNetworkAvailablePeersUpdate : firstserverpong_ !");
                     firstserverpong_ = false;
                     Network::Get()->Send(NeedOffer, String::EMPTY, Asterix);
+                    break();
                 }
             }
         }
@@ -2067,54 +2059,6 @@ void PlayState::OnNetworkConnectedPeersUpdate(const StringVector* peers)
 
     else if (MatchesManager::GetNumGrids() == 2)
         OnDisconnectPeer();
-}
-
-void PlayState::OnConnectPeer(const StringVector* peers)
-{
-    Network* network = Network::Get(false);
-
-    URHO3D_LOGINFOF("PlayState() - OnConnectPeer : connected with %s", peers->At(0).CString());
-    GameStatics::peerConnected_ = true;
-
-    // the peerconnection is established, so don't need websocket anymore
-    if (network && network->GetConnection() && network->GetConnection()->GetTransport())
-        network->GetConnection()->GetTransport()->Disconnect();
-
-    if (MatchesManager::GetNumGrids() == 1)
-    {
-        MatchesManager::Stop();
-        MatchesManager::SetNetPlayMod(NETPLAY_COLLAB);
-        MatchesManager::AddGrid(NETREMOTE);
-        SetLevelDatas();
-        MatchesManager::Start();
-        UpdateObjectives(true);
-
-        URHO3D_LOGINFOF("PlayState() - OnConnectPeer : Send Local Grid to peer !");
-        MatchesManager::GetGridInfo(NETLOCAL)->Net_SendGrid();
-    }
-}
-
-void PlayState::OnDisconnectPeer()
-{
-    Network* network = Network::Get(false);
-
-    URHO3D_LOGINFOF("PlayState() - OnDisconnectPeer ...");
-    GameStatics::peerConnected_ = false;
-
-    if (network && network->GetState() == NetworkConnectionState::Connected)
-        network->DisconnectAll();
-
-    if (MatchesManager::GetNumGrids() == 2)
-    {
-        MatchesManager::Stop();
-        MatchesManager::RemoveGrid(NETREMOTE);
-        SetLevelDatas();
-        MatchesManager::Start();
-        UpdateObjectives(true);
-    }
-
-    if (sDuoChecked_)
-        uiplay_->GetChildStaticCast<CheckBox>(String("duo"), true)->SetChecked(false);
 }
 
 void PlayState::OnNetworkMessageReceived(NetworkTransport* transport, Vector<VectorBuffer >* packets)
@@ -2133,7 +2077,70 @@ void PlayState::OnNetworkMessageReceived(NetworkTransport* transport, Vector<Vec
         }
     }
 }
+
+void PlayState::OnConnectPeer(const StringVector* peers)
+{
+    Network* network = Network::Get(false);
+
+    URHO3D_LOGINFOF("PlayState() - OnConnectPeer : connected with %s", peers->Front().CString());
+    GameStatics::peerConnected_ = true;
+
+    // the peerconnection is established, so don't need websocket anymore
+    if (network && network->GetConnection() && network->GetConnection()->GetTransport())
+        network->GetConnection()->GetTransport()->Disconnect();
+
+    if (MatchesManager::GetNumGrids() == 1)
+    {
+        URHO3D_LOGINFOF("PlayState() - OnConnectPeer : Send Local Grid to peer !");
+        MatchesManager::GetGridInfo(NETLOCAL)->Net_SendGrid();
+
+        delayActions_.Push(std::bind(&PlayState::StartGrid_Net, this));
+    }
+}
+
+void PlayState::OnDisconnectPeer()
+{
+    if (!GameStatics::peerConnected_)
+        return;
+
+    Network* network = Network::Get(false);
+
+    URHO3D_LOGINFOF("PlayState() - OnDisconnectPeer ...");
+    GameStatics::peerConnected_ = false;
+
+    if (network && network->GetState() == NetworkConnectionState::Connected)
+        network->DisconnectAll();
+
+    if (MatchesManager::GetNumGrids() == 2)
+    {
+        delayActions_.Push(std::bind(&PlayState::StartGrid_Solo, this));
+    }
+
+    if (sDuoChecked_)
+        uiplay_->GetChildStaticCast<CheckBox>(String("duo"), true)->SetChecked(false);
+}
 #endif
+
+void PlayState::StartGrid_Solo()
+{
+    URHO3D_LOGINFOF("PlayState() - StartGrid_Solo !");
+    MatchesManager::Stop();
+    MatchesManager::RemoveGrid(NETREMOTE);
+    SetLevelDatas();
+    MatchesManager::Start();
+    UpdateObjectives(true);
+}
+
+void PlayState::StartGrid_Net()
+{
+    URHO3D_LOGINFOF("PlayState() - StartGrid_Net !");
+    MatchesManager::Stop();
+    MatchesManager::SetNetPlayMod(NETPLAY_COLLAB);
+    MatchesManager::AddGrid(NETREMOTE);
+    SetLevelDatas();
+    MatchesManager::Start();
+    UpdateObjectives(true);
+}
 
 void PlayState::HandleScreenResized(StringHash eventType, VariantMap& eventData)
 {
@@ -2561,12 +2568,13 @@ void PlayState::OnQuitMessageAck(StringHash eventType, VariantMap& eventData)
 
 void PlayState::OnDelayedActions()
 {
+    if (delayActions_.Size())
+    {
+        for (auto& action : delayActions_)
+            action();
 
-}
-
-void PlayState::OnDelayedActions_Local(StringHash eventType, VariantMap& eventData)
-{
-    OnDelayedActions();
+        delayActions_.Clear();
+    }
 }
 
 void PlayState::OnPostRenderUpdate(StringHash eventType, VariantMap& eventData)

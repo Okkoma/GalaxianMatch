@@ -66,6 +66,9 @@ private:
 	bool CreateScene();
     void EndScene();
 
+    void StartGrid_Solo();
+    void StartGrid_Net();
+
 	void CreateUI();
 	void ResizeUI(bool instant);
 	void ResizeAbilityPanel(bool instant);
@@ -126,7 +129,6 @@ private:
     void OnGameNeedMoreStars(StringHash eventType, VariantMap& eventData);
 	void OnQuitMessageAck(StringHash eventType, VariantMap& eventData);
     void OnDelayedActions();
-    void OnDelayedActions_Local(StringHash eventType, VariantMap& eventData);
     void OnPostRenderUpdate(StringHash eventType, VariantMap& eventData);
 
 	Scene* rootScene_;
