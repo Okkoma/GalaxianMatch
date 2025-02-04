@@ -248,7 +248,8 @@ PODVector<RewardEventItem> GameStatics::rewardEventStack_;
 /// Level's States
 int GameStatics::gameMode_ = 0;
 bool GameStatics::peerConnected_ = false;
-String GameStatics::netidentity_;
+String GameStatics::netIdentity_;
+String GameStatics::netSignalingServer_;
 const unsigned GameStatics::MAXZONES = NBMAXZONE;
 float GameStatics::CameraZ_ = 10.f;
 const Plane GameStatics::GroundPlane_ = Plane(Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
@@ -401,9 +402,14 @@ void GameStatics::Initialize(Context* context)
     else
         URHO3D_LOGINFO("GameStatics() - Initialize ... : Add Default State : MainMenu ...");
 
-    URHO3D_LOGINFO("GameStatics() - ----------------------------------------");
-    URHO3D_LOGINFO("GameStatics() - Initialize ....     OK !               -");
-    URHO3D_LOGINFO("GameStatics() - ----------------------------------------");
+    // Add Network vars
+    netIdentity_ = GameHelpers::GetRandomString(10);
+    // TODO : set signaling server from gameconfig
+    netSignalingServer_ = "ws://127.0.0.1:8080/";
+
+    URHO3D_LOGINFO("GameStatics() - ---------------------------------------------------");
+    URHO3D_LOGINFOF("GameStatics() - Initialize .... netIdentity_=%s ... OK ! -", netIdentity_.CString());
+    URHO3D_LOGINFO("GameStatics() - ---------------------------------------------------");
 }
 
 void GameStatics::CreateUICursors()

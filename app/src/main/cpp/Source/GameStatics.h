@@ -514,7 +514,8 @@ public:
     // Level's States
     static int gameMode_;
     static bool peerConnected_;
-    static String netidentity_;
+    static String netIdentity_;
+    static String netSignalingServer_;
     static LevelData* currentLevelDatas_;
     static LevelInfo levelInfos_[NBMAXLVL];
     static const unsigned MAXZONES;
