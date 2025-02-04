@@ -672,11 +672,12 @@ void MatchGrid::InitializeTiles()
 {
     URHO3D_LOGINFOF("MatchGrid() - InitializeTiles : ... ");
 
+    Node* scene = GameStatics::rootScene_->GetChild("Scene");
     String gridname;
     gridname.AppendWithFormat("Grid%d", gridid_);
-    gridNode_ = GameStatics::rootScene_->GetChild("Scene")->GetChild(gridname, LOCAL);
+    gridNode_ = scene->GetChild(gridname, LOCAL);
     if (!gridNode_)
-        gridNode_ = GameStatics::rootScene_->GetChild("Scene")->CreateChild(gridname, LOCAL);
+        gridNode_ = scene->CreateChild(gridname, LOCAL);
 
     // Initialize Ground Tiles
 
@@ -836,12 +837,12 @@ void MatchGrid::InitializeWalls()
 void MatchGrid::InitializeObjects(Vector<Match*>& newmatches)
 {
     URHO3D_LOGINFO("MatchGrid() - InitializeObjects ... ");
-
+    Node* scene = GameStatics::rootScene_->GetChild("Scene");
     String objectsname;
     objectsname.AppendWithFormat("Objects%d", gridid_);
-    objectsNode_ = GameStatics::rootScene_->GetChild("Scene")->GetChild(objectsname, LOCAL);
+    objectsNode_ = scene->GetChild(objectsname, LOCAL);
     if (!objectsNode_)
-        objectsNode_ = GameStatics::rootScene_->GetChild("Scene")->CreateChild(objectsname, LOCAL);
+        objectsNode_ = scene->CreateChild(objectsname, LOCAL);
 
     objects_.Resize(width_, height_);
     previewobjects_.Resize(width_, previewLines_);
@@ -856,12 +857,12 @@ void MatchGrid::InitializeObjects(Vector<Match*>& newmatches)
 void MatchGrid::SetObjects(const PODVector<StringHash>& gots, const PODVector<StringHash>& previewgots)
 {
     URHO3D_LOGINFO("MatchGrid() - SetObjects ... ");
-
+    Node* scene = GameStatics::rootScene_->GetChild("Scene");
     String objectsname;
     objectsname.AppendWithFormat("Objects%d", gridid_);
-    objectsNode_ = GameStatics::rootScene_->GetChild("Scene")->GetChild(objectsname, LOCAL);
+    objectsNode_ = scene->GetChild(objectsname, LOCAL);
     if (!objectsNode_)
-        objectsNode_ = GameStatics::rootScene_->GetChild("Scene")->CreateChild(objectsname, LOCAL);
+        objectsNode_ = scene->CreateChild(objectsname, LOCAL);
 
     objects_.Resize(matches_.Width(), matches_.Height());
     for (unsigned i=0; i < objects_.Size(); i++)
