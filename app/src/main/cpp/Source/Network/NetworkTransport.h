@@ -50,6 +50,7 @@ public:
     NetworkTransportType GetType() const { return type_; }
     NetworkConnectionState GetState() const { return state_; }
     const String& GetIdentity() const { return identity_; }
+    const String& GetPeerId() const { return peerid_; }
     const StringHash& GetId() const { return id_; }
 
     bool HasIncomingPackets() const { return receivedPackets_; }
@@ -59,6 +60,7 @@ protected:
     NetworkTransportType type_ = NT_NONE;
     NetworkConnectionState state_ = NetworkConnectionState::Disconnected;
     String identity_;
+    String peerid_;
     StringHash id_;
 
     VectorBuffer preparedMessage_;
@@ -114,7 +116,7 @@ private:
     std::atomic<bool> newAvailablePeers_;
     Mutex availablePeersLock_;
     StringVector availablePeers_;
-
+    StringVector peerInfos_;
     std::atomic<bool> newConnectedPeers_;
     Mutex connectedPeersLock_;
     StringVector connectedPeers_;

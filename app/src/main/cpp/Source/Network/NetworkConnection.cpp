@@ -49,6 +49,9 @@ NetworkTransport* NetworkConnection::Connect(const String& adress, const String&
     if (!adress.Empty() && adress != adress_)
         Disconnect(0);
 
+    URHO3D_LOGINFOF("NetworkConnection::Connect() - adress=%s, identity=%s, type=%s ...",
+                        adress.CString(), identity.CString(), type.CString());
+
     // find the transport
     NetworkTransport* transport = GetTransport(identity);
     if (transport)

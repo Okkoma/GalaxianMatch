@@ -25,6 +25,20 @@ enum NetMode
     NetServer,
 };
 
+enum NetAction
+{
+    ConnectTo,
+    DisconnectAll
+};
+
+struct NetworkAction
+{
+    NetAction action_;
+    String adress_;
+    String identity_;
+};
+
+
 URHO3D_EVENT(N_WEBSOCKET_AVAILABLEPEERSUPDATED, Network_WebSocket_AvailablePeersUpdated)
 {
     URHO3D_PARAM(P_CONNECTION, Connection); // Ptr to Connection
@@ -69,21 +83,27 @@ public:
     Network(Context* context);
     virtual ~Network();
 
+    // connect to server with identity
     void Connect(const String& adress, const String& identity);
 
     void DisconnectAll(int waitMSec = 0);
     void Disconnect(const String& adress, int waitMSec=0);
-
-    void Send(const String& message, const String& channel, const String& peer=String::EMPTY);
-    void Send(NetworkConnection* connection, const String& message, const String& channel, const String& peer=String::EMPTY);
-    void SendBuffer(const VectorBuffer& buffer, const String& channel, const String& peer=String::EMPTY);
-    void SendBuffer(NetworkConnection* connection, const VectorBuffer& buffer, const String& channel, const String& peer=String::EMPTY);
+    // send a message via the default connection in a channel (if specified) and to a peer (if specified)
+    void Send(const String& message, const String& channel=String::EMPTY, const String& peer=String::EMPTY);
+    // send a message via the specified connection in a channel (if specified) and to a peer (if specified)
+    void Send(NetworkConnection* connection, const String& message, const String& channel=String::EMPTY, const String& peer=String::EMPTY);
+    void SendBuffer(const VectorBuffer& buffer, const String& channel=String::EMPTY, const String& peer=String::EMPTY);
+    void SendBuffer(NetworkConnection* connection, const VectorBuffer& buffer, const String& channel=String::EMPTY, const String& peer=String::EMPTY);
 
     NetworkConnection* GetConnection() const { return activeWsConnection_; }
     int GetState() const { return state_; }
+    bool IsConnected() const { return GetConnection() && GetConnection()->IsConnected(); }
+
     void OnAvailablePeersUpdate(std::function<void(const StringVector* peers)> callback) { onAvailablePeersUpdateCallBack_ = callback; }
     void OnConnectedPeersUpdate(std::function<void(const StringVector* peers)> callback) { onConnectedPeersUpdateCallBack_ = callback; }
     void OnMessageReceived(std::function<void(NetworkTransport* transport, Vector<VectorBuffer >* packets)> callback) { onMessageReceivedCallBack_ = callback; }
+    void OnConnected(std::function<void()> callback) { onConnectedCallBack_ = callback; }
+    void CleanCallBacks();
 
 protected:
     virtual void OnConnected(NetworkConnection* connection);
@@ -106,10 +126,13 @@ protected:
 private:
     std::function<void(const StringVector* peers)> onAvailablePeersUpdateCallBack_;
     std::function<void(const StringVector* peers)> onConnectedPeersUpdateCallBack_;
+    std::function<void()> onConnectedCallBack_;
     std::function<void(NetworkTransport* transport, Vector<VectorBuffer >* packets)> onMessageReceivedCallBack_;
 
     std::atomic<int> state_;
     Mutex connectionsMutex_;
+
+    Vector<NetworkAction> delayActions_;
 
     // Static member variables to hold the current netmode and instance
     static Context* context_;

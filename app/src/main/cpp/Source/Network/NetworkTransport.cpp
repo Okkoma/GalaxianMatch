@@ -34,7 +34,11 @@ void NetworkTransport::ClearIncomingPackets()
 NetworkWebTransport::NetworkWebTransport(NetworkConnection* connection) : NetworkTransport(connection)
 {
     type_ = NT_WEBSOCKET;
-    identity_ = connection->GetIdentity();
+    // identity include peerid and other datas separated by '/'
+    identity_ = connection_->GetIdentity();
+    // peerid is the only peer identity without all other infos
+    // in webtransport, peerid is the local peerid
+    peerid_ = identity_.Split('/').Front();
     id_ = connection->GetId();
 }
 
@@ -72,10 +76,11 @@ void NetworkWebTransport::Connect(const String& adress, const String& type)
     {
         if (state_ == NetworkConnectionState::Disconnected)
         {
-            URHO3D_LOGINFO("NetworkWebTransport::Connect() ... connecting to adress=" + adress);
-
             state_ = NetworkConnectionState::Connecting;
             String url = adress + identity_;
+
+            URHO3D_LOGINFO("NetworkWebTransport::Connect() ... connecting to url=" + url);
+
             websocket_->open(url.CString());
         }
     }
@@ -102,7 +107,7 @@ void NetworkWebTransport::Send(const String& order, const String& peer)
 
     preparedMessage_.Clear();
     preparedMessage_.WriteString(peer);      // Remote Id (used by the signaling server)
-    preparedMessage_.WriteString(identity_); // Local Id
+    preparedMessage_.WriteString(peerid_);   // Local Id
     preparedMessage_.WriteString(order);
     websocket_->send(reinterpret_cast<const std::byte*>(preparedMessage_.GetData()), preparedMessage_.GetSize());
 }
@@ -114,7 +119,7 @@ void NetworkWebTransport::SendBuffer(const VectorBuffer& buffer, const String& p
 
     preparedMessage_.Clear();
     preparedMessage_.WriteString(peer);      // Remote Id (used by the signaling server)
-    preparedMessage_.WriteString(identity_); // Local Id
+    preparedMessage_.WriteString(peerid_);   // Local Id
     AddToPreparedMessage(buffer);
     websocket_->send(reinterpret_cast<const std::byte*>(preparedMessage_.GetData()), preparedMessage_.GetSize());
 }
@@ -123,7 +128,7 @@ void NetworkWebTransport::PrepareMessage(const String& order, const String& peer
 {
     preparedMessage_.Clear();
     preparedMessage_.WriteString(peer);      // Remote Id (used by the signaling server)
-    preparedMessage_.WriteString(identity_); // Local Id
+    preparedMessage_.WriteString(peerid_);   // Local Id
     preparedMessage_.WriteString(order);
 }
 
@@ -177,11 +182,11 @@ void NetworkWebTransport::OnMessageBytes(rtc::binary data)
     auto peer1 = msg.ReadString();
     auto peer2 = msg.ReadString();
     auto type  = msg.ReadString();
-
-    auto remote = connection_->GetIdentity() == peer1 ? peer2 : peer1;
+    auto remote = peerid_ == peer1 ? peer2 : peer1;
     NetworkPeerTransport* peerTransport = static_cast<NetworkPeerTransport*>(connection_->GetTransport(remote));
 
-    URHO3D_LOGINFOF("NetworkWebTransport::OnMessageBytes() ... type=%s local=%s remote=%s state=%d", type.CString(), connection_->GetIdentity().CString(), remote.CString(), peerTransport ? peerTransport->GetState() : -1);
+    URHO3D_LOGINFOF("NetworkWebTransport::OnMessageBytes() ... type=%s local=%s remote=%s state=%d", type.CString(), peerid_.CString(),
+                    remote.CString(), peerTransport ? peerTransport->GetState() : -1);
 
     if (!peerTransport && type == "offer")
     {
@@ -235,18 +240,30 @@ void NetworkWebTransport::OnMessageString(rtc::string data)
     if (data.empty())
         return;
 
-    URHO3D_LOGINFO("NetworkWebTransport::OnMessageString() ...");
-
     rapidjson::Document doc;
     doc.Parse(data.c_str());
-    if (doc.HasMember("join") && doc["join"].IsString())
+
+    URHO3D_LOGINFOF("NetworkWebTransport::OnMessageString() ... %s", data.c_str());
+    // we know that's the doc is an json object, so go through it and get the tables peers and infos if exist.
+    rapidjson::GenericMemberIterator it = doc.FindMember("infos");
+    if (it != doc.MemberEnd() && it->value.IsArray())
     {
+        // TODO 
+        URHO3D_LOGINFOF("NetworkWebTransport::OnMessageString() : find infos ...");
+        for (auto jt = it->value.Begin(); jt != it->value.End(); ++jt)
+            URHO3D_LOGINFOF(" ... value = %d", jt->GetInt());
+    }
+    it = doc.FindMember("peers");
+    if (it != doc.MemberEnd() && it->value.IsArray())
+    {
+        URHO3D_LOGINFOF("NetworkWebTransport::OnMessageString() : find peers ...");
         MutexLock lock(availablePeersLock_);
-        availablePeers_ = String(doc["join"].GetString()).Split(',');
-        newAvailablePeers_ = true;
-
-        URHO3D_LOGINFOF("NetworkWebTransport::OnMessageString() : clients=%u", availablePeers_.Size());
-
+        availablePeers_.Clear();
+        for (auto jt = it->value.Begin(); jt != it->value.End(); ++jt)
+        {
+            URHO3D_LOGINFOF(" ... value = %s", jt->GetString());
+            availablePeers_.Push(jt->GetString());
+        }
         AutoConnectPeers();
     }
 }
@@ -266,7 +283,7 @@ void NetworkWebTransport::AutoConnectPeers()
     for (StringVector::Iterator it = availablePeers_.Begin(); it != availablePeers_.End(); ++it)
     {
         const String& peer = *it;
-        if (peer > identity_ && !connection_->GetTransport(peer))
+        if (peer > peerid_ && !connection_->GetTransport(peer))
         {
             URHO3D_LOGINFOF(" ... autoconnect peer=%s ...", peer.CString());
 
@@ -311,26 +328,30 @@ NetworkPeerTransport::~NetworkPeerTransport()
 
 void NetworkPeerTransport::Connect(const String& identity, const String& type)
 {
+    auto sidentity = identity.Split('/').Front();
+
     if (peerconnection_)
     {
         // PeerConnection already established on the same remote
-        if (identity == identity_ && peerconnection_->state() == rtc::PeerConnection::State::Connected)
+        if (sidentity == peerid_ && peerconnection_->state() == rtc::PeerConnection::State::Connected)
         {
-            URHO3D_LOGINFOF("NetworkPeerTransport() - Connect : already connected to %s ...", identity.CString());
+            URHO3D_LOGINFOF("NetworkPeerTransport() - Connect : already connected to %s ...", sidentity.CString());
             return;
         }
 
-        URHO3D_LOGINFOF("NetworkPeerTransport() - Connect : reset connection to previous peer=%s...", identity_.CString());
+        URHO3D_LOGINFOF("NetworkPeerTransport() - Connect : reset connection to previous peer=%s...", peerid_.CString());
         peerconnection_.reset();
     }
 
     // PeerConnection Initialization
     if (!peerconnection_)
     {
-        URHO3D_LOGINFOF("NetworkPeerTransport() - Connect : Connecting to %s type=%s ...", identity.CString(), type.CString());
+        URHO3D_LOGINFOF("NetworkPeerTransport() - Connect : Connecting to %s type=%s ...", sidentity.CString(), type.CString());
 
         state_ = NetworkConnectionState::Connecting;
         identity_ = identity;
+        // in peertransport, peerid is the distant peerid
+        peerid_ = sidentity;
         id_ = StringHash(identity_);
 
         CreatePeerConnection(type == "offer");
@@ -425,11 +446,11 @@ void NetworkPeerTransport::OnLocalDescription(rtc::Description desc)
     NetworkWebTransport* wsTransport = static_cast<NetworkWebTransport*>(connection_->GetTransport());
     if (wsTransport)
     {
-        wsTransport->PrepareMessage(desc.typeString().c_str(), identity_);
+        wsTransport->PrepareMessage(desc.typeString().c_str(), peerid_);
         wsTransport->AddToPreparedMessage(std::string(desc));
         wsTransport->SendPreparedMessage();
         URHO3D_LOGINFOF("onLocalDescription: type=%s local=%s remote=%s", desc.typeString().c_str(),
-                        connection_->GetIdentity().CString(), identity_.CString());
+                        connection_->GetIdentity().CString(), peerid_.CString());
     }
 }
 
@@ -439,13 +460,13 @@ void NetworkPeerTransport::OnLocalCandidate(rtc::Candidate candidate)
     NetworkWebTransport* wsTransport = static_cast<NetworkWebTransport*>(connection_->GetTransport());
     if (wsTransport)
     {
-        wsTransport->PrepareMessage("candidate", identity_);
+        wsTransport->PrepareMessage("candidate", peerid_);
         wsTransport->AddToPreparedMessage(std::string(candidate));
         wsTransport->AddToPreparedMessage(candidate.mid());
         wsTransport->SendPreparedMessage();
 
         URHO3D_LOGINFOF("onLocalCandidate: type=candidate local=%s remote=%s, mid=%s, sdp=%s",
-                        connection_->GetIdentity().CString(), identity_.CString(), candidate.mid().c_str(), std::string(candidate).c_str());
+                        connection_->GetIdentity().CString(), peerid_.CString(), candidate.mid().c_str(), std::string(candidate).c_str());
     }
 }
 

@@ -67,6 +67,8 @@ void Network::Init(int netmode)
 
 void Network::Stop()
 {
+    URHO3D_LOGINFOF("Network() - Stop !");
+
     connections_.Clear();
 
     WorkQueue* queue = GetSubsystem<WorkQueue>();
@@ -74,8 +76,22 @@ void Network::Stop()
         queue->Complete(0);
 }
 
+
 void Network::Connect(const String& adress, const String& identity)
 {
+    if (state_ == NetworkConnectionState::Disconnecting)
+    {
+        URHO3D_LOGWARNINGF("Network() - Connect : attempts to connect but is disconnecting !");
+        delayActions_.Resize(1);
+        NetworkAction& action = delayActions_.Front();
+        action.action_ = NetAction::ConnectTo;
+        action.adress_ = adress;
+        action.identity_ = identity;
+        // TODO : add EmplaceBack and move semantics to this version of urho
+        //delayActions_.EmplaceBack(NetAction::ConnectTo, adress, identity);
+        return;
+    }
+
     if (!adress.Empty())
     {
         // Web Socket Connection
@@ -108,17 +124,32 @@ void Network::Connect(const String& adress, const String& identity)
 
 void Network::DisconnectAll(int waitMSec)
 {
-    if ((HasSubscribedToEvent(E_BEGINFRAME) && state_ > NetworkConnectionState::Disconnected) || !Thread::IsMainThread())
+    if (HasSubscribedToEvent(E_BEGINFRAME) && state_ > NetworkConnectionState::Disconnected)
     {
         URHO3D_LOGINFOF("Network() - DisconnectAll : disconnecting ...");
         state_ = NetworkConnectionState::Disconnecting;
         return;
     }
 
+    if (!Thread::IsMainThread())
+    {
+        URHO3D_LOGINFOF("Network() - DisconnectAll : !IsMainThread");
+        return;
+    }
+
     for (HashMap<String, SharedPtr<NetworkConnection> >::Iterator it = connections_.Begin(); it != connections_.End(); ++it)
         it->second_->Disconnect(waitMSec);
 
+    CleanCallBacks();
+
     state_ = NetworkConnectionState::Disconnected;
+    if (delayActions_.Size())
+    {
+        const NetworkAction& action = delayActions_.Back();
+        if (action.action_ == NetAction::ConnectTo)
+            Connect(action.adress_, action.identity_);
+        delayActions_.Pop();
+    }
 }
 
 void Network::Disconnect(const String& adress, int waitMSec)
@@ -255,7 +286,11 @@ void Network::OnConnected(NetworkConnection* connection)
     }
 
     if (activeWsConnection_)
+    {
         state_ = NetworkConnectionState::Connected;
+        if (onConnectedCallBack_)
+            onConnectedCallBack_();
+    }
 }
 
 void Network::OnDisconnected(NetworkConnection* connection)
@@ -278,12 +313,22 @@ void Network::OnDisconnected(NetworkConnection* connection)
     }
 
     if (!connections_.Size())
+    {
+        CleanCallBacks();
         state_ = NetworkConnectionState::Disconnected;
+    }
+}
+
+void Network::CleanCallBacks()
+{
+    onAvailablePeersUpdateCallBack_ = nullptr;
+    onConnectedPeersUpdateCallBack_ = nullptr;
+    onConnectedCallBack_ = nullptr;
+    onMessageReceivedCallBack_ = nullptr;
 }
 
 
-/// Network Peering
-// for p2p, just need this
+/// Network Peering Mode
 
 void NetworkPeer::RegisterObject(Context* context)
 {
