@@ -30,6 +30,15 @@ enum NetworkTransportType : int
     NT_PEER
 };
 
+struct PeerInfo
+{
+    String peer_;
+    int level_;
+};
+
+using PeerInfoVector = Vector<PeerInfo>;
+
+
 // Transport Interface
 class GALAXIANMATCH_API NetworkTransport : public RefCounted
 {
@@ -100,7 +109,7 @@ public:
     void OnMessageString(rtc::string data);
 
     bool HasNewAvailablePeers() const { return newAvailablePeers_; }
-    MutexLock AcquireAvailablePeers(StringVector*& availablepeers) { availablepeers = &availablePeers_; newAvailablePeers_ = false; return MutexLock(availablePeersLock_); }
+    MutexLock AcquireAvailablePeers(PeerInfoVector*& availablepeers) { availablepeers = &availablePeers_; newAvailablePeers_ = false; return MutexLock(availablePeersLock_); }
 
     void RefreshConnectedPeers();
     bool HasNewConnectedPeers() const { return newConnectedPeers_; }
@@ -115,8 +124,8 @@ private:
 
     std::atomic<bool> newAvailablePeers_;
     Mutex availablePeersLock_;
-    StringVector availablePeers_;
-    StringVector peerInfos_;
+    PeerInfoVector availablePeers_;
+
     std::atomic<bool> newConnectedPeers_;
     Mutex connectedPeersLock_;
     StringVector connectedPeers_;

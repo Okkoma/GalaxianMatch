@@ -42,7 +42,7 @@ struct NetworkAction
 URHO3D_EVENT(N_WEBSOCKET_AVAILABLEPEERSUPDATED, Network_WebSocket_AvailablePeersUpdated)
 {
     URHO3D_PARAM(P_CONNECTION, Connection); // Ptr to Connection
-    URHO3D_PARAM(P_AVAILABLEPEERS, AvailablePeers); // Ptr to StringVector
+    URHO3D_PARAM(P_AVAILABLEPEERS, AvailablePeers); // Ptr to PeerInfoVector
 };
 URHO3D_EVENT(N_WEBSOCKET_CONNECTEDPEERSUPDATED, Network_WebSocket_ConnectedPeersUpdated)
 {
@@ -99,7 +99,7 @@ public:
     int GetState() const { return state_; }
     bool IsConnected() const { return GetConnection() && GetConnection()->IsConnected(); }
 
-    void OnAvailablePeersUpdate(std::function<void(const StringVector* peers)> callback) { onAvailablePeersUpdateCallBack_ = callback; }
+    void OnAvailablePeersUpdate(std::function<void(const PeerInfoVector* peers)> callback) { onAvailablePeersUpdateCallBack_ = callback; }
     void OnConnectedPeersUpdate(std::function<void(const StringVector* peers)> callback) { onConnectedPeersUpdateCallBack_ = callback; }
     void OnMessageReceived(std::function<void(NetworkTransport* transport, Vector<VectorBuffer >* packets)> callback) { onMessageReceivedCallBack_ = callback; }
     void OnConnected(std::function<void()> callback) { onConnectedCallBack_ = callback; }
@@ -124,7 +124,7 @@ protected:
     HashMap<String, SharedPtr<NetworkConnection> > connections_;
 
 private:
-    std::function<void(const StringVector* peers)> onAvailablePeersUpdateCallBack_;
+    std::function<void(const PeerInfoVector* peers)> onAvailablePeersUpdateCallBack_;
     std::function<void(const StringVector* peers)> onConnectedPeersUpdateCallBack_;
     std::function<void()> onConnectedCallBack_;
     std::function<void(NetworkTransport* transport, Vector<VectorBuffer >* packets)> onMessageReceivedCallBack_;

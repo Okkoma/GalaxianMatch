@@ -2028,7 +2028,7 @@ const String Asterix("*");
 
 /// 3 Callbacks used in Network::HandleBeginFrame
 
-void PlayState::OnNetworkAvailablePeersUpdate(const StringVector* peers)
+void PlayState::OnNetworkAvailablePeersUpdate(const PeerInfoVector* peers)
 {
     if (peers && peers->Size())
     {
@@ -2038,12 +2038,12 @@ void PlayState::OnNetworkAvailablePeersUpdate(const StringVector* peers)
         {
             for (unsigned i = 0; i < peers->Size(); i++)
             {
-                if (peers->At(i) == GameStatics::netIdentity_) // Send the need offer to all and wait for answers
+                if (peers->At(i).peer_ == GameStatics::netIdentity_) // Send the need offer to all and wait for answers
                 {
                     URHO3D_LOGINFOF("PlayState() - OnNetworkAvailablePeersUpdate : firstserverpong_ !");
                     firstserverpong_ = false;
                     Network::Get()->Send(NeedOffer, String::EMPTY, Asterix);
-                    break();
+                    break;
                 }
             }
         }

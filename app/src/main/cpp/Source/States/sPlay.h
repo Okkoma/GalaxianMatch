@@ -39,7 +39,7 @@ public:
 
 #if defined(TEST_NETWORK)
     // Network Callbacks
-    void OnNetworkAvailablePeersUpdate(const StringVector* peers);
+    void OnNetworkAvailablePeersUpdate(const PeerInfoVector* peers);
     void OnNetworkConnectedPeersUpdate(const StringVector* peers);
     void OnNetworkMessageReceived(NetworkTransport* transport, Vector<VectorBuffer >* packets);
 #endif

@@ -288,7 +288,9 @@ bool LevelMapState::ResetMap(bool purge)
     if (purge)
     {
         SubscribeToEvents();
-
+    #if defined(TEST_NETWORK)
+        SubscribeToNetworkEvents();
+    #endif
         SendEvent(GAME_STATEREADY);
     }
 
@@ -353,6 +355,9 @@ void LevelMapState::End()
         mapscene_->SetName("LevelMap");
 
     UnsubscribeToEvents();
+#if defined(TEST_NETWORK)
+    UnsubscribeToNetworkEvents();
+#endif
 
     RemoveUI();
 
@@ -419,7 +424,7 @@ void LevelMapState::UpdateStatics()
 bool receivedPeerUpdate_ = false;
 bool receivedPeerOffers_[NBMAXLVL];
 
-void LevelMapState::OnNetworkAvailablePeersUpdate(const StringVector* peers)
+void LevelMapState::OnNetworkAvailablePeersUpdate(const PeerInfoVector* peers)
 {
     if (peers && peers->Size())
     {
@@ -432,11 +437,10 @@ void LevelMapState::OnNetworkAvailablePeersUpdate(const StringVector* peers)
         // for each peer offer, get the levelid
         for (unsigned i = 0; i < peers->Size(); i++)
         {
-            // TODO : get the levelid
-            int level = firstMissionID_;
-            receivedPeerOffers_[level] = true;
+            const PeerInfo& peerinfo = peers->At(i);
+            receivedPeerOffers_[peerinfo.level_] = true;
 
-            if (level >= firstMissionID_ && level <= lastMissionID_)
+            if (peerinfo.level_ >= firstMissionID_ && peerinfo.level_ <= lastMissionID_)
             {
                 // flag to update the ui
                 receivedPeerUpdate_ = true;
@@ -455,9 +459,15 @@ void LevelMapState::UpdatePeerOffers()
         const Vector<LevelGraphPoint* >& missionpoints = levelGraph_->GetOrderedPoints();
         for (unsigned i = 0; i < missionpoints.Size(); i++)
         {
-            AnimatedSprite2D* peerstateAnim = static_cast<AnimatedSprite2D*>(selectablenodes_[i]->GetComponents()[1].Get());
-            if (peerstateAnim)
-                peerstateAnim->SetEnabled(receivedPeerOffers_[firstMissionID_+i]);
+            const auto& components = selectablenodes_[i]->GetComponents();
+            if (components.Size() > 1)
+            {
+                AnimatedSprite2D* peerstateAnim = static_cast<AnimatedSprite2D*>(components[1].Get());
+                if (peerstateAnim)
+                    peerstateAnim->SetEnabled(receivedPeerOffers_[firstMissionID_+i]);
+            }
+            else
+                URHO3D_LOGERRORF("LevelMapState() - UpdatePeerOffers ... can't set peerstateAnim !");
         }
 
         receivedPeerUpdate_ = false;
@@ -1651,20 +1661,6 @@ void LevelMapState::SubscribeToEvents()
 
     SubscribeToEvent(GAME_SCREENRESIZED, URHO3D_HANDLER(LevelMapState, HandleScreenResized));
 
-#if defined(TEST_NETWORK)
-    // connect to signaling server
-    NetworkPeer* network = static_cast<NetworkPeer*>(Network::Get(true, NetPeering));
-    if (network)
-    {
-        URHO3D_LOGINFOF("LevelMapState::SubscribeToEvents() - this=%u Network is Connecting ...", this);
-        network->Connect(GameStatics::netSignalingServer_, GameStatics::netIdentity_);
-        network->OnConnected([this, network]() {
-                URHO3D_LOGINFOF("LevelMapState:: () - this=%u ... connected to signaling server !", this);
-                network->OnAvailablePeersUpdate(std::bind(&LevelMapState::OnNetworkAvailablePeersUpdate, this, std::placeholders::_1));
-        });
-    }
-#endif
-
     Game::Get()->SubscribeToAccessMenuEvents();
 
     UIElement* accessmenu = Game::Get()->GetAccessMenu();
@@ -1674,7 +1670,6 @@ void LevelMapState::SubscribeToEvents()
         SubscribeToEvent(accessmenu, UIMENU_HIDECONTENT, URHO3D_HANDLER(LevelMapState, HandleAccessMenu));
     }
 }
-
 
 void LevelMapState::UnsubscribeToEvents()
 {
@@ -1710,13 +1705,31 @@ void LevelMapState::UnsubscribeToEvents()
         UnsubscribeFromEvent(accessmenu, UIMENU_SHOWCONTENT);
         UnsubscribeFromEvent(accessmenu, UIMENU_HIDECONTENT);
     }
+}
 
 #if defined(TEST_NETWORK)
+void LevelMapState::SubscribeToNetworkEvents()
+{
+    // connect to signaling server
+    NetworkPeer* network = static_cast<NetworkPeer*>(Network::Get(true, NetPeering));
+    if (network)
+    {
+        URHO3D_LOGINFOF("LevelMapState::SubscribeToEvents() - this=%u Network is Connecting ...", this);
+        network->Connect(GameStatics::netSignalingServer_, GameStatics::netIdentity_);
+        network->OnConnected([this, network]() {
+                URHO3D_LOGINFOF("LevelMapState:: () - this=%u ... connected to signaling server !", this);
+                network->OnAvailablePeersUpdate(std::bind(&LevelMapState::OnNetworkAvailablePeersUpdate, this, std::placeholders::_1));
+        });
+    }
+}
+
+void LevelMapState::UnsubscribeToNetworkEvents()
+{
     Network* network = Network::Get(false);
     if (network && network->IsConnected())
         network->DisconnectAll();
-#endif
 }
+#endif
 
 void LevelMapState::HandleInteractiveFrameStart(StringHash eventType, VariantMap& eventData)
 {

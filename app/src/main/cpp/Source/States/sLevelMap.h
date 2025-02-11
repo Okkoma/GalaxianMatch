@@ -1,5 +1,9 @@
 #pragma once
 
+#if defined(TEST_NETWORK)
+#include "Network.h"
+#endif
+
 #include "GameStateManager.h"
 
 namespace Urho3D
@@ -55,10 +59,7 @@ private:
     void UpdateSceneRect();
     void UpdateScene();
     void UpdateStatics();
-#if defined(TEST_NETWORK)
-    void OnNetworkAvailablePeersUpdate(const StringVector* peers);
-    void UpdatePeerOffers();
-#endif
+
     bool CreateScene(bool reset=true);
 
     void SetEnableConstellation(bool enable);
@@ -84,7 +85,13 @@ private:
 
     void SubscribeToEvents();
     void UnsubscribeToEvents();
+#if defined(TEST_NETWORK)
+    void SubscribeToNetworkEvents();
+    void UnsubscribeToNetworkEvents();
 
+    void OnNetworkAvailablePeersUpdate(const PeerInfoVector* peers);
+    void UpdatePeerOffers();
+#endif
     void HandleInteractiveFrameStart(StringHash eventType, VariantMap& eventData);
     void HandleConfirmCinematicLaunch(StringHash eventType, VariantMap& eventData);
     void HandleChangePlanetMode(StringHash eventType, VariantMap& eventData);

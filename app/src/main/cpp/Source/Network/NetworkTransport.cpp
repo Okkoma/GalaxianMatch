@@ -174,6 +174,7 @@ void NetworkWebTransport::OnClosed()
 void NetworkWebTransport::OnError(rtc::string error)
 {
     URHO3D_LOGINFOF("NetworkWebTransport::OnError() ... %s !", error.c_str());
+    OnClosed();
 }
 
 void NetworkWebTransport::OnMessageBytes(rtc::binary data)
@@ -248,21 +249,28 @@ void NetworkWebTransport::OnMessageString(rtc::string data)
     rapidjson::GenericMemberIterator it = doc.FindMember("infos");
     if (it != doc.MemberEnd() && it->value.IsArray())
     {
-        // TODO 
+        MutexLock lock(availablePeersLock_);
+        availablePeers_.Resize(it->value.Size());
+        unsigned index = 0;
         URHO3D_LOGINFOF("NetworkWebTransport::OnMessageString() : find infos ...");
-        for (auto jt = it->value.Begin(); jt != it->value.End(); ++jt)
-            URHO3D_LOGINFOF(" ... value = %d", jt->GetInt());
+        for (auto jt = it->value.Begin(); jt != it->value.End(); ++jt, ++index)
+        {
+            PeerInfo& peerinfo = availablePeers_[index];
+            peerinfo.level_ = jt->GetInt();
+            URHO3D_LOGINFOF(" ... value = %d", peerinfo.level_);
+        }
     }
     it = doc.FindMember("peers");
     if (it != doc.MemberEnd() && it->value.IsArray())
     {
         URHO3D_LOGINFOF("NetworkWebTransport::OnMessageString() : find peers ...");
         MutexLock lock(availablePeersLock_);
-        availablePeers_.Clear();
-        for (auto jt = it->value.Begin(); jt != it->value.End(); ++jt)
+        unsigned index = 0;
+        for (auto jt = it->value.Begin(); jt != it->value.End(); ++jt, ++index)
         {
-            URHO3D_LOGINFOF(" ... value = %s", jt->GetString());
-            availablePeers_.Push(jt->GetString());
+            PeerInfo& peerinfo = availablePeers_[index];
+            peerinfo.peer_ = jt->GetString();
+            URHO3D_LOGINFOF(" ... value = %s", peerinfo.peer_.CString());
         }
         AutoConnectPeers();
     }
@@ -280,14 +288,14 @@ void NetworkWebTransport::AutoConnectPeers()
 */
     int numConnectedPeers = connection_->GetTransports().Size() - 1;
 
-    for (StringVector::Iterator it = availablePeers_.Begin(); it != availablePeers_.End(); ++it)
+    for (auto it = availablePeers_.Begin(); it != availablePeers_.End(); ++it)
     {
-        const String& peer = *it;
-        if (peer > peerid_ && !connection_->GetTransport(peer))
+        const PeerInfo& peerInfo = *it;
+        if (peerInfo.peer_ > peerid_ && !connection_->GetTransport(peerInfo.peer_))
         {
-            URHO3D_LOGINFOF(" ... autoconnect peer=%s ...", peer.CString());
+            URHO3D_LOGINFOF(" ... autoconnect peer=%s ...", peerInfo.peer_.CString());
 
-            connection_->Connect(String::EMPTY, peer, "offer");
+            connection_->Connect(String::EMPTY, peerInfo.peer_, "offer");
             numConnectedPeers++;
 
             if (numConnectedPeers == connection_->GetAutoConnectedPeers())

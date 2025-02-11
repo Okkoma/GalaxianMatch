@@ -215,7 +215,7 @@ void Network::HandleBeginFrame(StringHash eventType, VariantMap& eventData)
                 {
                     if (wstransport->HasNewAvailablePeers())
                     {
-                        StringVector* availablepeers;
+                        PeerInfoVector* availablepeers;
                         MutexLock lock = wstransport->AcquireAvailablePeers(availablepeers);
 
                         if (onAvailablePeersUpdateCallBack_)
@@ -226,7 +226,7 @@ void Network::HandleBeginFrame(StringHash eventType, VariantMap& eventData)
                         {
                             VariantMap& newEventData = context_->GetEventDataMap();
                             newEventData[Network_WebSocket_AvailablePeersUpdated::P_CONNECTION] = connection;
-                            newEventData[Network_WebSocket_AvailablePeersUpdated::P_AVAILABLEPEERS] = *availablepeers;
+                            newEventData[Network_WebSocket_AvailablePeersUpdated::P_AVAILABLEPEERS] = availablepeers;
                             SendEvent(N_WEBSOCKET_AVAILABLEPEERSUPDATED, newEventData);
                         }
                     }
