@@ -63,3 +63,7 @@ script/archive
 script/zipper
 TODO.txt
 *.workspace*
+
+# VSCode
+.vscode/
+
