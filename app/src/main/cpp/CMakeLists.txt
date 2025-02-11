@@ -58,3 +58,7 @@ if (EMSCRIPTEN)
 else ()
     target_link_libraries (${TARGET_NAME} datachannel-static)    
 endif ()
+
+if (SPACEMATCH_WITH_TEST)
+    add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/Test)
+endif ()

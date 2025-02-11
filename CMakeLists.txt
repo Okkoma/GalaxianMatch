@@ -35,6 +35,13 @@ option (SPACEMATCH_WITH_CINEMATICS "Enable Story Animations" TRUE)
 option (SPACEMATCH_WITH_LOOPTESTS "Enable Tests Loop on Android" FALSE)
 # Dev Game Options
 option (SPACEMATCH_WITH_NETWORK "Enable Network via websocket" FALSE)
+# Dev Test
+option (SPACEMATCH_WITH_TEST "Enable Test" FALSE)
+
+if (SPACEMATCH_WITH_TEST)
+    include(CTest)
+    enable_testing()
+endif ()
 
 if (URHO3D_HOME)
 	add_subdirectory (app/src/main/cpp ${ARGN})
