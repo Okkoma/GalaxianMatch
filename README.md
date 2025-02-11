@@ -21,15 +21,16 @@ A simple space-themed match-3 game and my first published game.
 
 - Game Build Options:
   
-  - WITH_DEMOMODE Enable Demo Mode - only 3 first constellations.
-  - WITH_TIPS Enable Keyboard Tips - key C adds a Coin, key S adds a Star.
-  - WITH_ADS Enable Ads on Mobile.
-  - WITH_CINEMATICS Enable Story Animations.
+  - SPACEMATCH_WITH_DEMOMODE Enable Demo Mode - only 3 first constellations.
+  - SPACEMATCH_WITH_TIPS Enable Keyboard Tips - key C adds a Coin, key S adds a Star.
+  - SPACEMATCH_WITH_ADS Enable Ads on Mobile.
+  - SPACEMATCH_WITH_CINEMATICS Enable Story Animations.
 
 - WIP Options:
   
-  - WITH_NETWORK Enable networked mode.
-
+  - SPACEMATCH_WITH_NETWORK Enable networked mode.
+  - SPACEMATCH_WITH_TEST Enable tests.
+  
 
 ## Installation
 
