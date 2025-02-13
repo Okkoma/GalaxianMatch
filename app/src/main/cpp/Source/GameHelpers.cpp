@@ -774,7 +774,7 @@ Node* GameHelpers::SpawnGOtoNode(Context* context, StringHash type, Node* scenen
 
     if (templatenode)
     {
-        Node* node = templatenode->Clone(LOCAL, true, 0, 0, scenenode);
+        Node* node = templatenode->CloneInside(scenenode, LOCAL);
         node->SetVar(GOA::ENTITYCLONE, true);
         return node;
     }
@@ -930,7 +930,7 @@ void GameHelpers::AddEffects(Node* root, int index, int num, float x, float y, f
 
     for (int i=0; i < num; i++)
     {
-        Node* effect = effects->Clone(LOCAL, true, 0, 0, root);
+        Node* effect = effects->CloneInside(root, LOCAL);
         effect->SetWorldPosition(Vector3(x+Random(-0.3f,0.3f), y+i*0.3f, 0.f));
         effect->GetDerivedComponent<StaticSprite2D>()->SetLayer(layer);
         effect->SetEnabled(false);
@@ -1836,6 +1836,19 @@ void GameHelpers::SetImage(Sprite* uielt, const Sprite2D* sprite)
     {
         uielt->SetTexture(sprite->GetTexture());
         uielt->SetImageRect(sprite->GetRectangle());
+    }
+}
+
+void GameHelpers::GetNodeChildWithNameStartsWith(Node* entry, PODVector<Node*>& dest, const String& name, bool recursive)
+{
+    const Vector<SharedPtr<Node> >& children = entry->GetChildren();
+    for (Vector<SharedPtr<Node> >::ConstIterator i = children.Begin(); i != children.End(); ++i)
+    {
+        Node* node = *i;
+        if (node->GetName().StartsWith(name))
+            dest.Push(node);
+        if (!node->GetChildren().Empty() && recursive)
+            GetNodeChildWithNameStartsWith(node, dest, name, recursive);
     }
 }
 

@@ -492,7 +492,7 @@ void LevelMapState::SetMissionNodes(Node* root)
     for (unsigned i=0; i < points.Size(); i++)
     {
         // Create Mission Nodes
-        Node* node = missionDefaultNode->Clone(LOCAL, true, 0, 0, root);
+        Node* node = missionDefaultNode->CloneInside(root, LOCAL);
         node->SetName(points[i]->name_);
         node->SetPosition2D(points[i]->position_);
 
@@ -553,7 +553,7 @@ void LevelMapState::SetMissionNodes(Node* root)
     // Set Selector
     if (!root->GetChild("Selector"))
     {
-        selector_ = missionDefaultNode->Clone(LOCAL, true, 0, 0, root);
+        selector_ = missionDefaultNode->CloneInside(root, LOCAL);
 
         AnimatedSprite2D* animatedsprite = selector_->GetComponent<AnimatedSprite2D>();
         animatedsprite->SetLayer(1);
@@ -671,7 +671,7 @@ void LevelMapState::SetPlanetNodes(Node* root)
         {
             const LevelGraphPoint* point = points[i];
             // Create Planets Node
-            Node* node = defaultNode->Clone(LOCAL, true, 0, 0, root);
+            Node* node = defaultNode->CloneInside(root, LOCAL);
             node->SetName(point->name_);
             node->SetScale2D(scale);
             node->SetPosition2D(point->position_);

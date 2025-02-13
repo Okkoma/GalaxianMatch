@@ -1257,27 +1257,12 @@ void Node::ReorderComponent(Component* component, unsigned index)
     }
 }
 
-//Node* Node::Clone(CreateMode mode, bool applyAttr)
-//{
-//    // The scene itself can not be cloned
-//    if (this == scene_ || !parent_)
-//    {
-//        URHO3D_LOGERROR("Can not clone node without a parent");
-//        return 0;
-//    }
-//
-//    URHO3D_PROFILE(CloneNode);
-//
-//    SceneResolver resolver;
-//    Node* clone = CloneRecursive(parent_, resolver, mode);
-//    resolver.Resolve();
-//
-//    if (applyAttr)
-//        clone->ApplyAttributes();
-//    return clone;
-//}
+Node* Node::Clone(CreateMode mode, bool applyAttr)
+{
+    return CloneInside(parent_, REPLICATED, applyAttr);
+}
 
-Node* Node::Clone(CreateMode mode, bool applyAttr, unsigned nodeid, unsigned componentid, Node* parent)
+Node* Node::CloneInside(Node* parent, CreateMode mode, bool applyAttr, unsigned nodeid, unsigned componentid)
 {
     if (!parent) parent = parent_;
 
@@ -1285,8 +1270,10 @@ Node* Node::Clone(CreateMode mode, bool applyAttr, unsigned nodeid, unsigned com
     if (this == scene_ || !parent_)
     {
         URHO3D_LOGERROR("Can not clone node without a parent");
-        return 0;
+        return nullptr;
     }
+
+    URHO3D_PROFILE(CloneNode);
 
     SceneResolver resolver;
     Node* clone = CloneRecursive(parent, resolver, mode, nodeid, componentid, applyAttr);
@@ -1462,22 +1449,6 @@ void Node::GetChildrenWithName(PODVector<Node*>& dest, const String& name, bool 
     }
     else
         GetChildrenWithNameRecursive(dest, name);
-}
-
-void Node::GetChildrenWithNameStartsWith(PODVector<Node*>& dest, const String& basename, bool recursive /*= false*/) const
-{
-    dest.Clear();
-
-    if (!recursive)
-    {
-        for (Vector<SharedPtr<Node> >::ConstIterator i = children_.Begin(); i != children_.End(); ++i)
-        {
-            if ((*i)->GetName().StartsWith(basename))
-                dest.Push(*i);
-        }
-    }
-    else
-        GetChildrenWithNameStartsWithRecursive(dest, basename);
 }
 
 void Node::GetChildrenWithTag(PODVector<Node*>& dest, const String& tag, bool recursive /*= true*/) const
@@ -2416,19 +2387,6 @@ void Node::GetChildrenWithNameRecursive(PODVector<Node*>& dest, const String& na
     }
 }
 
-void Node::GetChildrenWithNameStartsWithRecursive(PODVector<Node*>& dest, const String& name) const
-{
-    for (Vector<SharedPtr<Node> >::ConstIterator i = children_.Begin(); i != children_.End(); ++i)
-    {
-        Node* node = *i;
-        if (node->GetName().StartsWith(name))
-            dest.Push(node);
-        if (!node->children_.Empty())
-            node->GetChildrenWithNameStartsWithRecursive(dest, name);
-    }
-}
-
-
 void Node::GetChildrenWithTagRecursive(PODVector<Node*>& dest, const String& tag) const
 {
     for (Vector<SharedPtr<Node> >::ConstIterator i = children_.Begin(); i != children_.End(); ++i)
@@ -2441,13 +2399,9 @@ void Node::GetChildrenWithTagRecursive(PODVector<Node*>& dest, const String& tag
     }
 }
 
-Node* Node::CloneRecursive(Node* parent, SceneResolver& resolver, CreateMode mode, unsigned nodeid, unsigned componentid, bool applyAttr)
+Node* Node::CloneRecursive(Node* parent, SceneResolver& resolver, CreateMode mode, bool applyAttr, unsigned nodeid, unsigned componentid)
 {
     // Create clone node
-//    Node* cloneNode = parent->CreateChild(0, (mode == REPLICATED && id_ < FIRST_LOCAL_ID) ? REPLICATED : LOCAL);
-//    resolver.AddNode(id_, cloneNode);
-//    Node* cloneNode = parent->CreateChild(id, id >= FIRST_LOCAL_ID ? LOCAL : REPLICATED);
-//    if (!id) resolver.AddNode(id_, cloneNode);
     Node* cloneNode = parent->CreateChild(nodeid, (mode == LOCAL || nodeid >= FIRST_LOCAL_ID) ? LOCAL : REPLICATED);
 
     if (!nodeid)

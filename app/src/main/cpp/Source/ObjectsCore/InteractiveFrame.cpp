@@ -543,7 +543,7 @@ void InteractiveFrame::AddAbility(int ability, bool autostart)
         URHO3D_LOGINFOF("InteractiveFrame() - AddAbility : Create New Ability %d, insert index=%u!", ability, index);
 
         // Create node
-        node = GOT::GetObject(StringHash("Abilities"))->Clone(LOCAL, true, 0, 0, node_);
+        node = GOT::GetObject(StringHash("Abilities"))->CloneInside(node_, LOCAL);
         interactiveItems_.Push(node);
         abilities_.Insert(index, node);
 
@@ -678,7 +678,7 @@ void InteractiveFrame::AddBonus(const Slot& slot)
     Node* templatebonus = COT::GetObjectFromCategory(StringHash(slot.cat_), slot.indexcat_);
     if (templatebonus)
     {
-        Node* bonusitem = templatebonus->Clone(LOCAL, true, 0, 0, nodeBonus_);
+        Node* bonusitem = templatebonus->CloneInside(nodeBonus_, LOCAL);
         URHO3D_LOGINFOF("InteractiveFrame() - AddBonus : slotqty=%d !!!", slot.qty_);
         if (slot.qty_ > 1 && bonusitem->GetVar(GOA::BONUS).GetInt() != slot.qty_)
         {

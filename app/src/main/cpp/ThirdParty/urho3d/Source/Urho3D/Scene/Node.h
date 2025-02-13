@@ -271,8 +271,8 @@ public:
     /// Adjust index order of an existing component in this node.
     void ReorderComponent(Component* component, unsigned index);
     /// Clone scene node, components and child nodes. Return the clone.
-//    Node* Clone(CreateMode mode = REPLICATED, bool applyAttr = true);
-    Node* Clone(CreateMode mode = REPLICATED, bool applyAttr = true, unsigned nodeid=0, unsigned componentid=0, Node* parent=0);
+    Node* Clone(CreateMode mode = REPLICATED, bool applyAttr = true);
+    Node* CloneInside(Node* parent, CreateMode mode = REPLICATED, bool applyAttr = true, unsigned nodeid = 0, unsigned componentid = 0);
 
     /// Remove from the parent node. If no other shared pointer references exist, causes immediate deletion.
     void Remove();
@@ -487,9 +487,8 @@ public:
     void GetChildrenWithComponent(PODVector<Node*>& dest, StringHash type, bool recursive = false) const;
     /// Return child scene nodes with a specific component.
     PODVector<Node*> GetChildrenWithComponent(StringHash type, bool recursive = false) const;
-/// Return child scene nodes with a specific name.
+    /// Return child scene nodes with a specific name.
     void GetChildrenWithName(PODVector<Node*>& dest, const String& name, bool recursive =false) const;
-    void GetChildrenWithNameStartsWith(PODVector<Node*>& dest, const String& basename, bool recursive=false) const;
     /// Return child scene nodes with a specific tag.
     void GetChildrenWithTag(PODVector<Node*>& dest, const String& tag, bool recursive = false) const;
     /// Return child scene nodes with a specific tag.
@@ -632,13 +631,12 @@ private:
     /// Return child nodes with a specific component recursively.
     void GetChildrenWithComponentRecursive(PODVector<Node*>& dest, StringHash type) const;
     void GetChildrenWithNameRecursive(PODVector<Node*>& dest, const String& name) const;
-    void GetChildrenWithNameStartsWithRecursive(PODVector<Node*>& dest, const String& name) const;
     /// Return child nodes with a specific tag recursively.
     void GetChildrenWithTagRecursive(PODVector<Node*>& dest, const String& tag) const;
     /// Return specific components recursively.
     void GetComponentsRecursive(PODVector<Component*>& dest, StringHash type) const;
     /// Clone node recursively.
-    Node* CloneRecursive(Node* parent, SceneResolver& resolver, CreateMode mode, unsigned nodeid=0, unsigned componentid=0, bool applyAttr=true);
+    Node* CloneRecursive(Node* parent, SceneResolver& resolver, CreateMode mode, bool applyAttr=true, unsigned nodeid=0, unsigned componentid=0);
     /// Remove a component from this node with the specified iterator.
     void RemoveComponent(Vector<SharedPtr<Component> >::Iterator i);
     /// Handle attribute animation update event.

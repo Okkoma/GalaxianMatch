@@ -316,7 +316,7 @@ void BossLogic::SetAlpha(float alphastart, float alphaend, float delay)
 void BossLogic::SetTrigAttacksEnable(bool enable)
 {
     PODVector<Node*> trigAttacks;
-    node_->GetChildrenWithNameStartsWith(trigAttacks, TRIGATTACK, true);
+    GameHelpers::GetNodeChildWithNameStartsWith(node_, trigAttacks, TRIGATTACK, true);
     for (unsigned i=0; i < trigAttacks.Size(); i++)
         trigAttacks[i]->SetEnabled(enable);
 }

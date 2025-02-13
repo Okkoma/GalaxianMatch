@@ -146,6 +146,7 @@ public:
     static void SetImage(BorderImage* uielt, const String& refname);
     static void SetImage(Sprite* uielt, const Sprite2D* sprite2d);
     static void SetImage(BorderImage* uielt, const Sprite2D* sprite2d);
+    static void GetNodeChildWithNameStartsWith(Node* entry, PODVector<Node*>& dest, const String& name, bool recursive);
 
     /// Audio Helpers
     static void SpawnSound(Node* node, const char* fileName, float gain = 1.f);
