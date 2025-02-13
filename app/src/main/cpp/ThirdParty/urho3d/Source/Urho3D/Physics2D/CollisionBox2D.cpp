@@ -174,31 +174,6 @@ void CollisionBox2D::UpdateBox(const Vector2& center, const Vector2& size, const
     }
 }
 
-void CollisionBox2D::UpdateBox(const Vector2& center, const Vector2& size, float cos, float sin)
-{
-	// FromBones : keep old center to track the displacement for waterlayer
-	pivot_ = center_;
-    center_ = center;
-
-    size_ = size;
-	tangent_ = cos ? sin / cos : 0.f;
-
-    if (!fixture_)
-        return;
-
-    float halfWidth = size_.x_ * 0.5f * cachedWorldScale_.x_;
-    float halfHeight = size_.y_ * 0.5f * cachedWorldScale_.y_;
-
-    b2Vec2 centerScaled;
-    centerScaled.x = center_.x_ * cachedWorldScale_.x_;
-    centerScaled.y = center_.y_ * cachedWorldScale_.y_;
-
-    boxShape_.SetAsBox(halfWidth, halfHeight, centerScaled, cos, sin);
-
-    b2PolygonShape* shape = (b2PolygonShape*)fixture_->GetShape();
-    shape->SetAsBox(halfWidth, halfHeight, centerScaled, cos, sin);
-}
-
 void CollisionBox2D::ApplyNodeWorldScale()
 {
     RecreateFixture();

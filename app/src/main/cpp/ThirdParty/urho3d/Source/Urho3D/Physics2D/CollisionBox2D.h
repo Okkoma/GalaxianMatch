@@ -57,7 +57,6 @@ public:
     /// Set parameters once
     void SetBox(const Vector2& center, const Vector2& size, const Vector2& pivot, float angle);
     void UpdateBox(const Vector2& center, const Vector2& size, const Vector2& pivot, float angle);
-    void UpdateBox(const Vector2& center, const Vector2& size, float cos, float sin);
 
     /// Return size.
     const Vector2& GetSize() const { return size_; }
