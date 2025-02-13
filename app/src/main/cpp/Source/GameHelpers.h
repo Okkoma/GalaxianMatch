@@ -8,13 +8,15 @@
 
 namespace Urho3D
 {
-class Camera;
-class UIElement;
-class Sprite2D;
-class Font;
-class Text;
-class MessageBox;
-class AnimatedSprite2D;
+    class Camera;
+    class UIElement;
+    class Sprite2D;
+    class Font;
+    class Text;
+    class MessageBox;
+    class Sprite;
+    class BorderImage;
+    class AnimatedSprite2D;
 }
 
 using namespace Urho3D;
@@ -138,6 +140,12 @@ public:
     static void EqualizeValues(PODVector<float>& values, int coeff=1, bool incbleft=true, bool incbright=true);
     template< typename T > static bool FloodFill(Matrix2D<T>& buffer, Stack<unsigned>& stack, const T& patternToFill, const T& fillPattern, const int& xo, const int& yo);
     template< typename T > static bool FloodFill(Matrix2D<T>& buffer, Stack<unsigned>& stack, const T& patternToFillFrom, const T& patternToFillTo, const T& fillPattern, const int& xo, const int& yo);
+
+    /// TODO : Converters To sort
+    static void SetImage(Sprite* uielt, const String& refname);
+    static void SetImage(BorderImage* uielt, const String& refname);
+    static void SetImage(Sprite* uielt, const Sprite2D* sprite2d);
+    static void SetImage(BorderImage* uielt, const Sprite2D* sprite2d);
 
     /// Audio Helpers
     static void SpawnSound(Node* node, const char* fileName, float gain = 1.f);

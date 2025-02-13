@@ -753,7 +753,7 @@ void PlayState::CreateUI()
         if (!button)
         {
             Button* button = uibuttons->CreateChild<Button>("shake");
-            button->SetImage("2D/tiles.xml@shake");
+            GameHelpers::SetImage(button, "2D/tiles.xml@shake");
             button->SetSize(IntVector2(80, 80));
             button->SetPriority(499);
             button->SetOpacity(0.9f);
@@ -764,7 +764,7 @@ void PlayState::CreateUI()
     if (!triesSprite)
     {
         triesSprite = uibuttons->CreateChild<BorderImage>();
-        triesSprite->SetImage("2D/tiles.xml@item_star");
+        GameHelpers::SetImage(triesSprite, "2D/tiles.xml@item_star");
         triesSprite->SetSize(UISIZE[TRIESUISIZE], UISIZE[TRIESUISIZE]);
         triesSprite->SetPosition(20.f, 1.f);
         triesSprite->SetOpacity(0.8f);
@@ -779,7 +779,7 @@ void PlayState::CreateUI()
     {
         Button* movebutton = uibuttons->CreateChild<Button>();
         movebutton->SetName("movebutton");
-        movebutton->SetImage("2D/tiles.xml@button1");
+        GameHelpers::SetImage(movebutton, "2D/tiles.xml@button1");
         movebutton->SetEnableAnchor(true);
         movebutton->SetMinOffset(IntVector2(border, UISIZE[TRIESUISIZE]+5));
         movebutton->SetMaxOffset(IntVector2(border+UISIZE[BUTTONUISIZE], UISIZE[TRIESUISIZE]+5+UISIZE[BUTTONUISIZE]));
@@ -802,7 +802,7 @@ void PlayState::CreateUI()
     {
         Button* objbutton = objectivezone->CreateChild<Button>();
         objbutton->SetName("objectivebutton_"+String(i));
-        objbutton->SetImage("2D/tiles.xml@button1");
+        GameHelpers::SetImage(objbutton, "2D/tiles.xml@button1");
         objbutton->SetEnableAnchor(true);
         objbutton->SetMinOffset(IntVector2(width - uisize * (numObjectives_-i), fontsize + 10));
         objbutton->SetMaxOffset(IntVector2(width - uisize * (numObjectives_-i) + uisize, fontsize + 10 + uisize));
@@ -819,13 +819,13 @@ void PlayState::CreateUI()
         {
             Node* objectivenode = GOT::GetObject(StringHash(objectives[i][1]));
             if (objectivenode)
-                objectiveImage->SetImage(objectivenode->GetComponent<StaticSprite2D>()->GetSprite());
+                GameHelpers::SetImage(objectiveImage, objectivenode->GetComponent<StaticSprite2DFX>()->GetSprite());
         }
         else
         {
             int bossid = GameStatics::GetCurrentBoss();
             if (bossid != -1)
-                objectiveImage->SetImage(ToString("2D/bossestatics.xml@boss%d_static", bossid));
+                GameHelpers::SetImage(objectiveImage, ToString("2D/bossestatics.xml@boss%d_static", bossid));
         }
     }
     if (bosslevel)
@@ -1801,6 +1801,7 @@ void PlayState::HandleUpdate(StringHash eventType, VariantMap& eventData)
             if (input->GetKeyPress(KEY_G))
             {
                 drawDebug_ = !drawDebug_;
+                URHO3D_LOGINFOF("PlayState() - HandleKeyDown : KEY_G : Debug=%s", drawDebug_ ? "ON":"OFF");
                 SubscribeToDebugEvents(drawDebug_);
             }
         }

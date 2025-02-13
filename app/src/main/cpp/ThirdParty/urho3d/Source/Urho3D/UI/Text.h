@@ -23,7 +23,6 @@
 #pragma once
 
 #include "../UI/UIElement.h"
-#include "../Urho2D/Drawable2D.h"
 
 namespace Urho3D
 {

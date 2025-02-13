@@ -26,8 +26,6 @@
 #include "../Graphics/Texture2D.h"
 #include "../Resource/ResourceCache.h"
 #include "../UI/BorderImage.h"
-#include "../Urho2D/Sprite2D.h"
-#include "../Urho2D/SpriteSheet2D.h"
 
 #include "../DebugNew.h"
 
@@ -89,20 +87,6 @@ void BorderImage::SetFullImageRect()
 {
     if (texture_)
         SetImageRect(IntRect(0, 0, texture_->GetWidth(), texture_->GetHeight()));
-}
-
-void BorderImage::SetImage(const String& refname)
-{
-    SetImage(Sprite2D::LoadFromResourceRef(context_, ResourceRef(SpriteSheet2D::GetTypeStatic(), refname)));
-}
-
-void BorderImage::SetImage(Sprite2D* sprite)
-{
-    if (sprite)
-    {
-        SetTexture(sprite->GetTexture());
-        SetImageRect(sprite->GetRectangle());
-    }
 }
 
 void BorderImage::SetBorder(const IntRect& rect)

@@ -25,8 +25,6 @@
 #include "../Core/Context.h"
 #include "../Graphics/Texture2D.h"
 #include "../Resource/ResourceCache.h"
-#include "../Urho2D/Sprite2D.h"
-#include "../Urho2D/SpriteSheet2D.h"
 
 #include "../UI/Sprite.h"
 
@@ -274,20 +272,6 @@ void Sprite::SetFullImageRect()
 {
     if (texture_)
         SetImageRect(IntRect(0, 0, texture_->GetWidth(), texture_->GetHeight()));
-}
-
-void Sprite::SetImage(const String& refname)
-{
-    SetImage(Sprite2D::LoadFromResourceRef(context_, ResourceRef(SpriteSheet2D::GetTypeStatic(), refname)));
-}
-
-void Sprite::SetImage(Sprite2D* sprite)
-{
-    if (sprite)
-    {
-        SetTexture(sprite->GetTexture());
-        SetImageRect(sprite->GetRectangle());
-    }
 }
 
 void Sprite::SetBorder(const IntRect& rect)

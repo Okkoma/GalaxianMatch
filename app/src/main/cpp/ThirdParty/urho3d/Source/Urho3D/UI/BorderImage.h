@@ -30,7 +30,6 @@ namespace Urho3D
 
 class Texture;
 class Texture2D;
-class Sprite2D;
 
 /// %Image %UI element with optional border.
 class URHO3D_API BorderImage : public UIElement
@@ -54,9 +53,6 @@ public:
     void SetImageRect(const IntRect& rect);
     /// Use whole texture as the image.
     void SetFullImageRect();
-    /// OkkoStudio : Use Sprite2D as image
-    void SetImage(const String& refname);
-    void SetImage(Sprite2D* sprite);
     /// Set border dimensions on the screen.
     void SetBorder(const IntRect& rect);
     /// Set border dimensions on the image. If zero (default) uses the screen dimensions, resulting in pixel-perfect borders.

@@ -28,8 +28,6 @@
 namespace Urho3D
 {
 
-class Sprite2D;
-
 /// %UI element which allows sub-pixel positioning and size, as well as rotation. Only other Sprites should be added as child elements.
 class URHO3D_API Sprite : public UIElement
 {
@@ -76,9 +74,6 @@ public:
     void SetTexture(Texture* texture);
     /// Set part of texture to use as the image.
     void SetImageRect(const IntRect& rect);
-    /// OkkoStudio : Use Sprite2D as image
-    void SetImage(const String& refname);
-    void SetImage(Sprite2D* sprite);
     /// Use whole texture as the image.
     void SetFullImageRect();
     /// Set border dimensions on the screen.

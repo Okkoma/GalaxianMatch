@@ -1811,6 +1811,34 @@ template bool GameHelpers::FloodFill(Matrix2D<unsigned>& buffer, Stack<unsigned>
 
 
 
+void GameHelpers::SetImage(BorderImage* uielt, const String& refname)
+{
+    SetImage(uielt, Sprite2D::LoadFromResourceRef(uielt, ResourceRef(SpriteSheet2D::GetTypeStatic(), refname)));
+}
+
+void GameHelpers::SetImage(BorderImage* uielt, const Sprite2D* sprite)
+{
+    if (sprite)
+    {
+        uielt->SetTexture(sprite->GetTexture());
+        uielt->SetImageRect(sprite->GetRectangle());
+    }
+}
+
+void GameHelpers::SetImage(Sprite* uielt, const String& refname)
+{
+    SetImage(uielt, Sprite2D::LoadFromResourceRef(uielt, ResourceRef(SpriteSheet2D::GetTypeStatic(), refname)));
+}
+
+void GameHelpers::SetImage(Sprite* uielt, const Sprite2D* sprite)
+{
+    if (sprite)
+    {
+        uielt->SetTexture(sprite->GetTexture());
+        uielt->SetImageRect(sprite->GetRectangle());
+    }
+}
+
 
 /// Audio Helpers
 
