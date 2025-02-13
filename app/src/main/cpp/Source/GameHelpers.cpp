@@ -2116,7 +2116,7 @@ void GameHelpers::DumpNode(unsigned id, bool withcomponentattr)
         Context* context = node->GetContext();
         for (VariantMap::ConstIterator it=variables.Begin();it!=variables.End();++it)
         {
-            const String& attrname = context->GetUserAttributeName(it->first_);
+            const String& attrname = GameStatics::GetUserAttributeName(it->first_);
             URHO3D_LOGINFOF(" => Var %s(%u) type=%s value=%s", attrname.CString(), it->first_.Value(), it->second_.GetTypeName().CString(), it->second_.ToString().CString());
         }
     }

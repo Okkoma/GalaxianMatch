@@ -102,7 +102,7 @@ void GameCommands::Launch(Context* context, const String& input)
                 const VariantMap& vars = node->GetVars();
                 for (VariantMap::ConstIterator it=vars.Begin(); it!=vars.End();++it)
                 {
-                    const String& attrName = context->GetUserAttributeName(it->first_);
+                    const String& attrName = GameStatics::GetUserAttributeName(it->first_);
                     URHO3D_LOGINFOF(" => Var %s(%u) = %s(%s)", attrName.CString(), it->first_.Value(), it->second_.ToString().CString(), it->second_.GetTypeName().CString());
                 }
             }

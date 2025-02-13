@@ -246,6 +246,7 @@ GameStatics::PlayerState* GameStatics::playerState_ = &GameStatics::gameState_.p
 
 PODVector<RewardEventItem> GameStatics::rewardEventStack_;
 
+HashMap<StringHash, String> GameStatics::userAttributes_;
 
 /// Level's States
 int GameStatics::gameMode_ = 0;
@@ -1635,6 +1636,32 @@ void GameStatics::GetMissionBonuses(int missionid, Vector<Slot >& bonuses)
     for (int j=0; j < MAXMISSIONBONUSES; j++)
         if (mstate.bonuses_[j].type_ != 0)
             bonuses.Push(mstate.bonuses_[j]);
+}
+
+void GameStatics::RegisterUserAttribute(const String& attributeName)
+{
+    StringHash hashname = StringHash(attributeName);
+
+    if (userAttributes_.Contains(hashname))
+        return;
+
+    userAttributes_[hashname] = attributeName;
+}
+
+void GameStatics::RemoveUserAttribute(const String& attributeName)
+{
+    HashMap<StringHash, String>::Iterator i = userAttributes_.Find(StringHash(attributeName));
+    if (i != userAttributes_.End())
+        userAttributes_.Erase(i);
+}
+
+const String& GameStatics::GetUserAttributeName(StringHash attributeHash)
+{
+    HashMap<StringHash, String>::ConstIterator i = userAttributes_.Find(attributeHash);
+    if (i != userAttributes_.End())
+        return i->second_;
+    else
+        return String::EMPTY;
 }
 
 void GameStatics::Dump()

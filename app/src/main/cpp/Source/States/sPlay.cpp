@@ -2598,9 +2598,16 @@ void PlayState::OnPostRenderUpdate(StringHash eventType, VariantMap& eventData)
         {
             PODVector<AnimatedSprite2D*> drawables;
             rootScene_->GetComponents<AnimatedSprite2D>(drawables,true);
-//            URHO3D_LOGINFOF("nb AnimatedSprite2D=%d",drawables.Size());
+//            URHO3D_LOGINFOF("nb AnimatedSprite2D=%d", drawables.Size());
             for (unsigned i = 0; i < drawables.Size(); ++i)
                 drawables[i]->DrawDebugGeometry(debugRenderer,true);
+        }
+        {
+            PODVector<StaticSprite2D*> drawables;
+            rootScene_->GetComponents<StaticSprite2D>(drawables,true);
+            for (unsigned i = 0; i < drawables.Size(); ++i)
+                drawables[i]->DrawDebugGeometry(debugRenderer,true);
+//            URHO3D_LOGINFOF("nb StaticSprite2D=%u", drawables.Size());
         }
         if (GameStatics::gameConfig_.physics2DEnabled_ && GameStatics::gameConfig_.debugPhysics_)
         {
@@ -2627,12 +2634,7 @@ void PlayState::OnPostRenderUpdate(StringHash eventType, VariantMap& eventData)
         {
             MatchesManager::Get()->DrawDebugGeometry(debugRenderer,true);
         }
-//        {
-//            PODVector<StaticSprite2D*> drawables;
-//            rootScene_->GetComponents<StaticSprite2D>(drawables,true);
-//            for (unsigned i = 0; i < drawables.Size(); ++i)
-//                drawables[i]->DrawDebugGeometry(debugRenderer,true);
-//        }
+
 
         if (abilitypanel_)
             abilitypanel_->DrawDebugGeometry(debugRenderer,true);

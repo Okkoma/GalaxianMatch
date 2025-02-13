@@ -83,7 +83,7 @@ void GOA::RegisterToContext(Context* context)
 
     for (HashMap<StringHash, String>::ConstIterator it=attributes_.Begin();it!=attributes_.End();++it)
     {
-        context->RegisterUserAttribute(it->second_);
+        GameStatics::RegisterUserAttribute(it->second_);
     }
 }
 

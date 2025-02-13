@@ -370,6 +370,10 @@ public:
     static bool IsBossLevel();
     static void GetMissionBonuses(int missionid, Vector<Slot >& bonuses);
 
+    static void RegisterUserAttribute(const String& attributeName);
+    static void RemoveUserAttribute(const String& attributeName);
+    static const String& GetUserAttributeName(StringHash attributeHash);
+
     static void Dump();
 
     /// Vars
@@ -426,6 +430,8 @@ public:
     static GameState gameState_;
 
     static GameStateManager* stateManager_;
+
+    static HashMap<StringHash, String> userAttributes_;
 
     // Player's States
     enum ZoneState
