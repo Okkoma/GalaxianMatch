@@ -79,13 +79,13 @@ if (URHO3D_DATABASE_SQLITE)
     add_subdirectory (ThirdParty/SQLite)
 endif ()
 
-if (URHO3D_URHO2D)
+if (URHO3D_PHYSICS2D)
     add_subdirectory (ThirdParty/Box2D)
-    if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/spine)
-        add_subdirectory (ThirdParty/spine)
-        # Add definition for Spine
-        add_definitions (-DURHO3D_SPINE)
-    endif ()
+endif ()
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/spine)
+    add_subdirectory (ThirdParty/spine)
+    # Add definition for Spine
+    add_definitions (-DURHO3D_SPINE)
 endif ()
 
 if (URHO3D_WEBP)

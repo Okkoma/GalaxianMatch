@@ -10,12 +10,13 @@
 #include <Urho3D/Scene/ObjectAnimation.h>
 #include <Urho3D/Scene/ValueAnimation.h>
 
-#include <Urho3D/Urho2D/CollisionShape2D.h>
-#include <Urho3D/Urho2D/RigidBody2D.h>
-#include <Urho3D/Urho2D/PhysicsEvents2D.h>
+#include <Urho3D/Physics2D/CollisionShape2D.h>
+#include <Urho3D/Physics2D/RigidBody2D.h>
+#include <Urho3D/Physics2D/PhysicsEvents2D.h>
+#include <Urho3D/Physics2D/ConstraintDistance2D.h>
+
 #include <Urho3D/Urho2D/SpriterInstance2D.h>
 #include <Urho3D/Urho2D/AnimatedSprite2D.h>
-#include <Urho3D/Urho2D/ConstraintDistance2D.h>
 
 #include "GameAttributes.h"
 #include "GameEvents.h"

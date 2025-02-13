@@ -40,13 +40,14 @@
 #include <Urho3D/Graphics/Zone.h>
 #include <Urho3D/Graphics/Octree.h>
 
+#include <Urho3D/Physics2D/PhysicsWorld2D.h>
+#include <Urho3D/Physics2D/RigidBody2D.h>
+#include <Urho3D/Physics2D/CollisionShape2D.h>
+
 #include <Urho3D/Urho2D/Renderer2D.h>
 #include <Urho3D/Urho2D/Sprite2D.h>
 #include <Urho3D/Urho2D/StaticSprite2D.h>
 #include <Urho3D/Urho2D/AnimatedSprite2D.h>
-#include <Urho3D/Urho2D/PhysicsWorld2D.h>
-#include <Urho3D/Urho2D/RigidBody2D.h>
-#include <Urho3D/Urho2D/CollisionShape2D.h>
 
 #include <Urho3D/Input/Input.h>
 

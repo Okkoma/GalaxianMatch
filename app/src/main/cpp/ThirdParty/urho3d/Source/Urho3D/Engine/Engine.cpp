@@ -53,6 +53,9 @@
 #ifdef URHO3D_PHYSICS
 #include "../Physics/PhysicsWorld.h"
 #endif
+#ifdef URHO3D_PHYSICS2D
+#include "../Physics2D/Physics2D.h"
+#endif
 #include "../Resource/ResourceCache.h"
 #include "../Resource/Localization.h"
 #include "../Scene/Scene.h"
@@ -202,6 +205,9 @@ bool Engine::Initialize(const VariantMap& parameters)
         RegisterGraphicsLibrary(context_);
     }
 
+#ifdef URHO3D_PHYSICS2D
+    RegisterPhysics2DLibrary(context_);
+#endif
 #ifdef URHO3D_URHO2D
     // 2D graphics library is dependent on 3D graphics library
     RegisterUrho2DLibrary(context_);
