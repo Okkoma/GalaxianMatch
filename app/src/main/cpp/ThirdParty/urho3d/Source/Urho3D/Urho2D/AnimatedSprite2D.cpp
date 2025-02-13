@@ -30,9 +30,11 @@
 #include "../Resource/ResourceCache.h"
 #include "../Scene/Scene.h"
 #include "../Scene/SceneEvents.h"
+
+#include "../Physics2D/CollisionCircle2D.h"
+#include "../Physics2D/CollisionBox2D.h"
+
 #include "../Urho2D/Renderer2D.h"
-#include "../Urho2D/CollisionCircle2D.h"
-#include "../Urho2D/CollisionBox2D.h"
 #include "../Urho2D/AnimatedSprite2D.h"
 #include "../Urho2D/AnimationSet2D.h"
 #include "../Urho2D/Sprite2D.h"
