@@ -348,9 +348,8 @@ bool ObjectPoolCategory::Update(HiresTimer* timer, const long long& delay)
 
         while (nodes_.Size() < requestedSize_)
         {
-            SharedPtr<Node> node(template_->Clone(LOCAL, false, nodeid, componentid));
-            //Node* Clone(CreateMode mode = REPLICATED, bool applyAttr = true, unsigned nodeid=0, unsigned componentid=0, Node* parent=0);
-
+            // Clone inside the parent node of template_ node (= same level as template_ node)
+            SharedPtr<Node> node(template_->CloneInside(nullptr, LOCAL, false, nodeid, componentid));
             if (!node)
             {
                 URHO3D_LOGERRORF("ObjectPoolCategory() - Update : Resize Error => Can't Clone Template !");
