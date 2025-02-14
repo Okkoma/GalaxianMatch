@@ -26,7 +26,8 @@
 
 namespace Urho3D
 {
-
+/// Bitmask for not using any events.
+static const unsigned char USE_NO_EVENT = 0x0;
 /// Bitmask for using the scene update event.
 static const unsigned char USE_UPDATE = 0x1;
 /// Bitmask for using the scene post-update event.

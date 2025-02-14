@@ -962,7 +962,7 @@ SceneAnimation2D::SceneAnimation2D(Context* context) :
 {
 
     // Only the scene update event is needed: unsubscribe from the rest for optimization
-    SetUpdateEventMask(0x0);
+    SetUpdateEventMask(USE_NO_EVENT);
 }
 
 SceneAnimation2D::~SceneAnimation2D()
