@@ -819,7 +819,7 @@ void PlayState::CreateUI()
         {
             Node* objectivenode = GOT::GetObject(StringHash(objectives[i][1]));
             if (objectivenode)
-                GameHelpers::SetImage(objectiveImage, objectivenode->GetComponent<StaticSprite2DFX>()->GetSprite());
+                GameHelpers::SetImage(objectiveImage, objectivenode->GetComponent<StaticSprite2D>()->GetSprite());
         }
         else
         {
