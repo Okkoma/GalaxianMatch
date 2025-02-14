@@ -578,7 +578,7 @@ void LevelMapState::SetLinks()
     const Vector<LevelGraphPoint* >& points = levelGraph_->GetOrderedPoints();
     GameStatics::MissionState* mstates = GameStatics::playerState_->missionstates;
 
-    Sprite2D* sprite = Sprite2D::LoadFromResourceRef(root->GetContext(), ResourceRef(Sprite2D::GetTypeStatic(), "UI/LevelMap/missionLink.png"));
+    Sprite2D* sprite = Sprite2D::LoadFromResourceRef(root, ResourceRef(Sprite2D::GetTypeStatic(), "UI/LevelMap/missionLink.png"));
     sprite->SetTextureEdgeOffset(2.f);
     Rect spriterect;
     sprite->GetDrawRectangle(spriterect);

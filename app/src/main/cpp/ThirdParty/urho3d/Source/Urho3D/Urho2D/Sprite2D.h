@@ -107,9 +107,9 @@ public:
     /// Save sprite to ResourceRef.
     static ResourceRef SaveToResourceRef(Sprite2D* sprite);
     /// Load sprite from ResourceRef.
-    static Sprite2D* LoadFromResourceRef(Context* context, const ResourceRef& value);
+    static Sprite2D* LoadFromResourceRef(Object* object, const ResourceRef& value);
     /// Load sprites from ResourceRefList.
-    static void LoadFromResourceRefList(Context* context, const ResourceRefList& valuelist, PODVector<Sprite2D*>& sprites);
+    static void LoadFromResourceRefList(Object* object, const ResourceRefList& valuelist, PODVector<Sprite2D*>& sprites);
 
 private:
     /// Texture.

@@ -321,12 +321,12 @@ ResourceRef Sprite2D::SaveToResourceRef(Sprite2D* sprite)
     return ResourceRef(sprite->GetSpriteSheet()->GetType(), sprite->GetSpriteSheet()->GetName() + "@" + sprite->GetName());
 }
 
-Sprite2D* Sprite2D::LoadFromResourceRef(Context* context, const ResourceRef& value)
+Sprite2D* Sprite2D::LoadFromResourceRef(Object* object, const ResourceRef& value)
 {
-    if (!context)
-        return 0;
+    if (!object)
+        return nullptr;
 
-    ResourceCache* cache = context->GetSubsystem<ResourceCache>();
+    ResourceCache* cache = object->GetContext()->GetSubsystem<ResourceCache>();
 
     if (value.type_ == Sprite2D::GetTypeStatic())
         return cache->GetResource<Sprite2D>(value.name_);
@@ -351,12 +351,12 @@ Sprite2D* Sprite2D::LoadFromResourceRef(Context* context, const ResourceRef& val
     return 0;
 }
 
-void Sprite2D::LoadFromResourceRefList(Context* context, const ResourceRefList& valuelist, PODVector<Sprite2D*>& sprites)
+void Sprite2D::LoadFromResourceRefList(Object* object, const ResourceRefList& valuelist, PODVector<Sprite2D*>& sprites)
 {
-    if (!context)
+    if (!object)
         return;
 
-    ResourceCache* cache = context->GetSubsystem<ResourceCache>();
+    ResourceCache* cache = object->GetContext()->GetSubsystem<ResourceCache>();
 
     sprites.Clear();
     int numsprites = valuelist.names_.Size();

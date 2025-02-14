@@ -250,7 +250,7 @@ Material* StaticSprite2D::GetCustomMaterial() const
 
 void StaticSprite2D::SetSpriteAttr(const ResourceRef& value)
 {
-    Sprite2D* sprite = Sprite2D::LoadFromResourceRef(context_, value);
+    Sprite2D* sprite = Sprite2D::LoadFromResourceRef(this, value);
     if (sprite)
         SetSprite(sprite);
 }
