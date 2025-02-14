@@ -7,7 +7,7 @@
 #include <Urho3D/Resource/XMLFile.h>
 #include <Urho3D/Scene/Scene.h>
 #include <Urho3D/Scene/SmoothedTransform.h>
-#include <Urho3D/Urho2D/RigidBody2D.h>
+#include <Urho3D/Physics2D/RigidBody2D.h>
 
 //#include "DefsViews.h"
 
