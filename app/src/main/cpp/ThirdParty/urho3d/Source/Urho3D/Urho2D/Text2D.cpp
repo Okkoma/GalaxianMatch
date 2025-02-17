@@ -613,8 +613,14 @@ void Text2D::UpdateTextMaterials(bool forceUpdate)
 
 void CopyVerticesUIBatchToSourceBatch2D(const UIBatch& uibatch, SourceBatch2D& batch2d)
 {
-    const unsigned QUAD_STRIDE = 6 * UI_VERTEX_SIZE;
-    const unsigned numquads = (uibatch.vertexEnd_ - uibatch.vertexStart_) / QUAD_STRIDE;
+    // uiquad (=2 uitriangles =6 uivertices)
+    // uivertex (=6 float : position(3float) + color(1float) + uv(2float)
+    const unsigned VERTEXUI_SIZE = UI_VERTEX_SIZE;
+    const unsigned UI_QUAD_STRIDE = 2 * 3 * VERTEXUI_SIZE;
+    const unsigned numquads = (uibatch.vertexEnd_ - uibatch.vertexStart_) / UI_QUAD_STRIDE;
+    // 2dquad (=4 2dvertex_gl)
+    // 2dvertex_gl (=10 float : position(3float) + color(1float) + uv(2float) + texmode(4float))
+    const unsigned VERTEX2D_SIZE = 10;
     batch2d.vertices_.Resize(numquads * 4);
 
     unsigned ivertices = 0U;
@@ -632,22 +638,11 @@ void CopyVerticesUIBatchToSourceBatch2D(const UIBatch& uibatch, SourceBatch2D& b
 
         float* datas = &batch2d.vertices_[q*4].position_.x_;
 
-        memcpy(datas, &uibatch.vertexData_->At(ivertices+12), UI_VERTEX_SIZE * sizeof(float));      // V0
-        memcpy(&datas[6], &uibatch.vertexData_->At(ivertices), 2*UI_VERTEX_SIZE * sizeof(float));   // V1 & V2
-        memcpy(&datas[18], &uibatch.vertexData_->At(ivertices+24), UI_VERTEX_SIZE * sizeof(float)); // V3
-
-//        for (unsigned v = 0; v < UI_VERTEX_SIZE; v++)
-//        {
-//            // V0 Bottom Left
-//            datas[v] = uibatch.vertexData_->At(ivertices+v+2*UI_VERTEX_SIZE);
-//            // V1 Top Left
-//            datas[v+1*UI_VERTEX_SIZE] = uibatch.vertexData_->At(ivertices+v);
-//            // V2 Top Right
-//            datas[v+2*UI_VERTEX_SIZE] = uibatch.vertexData_->At(ivertices+v+1*UI_VERTEX_SIZE);
-//            // V3 Bottom Right
-//            datas[v+3*UI_VERTEX_SIZE] = uibatch.vertexData_->At(ivertices+v+4*UI_VERTEX_SIZE);
-//        }
-        ivertices += QUAD_STRIDE;
+        memcpy(datas, &uibatch.vertexData_->At(ivertices+2*VERTEXUI_SIZE), VERTEXUI_SIZE * sizeof(float));      // V0
+        memcpy(&datas[VERTEX2D_SIZE], &uibatch.vertexData_->At(ivertices), VERTEXUI_SIZE * sizeof(float));   // V1
+        memcpy(&datas[2*VERTEX2D_SIZE], &uibatch.vertexData_->At(ivertices+VERTEXUI_SIZE), VERTEXUI_SIZE * sizeof(float));   // V2
+        memcpy(&datas[3*VERTEX2D_SIZE], &uibatch.vertexData_->At(ivertices+4*VERTEXUI_SIZE), VERTEXUI_SIZE * sizeof(float)); // V3
+        ivertices += UI_QUAD_STRIDE;
     }
 }
 
