@@ -37,19 +37,14 @@ namespace Urho3D
 
 Sprite2D::Sprite2D(Context* context) :
     Resource(context),
-    offset_(0, 0),
     hotSpot_(0.5f, 0.5f),
+    offset_(0, 0),
     sourceSize_(0, 0),
-    edgeOffset_(0.0f),
-    isRotated_(false)
+    edgeOffset_(0.0f)
 {
-
 }
 
-Sprite2D::~Sprite2D()
-{
-
-}
+Sprite2D::~Sprite2D() = default;
 
 void Sprite2D::RegisterObject(Context* context)
 {
@@ -125,6 +120,7 @@ void Sprite2D::SetTexture(Texture2D* texture)
 
 void Sprite2D::SetRectangle(const IntRect& rectangle)
 {
+	sourceSize_ = rectangle.Size();
     rectangle_ = rectangle;
 }
 
@@ -154,69 +150,37 @@ void Sprite2D::SetSpriteSheet(SpriteSheet2D* spriteSheet)
     spriteSheet_ = spriteSheet;
 }
 
-void Sprite2D::SetRotated(bool isrotated)
-{
-    isRotated_ = isrotated;
-}
-
 bool Sprite2D::GetDrawRectangle(Rect& rect, bool flipX, bool flipY) const
 {
     return GetDrawRectangle(rect, hotSpot_, flipX, flipY);
 }
-/*
-bool Sprite2D::GetDrawRectangle(Rect& rect, const Vector2& hotSpot, bool flipX, bool flipY) const
-{
-    if (rectangle_.Width() == 0 || rectangle_.Height() == 0)
-        return false;
 
-    float width = (float)rectangle_.Width() * PIXEL_SIZE;
-    float height = (float)rectangle_.Height() * PIXEL_SIZE;
-
-    float hotSpotX = flipX ? (1.0f - hotSpot.x_) : hotSpot.x_;
-    float hotSpotY = flipY ? (1.0f - hotSpot.y_) : hotSpot.y_;
-
-    rect.min_.x_ = -width * hotSpotX;
-    rect.max_.x_ = width * (1.0f - hotSpotX);
-    rect.min_.y_ = -height * hotSpotY;
-    rect.max_.y_ = height * (1.0f - hotSpotY);
-
-    return true;
-}
-*/
 bool Sprite2D::GetDrawRectangle(Rect& rect, const Vector2& pivot, bool flipX, bool flipY) const
 {
     if (sourceSize_.x_ == 0 || sourceSize_.y_ == 0)
         return false;
-    if (isRotated_)
+
+    if (!flipX)
     {
-        rect.min_.x_ = (float)(offset_.y_ - sourceSize_.y_) * PIXEL_SIZE;
-        rect.max_.x_ = (float)offset_.y_ * PIXEL_SIZE;
-        rect.min_.y_ = (float)offset_.x_ * PIXEL_SIZE;
-        rect.max_.y_ = (float)(offset_.x_ - sourceSize_.x_) * PIXEL_SIZE;
+        rect.min_.x_ = -(float)sourceSize_.x_ * PIXEL_SIZE * pivot.x_;
+        rect.max_.x_ = (float)sourceSize_.x_ * PIXEL_SIZE * (1.0f - pivot.x_);
     }
     else
     {
-        if (!flipX)
-        {
-            rect.min_.x_ = -(float)sourceSize_.x_ * PIXEL_SIZE * pivot.x_;
-            rect.max_.x_ = (float)sourceSize_.x_ * PIXEL_SIZE * (1.0f - pivot.x_);
-        }
-        else
-        {
-            rect.min_.x_ = -(float)sourceSize_.x_ * PIXEL_SIZE * (1.0f - pivot.x_);
-            rect.max_.x_ = (float)sourceSize_.x_ * PIXEL_SIZE * pivot.x_;
-        }
-        if (!flipY)
-        {
-            rect.min_.y_ = -(float)sourceSize_.y_ * PIXEL_SIZE * pivot.y_;
-            rect.max_.y_ = (float)sourceSize_.y_ * PIXEL_SIZE * (1.0f - pivot.y_);
-        }
-        else
-        {
-            rect.min_.y_ = -(float)sourceSize_.y_ * PIXEL_SIZE * (1.0f - pivot.y_);
-            rect.max_.y_ = (float)sourceSize_.y_ * PIXEL_SIZE * pivot.y_;
-        }
+        rect.min_.x_ = -(float)sourceSize_.x_ * PIXEL_SIZE * (1.0f - pivot.x_);
+        rect.max_.x_ = (float)sourceSize_.x_ * PIXEL_SIZE * pivot.x_;
     }
+    if (!flipY)
+    {
+        rect.min_.y_ = -(float)sourceSize_.y_ * PIXEL_SIZE * pivot.y_;
+        rect.max_.y_ = (float)sourceSize_.y_ * PIXEL_SIZE * (1.0f - pivot.y_);
+    }
+    else
+    {
+        rect.min_.y_ = -(float)sourceSize_.y_ * PIXEL_SIZE * (1.0f - pivot.y_);
+        rect.max_.y_ = (float)sourceSize_.y_ * PIXEL_SIZE * pivot.y_;
+    }
+
     return true;
 }
 
@@ -235,21 +199,13 @@ bool Sprite2D::GetTextureRectangle(Rect& rect, bool flipX, bool flipY) const
     rect.max_.y_ = ((float)(rectangle_.top_ >> texturelevel) + edgeOffset_) * invHeight;
 
 
-    if (!isRotated_ && flipX)
+    if (flipX)
         Swap(rect.min_.x_, rect.max_.x_);
-
-    if (isRotated_ && !flipX)
-        Swap(rect.min_.y_, rect.max_.y_);
 
     if (flipY)
         Swap(rect.min_.y_, rect.max_.y_);
 
     return true;
-}
-
-bool Sprite2D::GetRotated() const
-{
-    return isRotated_;
 }
 
 float round(float f, float prec)
@@ -259,16 +215,13 @@ float round(float f, float prec)
 
 void Sprite2D::SetFixedRectangles(const Vector2& scale, float spanOffset, bool flipX, bool flipY)
 {
-    float width = (float)rectangle_.Width() * PIXEL_SIZE * scale.x_;
-    float height = (float)rectangle_.Height() * PIXEL_SIZE * scale.y_;
+    Vector2 hotspot(flipX ? (1.0f - hotSpot_.x_) : hotSpot_.x_, flipY ? (1.0f - hotSpot_.y_) : hotSpot_.y_);
 
-    float hotSpotX = flipX ? (1.0f - hotSpot_.x_) : hotSpot_.x_;
-    float hotSpotY = flipY ? (1.0f - hotSpot_.y_) : hotSpot_.y_;
-
-    fixedDrawRect_.min_.x_ = -width * hotSpotX - spanOffset;
-    fixedDrawRect_.max_.x_ = width * (1.0f - hotSpotX) + spanOffset;
-    fixedDrawRect_.min_.y_ = -height * hotSpotY - spanOffset;
-    fixedDrawRect_.max_.y_ = height * (1.0f - hotSpotY) + spanOffset;
+    GetDrawRectangle(fixedDrawRect_, hotspot, flipX, flipY);
+    fixedDrawRect_.min_.x_ = (fixedDrawRect_.min_.x_ - spanOffset) * scale.x_;
+    fixedDrawRect_.max_.x_ = (fixedDrawRect_.max_.x_ + spanOffset) * scale.x_;
+    fixedDrawRect_.min_.y_ = (fixedDrawRect_.min_.y_ - spanOffset) * scale.y_;
+    fixedDrawRect_.max_.y_ = (fixedDrawRect_.max_.y_ + spanOffset) * scale.y_;
 
     float invWidth = 1.0f / (float)texture_->GetWidth();
     float invHeight = 1.0f / (float)texture_->GetHeight();
@@ -304,7 +257,8 @@ String Sprite2D::Dump() const
     s += String("size=") + sourceSize_.ToString() + String(" | ");
     s += String("off=") + offset_.ToString() + String(" | ");
     s += String("hot=") + hotSpot_.ToString() + String(" | ");
-    s += String("rot=") + String(isRotated_) + String(" | ");
+    s += String("fxdrawrect=") + fixedDrawRect_.ToString() + String(" | ");
+    s += String("fxtextrect=") + fixedTextRect_.ToString();
 
     return s;
 }
@@ -314,11 +268,11 @@ ResourceRef Sprite2D::SaveToResourceRef(Sprite2D* sprite)
     if (!sprite)
         return Variant::emptyResourceRef;
 
-    if (!sprite->GetSpriteSheet())
+    if (!sprite->GetSpriteSheet() || sprite->GetSpriteSheet()->GetName().Empty())
         return GetResourceRef(sprite, Sprite2D::GetTypeStatic());
 
     // Combine sprite sheet name and sprite name as resource name.
-    return ResourceRef(sprite->GetSpriteSheet()->GetType(), sprite->GetSpriteSheet()->GetName() + "@" + sprite->GetName());
+    return ResourceRef(SpriteSheet2D::GetTypeStatic(), sprite->GetSpriteSheet()->GetName() + "@" + sprite->GetName());
 }
 
 Sprite2D* Sprite2D::LoadFromResourceRef(Object* object, const ResourceRef& value)
@@ -326,7 +280,7 @@ Sprite2D* Sprite2D::LoadFromResourceRef(Object* object, const ResourceRef& value
     if (!object)
         return nullptr;
 
-    ResourceCache* cache = object->GetContext()->GetSubsystem<ResourceCache>();
+    ResourceCache* cache = object->GetSubsystem<ResourceCache>();
 
     if (value.type_ == Sprite2D::GetTypeStatic())
         return cache->GetResource<Sprite2D>(value.name_);
@@ -336,19 +290,19 @@ Sprite2D* Sprite2D::LoadFromResourceRef(Object* object, const ResourceRef& value
         // value.name_ include sprite sheet name and sprite name.
         Vector<String> names = value.name_.Split('@');
         if (names.Size() != 2)
-            return 0;
+            return nullptr;
 
         const String& spriteSheetName = names[0];
         const String& spriteName = names[1];
 
         SpriteSheet2D* spriteSheet = cache->GetResource<SpriteSheet2D>(spriteSheetName);
         if (!spriteSheet)
-            return 0;
+            return nullptr;
 
         return spriteSheet->GetSprite(spriteName);
     }
 
-    return 0;
+    return nullptr;
 }
 
 void Sprite2D::LoadFromResourceRefList(Object* object, const ResourceRefList& valuelist, PODVector<Sprite2D*>& sprites)
@@ -356,48 +310,34 @@ void Sprite2D::LoadFromResourceRefList(Object* object, const ResourceRefList& va
     if (!object)
         return;
 
-    ResourceCache* cache = object->GetContext()->GetSubsystem<ResourceCache>();
+    ResourceCache* cache = object->GetSubsystem<ResourceCache>();
 
     sprites.Clear();
-    int numsprites = valuelist.names_.Size();
+    unsigned numsprites = valuelist.names_.Size();
 
     sprites.Resize(numsprites);
 
     if (valuelist.type_ == Sprite2D::GetTypeStatic())
     {
-        for (int i=0; i < numsprites; ++i)
+        for (unsigned i=0; i < numsprites; ++i)
             sprites[i] = cache->GetResource<Sprite2D>(valuelist.names_[i]);
     }
     else if (valuelist.type_ == SpriteSheet2D::GetTypeStatic())
     {
         Vector<String> names;
-        SpriteSheet2D* spriteSheet = 0;
-        for (int i=0; i < numsprites; ++i)
+        SpriteSheet2D* spriteSheet = nullptr;
+        for (unsigned i=0; i < numsprites; ++i)
         {
-            // each string in valuelist = "spritesheet_name"@"sprite_name".
             names = valuelist.names_[i].Split('@');
-            if (names.Size() != 2)
+            if (names.Size() > 1) // valuelist = "spritesheetname@spritename"
             {
-                sprites[i] = 0;
-                continue;
-            }
-            const String& spriteSheetName = names[0];
-            const String& spriteName = names[1];
+                if (!spriteSheet || spriteSheet->GetName() != names.Front())
+                    spriteSheet = cache->GetResource<SpriteSheet2D>(names.Front());
 
-            // If No SpriteSheet or not Same SpiteSheet than previous iteration
-            if (!spriteSheet || spriteSheet->GetName() != spriteSheetName)
-            {
-                // Get SpriteSheet
-                SpriteSheet2D* spriteSheet = cache->GetResource<SpriteSheet2D>(spriteSheetName);
-
-                // Get Sprite
-                sprites[i] = spriteSheet ? spriteSheet->GetSprite(spriteName) : 0;
+                sprites[i] = spriteSheet ? spriteSheet->GetSprite(names[1]) : nullptr;
             }
-            // If same SpriteSheet, Get Sprite
-            else
-            {
-                sprites[i] = spriteSheet->GetSprite(spriteName);
-            }
+            else if (spriteSheet) // valuelist = "spritename" use previous spritesheet to get sprite            
+                sprites[i] = spriteSheet->GetSprite(names.Front());           
         }
     }
 }

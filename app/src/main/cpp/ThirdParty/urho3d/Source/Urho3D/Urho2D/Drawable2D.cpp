@@ -48,12 +48,15 @@ SourceBatch2D::SourceBatch2D() :
 Drawable2D::Drawable2D(Context* context) :
     Drawable(context, DRAWABLE_GEOMETRY2D),
     layer_(0),
+    layerModifier_(0),
     orderInLayer_(0),
+    textureFX_(0),
     sourceBatchesDirty_(false),
-    drawRectDirty_(true),
-    visibility_(true)
+    drawRect_(Rect::ZERO),
+    drawRectDirty_(true)
 {
-    worldBoundingBox_.min_.z_ = worldBoundingBox_.max_.z_ = 0.f;
+    worldBoundingBox_.min_.z_ = 0.f;
+    worldBoundingBox_.max_.z_ = 1.f;
 }
 
 Drawable2D::~Drawable2D()
@@ -65,8 +68,10 @@ Drawable2D::~Drawable2D()
 void Drawable2D::RegisterObject(Context* context)
 {
     URHO3D_ACCESSOR_ATTRIBUTE("Layer", GetLayer, SetLayer, int, 0, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Layer Modifier", GetLayerModifier, SetLayerModifier, int, 0, AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Order in Layer", GetOrderInLayer, SetOrderInLayer, int, 0, AM_DEFAULT);
     URHO3D_ATTRIBUTE("View Mask", int, viewMask_, DEFAULT_VIEWMASK, AM_DEFAULT);
+    URHO3D_ATTRIBUTE("TextureFx", int, textureFX_, 0, AM_DEFAULT);
 }
 
 void Drawable2D::OnSetEnabled()
@@ -75,7 +80,7 @@ void Drawable2D::OnSetEnabled()
 
     if (enabled)
     {
-        visibility_ = worldBoundingBoxDirty_ = true;
+        sourceBatchesDirty_ = worldBoundingBoxDirty_ = true;
         if (renderer_)
             renderer_->AddDrawable(this);
     }
@@ -84,7 +89,7 @@ void Drawable2D::OnSetEnabled()
         if (renderer_)
             renderer_->RemoveDrawable(this);
 
-        sourceBatchesDirty_ = worldBoundingBoxDirty_ = visibility_ = false;
+        sourceBatchesDirty_ = worldBoundingBoxDirty_ = false;
         ClearSourceBatches();
     }
 }
@@ -100,6 +105,17 @@ void Drawable2D::SetLayer(int layer)
     MarkNetworkUpdate();
 }
 
+void Drawable2D::SetLayerModifier(int layermodifier)
+{
+    if (layermodifier == layerModifier_)
+        return;
+
+    layerModifier_ = layermodifier;
+
+    OnDrawOrderChanged();
+    MarkNetworkUpdate();
+}
+
 void Drawable2D::SetOrderInLayer(int orderInLayer)
 {
     if (orderInLayer == orderInLayer_)
@@ -109,6 +125,35 @@ void Drawable2D::SetOrderInLayer(int orderInLayer)
 
     OnDrawOrderChanged();
     MarkNetworkUpdate();
+}
+
+void Drawable2D::SetTextureMode(TextureModeFlag flag, unsigned value, Vector4& texmode)
+{
+    if (flag == TXM_UNIT)
+    {
+        texmode.x_ = value & 0xF;
+    }
+    else if (flag == TXM_FX)
+    {
+        texmode.y_ = value & 0x1; // bit 0
+        texmode.z_ = (value & 0xE) >> 1; // bit 1-2-3
+        texmode.w_ = value >> 4; // bit 4-5
+    }
+    else if (flag == TXM_FX_LIT)
+    {
+        texmode.y_ = value & 0x1; // bit 0
+    }
+}
+
+unsigned Drawable2D::GetTextureMode(TextureModeFlag flag, const Vector4& texmode)
+{
+    if (flag == TXM_UNIT)
+        return texmode.x_;
+    else if (flag == TXM_FX)
+        return texmode.y_;
+    else if (flag == TXM_FX_LIT)
+        return unsigned(texmode.y_) & 0x1;
+    return 0U;
 }
 
 const Rect& Drawable2D::GetDrawRectangle()
@@ -147,9 +192,6 @@ void Drawable2D::ForceUpdateBatches()
 
 void Drawable2D::ClearSourceBatches()
 {
-//    URHO3D_LOGINFOF("Drawable2D() - ClearSourceBatches : node=%s(%u) enabled=%s visibility_=%s ",
-//             node_->GetName().CString(), node_->GetID(), IsEnabledEffective() ? "true" : "false", visibility_ ? "true" : "false");
-
     sourceBatchesToRender_.Clear();
 
     for (unsigned i=0; i < sourceBatches_.Size(); i++)
@@ -165,19 +207,8 @@ void Drawable2D::UpdateSourceBatchesToRender()
         sourceBatchesToRender_.Push(&(sourceBatches_[i]));
 }
 
-//const Vector<SourceBatch2D>& Drawable2D::GetSourceBatches()
-//{
-//    if (sourceBatchesDirty_)
-//        UpdateSourceBatches();
-//
-//    return sourceBatches_;
-//}
-
-const Vector<SourceBatch2D*>& Drawable2D::GetSourceBatchesToRender()
+const Vector<SourceBatch2D*>& Drawable2D::GetSourceBatchesToRender(Camera* camera)
 {
-//    URHO3D_LOGINFOF("Drawable2D() - GetSourceBatchesToRender : node=%s ... dirty=%s",
-//                    node_->GetName().CString(), sourceBatchesDirty_ ? "true" : "false");
-
     if (sourceBatchesDirty_)
         UpdateSourceBatchesToRender();
 
@@ -210,6 +241,25 @@ void Drawable2D::MarkDirty()
 void Drawable2D::OnMarkedDirty(Node* node)
 {
     sourceBatchesDirty_ = worldBoundingBoxDirty_ = true;
+}
+
+int GetTextureUnit(Material* material, Texture* texture)
+{
+    const HashMap<TextureUnit, SharedPtr<Texture> >& textures = material->GetTextures();
+    for (HashMap<TextureUnit, SharedPtr<Texture> >::ConstIterator it = textures.Begin(); it != textures.End(); ++it)
+        if (it->second_.Get() == texture)
+            return (int)it->first_;
+    return -1;
+}
+
+Color MultColors(const Color& c1, const Color& c2)
+{
+    return Color(c1.r_ * c2.r_, c1.g_ * c2.g_, c1.b_ * c2.b_, c1.a_ * c2.a_);
+}
+
+Color MultColors(const Color& c1, const Color& c2, const Color& c3)
+{
+    return Color(c1.r_ * c2.r_ * c3.r_, c1.g_ * c2.g_ * c3.g_, c1.b_ * c2.b_ * c3.b_, c1.a_ * c2.a_ * c3.a_);
 }
 
 }

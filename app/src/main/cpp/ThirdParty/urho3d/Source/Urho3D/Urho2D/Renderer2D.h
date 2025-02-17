@@ -60,6 +60,10 @@ struct ViewBatchInfo2D
     Vector<SharedPtr<Material> > materials_;
     /// Geometries.
     Vector<SharedPtr<Geometry> > geometries_;
+
+    FrameInfo frame_;
+    const Frustum* frustum_;
+    BoundingBox frustum2D_;
 };
 
 /// 2D renderer component.
@@ -77,6 +81,8 @@ public:
     /// Register object factory.
     static void RegisterObject(Context* context);
 
+    void SetInitialVertexBufferSize(unsigned size) { initialVertexBufferSize_ = size; }
+
     /// Process octree raycast. May be called from a worker thread.
     virtual void ProcessRayQuery(const RayOctreeQuery& query, PODVector<RayQueryResult>& results);
     /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly re-entrantly.
@@ -91,26 +97,16 @@ public:
     /// Remove Drawable2D.
     void RemoveDrawable(Drawable2D* drawable);
 
-    /// Create material by texture and blend mode.
-    SharedPtr<Material> CreateMaterial(Texture2D* texture, BlendMode blendMode);
     /// Return material by texture and blend mode.
     Material* GetMaterial(Texture2D* texture, BlendMode blendMode);
 
-    const FrameInfo& GetFrameInfo() const { return frame_; }
+    const FrameInfo& GetCurrentFrameInfo() const { return currentViewBatchInfo_->frame_; }
 
     /// Check visibility.
-    bool CheckVisibility(Drawable2D* drawable) const;
-    bool IsDrawableVisible(Drawable2D* drawable) const;
-
-    void UpdateFrustumBoundingBox(Camera* camera);
-
-    const BoundingBox& GetFrustumBoundingBox() const;
+    void SetCheckVisibility(bool enable) { checkVisibility_ = enable; }
+    bool CheckVisibility(ViewBatchInfo2D* viewinfo,  Drawable2D* drawable) const;
 
     void Dump() const;
-/*
-    bool geometryDirty_;
-*/
-    bool orthographicMode_;
 
 private:
     /// Recalculate the world-space bounding box.
@@ -118,18 +114,19 @@ private:
     /// Load default material for a texture and blend mode from material directory
     SharedPtr<Material> LoadDefaultMaterial(Texture2D* texture, BlendMode blendMode);
 
-    /// C.VILLE Handle Camera Frustum change
-    void HandleCameraFrustumChanged(StringHash eventType, VariantMap& eventData);
+    /// Create material by texture and blend mode.
+    SharedPtr<Material> CreateMaterial(Texture2D* texture, BlendMode blendMode);
+
     /// Handle view update begin event. Determine Drawable2D's and their batches here.
     void HandleBeginViewUpdate(StringHash eventType, VariantMap& eventData);
-    /// C.VILLE
-    void HandleEndViewUpdate(StringHash eventType, VariantMap& eventData);
     /// Get all drawables in node.
     void GetDrawables(PODVector<Drawable2D*>& drawables, Node* node);
     /// Update view batch info.
-    void UpdateViewBatchInfo(ViewBatchInfo2D& viewBatchInfo, Camera* camera);
+    void UpdateViewBatchInfo(ViewBatchInfo2D& viewBatchInfo);
     /// Add view batch.
     void AddViewBatch(ViewBatchInfo2D& viewBatchInfo, int primitivetype, Material* material, unsigned indexStart, unsigned indexCount, unsigned vertexStart, unsigned vertexCount);
+
+    unsigned initialVertexBufferSize_;
 
     /// Index buffer.
     SharedPtr<IndexBuffer> indexBuffer_[2];
@@ -137,23 +134,15 @@ private:
     SharedPtr<Material> material_;
     /// Drawables.
     PODVector<Drawable2D*> drawables_;
-    /// View frame info for current frame.
-    FrameInfo frame_;
     /// View batch info.
     HashMap<Camera*, ViewBatchInfo2D> viewBatchInfos_;
-    /// Frustum for current frame.
-    const Frustum* frustum_;
-    /// Frustum bounding box for current frame.
-    BoundingBox frustumBoundingBox_;
-    /// View mask of current camera for visibility checking.
-    unsigned viewMask_;
+    ViewBatchInfo2D* currentViewBatchInfo_;
     /// Cached materials.
     HashMap<Texture2D*, HashMap<int, SharedPtr<Material> > > cachedMaterials_;
     /// Cached techniques per blend mode.
     HashMap<int, SharedPtr<Technique> > cachedTechniques_;
 
-    /// C.VILLE
-    Camera* resetcamera_;
+    bool checkVisibility_{true};
 };
 
 }

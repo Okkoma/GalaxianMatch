@@ -27,8 +27,6 @@ namespace pugi
 class xml_node;
 }
 
-//#define USE_KEYPOOLS
-
 namespace Urho3D
 {
 
@@ -59,10 +57,8 @@ struct SpriteTimelineKey;
 struct BoneTimelineKey;
 struct BoxTimelineKey;
 
-#define DEFAULT_KEYPOOLSIZE 1000
-
 /// Object type.
-enum ObjectType
+enum SpriterObjectType
 {
     BONE = 0,
     SPRITE,
@@ -93,11 +89,7 @@ struct SpriterData
     bool Load(const void* data, size_t size);
     void UpdateKeyInfos();
 
-#ifdef USE_KEYPOOLS
-    static void InitKeyPools(unsigned poolSize = DEFAULT_KEYPOOLSIZE);
-#endif
-    static float GetFactor(TimeKey* keyA, TimeKey* keyB, float length, float targetTime);
-    static float AdjustTime(TimeKey* keyA, TimeKey* keyB, float length, float targetTime);
+    static const char* GetCurveTypeStr(CurveType type);
 
     int scmlVersion_;
     String generator_;
@@ -115,7 +107,7 @@ struct Folder
     void Reset();
     bool Load(const pugi::xml_node& node);
 
-    int id_;
+    unsigned id_;
     String name_;
     PODVector<File*> files_;
 };
@@ -129,7 +121,8 @@ struct File
     bool Load(const pugi::xml_node& node);
 
     Folder* folder_;
-    int id_;
+    unsigned id_;
+    unsigned fx_;
     String name_;
     float width_;
     float height_;
@@ -146,10 +139,11 @@ struct Entity
     void Reset();
     bool Load(const pugi::xml_node& node);
 
-    int id_;
+    unsigned id_;
     String name_;
+    Color color_;
 
-    HashMap<String, ObjInfo > objInfos_;
+    HashMap<StringHash, ObjInfo > objInfos_;
     PODVector<CharacterMap*> characterMaps_;
     PODVector<Animation*> animations_;
 };
@@ -162,12 +156,16 @@ struct ObjInfo
 
     static bool Load(const pugi::xml_node& node, ObjInfo& objinfo);
 
-    ObjectType type_;
+    String name_;
+    SpriterObjectType type_;
     float width_;
     float height_;
     float pivotX_;
     float pivotY_;
 };
+
+inline unsigned GetKey(unsigned folderid, unsigned fileid) { return (folderid << 16) + fileid; }
+inline void GetFolderFile(unsigned key, unsigned& folderid, unsigned& fileid) { folderid = key >> 16; fileid = key & 0xFFFF; }
 
 /// Character map.
 struct CharacterMap
@@ -178,7 +176,11 @@ struct CharacterMap
     void Reset();
     bool Load(const pugi::xml_node& node);
 
-    int id_;
+    MapInstruction* GetInstruction(unsigned key, bool add=false);
+    MapInstruction* GetInstruction(unsigned folder, unsigned file);
+    MapInstruction* RemoveInstruction(unsigned key);
+
+    unsigned id_;
     String name_;
     StringHash hashname_;
     PODVector<MapInstruction*> maps_;
@@ -192,10 +194,20 @@ struct MapInstruction
 
     bool Load(const pugi::xml_node& node);
 
-    int folder_;
-    int file_;
+    void SetOrigin(unsigned spritekey);
+    void SetTarget(unsigned targetkey);
+    void RemoveTarget();
+
+    unsigned folder_;
+    unsigned file_;
     int targetFolder_;
     int targetFile_;
+
+    float targetdx_;
+    float targetdy_;
+    float targetdangle_;
+    float targetscalex_;
+    float targetscaley_;
 };
 
 /// Animation.
@@ -207,7 +219,13 @@ struct Animation
     void Reset();
     bool Load(const pugi::xml_node& node);
 
-    int id_;
+    void GetBoneRefs(unsigned timeline, PODVector<Ref*>& refs, unsigned startmainkeyid=0);
+    void GetObjectRefs(unsigned timeline, PODVector<Ref*>& refs, unsigned startmainkeyid=0);
+
+    MainlineKey* GetMainlineKey(float time) const;
+    void UnMapToRoot(SpatialTimelineKey* tkey, float time, bool includeFirstKey, SpatialInfo& info) const;
+
+    unsigned id_;
     String name_;
     float length_;
     bool looping_;
@@ -223,11 +241,14 @@ struct Ref
 
     bool Load(const pugi::xml_node& node);
 
-    int id_;
+    void Copy(Ref& copy) const;
+
+    unsigned id_;
     int parent_;
-    int timeline_;
-    int key_;
+    unsigned timeline_;
+    unsigned key_;
     int zIndex_;
+    Color color_;
 };
 
 
@@ -241,9 +262,12 @@ struct Timeline
     void Reset();
     bool Load(const pugi::xml_node& node);
 
-    int id_;
+    SpatialTimelineKey* GetTimeKey(float time) const;
+
+    unsigned id_;
     String name_;
-    ObjectType objectType_;
+    StringHash hashname_;
+    SpriterObjectType objectType_;
     PODVector<SpatialTimelineKey*> keys_;
 };
 
@@ -259,8 +283,8 @@ struct SpatialInfo
     float alpha_;
     int spin;
 
-    SpatialInfo(float x = 0.0f, float y = 0.0f, float angle = 0.0f, float scale_x = 1, float scale_y = 1, float a = 1, int spin = 1);
-    SpatialInfo UnmapFromParent(const SpatialInfo& parentInfo) const;
+    SpatialInfo(float x = 0.0f, float y = 0.0f, float angle = 0.0f, float scale_x = 1, float scale_y = 1, float a = 1, int sp = 1);
+    void UnmapFromParent(const SpatialInfo& parentInfo);
     void Interpolate(const SpatialInfo& other, float t);
 };
 
@@ -276,7 +300,7 @@ struct TimeKey
     float AdjustTime(float timeA, float timeB, float length, float targetTime);
     float GetFactor(float timeA, float timeB, float length, float targetTime);
 
-    int id_;
+    unsigned id_;
     float time_;
     CurveType curveType_;
     float c1_;
@@ -295,6 +319,10 @@ struct MainlineKey : public TimeKey
 
     void Reset();
 
+    Ref* GetRef(unsigned timeline) const;
+    Ref* GetBoneRef(unsigned timeline) const;
+    Ref* GetObjectRef(unsigned timeline) const;
+
     PODVector<Ref*> boneRefs_;
     PODVector<Ref*> objectRefs_;
 };
@@ -305,8 +333,9 @@ struct TimelineKey : public TimeKey
     TimelineKey(Timeline* timeline);
     virtual ~TimelineKey();
 
-    ObjectType GetObjectType() const { return timeline_->objectType_; }
+    SpriterObjectType GetObjectType() const { return timeline_->objectType_; }
     virtual TimelineKey* Clone() const = 0;
+    virtual void Copy(TimelineKey* copy) const = 0;
 
     virtual void Interpolate(const TimelineKey& other, float t) = 0;
     TimelineKey& operator=(const TimelineKey& rhs);
@@ -329,20 +358,12 @@ struct SpatialTimelineKey : TimelineKey
 /// Bone timeline key.
 struct BoneTimelineKey : SpatialTimelineKey
 {
-//    float length_;
-//    float width_;
-#ifdef USE_KEYPOOLS
-    static BoneTimelineKey* Get();
-    static void Free(BoneTimelineKey* elt);
-    static void FreeAlls();
-    static PODVector<BoneTimelineKey*> freeindexes_;
-    static Vector<BoneTimelineKey> pool_;
-#endif
     BoneTimelineKey();
     BoneTimelineKey(Timeline* timeline);
     virtual ~BoneTimelineKey();
 
     virtual TimelineKey* Clone() const;
+    virtual void Copy(TimelineKey* copy) const;
     virtual bool Load(const pugi::xml_node& node);
     virtual void Interpolate(const TimelineKey& other, float t);
     BoneTimelineKey& operator=(const BoneTimelineKey& rhs);
@@ -354,23 +375,20 @@ struct SpriteTimelineKey : SpatialTimelineKey
     bool useDefaultPivot_;
     float pivotX_;
     float pivotY_;
-    int folderId_;
-    int fileId_;
+    unsigned folderId_;
+    unsigned fileId_;
+    unsigned fx_;
 
     // Run time data.
     int zIndex_;
-#ifdef USE_KEYPOOLS
-    static SpriteTimelineKey* Get();
-    static void Free(SpriteTimelineKey* elt);
-    static void FreeAlls();
-    static PODVector<SpriteTimelineKey*> freeindexes_;
-    static Vector<SpriteTimelineKey> pool_;
-#endif
+    Color color_;
+
     SpriteTimelineKey();
     SpriteTimelineKey(Timeline* timeline);
     virtual ~SpriteTimelineKey();
 
     virtual TimelineKey* Clone() const;
+    virtual void Copy(TimelineKey* copy) const;
     virtual bool Load(const pugi::xml_node& node);
     virtual void Interpolate(const TimelineKey& other, float t);
     SpriteTimelineKey& operator=(const SpriteTimelineKey& rhs);
@@ -384,21 +402,32 @@ struct BoxTimelineKey : SpatialTimelineKey
     float pivotY_;
     float width_;
     float height_;
-#ifdef USE_KEYPOOLS
-    static BoxTimelineKey* Get();
-    static void Free(BoxTimelineKey* elt);
-    static void FreeAlls();
-    static PODVector<BoxTimelineKey*> freeindexes_;
-    static Vector<BoxTimelineKey> pool_;
-#endif
     BoxTimelineKey();
     BoxTimelineKey(Timeline* timeline);
     virtual ~BoxTimelineKey();
 
     virtual TimelineKey* Clone() const;
+    virtual void Copy(TimelineKey* copy) const;
     virtual bool Load(const pugi::xml_node& node);
     virtual void Interpolate(const TimelineKey& other, float t);
     BoxTimelineKey& operator=(const BoxTimelineKey& rhs);
+};
+
+/// Point timeline key.
+struct PointTimelineKey : SpatialTimelineKey
+{
+    // Run time data.
+    int zIndex_;
+
+    PointTimelineKey();
+    PointTimelineKey(Timeline* timeline);
+    virtual ~PointTimelineKey();
+
+    virtual TimelineKey* Clone() const;
+    virtual void Copy(TimelineKey* copy) const;
+    virtual bool Load(const pugi::xml_node& node);
+    virtual void Interpolate(const TimelineKey& other, float t);
+    PointTimelineKey& operator=(const PointTimelineKey& rhs);
 };
 
 }

@@ -402,7 +402,7 @@ bool CinematicState::LaunchSceneFile()
 
         SubscribeToEvents();
 
-        GameStatics::rootScene_->GetComponent<Renderer2D>()->orthographicMode_ = false;
+        GameStatics::rootScene_->GetComponent<Renderer2D>()->SetCheckVisibility(false);
 
         URHO3D_LOGINFO("CinematicState() - LaunchSceneFile : ... OK !");
         return true;
@@ -500,7 +500,7 @@ void CinematicState::Stop()
             localScene_->SetEnabledRecursive(false);
 
         GameStatics::ResetCamera();
-        GameStatics::rootScene_->GetComponent<Renderer2D>()->orthographicMode_ = true;
+        GameStatics::rootScene_->GetComponent<Renderer2D>()->SetCheckVisibility(true);
         stopped_ = true;
     }
 

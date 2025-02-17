@@ -50,6 +50,13 @@ enum LoopMode
     ForceClamped,
 };
 
+struct NodeUpdater
+{
+    NodeUpdater() : timekey_(0), ucomponent_(0) { }
+    PointTimelineKey* timekey_;
+    void* ucomponent_;
+};
+
 /// Spriter instance.
 class SpriterInstance
 {
@@ -71,38 +78,53 @@ public:
     void SetSpatialInfo(const SpatialInfo& spatialInfo);
     /// Set root spatial info.
     void SetSpatialInfo(float x, float y, float angle, float scaleX, float scaleY);
-    /// Update animation.
-    bool Update(float deltaTime);
-    void SetTime(float time);
+
+    void SetCurrentTime(float time);
+    void ResetCurrentTime();
 
     /// Return current entity.
     Entity* GetEntity() const { return entity_; }
     /// Return the entity at index.
     Entity* GetEntity(int index) const { return spriterData_->entities_[index]; }
+    unsigned GetNumEntities() const { return spriterData_->entities_.Size(); }
 
     /// Return current animation.
     Animation* GetAnimation() const { return animation_; }
     /// Return animation by index.
-    Animation* GetAnimation(int index) const { return entity_->animations_[index]; }
+    Animation* GetAnimation(int index) const { return index < entity_->animations_.Size() ? entity_->animations_[index] : 0; }
     /// Return animation by name.
     Animation* GetAnimation(const String& name) const;
     /// Return root spatial info.
     const SpatialInfo& GetSpatialInfo() const { return spatialInfo_; }
     /// Return animation result timeline keys.
+    unsigned GetNumBoneKeys() const { return numBoneKeys_; }
     const PODVector<BoneTimelineKey* >& GetBoneKeys() const { return boneKeys_; }
+    unsigned GetNumSpriteKeys() const { return numSpriteKeys_; }
     const PODVector<SpriteTimelineKey* >& GetSpriteKeys() const { return spriteKeys_; }
     /// Return animation triggers.
-    const HashMap<String, BoneTimelineKey* >& GetNodeTriggers() const { return nodeTriggers_; }
-    const HashMap<Timeline*, SpriteTimelineKey* >& GetEventTriggers() const { return eventTriggers_; }
+    HashMap<String, NodeUpdater >& GetNodeUpdaters() { return nodeUpdaters_; }
+    const HashMap<String, NodeUpdater >& GetNodeUpdaters() const { return nodeUpdaters_; }
+    const HashMap<Timeline*, PointTimelineKey* >& GetEventTriggers() const { return eventTriggers_; }
     const HashMap<Timeline*, BoxTimelineKey* >& GetPhysicTriggers() const { return physicTriggers_; }
-    /// Return time passed on the current animation.
+    
+/// Return time passed on the current animation.
     float GetCurrentTime() const { return currentTime_; }
 
-    void ResetCurrentTime();
+    Spriter::MainlineKey* GetCurrentMainKey() const { return mainlineKey_; }
+
     bool HasFinishedAnimation() const;
     bool GetLooping() const { return looping_; }
 
+    /// Update animation.
+    bool Update(float deltaTime);
+    /// Update timeline keys.
+    void UpdateTimelineKeys();
+
 private:
+    /// Clear mainline key and timeline keys.
+    void RestoreKeys();
+    void Dispose();
+
     /// Handle set entity.
     void OnSetEntity(Entity* entity);
     /// Handle set animation.
@@ -110,13 +132,9 @@ private:
 
     /// Update mainline keys.
     bool UpdateMainlineKeys(float deltaTime);
-    /// Update timeline keys.
-    void UpdateTimelineKeys();
 
     /// Get timeline key by ref.
-    TimelineKey* GetTimelineKey(Ref* ref, float targetTime) const;
-    /// Clear mainline key and timeline keys.
-    void Clear();
+    TimelineKey* GetTimelineKey(Timeline* timeline, Ref* ref, float targetTime, TimelineKey* reuse) const;
 
     /// Parent component.
     Component* owner_;
@@ -129,7 +147,7 @@ private:
     /// Next animation.
     Animation* nextanimation_;
     /// Looping.
-    bool looping_, loopfinished_;
+    bool looping_;
     /// Root spatial info.
     SpatialInfo spatialInfo_;
     /// Current time.
@@ -141,12 +159,13 @@ private:
     MainlineKey* mainlineKey_;
 
     /// Current timeline keys.
+    unsigned numBoneKeys_, numSpriteKeys_;
     PODVector<BoneTimelineKey* > boneKeys_;
     PODVector<SpriteTimelineKey* > spriteKeys_;
 
     /// Current event keys.
-    HashMap<String, BoneTimelineKey* > nodeTriggers_;
-    HashMap<Timeline*, SpriteTimelineKey* > eventTriggers_;
+    HashMap<String, NodeUpdater > nodeUpdaters_;
+    HashMap<Timeline*, PointTimelineKey* > eventTriggers_;
     HashMap<Timeline*, BoxTimelineKey* > physicTriggers_;
 };
 

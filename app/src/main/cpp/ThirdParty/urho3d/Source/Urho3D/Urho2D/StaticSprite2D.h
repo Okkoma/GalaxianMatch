@@ -42,9 +42,6 @@ public:
     /// Register object factory. Drawable2D must be registered first.
     static void RegisterObject(Context* context);
 
-    /// Handle enabled/disabled state change.
-    virtual void OnSetEnabled();
-
     /// Set sprite.
     void SetSprite(Sprite2D* sprite);
     /// Set draw rectangle.
@@ -127,8 +124,12 @@ public:
     /// Return custom material attribute.
     ResourceRef GetCustomMaterialAttr() const;
 
+    void SetHotSpotAttr(const Vector2& hotspot);
+
     /// Only Used by Renderer2D
     virtual const BoundingBox& GetWorldBoundingBox2D();
+
+    virtual bool UpdateDrawRectangle();
 
     virtual void DrawDebugGeometry(DebugRenderer* debug, bool depthTest);
 
@@ -141,8 +142,6 @@ protected:
     virtual void UpdateSourceBatches();
     /// Update material.
     virtual void UpdateMaterial();
-    /// Update drawRect.
-    void UpdateDrawRect();
 
     /// Sprite.
     SharedPtr<Sprite2D> sprite_;
@@ -164,8 +163,6 @@ protected:
     bool useTextureRect_;
     /// Hot spot.
     Vector2 hotSpot_;
-    /// Draw rectangle.
-//    Rect drawRect_;
     /// Texture rectangle.
     Rect textureRect_;
     /// Custom material.

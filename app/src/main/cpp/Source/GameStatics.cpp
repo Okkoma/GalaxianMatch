@@ -521,9 +521,6 @@ void GameStatics::ChangeCameraTo(Node* node, bool ortho)
     {
         context_->GetSubsystem<Renderer>()->GetViewport(0)->SetCamera(camera);
         camera->SetOrthographic(ortho);
-
-        if (rootScene_)
-            rootScene_->GetComponent<Renderer2D>()->UpdateFrustumBoundingBox(camera);
     }
 }
 
@@ -541,21 +538,7 @@ void GameStatics::UpdateViews()
     URHO3D_LOGINFOF("GameStatics() - UpdateViews ... ");
 
     Renderer* renderer = camera_->GetSubsystem<Renderer>();
-//    Viewport* viewport = renderer->GetViewport(0);
-//    if (!viewport->GetView())
-//        viewport->AllocateView();
-
-    Renderer2D* renderer2d = rootScene_->GetOrCreateComponent<Renderer2D>(LOCAL);
-
-//    using namespace BeginViewRender;
-//    VariantMap& eventData = context_->GetEventDataMap();
-//    eventData[P_VIEW] = viewport->GetView();
-//    eventData[P_SCENE] = rootScene_;
-//    eventData[P_CAMERA] = camera_;
-//    renderer->SendEvent(E_BEGINVIEWUPDATE, eventData);
     renderer->SendEvent(E_SCREENMODE);
-
-    renderer2d->UpdateFrustumBoundingBox(camera_);
 
     URHO3D_LOGINFOF("GameStatics() - UpdateViews ... OK !");
 }

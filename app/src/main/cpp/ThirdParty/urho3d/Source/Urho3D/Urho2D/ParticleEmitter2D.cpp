@@ -43,8 +43,9 @@ extern const char* blendModeNames[];
 
 ParticleEmitter2D::ParticleEmitter2D(Context* context) :
     Drawable2D(context),
-    blendMode_(BLEND_ADDALPHA),
+    blendMode_(BLEND_ALPHA),
     numParticles_(0),
+    maxParticles_(0),
     emissionTime_(0.0f),
     emitParticleTime_(0.0f),
     boundingBoxMinPoint_(Vector3::ZERO),
@@ -72,7 +73,10 @@ void ParticleEmitter2D::RegisterObject(Context* context)
         AM_DEFAULT);
     URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Blend Mode", GetBlendMode, SetBlendMode, BlendMode, blendModeNames, BLEND_ALPHA, AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Looped", GetLooped, SetLooped, bool, true, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Color", GetColor, SetColor, Color, Color::BLACK, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Color", GetColor, SetColor, Color, Color::WHITE, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Alpha", GetAlpha, SetAlpha, float, 1.f, AM_DEFAULT);
+    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Custom material", GetCustomMaterialAttr, SetCustomMaterialAttr, ResourceRef,
+        ResourceRef(Material::GetTypeStatic(), String::EMPTY), AM_DEFAULT);
 }
 
 void ParticleEmitter2D::OnSetEnabled()
@@ -83,9 +87,17 @@ void ParticleEmitter2D::OnSetEnabled()
     if (scene)
     {
         if (IsEnabledEffective())
+        {
+            if (effect_)
+                SetMaxParticles(effect_->GetMaxParticles());
             SubscribeToEvent(scene, E_SCENEPOSTUPDATE, URHO3D_HANDLER(ParticleEmitter2D, HandleScenePostUpdate));
+        }
         else
+        {
+        	particles_.Clear();
+        	sourceBatches_[0].vertices_.Clear();
             UnsubscribeFromEvent(scene, E_SCENEPOSTUPDATE);
+        }
     }
 }
 
@@ -102,7 +114,7 @@ void ParticleEmitter2D::SetEffect(ParticleEffect2D* model)
 
     SetSprite(effect_->GetSprite());
     SetBlendMode(effect_->GetBlendMode());
-    SetMaxParticles((unsigned)effect_->GetMaxParticles());
+    SetMaxParticles(effect_->GetMaxParticles());
 
     emitParticleTime_ = 0.0f;
     emissionTime_ = effect_->GetDuration();
@@ -130,14 +142,14 @@ void ParticleEmitter2D::SetBlendMode(BlendMode blendMode)
     MarkNetworkUpdate();
 }
 
-void ParticleEmitter2D::SetMaxParticles(unsigned maxParticles)
+void ParticleEmitter2D::SetMaxParticles(int maxParticles)
 {
-    maxParticles = Max(maxParticles, 1U);
+    maxParticles_ = Max(maxParticles, 1);
 
     particles_.Resize(maxParticles);
     sourceBatches_[0].vertices_.Reserve(maxParticles * 4);
 
-    numParticles_ = Min(maxParticles, numParticles_);
+    numParticles_ = Min(maxParticles_, numParticles_);
 }
 
 void ParticleEmitter2D::SetColor(const Color& color)
@@ -171,10 +183,36 @@ Sprite2D* ParticleEmitter2D::GetSprite() const
     return sprite_;
 }
 
+Material* ParticleEmitter2D::GetCustomMaterial() const
+{
+    return customMaterial_.Get();
+}
+
+void ParticleEmitter2D::SetCustomMaterial(Material* customMaterial)
+{
+    if (customMaterial == customMaterial_)
+        return;
+
+    customMaterial_ = customMaterial;
+    sourceBatchesDirty_ = true;
+
+    UpdateMaterial();
+    MarkNetworkUpdate();
+}
+
+void ParticleEmitter2D::SetCustomMaterialAttr(const ResourceRef& value)
+{
+    SetCustomMaterial(GetSubsystem<ResourceCache>()->GetResource<Material>(value.name_));
+}
+
+ResourceRef ParticleEmitter2D::GetCustomMaterialAttr() const
+{
+    return GetResourceRef(customMaterial_.Get(), Material::GetTypeStatic());
+}
+
 void ParticleEmitter2D::SetParticleEffectAttr(const ResourceRef& value)
 {
-    ResourceCache* cache = GetSubsystem<ResourceCache>();
-    SetEffect(cache->GetResource<ParticleEffect2D>(value.name_));
+    SetEffect(GetSubsystem<ResourceCache>()->GetResource<ParticleEffect2D>(value.name_));
 }
 
 ResourceRef ParticleEmitter2D::GetParticleEffectAttr() const
@@ -205,7 +243,11 @@ void ParticleEmitter2D::OnSceneSet(Scene* scene)
     Drawable2D::OnSceneSet(scene);
 
     if (scene && IsEnabledEffective())
+    {
+        if (effect_)
+            SetMaxParticles(effect_->GetMaxParticles());
         SubscribeToEvent(scene, E_SCENEPOSTUPDATE, URHO3D_HANDLER(ParticleEmitter2D, HandleScenePostUpdate));
+    }
     else if (!scene)
         UnsubscribeFromEvent(E_SCENEPOSTUPDATE);
 }
@@ -233,7 +275,11 @@ void ParticleEmitter2D::UpdateSourceBatches()
     Vector<Vertex2D>& vertices = sourceBatches_[0].vertices_;
     vertices.Clear();
 
-    if (!sprite_)
+    if (!sourceBatches_[0].material_)
+        UpdateMaterial();
+
+    Material* material = sourceBatches_[0].material_;
+    if (!sprite_ || !material)
         return;
 
     Rect textureRect;
@@ -254,32 +300,38 @@ void ParticleEmitter2D::UpdateSourceBatches()
     Vertex2D vertex2;
     Vertex2D vertex3;
 
+    vertex0.position_.z_ = vertex1.position_.z_ = vertex2.position_.z_ = vertex3.position_.z_ = node_->GetWorldPosition().z_;
+
     vertex0.uv_ = textureRect.min_;
     vertex1.uv_ = Vector2(textureRect.min_.x_, textureRect.max_.y_);
     vertex2.uv_ = textureRect.max_;
     vertex3.uv_ = Vector2(textureRect.max_.x_, textureRect.min_.y_);
 
+    Vector4 texmode;
+    SetTextureMode(TXM_UNIT, GetTextureUnit(material, (Texture*)sprite_->GetTexture()), texmode);
+    SetTextureMode(TXM_FX, textureFX_, texmode);
+    vertex0.texmode_ = vertex1.texmode_ = vertex2.texmode_ = vertex3.texmode_ = texmode;
+
     for (unsigned i = 0; i < numParticles_; ++i)
     {
         Particle2D& p = particles_[i];
 
-        float rotation = -p.rotation_;
-        float c = Cos(rotation);
-        float s = Sin(rotation);
-        float add = (c + s) * p.size_ * 0.5f;
-        float sub = (c - s) * p.size_ * 0.5f;
+        const float rotation = -p.rotation_;
+        const float c = Cos(rotation);
+        const float s = Sin(rotation);
+        const float add = (c + s) * p.size_ * 0.5f;
+        const float sub = (c - s) * p.size_ * 0.5f;
 
-//        vertex0.position_ = Vector3(p.position_.x_ - sub, p.position_.y_ - add, p.position_.z_);
-//        vertex1.position_ = Vector3(p.position_.x_ - add, p.position_.y_ + sub, p.position_.z_);
-//        vertex2.position_ = Vector3(p.position_.x_ + sub, p.position_.y_ + add, p.position_.z_);
-//        vertex3.position_ = Vector3(p.position_.x_ + add, p.position_.y_ - sub, p.position_.z_);
+        vertex0.position_.x_ = p.position_.x_ - sub;
+        vertex0.position_.y_ = p.position_.y_ - add;
+        vertex1.position_.x_ = p.position_.x_ - add;
+        vertex1.position_.y_ = p.position_.y_ + sub;
+        vertex2.position_.x_ = p.position_.x_ + sub;
+        vertex2.position_.y_ = p.position_.y_ + add;
+        vertex3.position_.x_ = p.position_.x_ + add;
+		vertex3.position_.y_ = p.position_.y_ - sub;
 
-        vertex0.position_ = Vector2(p.position_.x_ - sub, p.position_.y_ - add);
-        vertex1.position_ = Vector2(p.position_.x_ - add, p.position_.y_ + sub);
-        vertex2.position_ = Vector2(p.position_.x_ + sub, p.position_.y_ + add);
-        vertex3.position_ = Vector2(p.position_.x_ + add, p.position_.y_ - sub);
-
-        vertex0.color_ = vertex1.color_ = vertex2.color_ = vertex3.color_ = p.color_.ToUInt();
+        vertex0.color_ = vertex1.color_ = vertex2.color_ = vertex3.color_ = MultColors(p.color_, color_).ToUInt();
 
         vertices.Push(vertex0);
         vertices.Push(vertex1);
@@ -292,10 +344,12 @@ void ParticleEmitter2D::UpdateSourceBatches()
 
 void ParticleEmitter2D::UpdateMaterial()
 {
-    if (sprite_ && renderer_)
+    if (customMaterial_)
+        sourceBatches_[0].material_ = customMaterial_;
+    else if (sprite_ && renderer_)
         sourceBatches_[0].material_ = renderer_->GetMaterial(sprite_->GetTexture(), blendMode_);
     else
-        sourceBatches_[0].material_ = 0;
+        sourceBatches_[0].material_ = nullptr;
 }
 
 void ParticleEmitter2D::HandleScenePostUpdate(StringHash eventType, VariantMap& eventData)
@@ -310,14 +364,13 @@ void ParticleEmitter2D::Update(float timeStep)
     if (!effect_)
         return;
 
-//    Vector3 worldPosition = GetNode()->GetWorldPosition();
-    const Vector2& worldPosition = GetNode()->GetWorldPosition2D();
-    float worldScale = GetNode()->GetWorldScale2D().x_ * PIXEL_SIZE;
+    const Vector2& worldPosition = node_->GetWorldPosition2D();
+    float worldScale = node_->GetWorldScale2D().x_ * PIXEL_SIZE;
 
     boundingBoxMinPoint_ = Vector3(M_INFINITY, M_INFINITY, M_INFINITY);
     boundingBoxMaxPoint_ = Vector3(-M_INFINITY, -M_INFINITY, -M_INFINITY);
 
-    unsigned particleIndex = 0;
+    int particleIndex = 0;
     while (particleIndex < numParticles_)
     {
         Particle2D& particle = particles_[particleIndex];
@@ -336,14 +389,14 @@ void ParticleEmitter2D::Update(float timeStep)
 
     if (emissionTime_ > 0.0f)
     {
-        float worldAngle = GetNode()->GetWorldRotation().RollAngle();
+        float worldAngle = node_->GetWorldRotation().RollAngle();
 
-        float timeBetweenParticles = effect_->GetParticleLifeSpan() / particles_.Size();
+        float timeBetweenParticles = effect_->GetParticleLifeSpan() / (float)maxParticles_;
         emitParticleTime_ += timeStep;
 
         while (emitParticleTime_ > 0.0f)
         {
-            if (EmitParticle(worldPosition, worldAngle, worldScale))
+            if (EmitParticle(worldPosition, worldAngle, worldScale) && numParticles_ > 0)
                 UpdateParticle(particles_[numParticles_ - 1], emitParticleTime_, worldScale);
 
             emitParticleTime_ -= timeBetweenParticles;
@@ -357,7 +410,7 @@ void ParticleEmitter2D::Update(float timeStep)
     {
         if (!looped_)
         {
-            if (!numParticles_)
+            if (numParticles_ <= 0)
                 SetEnabled(false);
         }
         else
@@ -370,9 +423,8 @@ void ParticleEmitter2D::Update(float timeStep)
 }
 
 bool ParticleEmitter2D::EmitParticle(const Vector2& worldPosition, float worldAngle, float worldScale)
-//bool ParticleEmitter2D::EmitParticle(const Vector3& worldPosition, float worldAngle, float worldScale)
 {
-    if (numParticles_ >= (unsigned)effect_->GetMaxParticles() || numParticles_ >= particles_.Size())
+    if (numParticles_ >= maxParticles_)
         return false;
 
     float lifespan = effect_->GetParticleLifeSpan() + effect_->GetParticleLifespanVariance() * Random(-1.0f, 1.0f);
@@ -386,7 +438,7 @@ bool ParticleEmitter2D::EmitParticle(const Vector2& worldPosition, float worldAn
 
     particle.position_.x_ = worldPosition.x_ + worldScale * effect_->GetSourcePositionVariance().x_ * Random(-1.0f, 1.0f);
     particle.position_.y_ = worldPosition.y_ + worldScale * effect_->GetSourcePositionVariance().y_ * Random(-1.0f, 1.0f);
-//    particle.position_.z_ = worldPosition.z_;
+
     particle.startPos_.x_ = worldPosition.x_;
     particle.startPos_.y_ = worldPosition.y_;
 
@@ -401,20 +453,16 @@ bool ParticleEmitter2D::EmitParticle(const Vector2& worldPosition, float worldAn
     particle.emitRadiusDelta_ = (minRadius - maxRadius) * invLifespan;
     particle.emitRotation_ = worldAngle + effect_->GetAngle() + effect_->GetAngleVariance() * Random(-1.0f, 1.0f);
     particle.emitRotationDelta_ = effect_->GetRotatePerSecond() + effect_->GetRotatePerSecondVariance() * Random(-1.0f, 1.0f);
-    particle.radialAcceleration_ =
-        worldScale * (effect_->GetRadialAcceleration() + effect_->GetRadialAccelVariance() * Random(-1.0f, 1.0f));
-    particle.tangentialAcceleration_ =
-        worldScale * (effect_->GetTangentialAcceleration() + effect_->GetTangentialAccelVariance() * Random(-1.0f, 1.0f));
+    particle.radialAcceleration_ = worldScale * (effect_->GetRadialAcceleration() + effect_->GetRadialAccelVariance() * Random(-1.0f, 1.0f));
+    particle.tangentialAcceleration_ = worldScale * (effect_->GetTangentialAcceleration() + effect_->GetTangentialAccelVariance() * Random(-1.0f, 1.0f));
 
-    float startSize =
-        worldScale * Max(0.1f, effect_->GetStartParticleSize() + effect_->GetStartParticleSizeVariance() * Random(-1.0f, 1.0f));
-    float finishSize =
-        worldScale * Max(0.1f, effect_->GetFinishParticleSize() + effect_->GetFinishParticleSizeVariance() * Random(-1.0f, 1.0f));
+    float startSize = worldScale * Max(0.1f, effect_->GetStartParticleSize() + effect_->GetStartParticleSizeVariance() * Random(-1.0f, 1.0f));
+    float finishSize = worldScale * Max(0.1f, effect_->GetFinishParticleSize() + effect_->GetFinishParticleSizeVariance() * Random(-1.0f, 1.0f));
     particle.size_ = startSize;
     particle.sizeDelta_ = (finishSize - startSize) * invLifespan;
 
-    particle.color_ = effect_->GetStartColor() * color_.Luma() + effect_->GetStartColorVariance() * Random(-1.0f, 1.0f) ;
-    Color endColor = effect_->GetFinishColor() * color_.Luma() + effect_->GetFinishColorVariance() * Random(-1.0f, 1.0f);
+    particle.color_ = effect_->GetStartColor() /* * color_.Luma() */ + effect_->GetStartColorVariance() * Random(-1.0f, 1.0f) ;
+    Color endColor = effect_->GetFinishColor() /* * color_.Luma() */ + effect_->GetFinishColorVariance() * Random(-1.0f, 1.0f);
     particle.colorDelta_ = (endColor - particle.color_) * invLifespan;
 
     particle.rotation_ = worldAngle + effect_->GetRotationStart() + effect_->GetRotationStartVariance() * Random(-1.0f, 1.0f);
@@ -425,7 +473,6 @@ bool ParticleEmitter2D::EmitParticle(const Vector2& worldPosition, float worldAn
 }
 
 void ParticleEmitter2D::UpdateParticle(Particle2D& particle, float timeStep, float worldScale)
-//void ParticleEmitter2D::UpdateParticle(Particle2D& particle, float timeStep, const Vector3& worldPosition, float worldScale)
 {
     if (timeStep > particle.timeToLive_)
         timeStep = particle.timeToLive_;
@@ -475,10 +522,8 @@ void ParticleEmitter2D::UpdateParticle(Particle2D& particle, float timeStep, flo
     float halfSize = particle.size_ * 0.5f;
     boundingBoxMinPoint_.x_ = Min(boundingBoxMinPoint_.x_, particle.position_.x_ - halfSize);
     boundingBoxMinPoint_.y_ = Min(boundingBoxMinPoint_.y_, particle.position_.y_ - halfSize);
-//    boundingBoxMinPoint_.z_ = Min(boundingBoxMinPoint_.z_, particle.position_.z_);
     boundingBoxMaxPoint_.x_ = Max(boundingBoxMaxPoint_.x_, particle.position_.x_ + halfSize);
     boundingBoxMaxPoint_.y_ = Max(boundingBoxMaxPoint_.y_, particle.position_.y_ + halfSize);
-//    boundingBoxMaxPoint_.z_ = Max(boundingBoxMaxPoint_.z_, particle.position_.z_);
 }
 
 }

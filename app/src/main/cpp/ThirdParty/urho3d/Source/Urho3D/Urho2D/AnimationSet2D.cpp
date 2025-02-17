@@ -122,14 +122,11 @@ AnimationSet2D::AnimationSet2D(Context* context) :
         {
             spriteSheetFilePath_ = customSpritesheetFile_;
             hasSpriteSheet_ = true;
-
-//            URHO3D_LOGERRORF("AnimationSet2D : this=%u - Use custom spritesheet file=%s", this, customSpritesheetFile_.CString());
         }
         else
         {
             spriteSheetFilePath_.Clear();
             hasSpriteSheet_ = false;
-            URHO3D_LOGERRORF("AnimationSet2D : this=%u - Could not find custom spritesheet file=%s", this, customSpritesheetFile_.CString());
         }
     }
 }
@@ -227,39 +224,53 @@ bool AnimationSet2D::HasAnimation(const String& animationName) const
     return false;
 }
 
+#ifdef URHO3D_SPINE
+Sprite2D* AnimationSet2D::GetSpineSprite() const
+{
+    return spineSprite_;
+}
+#endif
+
 Sprite2D* AnimationSet2D::GetSprite() const
 {
+#ifdef URHO3D_SPINE
+    if (spineSprite_)
+        return spineSprite_;
+#endif
     return sprite_;
 }
 
 Sprite2D* AnimationSet2D::GetSprite(const String& name) const
 {
-    return spriteSheet_->GetSprite(name);
+    return spriteSheet_ ? spriteSheet_->GetSprite(name) : nullptr;
 }
 
 Sprite2D* AnimationSet2D::GetSpriterFileSprite(int folderId, int fileId) const
 {
-    int key = (folderId << 16) + fileId;
-    HashMap<int, SharedPtr<Sprite2D> >::ConstIterator i = spriterFileSprites_.Find(key);
+    if (folderId == -1)
+        return nullptr;
+
+    unsigned key = (folderId << 16) + fileId;
+    HashMap<unsigned, SharedPtr<Sprite2D> >::ConstIterator i = spriterFileSprites_.Find(key);
     if (i != spriterFileSprites_.End())
         return i->second_;
 
-    return 0;
+    return nullptr;
 }
 
 Sprite2D* AnimationSet2D::GetSpriterFileSprite(unsigned key) const
 {
-    HashMap<int, SharedPtr<Sprite2D> >::ConstIterator i = spriterFileSprites_.Find(key);
+    HashMap<unsigned, SharedPtr<Sprite2D> >::ConstIterator i = spriterFileSprites_.Find(key);
     if (i != spriterFileSprites_.End())
         return i->second_;
 
-    return 0;
+    return nullptr;
 }
 
 Sprite2D* AnimationSet2D::GetCharacterMapSprite(const Spriter::CharacterMap* characterMap, unsigned index) const
 {
     if (!characterMap)
-        return 0;
+        return nullptr;
 
     Spriter::MapInstruction* map = characterMap->maps_[index];
     return GetSpriterFileSprite(map->targetFolder_, map->targetFile_);
@@ -318,13 +329,18 @@ bool AnimationSet2D::EndLoadSpine()
         atlasPage = atlasPage->next;
     }
 
+    if (!numAtlasPages)
+    {
+        URHO3D_LOGERROR("no page loaded in atlas");
+        return false;
+    }
     if (numAtlasPages > 1)
     {
         URHO3D_LOGERROR("Only one page is supported in Urho3D");
         return false;
     }
 
-    sprite_ = static_cast<Sprite2D*>(atlas_->pages->rendererObject);
+    spineSprite_ = static_cast<Sprite2D*>(atlas_->pages->rendererObject);
 
     spSkeletonJson* skeletonJson = spSkeletonJson_create(atlas_);
     if (!skeletonJson)
@@ -339,7 +355,7 @@ bool AnimationSet2D::EndLoadSpine()
     spSkeletonJson_dispose(skeletonJson);
     jsonData_.Reset();
 
-    currentAnimationSet = 0;
+    currentAnimationSet = nullptr;
 
     return true;
 }
@@ -437,7 +453,7 @@ bool AnimationSet2D::EndLoadSpriter()
         if (!spriteSheet_)
             return false;
 
-//        URHO3D_LOGINFOF("%s =>", spriteSheet_->GetName().CString());
+        spriterFileSprites_.Clear();
         for (unsigned i = 0; i < spriterData_->folders_.Size(); ++i)
         {
             Spriter::Folder* folder = spriterData_->folders_[i];
@@ -462,15 +478,17 @@ bool AnimationSet2D::EndLoadSpriter()
                     }
 
                     sprite->SetHotSpot(hotSpot);
-//                    URHO3D_LOGINFOF("  -> %s", sprite->Dump().CString());
                 }
 
-                int key = (folder->id_ << 16) + file->id_;
+                unsigned key = (folder->id_ << 16) + file->id_;
                 spriterFileSprites_[key] = sprite;
             }
         }
 
-        sprite_ = spriteSheet_->GetSpriteMapping().Front().second_;
+        if (!sprite_ && !spriterFileSprites_.Empty())
+            sprite_ = spriterFileSprites_.Front().second_;
+        if (!sprite_)
+            sprite_ = spriteSheet_->GetSpriteMapping().Front().second_;
 
         mutliTextures_ = spriteSheet_->GetTextures().Size() > 1;
     }
@@ -569,7 +587,6 @@ bool AnimationSet2D::EndLoadSpriter()
                             continue;
 
                         Image* image = info.image_;
-                        URHO3D_LOGINFOF("AnimationSet2D() - EndLoadSpriter : copy image %s to texture[%u] !", image->GetName().CString(), numTextures);
 
                         for (int y = 0; y < image->GetHeight(); ++y)
                         {
@@ -584,16 +601,11 @@ bool AnimationSet2D::EndLoadSpriter()
                         sprite->SetSourceSize(image->GetWidth(), image->GetHeight());
                         sprite->SetHotSpot(Vector2(info.file_->pivotX_, info.file_->pivotY_));
 
-    //                    URHO3D_LOGINFOF("  -> %s", sprite->Dump().CString());
-
-                        int key = (info.file_->folder_->id_ << 16) + info.file_->id_;
+                        unsigned key = (info.file_->folder_->id_ << 16) + info.file_->id_;
                         spriterFileSprites_[key] = sprite;
                     }
 
                     texture->SetData(0, 0, 0, texturesSizes[i].x_, texturesSizes[i].y_, textureData.Get());
-
-                    URHO3D_LOGINFOF("AnimationSet2D() - EndLoadSpriter : folder=%u texture[%u] size=%dx%d!", folderid, numTextures, texturesSizes[i].x_, texturesSizes[i].y_);
-
                     numTextures++;
                 }
             }
@@ -612,7 +624,7 @@ bool AnimationSet2D::EndLoadSpriter()
                 sprite_->SetSourceSize(info.image_->GetWidth(), info.image_->GetHeight());
                 sprite_->SetHotSpot(Vector2(info.file_->pivotX_, info.file_->pivotY_));
 
-                int key = (info.file_->folder_->id_ << 16) + info.file_->id_;
+                unsigned key = (info.file_->folder_->id_ << 16) + info.file_->id_;
                 spriterFileSprites_[key] = sprite_;
 
                 numTextures++;
@@ -629,6 +641,7 @@ bool AnimationSet2D::EndLoadSpriter()
 void AnimationSet2D::Dispose()
 {
 #ifdef URHO3D_SPINE
+    spineSprite_.Reset();
     if (skeletonData_)
     {
         spSkeletonData_dispose(skeletonData_);
@@ -642,11 +655,10 @@ void AnimationSet2D::Dispose()
     }
 #endif
 
-    spriterData_.Reset();
-
     sprite_.Reset();
-    spriteSheet_.Reset();
+    spriterData_.Reset();
     spriterFileSprites_.Clear();
+    spriteSheet_.Reset();
 }
 
 

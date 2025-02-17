@@ -28,8 +28,23 @@
 namespace Urho3D
 {
 
+/// Drawable2D FX
+enum TextureModeFlag
+{
+    TXM_UNIT = 0,
+    TXM_FX,
+    TXM_FX_LIT,
+    TXM_FX_CROPALPHA,
+    TXM_FX_BLUR,
+    TXM_FX_FXAA,
+    TXM_FX_TILEINDEX
+};
+
+
 class Drawable2D;
+class Material;
 class Renderer2D;
+class Texture;
 class Texture2D;
 class VertexBuffer;
 
@@ -42,6 +57,8 @@ struct Vertex2D
     unsigned color_;
     /// UV.
     Vector2 uv_;
+    /// Texture Id & Effect
+	Vector4 texmode_;
 };
 
 /// 2D source batch.
@@ -85,11 +102,21 @@ public:
 
     /// Set layer.
     void SetLayer(int layer);
+    void SetLayerModifier(int layermodifier);
     /// Set order in layer.
     void SetOrderInLayer(int orderInLayer);
 
+    void SetTextureFX(int effect) { textureFX_ = effect; }
+    int GetTextureFX() const { return textureFX_; }
+
+    static void SetTextureMode(TextureModeFlag flag, unsigned value, unsigned& texmode);
+    static unsigned GetTextureMode(TextureModeFlag flag, unsigned texmode);
+    static void SetTextureMode(TextureModeFlag flag, unsigned value, Vector4& texmode);
+    static unsigned GetTextureMode(TextureModeFlag flag, const Vector4& texmode);
+
     /// Return layer.
     int GetLayer() const { return layer_; }
+    int GetLayerModifier() const { return layerModifier_; }
 
     /// Return order in layer.
     int GetOrderInLayer() const { return orderInLayer_; }
@@ -102,11 +129,8 @@ public:
 
     void MarkDirty();
 
-//    /// Return all source batches (called by Renderer2D).
-//    const Vector<SourceBatch2D>& GetSourceBatches();
     /// Return all source batches To Renderer (called by Renderer2D).
-    const Vector<SourceBatch2D* >& GetSourceBatchesToRender();
-//    virtual BoundingBox GetFixedWorldBoundingBox();
+    virtual const Vector<SourceBatch2D* >& GetSourceBatchesToRender(Camera* camera);
 
     void ForceUpdateBatches();
 
@@ -122,27 +146,28 @@ protected:
 
     /// Update source batches.
     virtual void UpdateSourceBatches() = 0;
-    virtual void UpdateSourceBatchesToRender();
+    void UpdateSourceBatchesToRender();
     virtual bool UpdateDrawRectangle();
 
     /// Return draw order by layer and order in layer.
-    int GetDrawOrder() const { return (layer_ << 20) + (orderInLayer_ << 10); }
+    int GetDrawOrder() const { return ((layer_ + layerModifier_) << 20) + (orderInLayer_ << 10); }
 
     /// Layer.
     int layer_;
+    int layerModifier_;
     /// Order in layer.
     int orderInLayer_;
+
+    int textureFX_;
 
     /// DrawRect.
 	Rect drawRect_;
     bool drawRectDirty_;
 
-    /// Visibility.
-	bool visibility_;
-
-    /// Source batches.
+    /// Prepared Internal Source batches.
     Vector<SourceBatch2D> sourceBatches_;
-    Vector<SourceBatch2D*> sourceBatchesToRender_;
+    /// Source batches to be rendered.
+    Vector<SourceBatch2D* > sourceBatchesToRender_;
 
     /// Source batches dirty flag.
     bool sourceBatchesDirty_;
@@ -150,5 +175,10 @@ protected:
     /// Renderer2D.
     WeakPtr<Renderer2D> renderer_;
 };
+
+int GetTextureUnit(Material* material, Texture* texture);
+
+Color MultColors(const Color& c1, const Color& c2);
+Color MultColors(const Color& c1, const Color& c2, const Color& c3);
 
 }

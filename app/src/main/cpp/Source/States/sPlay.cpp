@@ -178,7 +178,7 @@ void PlayState::Begin()
 
     rootScene_->StopAsyncLoading();
 
-    rootScene_->GetComponent<Renderer2D>()->orthographicMode_ = false;
+    rootScene_->GetComponent<Renderer2D>()->SetCheckVisibility(false);
 
     GameState::Begin();
 
@@ -204,7 +204,7 @@ void PlayState::End()
     GameStatics::peerConnected_ = false;
 #endif
 
-    rootScene_->GetComponent<Renderer2D>()->orthographicMode_ = true;
+    rootScene_->GetComponent<Renderer2D>()->SetCheckVisibility(true);
 
     UnsubscribeFromEvent(E_POSTUPDATE);
 
@@ -274,7 +274,7 @@ void PlayState::SetLevelDatas()
         for (unsigned i=0; i < GameStatics::currentLevelDatas_->objectiveTypes_.Size() ; i++)
         {
             objectives[i][0] = GameStatics::currentLevelDatas_->objectiveQties_[i];
-            objectives[i][1] = GameStatics::currentLevelDatas_->objectiveTypes_[i];
+            objectives[i][1] = GameStatics::currentLevelDatas_->objectiveTypes_[i].Value();
             MatchesManager::RegisterObjective(GameStatics::currentLevelDatas_->objectiveNames_[i], GameStatics::currentLevelDatas_->objectiveQties_[i]);
             GameStatics::numRemainObjectives_ += objectives[i][0];
         }

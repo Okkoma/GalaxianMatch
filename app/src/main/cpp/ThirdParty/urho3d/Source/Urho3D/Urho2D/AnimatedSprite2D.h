@@ -1,3 +1,5 @@
+#pragma once
+
 //
 // Copyright (c) 2008-2016 the Urho3D project.
 //
@@ -20,8 +22,6 @@
 // THE SOFTWARE.
 //
 
-#pragma once
-
 #include "../Urho2D/StaticSprite2D.h"
 
 #ifdef URHO3D_SPINE
@@ -41,8 +41,6 @@ enum LoopMode2D
     LM_FORCE_CLAMPED
 };
 
-
-
 namespace Urho3D
 {
 
@@ -51,34 +49,54 @@ namespace Spriter
     class SpriterInstance;
     struct Animation;
     struct CharacterMap;
+    struct MapInstruction;
     struct SpatialTimelineKey;
     struct SpriteTimelineKey;
 }
 
 class AnimationSet2D;
 
-    struct SpriteInfo
-    {
-        SpriteInfo() : sprite_(0) { }
+struct SpriteMapInfo
+{
+    SpriteMapInfo();
 
-        Sprite2D* sprite_;
-        float scalex_;
-        float scaley_;
-        float deltaHotspotx_;
-        float deltaHotspoty_;
-    };
+    void Clear();
+    void Set(unsigned key, Sprite2D* sprite, Spriter::CharacterMap* map, Spriter::MapInstruction* instruction);
 
-    struct EventTriggerInfo
+    unsigned key_;
+    SharedPtr<Sprite2D> sprite_;
+    Spriter::CharacterMap* map_;
+    Spriter::MapInstruction* instruction_;
+};
+
+struct SpriteInfo
+{
+    SpriteInfo() : mapinfo_(nullptr), sprite_(nullptr) { }
+
+    void Set(Sprite2D* sprite, const Vector2& scale=Vector2::ONE, const Vector2& dPivot=Vector2::ZERO)
     {
-        StringHash type_;
-        StringHash type2_;
-        unsigned char entityid_;
-        Vector2 position_;
-        float rotation_;
-        int zindex_;
-        Node* node_;
-        String datas_;
-    };
+        scale_ = scale;
+        dPivot_ = dPivot;
+        sprite_ = sprite;
+    }
+
+    Vector2 scale_, dPivot_;
+    const SpriteMapInfo* mapinfo_;
+    Sprite2D* sprite_;
+    const Color* pcolor_;
+};
+
+struct EventTriggerInfo
+{
+    StringHash type_;
+    StringHash type2_;
+    unsigned char entityid_;
+    Vector2 position_;
+    float rotation_;
+    int zindex_;
+    Node* node_;
+    String datas_;
+};
 
 /// Animated sprite component, it uses to play animation created by Spine (http://www.esotericsoftware.com) and Spriter (http://www.brashmonkey.com/).
 class URHO3D_API AnimatedSprite2D : public StaticSprite2D
@@ -112,8 +130,8 @@ public:
     void SetLoopMode(LoopMode2D loopMode);
     /// Set speed.
     void SetSpeed(float speed);
-    /// Set animation enable for rendering
-    void SetRenderEnable(bool enable, int zindex=0);
+    /// Set Current Animation Time position.
+    void SetCurrentAnimationTime(float time);
     void SetCustomSpriteSheetAttr(const String& value);
     /// Set animation set attribute.
     void SetAnimationSetAttr(const ResourceRef& value);
@@ -125,18 +143,12 @@ public:
     /// Reset Animation
     void ResetAnimation();
 
-    void SetTime(float time);
-
 /// ENTITY/ANIMATION GETTERS
 
     /// Return animation Set.
     AnimationSet2D* GetAnimationSet() const;
     /// Return Spriter Animation by index or the current animation.
     Spriter::Animation* GetSpriterAnimation(int index=-1) const;
-    /// Return Current Spriter Animation ID.
-	int GetSpriterAnimationId() const;
-    /// Return Spriter Animation ID with name.
-	int GetSpriterAnimationId(const String& animationName) const;
     /// Return Spriter Animation by Name
     Spriter::Animation* GetSpriterAnimation(const String& animationName) const;
     /// Return entity name.
@@ -151,6 +163,7 @@ public:
     /// Return animation name.
     bool HasAnimation(const String& name) const;
     const String& GetAnimation() const { return animationName_; }
+    int GetAnimationIndex() const { return animationIndex_; }
     /// Return animation name by default.
     const String& GetDefaultAnimation() const;
     /// Return loop mode.
@@ -158,16 +171,14 @@ public:
     /// Return speed.
     float GetSpeed() const { return speed_; }
 
-    /// Return time passed on the current animation.
+    /// Return the total time length of the current animation.
     float GetCurrentAnimationLength() const;
+    /// Return time passed on the current animation.
     float GetCurrentAnimationTime() const;
     bool HasFinishedAnimation() const;
 
     /// Return SpriterInstance
     Spriter::SpriterInstance* GetSpriterInstance() const;
-
-    void GetLocalSpritePositions(unsigned spriteindex, Vector2& position, float& angle, Vector2& scale);
-    Sprite2D* GetSprite(unsigned spriteindex) const; //, bool fromInstance=false) const;
 
     /// Get Event Trigger Infos
     const EventTriggerInfo& GetEventTriggerInfo() const { return triggerInfo_; }
@@ -179,6 +190,7 @@ public:
 
     void SetAppliedCharacterMapsAttr(const VariantVector& characterMapApplied);
     void SetCharacterMapAttr(const String& names);
+    void ResetCharacterMapping(bool resetSwappedSprites=true);
 
     bool ApplyCharacterMap(const StringHash& hashname);
     bool ApplyCharacterMap(const String& name);
@@ -187,15 +199,14 @@ public:
     void SwapSprites(const StringHash& characterMap, const PODVector<Sprite2D*>& replacements, bool keepProportion=false);
     void SwapSprite(const String& characterMap, Sprite2D* replacement, unsigned index=0, bool keepProportion=false);
     void SwapSprites(const String& characterMap, const PODVector<Sprite2D*>& replacements, bool keepProportion=false);
+    void SwapSprite(Sprite2D* original, Sprite2D* replacement, bool keepProportion=false);
+    void SwapSprites(const PODVector<Sprite2D*>& originals, const PODVector<Sprite2D*>& replacements, bool keepProportion=false);
 
     void UnSwapSprite(Sprite2D* original);
     void UnSwapAllSprites();
 
-    void ResetCharacterMapping();
-
 /// CHARACTER MAPPING GETTERS
 
-//    String GetCharacterMapAttr() const;
     const VariantVector& GetAppliedCharacterMapsAttr() const;
     const String& GetEmptyString() const { return String::EMPTY; }
 
@@ -215,7 +226,13 @@ public:
     Sprite2D* GetMappedSprite(unsigned key) const;
     Sprite2D* GetMappedSprite(int folderid, int fileid) const;
     Sprite2D* GetSwappedSprite(Sprite2D* original) const;
+    Sprite2D* GetSprite(unsigned spriteindex) const;
+    unsigned GetNumSpriteKeys() const;
+    const PODVector<Spriter::SpriteTimelineKey* >& GetSpriteKeys() const;
     const PODVector<SpriteInfo*>& GetSpriteInfos();
+    const HashMap<unsigned, SpriteMapInfo >& GetSpriteMapping() const { return spriteMapping_; }
+    const SpriteMapInfo* GetSpriteMapInfo(unsigned key) const;
+    const HashMap<Sprite2D*, HashMap<Sprite2D*, SpriteInfo> >& GetSpriteSwapping() const { return spriteInfoMapping_; }
 
 /// FOR UI Batch / UI AnimatedSprite
     template< typename T > void GetVertices(const IntVector2& size, const T& transform, PODVector<float>& verticeData);
@@ -234,8 +251,6 @@ protected:
     virtual void OnSceneSet(Scene* scene);
     /// Handle update vertices.
     virtual void UpdateSourceBatches();
-//    /// Update material.
-//    virtual void UpdateMaterial();
     virtual bool UpdateDrawRectangle();
 
     /// Handle scene post update.
@@ -250,39 +265,29 @@ protected:
     void UpdateSourceBatchesSpine();
 #endif
 
-    /// Set Spriter triggers.
-    void SetTriggers();
+    /// Update spriter triggers.
+    void UpdateTriggers();
     void HideTriggers();
     void ClearTriggers(bool removeNode);
-
-    /// Update Spriter triggers.
-    inline void LocalToWorld(Spriter::SpatialTimelineKey* key, Vector2& position, float& rotation);
-    void UpdateTriggers();
 
     /// Update spriter animation.
     void UpdateSpriterAnimation(float timeStep);
 
     /// Update Batches
-    template< typename T > void UpdateSourceBatchesSpriter_OneMaterial(const T& nodeWorldTransform, Vector<SourceBatch2D>& sourceBatches, bool resetBatches=true);
-    template< typename T > void UpdateSourceBatchesSpriter_MultiMaterials(const T& nodeWorldTransform, Vector<SourceBatch2D>& sourceBatches, int breakZIndex=-1, bool resetBatches=true);
+    inline void LocalToWorld(Spriter::SpatialTimelineKey* key, Vector2& position, float& rotation);
+    void SetCustomSourceBatches(Vector<SourceBatch2D>* sourceBatches);
+    void UpdateSourceBatchesSpriter(Vector<SourceBatch2D>* sourceBatches, bool resetBatches=true);
+    void UpdateSourceBatchesSpriter_Custom(Vector<SourceBatch2D>* sourceBatches, int breakZIndex=-1, bool resetBatches=true);
 
-    void UpdateSourceBatchesSpriter_RenderNodes();
-    void UpdateSourceBatchesSpriter_RenderNodesOrthographic();
-
-    inline void AddSprite(Sprite2D* sprite, const Matrix3x4& transform, float x, float y, float px, float py, float sx, float sy, float angle, float alpha, float* vertices);
-    inline void AddSprite(Sprite2D* sprite, const Matrix2x3& transform, float x, float y, float px, float py, float sx, float sy, float angle, float alpha, float* vertices);
-    inline void AddSprite_UI(Sprite2D* sprite, const IntVector2& size, const Matrix3x4& transform, float x, float y, float px, float py, float sx, float sy, float angle, float alpha, float* vertices);
+    void AddSprite_UI(Sprite2D* sprite, const IntVector2& size, const Matrix3x4& transform, float x, float y, float px, float py, float sx, float sy, float angle, float alpha, float* vertices);
 
     /// Dispose.
     void Dispose(bool removeNode=false);
 
-    /// Character Maps
+    /// Character Mapping
     bool ApplyCharacterMap(Spriter::CharacterMap* characterMap);
 
-    void SwapSprite(Sprite2D* original, Sprite2D* replacement, bool keepProportion=false);
-    void SwapSprites(const PODVector<Sprite2D*>& originals, const PODVector<Sprite2D*>& replacements, bool keepProportion=false);
-
-    SpriteInfo* GetSpriteInfo(Sprite2D* sprite);
+    SpriteInfo* GetSpriteInfo(unsigned key, const SpriteMapInfo* mapinfo, Sprite2D* sprite, Sprite2D* origin);
 
     /// Speed.
     float speed_;
@@ -298,7 +303,6 @@ protected:
     /// characterMap using
     bool useCharacterMap_;
     bool characterMapDirty_;
-    bool renderEnabled_;
 	int renderZIndex_;
 	unsigned firstKeyIndex_, stopKeyIndex_;
 
@@ -316,12 +320,10 @@ protected:
 
     PODVector<StringHash> activedEventTriggers_;
     PODVector<Node* > updatedPhysicNodes_;
-    PODVector<Node* > triggerNodes_;
-    PODVector<Node* > renderNodes_;
+    Vector<WeakPtr<Node> > triggerNodes_;
 
     /// Spriter Batch Update
     PODVector<Spriter::SpriteTimelineKey* > spritesKeys_;
-//    PODVector<Sprite2D*> sprites_;
     PODVector<SpriteInfo*> spritesInfos_;
 
     /// Applied Character Maps.
@@ -329,14 +331,16 @@ protected:
     VariantVector characterMapApplied_;
 
     /// Current Sprite Mapping.
-    HashMap<unsigned, SharedPtr<Sprite2D> > spriteMapping_;
+    HashMap<unsigned, SpriteMapInfo > spriteMapping_;
     /// Swap Sprite Mapping
     HashMap<Sprite2D*, SharedPtr<Sprite2D> > swappedSprites_;
     /// Swap Sprite Mapping Info
-    HashMap<Sprite2D*, SpriteInfo > spriteInfoMapping_;
+    HashMap<Sprite2D*, HashMap<Sprite2D*, SpriteInfo> > spriteInfoMapping_;
 
     /// Trigger Infos
     EventTriggerInfo triggerInfo_;
+    Vector<SourceBatch2D>* customSourceBatches_;
+    int animationIndex_;
 };
 
 }

@@ -40,18 +40,20 @@ class URHO3D_API SpriteSheet2D : public Resource
 
 public:
     /// Construct.
-    SpriteSheet2D(Context* context);
+    explicit SpriteSheet2D(Context* context);
     /// Destruct.
-    virtual ~SpriteSheet2D();
+    ~SpriteSheet2D();
     /// Register object factory.
+    /// @nobind
     static void RegisterObject(Context* context);
 
     /// Load resource from stream. May be called from a worker thread. Return true if successful.
-    virtual bool BeginLoad(Deserializer& source);
+    bool BeginLoad(Deserializer& source) override;
     /// Finish resource loading. Always called from the main thread. Return true if successful.
-    virtual bool EndLoad();
+    bool EndLoad() override;
 
     /// Set texture.
+    /// @property
     void SetTexture(Texture2D* texture);
     /// Define sprite.
     void DefineSprite(const String& name, const IntRect& rectangle, const Vector2& hotSpot = Vector2(0.5f, 0.5f),
@@ -60,8 +62,9 @@ public:
     void DefineSprite(unsigned textureindex, const String& name, const IntRect& rectangle, const Vector2& hotSpot = Vector2(0.5f, 0.5f),
         const IntVector2& offset = IntVector2::ZERO);
     /// Define sprite (rotated version)
-    void DefineSprite(const String& name, int fw, int fh, int fx, int fy, int sw, int sh, int ssx, int ssy, bool rotated);
+    void DefineSprite(const String& name, int fw, int fh, int fx, int fy, int sw, int sh, int ssx, int ssy);
     /// Return texture.
+    /// @property
     Texture2D* GetTexture() const { return texture_; }
     Texture2D* GetTexture(unsigned index) const { return textures_[index]; }
     const Vector<SharedPtr<Texture2D> >& GetTextures() const { return textures_; }
@@ -99,7 +102,8 @@ private:
     /// XML file used while loading.
     SharedPtr<XMLFile> loadXMLFile_;
     /// JSON file used while loading.
-    SharedPtr<JSONFile> loadJSONFile_, loadSpriterFile_;
+    SharedPtr<JSONFile> loadJSONFile_;
+    SharedPtr<JSONFile> loadSpriterFile_;
     /// Texture name used while loading.
     String loadTextureName_;
     Vector<String> loadTextureNames_;

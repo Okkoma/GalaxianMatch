@@ -36,6 +36,8 @@ namespace Urho3D
 
 namespace Spriter
 {
+    struct Entity;
+    struct Ref;
     struct SpriterData;
     struct CharacterMap;
 }
@@ -73,6 +75,7 @@ public:
     Sprite2D* GetSprite(const String& name) const;
 
 #ifdef URHO3D_SPINE
+    Sprite2D* GetSpineSprite() const;
     /// Return spine skeleton data.
     spSkeletonData* GetSkeletonData() const { return skeletonData_; }
 #endif
@@ -87,9 +90,10 @@ public:
     void GetCharacterMapSprites(const Spriter::CharacterMap* characterMap, PODVector<Sprite2D*>& sprites);
     void GetSpritesCharacterMapRef(Spriter::CharacterMap* characterMap, ResourceRefList& spriteRefList);
 
-    bool IsMultiTextures() const { return mutliTextures_; }
+    SpriteSheet2D* GetSpriteSheet() const { return spriteSheet_; }
+    const HashMap<unsigned, SharedPtr<Sprite2D> >& GetSpriteMapping() const { return spriterFileSprites_; }
 
-    const HashMap<int, SharedPtr<Sprite2D> >& GetSpriteMapping() const { return spriterFileSprites_; }
+    bool IsMultiTextures() const { return mutliTextures_; }
 
     static String customSpritesheetFile_;
 
@@ -109,10 +113,10 @@ private:
     /// Dispose all data.
     void Dispose();
 
-    /// Spine sprite.
     SharedPtr<Sprite2D> sprite_;
 
 #ifdef URHO3D_SPINE
+    SharedPtr<Sprite2D> spineSprite_;
     /// Spine json data.
     SharedArrayPtr<char> jsonData_;
     /// Spine skeleton data.
@@ -130,7 +134,7 @@ private:
     /// Sprite sheet.
     SharedPtr<SpriteSheet2D> spriteSheet_;
     /// Spriter sprites.
-    HashMap<int, SharedPtr<Sprite2D> > spriterFileSprites_;
+    HashMap<unsigned, SharedPtr<Sprite2D> > spriterFileSprites_;
 
     bool mutliTextures_;
 };

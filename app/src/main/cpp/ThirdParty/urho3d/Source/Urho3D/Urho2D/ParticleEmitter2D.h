@@ -95,11 +95,13 @@ public:
     /// Set blend mode.
     void SetBlendMode(BlendMode blendMode);
     /// Set max particles.
-    void SetMaxParticles(unsigned maxParticles);
+    void SetMaxParticles(int maxParticles);
     /// Set color.
     void SetColor(const Color& color);
     /// Set alpha.
     void SetAlpha(float alpha);
+    /// Set custom material.
+    void SetCustomMaterial(Material* customMaterial);
 
     /// Return particle effect.
     ParticleEffect2D* GetEffect() const;
@@ -115,6 +117,8 @@ public:
     const Color& GetColor() const { return color_; }
     /// Return alpha.
     float GetAlpha() const { return color_.a_; }
+    /// Return custom material.
+    Material* GetCustomMaterial() const;
 
     /// Set particle model attr.
     void SetParticleEffectAttr(const ResourceRef& value);
@@ -124,6 +128,10 @@ public:
     void SetSpriteAttr(const ResourceRef& value);
     /// Return sprite attribute.
     ResourceRef GetSpriteAttr() const;
+    /// Set custom material attribute.
+    void SetCustomMaterialAttr(const ResourceRef& value);
+    /// Return custom material attribute.
+    ResourceRef GetCustomMaterialAttr() const;
     /// Set Loop attribute.
     void SetLooped(bool value);
     /// Return Loop attribute.
@@ -146,10 +154,8 @@ private:
     void Update(float timeStep);
     /// Emit particle.
     bool EmitParticle(const Vector2& worldPosition, float worldAngle, float worldScale);
-//    bool EmitParticle(const Vector3& worldPosition, float worldAngle, float worldScale);
     /// Update particle.
     void UpdateParticle(Particle2D& particle, float timeStep, float worldScale);
-//    void UpdateParticle(Particle2D& particle, float timeStep, const Vector3& worldPosition, float worldScale);
 
     /// Particle effect.
     SharedPtr<ParticleEffect2D> effect_;
@@ -157,8 +163,9 @@ private:
     SharedPtr<Sprite2D> sprite_;
     /// Blend mode.
     BlendMode blendMode_;
-    /// Nummber of particles.
-    unsigned numParticles_;
+    /// Number of particles.
+    int numParticles_;
+    int maxParticles_;
     /// Emission time.
     float emissionTime_;
     /// Emit particle time
@@ -173,6 +180,8 @@ private:
     bool looped_;
     /// Color.
     Color color_;
+    /// Custom material.
+    SharedPtr<Material> customMaterial_;
 };
 
 }

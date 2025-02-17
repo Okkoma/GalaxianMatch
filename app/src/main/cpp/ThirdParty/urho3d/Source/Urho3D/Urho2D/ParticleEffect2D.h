@@ -326,6 +326,7 @@ private:
     float rotationEndVariance_;
     /// Sprite name acquired during BeginLoad().
     String loadSpriteName_;
+    ResourceRef resourceRef_;
 };
 
 }

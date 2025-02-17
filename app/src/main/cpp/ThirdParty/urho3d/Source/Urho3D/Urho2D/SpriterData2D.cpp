@@ -39,6 +39,39 @@ namespace Urho3D
 namespace Spriter
 {
 
+const int FloatPrecision = 6;
+const char* ScmlVersion = "1.0";
+const char* ScmlGeneratorStr = "Urho3DSCML";
+const char* ScmlGeneratorVersionStr = "r1";
+
+const char* ObjectTypeStr[] =
+{
+    "bone",
+    "sprite",
+    "point",
+    "box"
+};
+
+const char* CurveTypeStr[] =
+{
+    "instant",
+    "linear",
+    "quadratic",
+    "cubic",
+    "quartic",
+    "quintic",
+    "bezier"
+};
+
+String GetFloatStr(float number, int precision)
+{
+    int numDigitBeforeDecimal = String(static_cast<int>(number)).Length();
+    char resultat[20];
+    sprintf(resultat, "%.*g", precision + numDigitBeforeDecimal, number);
+    return String(resultat);
+}
+
+
 SpriterData::SpriterData()
 {
 }
@@ -52,29 +85,34 @@ void SpriterData::Reset()
 {
     if (!folders_.Empty())
     {
-        for (unsigned i = 0; i < folders_.Size(); ++i)
+        for (size_t i = 0; i < folders_.Size(); ++i)
             delete folders_[i];
         folders_.Clear();
     }
 
     if (!entities_.Empty())
     {
-        for (unsigned i = 0; i < entities_.Size(); ++i)
+        for (size_t i = 0; i < entities_.Size(); ++i)
             delete entities_[i];
         entities_.Clear();
     }
+}
+
+const char* SpriterData::GetCurveTypeStr(CurveType type)
+{
+    return CurveTypeStr[type];
 }
 
 bool SpriterData::Load(const pugi::xml_node& node)
 {
     Reset();
 
-    if (strcmp(node.name(), "spriter_data") != 0)
+    if (strcmp(node.name(), "spriter_data"))
         return false;
 
     scmlVersion_ = node.attribute("scml_version").as_int();
     generator_ = node.attribute("generator").as_string();
-    generatorVersion_ = node.attribute("scml_version").as_string();
+    generatorVersion_ = node.attribute("generator_version").as_string();
 
     for (xml_node folderNode = node.child("folder"); !folderNode.empty(); folderNode = folderNode.next_sibling("folder"))
     {
@@ -107,63 +145,52 @@ bool SpriterData::Load(const void* data, size_t size)
     if (!document.load_buffer(data, size))
         return false;
 
-    return Load(document.child("spriter_data"));
+    bool loaded = Load(document.child("spriter_data"));
+    return loaded;
 }
-
-#ifdef USE_KEYPOOLS
-void SpriterData::InitKeyPools(unsigned poolSize)
-{
-    BoneTimelineKey::pool_.Resize(poolSize);
-    BoneTimelineKey::FreeAlls();
-    SpriteTimelineKey::pool_.Resize(poolSize);
-    SpriteTimelineKey::FreeAlls();
-    BoxTimelineKey::pool_.Resize(poolSize);
-    BoxTimelineKey::FreeAlls();
-}
-#endif
 
 void SpriterData::UpdateKeyInfos()
 {
-//    URHO3D_LOGINFOF("SpriterData : UpdateKeyInfos !");
-
     for (PODVector<Entity*>::ConstIterator entity = entities_.Begin(); entity != entities_.End(); ++entity)
     {
         const PODVector<Animation*>& animations = (*entity)->animations_;
         for (PODVector<Animation*>::ConstIterator animation = animations.Begin(); animation != animations.End(); ++animation)
         {
             const PODVector<Timeline*>& timelines = (*animation)->timelines_;
-            for (PODVector<Timeline*>::ConstIterator timeline = timelines.Begin(); timeline != timelines.End(); ++timeline)
+            for (PODVector<Timeline*>::ConstIterator timelinet = timelines.Begin(); timelinet != timelines.End(); ++timelinet)
             {
-                if ((*timeline)->objectType_ != SPRITE && (*timeline)->objectType_  != BOX)
+                Timeline* timeline = *timelinet;
+                if (timeline->objectType_ != SPRITE && timeline->objectType_ != BOX)
                     continue;
 
-                const PODVector<SpatialTimelineKey*>& keys = (*timeline)->keys_;
-                const ObjInfo& objinfo = (*entity)->objInfos_[(*timeline)->name_];
+                const PODVector<SpatialTimelineKey*>& keys = timeline->keys_;
 
                 for (PODVector<SpatialTimelineKey*>::ConstIterator key = keys.Begin(); key != keys.End(); ++key)
                 {
                     if ((*key)->GetObjectType() == SPRITE)
                     {
                         SpriteTimelineKey* spriteKey = (SpriteTimelineKey*) (*key);
+                        File* file = folders_[spriteKey->folderId_]->files_[spriteKey->fileId_];
+                        spriteKey->fx_ = file->fx_;
                         if (spriteKey->useDefaultPivot_)
                         {
-                            spriteKey->pivotX_ = folders_[spriteKey->folderId_]->files_[spriteKey->fileId_]->pivotX_;
-                            spriteKey->pivotY_ = folders_[spriteKey->folderId_]->files_[spriteKey->fileId_]->pivotY_;
-//                            URHO3D_LOGINFOF(" ... anim=%s t=%s k=%d is using DefautPivot x=%f y=%f",
-//                                            (*animation)->name_.CString(), (*timeline)->name_.CString(),
-//                                            spriteKey->id_, spriteKey->pivotX_, spriteKey->pivotY_);
+                            spriteKey->pivotX_ = file->pivotX_;
+                            spriteKey->pivotY_ = file->pivotY_;
                         }
                     }
                     else if ((*key)->GetObjectType() == BOX)
                     {
-                        BoxTimelineKey* boxKey = (BoxTimelineKey*) (*key);
-
-                        boxKey->width_ = objinfo.width_;
-                        boxKey->height_ = objinfo.height_;
-                        if (boxKey->useDefaultPivot_)
+                        HashMap<StringHash, ObjInfo >::Iterator objit = (*entity)->objInfos_.Find(timeline->hashname_);
+                        if (objit != (*entity)->objInfos_.End())
                         {
-                            boxKey->pivotX_ = objinfo.pivotX_;
-                            boxKey->pivotY_ = objinfo.pivotY_;
+                            BoxTimelineKey* boxKey = (BoxTimelineKey*) (*key);
+                            boxKey->width_ = objit->second_.width_;
+                            boxKey->height_ = objit->second_.height_;
+                            if (boxKey->useDefaultPivot_)
+                            {
+                                boxKey->pivotX_ = objit->second_.pivotX_;
+                                boxKey->pivotY_ = objit->second_.pivotY_;
+                            }
                         }
                     }
                 }
@@ -184,7 +211,7 @@ Folder::~Folder()
 
 void Folder::Reset()
 {
-    for (unsigned i = 0; i < files_.Size(); ++i)
+    for (size_t i = 0; i < files_.Size(); ++i)
         delete files_[i];
     files_.Clear();
 }
@@ -193,10 +220,10 @@ bool Folder::Load(const pugi::xml_node& node)
 {
     Reset();
 
-    if (strcmp(node.name(), "folder") != 0)
+    if (strcmp(node.name(), "folder"))
         return false;
 
-    id_ = node.attribute("id").as_int();
+    id_ = node.attribute("id").as_uint();
     name_ = node.attribute("name").as_string();
 
     for (xml_node fileNode = node.child("file"); !fileNode.empty(); fileNode = fileNode.next_sibling("file"))
@@ -220,10 +247,11 @@ File::~File()
 
 bool File::Load(const pugi::xml_node& node)
 {
-    if (strcmp(node.name(), "file") != 0)
+    if (strcmp(node.name(), "file"))
         return false;
 
-    id_ = node.attribute("id").as_int();
+    id_ = node.attribute("id").as_uint(0);
+    fx_ = node.attribute("fx").as_uint(0);
     name_ = node.attribute("name").as_string();
     width_ = node.attribute("width").as_float();
     height_ = node.attribute("height").as_float();
@@ -245,11 +273,11 @@ Entity::~Entity()
 
 void Entity::Reset()
 {
-    for (unsigned i = 0; i < characterMaps_.Size(); ++i)
+    for (size_t i = 0; i < characterMaps_.Size(); ++i)
         delete characterMaps_[i];
     characterMaps_.Clear();
 
-    for (unsigned i = 0; i < animations_.Size(); ++i)
+    for (size_t i = 0; i < animations_.Size(); ++i)
         delete animations_[i];
     animations_.Clear();
 }
@@ -258,20 +286,27 @@ bool Entity::Load(const pugi::xml_node& node)
 {
     Reset();
 
-    if (strcmp(node.name(), "entity") != 0)
+    if (strcmp(node.name(), "entity"))
         return false;
 
-    id_ = node.attribute("id").as_int();
+    id_ = node.attribute("id").as_uint();
     name_ = String(node.attribute("name").as_string());
 
-    URHO3D_LOGINFOF("SpriterData : Load Entity = %s", name_.CString());
-
+    xml_attribute colorAttr = node.attribute("color");
+    if (!colorAttr.empty())
+        color_ = ToColor(String(node.attribute("color").as_string()));
+    
     for (xml_node objInfoNode = node.child("obj_info"); !objInfoNode.empty(); objInfoNode = objInfoNode.next_sibling("obj_info"))
     {
-        if (!ObjInfo::Load(objInfoNode, objInfos_[String(objInfoNode.attribute("name").as_string())]))
+        String name(objInfoNode.attribute("name").as_string());
+        if (!name.Empty())
         {
-            URHO3D_LOGERRORF("SpriterData : Error In Entities:ObjInfo !");
-            return false;
+            StringHash hashname(name);
+            if (!ObjInfo::Load(objInfoNode, objInfos_[hashname]))
+            {
+                URHO3D_LOGERRORF("SpriterFXData : Error In Entities:ObjInfo !");
+                return false;
+            }
         }
     }
 
@@ -321,7 +356,10 @@ bool ObjInfo::Load(const pugi::xml_node& node, ObjInfo& objinfo)
         objinfo.type_ = POINT;
     else if (type == "box")
         objinfo.type_ = BOX;
+    else
+        return false;
 
+    objinfo.name_   = node.attribute("name").as_string();
     objinfo.width_ = node.attribute("w").as_float(10.f);
     objinfo.height_ = node.attribute("h").as_float(10.f);
     objinfo.pivotX_ = node.attribute("pivot_x").as_float(0.f);
@@ -353,10 +391,10 @@ bool CharacterMap::Load(const pugi::xml_node& node)
 {
     Reset();
 
-    if (strcmp(node.name(), "character_map") != 0)
+    if (strcmp(node.name(), "character_map"))
         return false;
 
-    id_ = node.attribute("id").as_int();
+    id_ = node.attribute("id").as_uint();
     name_ = String(node.attribute("name").as_string());
     hashname_ = StringHash(name_);
 
@@ -373,27 +411,112 @@ bool CharacterMap::Load(const pugi::xml_node& node)
     return true;
 }
 
-MapInstruction::MapInstruction()
+MapInstruction* CharacterMap::GetInstruction(unsigned key, bool add)
 {
+    unsigned folder;
+    unsigned file;
+    GetFolderFile(key, folder, file);
 
+    MapInstruction* instruction = GetInstruction(folder, file);
+
+    for (PODVector<MapInstruction*>::ConstIterator it = maps_.Begin(); it != maps_.End(); ++it)
+    {
+        MapInstruction* mapinstruct = *it;
+        if (mapinstruct->folder_ == folder && mapinstruct->file_ == file)
+        {
+            return mapinstruct;
+        }
+    }
+
+    if (!instruction && add)
+    {
+        instruction = new MapInstruction();
+        instruction->SetOrigin(key);
+        maps_.Push(instruction);
+    }
+
+    return instruction;
 }
+
+MapInstruction* CharacterMap::GetInstruction(unsigned folder, unsigned file)
+{
+    for (PODVector<MapInstruction*>::ConstIterator it = maps_.Begin(); it != maps_.End(); ++it)
+    {
+        MapInstruction* mapinstruct = *it;
+        if (mapinstruct->folder_ == folder && mapinstruct->file_ == file)
+            return mapinstruct;
+    }
+    return 0;
+}
+
+MapInstruction* CharacterMap::RemoveInstruction(unsigned key)
+{
+    unsigned folder;
+    unsigned file;
+    GetFolderFile(key, folder, file);
+
+    for (PODVector<MapInstruction*>::Iterator it = maps_.Begin(); it != maps_.End(); ++it)
+    {
+        MapInstruction* mapinstruct = *it;
+        if (mapinstruct->folder_ == folder && mapinstruct->file_ == file)
+        {
+            maps_.Erase(it);
+            delete mapinstruct;
+            return 0;
+        }
+    }
+
+    return 0;
+}
+
+
+MapInstruction::MapInstruction() :
+    targetdx_(0.f),
+    targetdy_(0.f),
+    targetdangle_(0.f),
+    targetscalex_(1.f),
+    targetscaley_(1.f)
+{ }
 
 MapInstruction::~MapInstruction()
-{
-
-}
+{ }
 
 bool MapInstruction::Load(const pugi::xml_node& node)
 {
-    if (strcmp(node.name(), "map") != 0)
+    if (strcmp(node.name(), "map"))
         return false;
 
-    folder_ = node.attribute("folder").as_int();
-    file_ = node.attribute("file").as_int();
+    folder_ = node.attribute("folder").as_uint();
+    file_ = node.attribute("file").as_uint();
     targetFolder_ = node.attribute("target_folder").as_int(-1);
     targetFile_ = node.attribute("target_file").as_int(-1);
 
+    targetdx_ = node.attribute("target_dx").as_float(0.f);
+    targetdy_ = node.attribute("target_dy").as_float(0.f);
+    targetdangle_ = node.attribute("target_dangle").as_float(0.f);
+    targetscalex_ = node.attribute("target_scalex").as_float(1.f);
+    targetscaley_ = node.attribute("target_scaley").as_float(1.f);
+
     return true;
+}
+
+void MapInstruction::SetOrigin(unsigned spritekey)
+{
+    GetFolderFile(spritekey, folder_, file_);
+}
+
+void MapInstruction::SetTarget(unsigned targetkey)
+{
+    unsigned targetFolder, targetFile;
+    GetFolderFile(targetkey, targetFolder, targetFile);
+    targetFolder_ = targetFolder;
+    targetFile_ = targetFile;
+}
+
+void MapInstruction::RemoveTarget()
+{
+    targetFolder_ = -1;
+    targetFile_   = -1;
 }
 
 Animation::Animation()
@@ -410,12 +533,12 @@ void Animation::Reset()
 {
     if (!mainlineKeys_.Empty())
     {
-        for (unsigned i = 0; i < mainlineKeys_.Size(); ++i)
+        for (size_t i = 0; i < mainlineKeys_.Size(); ++i)
             delete mainlineKeys_[i];
         mainlineKeys_.Clear();
     }
 
-    for (unsigned i = 0; i < timelines_.Size(); ++i)
+    for (size_t i = 0; i < timelines_.Size(); ++i)
         delete timelines_[i];
     timelines_.Clear();
 }
@@ -424,10 +547,10 @@ bool Animation::Load(const pugi::xml_node& node)
 {
     Reset();
 
-    if (strcmp(node.name(), "animation") != 0)
+    if (strcmp(node.name(), "animation"))
         return false;
 
-    id_ = node.attribute("id").as_int();
+    id_ = node.attribute("id").as_uint();
     name_ = String(node.attribute("name").as_string());
     length_ = node.attribute("length").as_float() * 0.001f;
     looping_ = node.attribute("looping").as_bool(true);
@@ -440,16 +563,81 @@ bool Animation::Load(const pugi::xml_node& node)
             return false;
     }
 
+    unsigned id = 0;
     for (xml_node timelineNode = node.child("timeline"); !timelineNode.empty(); timelineNode = timelineNode.next_sibling("timeline"))
     {
         timelines_.Push(new Timeline());
         if (!timelines_.Back()->Load(timelineNode))
             return false;
+        timelines_.Back()->id_ = id++;
     }
 
     return true;
 }
 
+void Animation::GetBoneRefs(unsigned timeline, PODVector<Ref*>& refs, unsigned startmainkeyid)
+{
+    if (!mainlineKeys_.Size())
+        return;
+
+    for (unsigned i = startmainkeyid; i < mainlineKeys_.Size(); i++)
+    {
+        Ref* ref = mainlineKeys_[i]->GetBoneRef(timeline);
+        if (ref)
+            refs.Push(ref);
+    }
+}
+
+void Animation::GetObjectRefs(unsigned timeline, PODVector<Ref*>& refs, unsigned startmainkeyid)
+{
+    if (!mainlineKeys_.Size())
+        return;
+
+    for (unsigned i = startmainkeyid; i < mainlineKeys_.Size(); i++)
+    {
+        Ref* ref = mainlineKeys_[i]->GetObjectRef(timeline);
+        if (ref)
+            refs.Push(ref);
+    }
+}
+
+MainlineKey* Animation::GetMainlineKey(float time) const
+{
+    MainlineKey* mainkey = mainlineKeys_.Front();
+    for (PODVector<MainlineKey*>::ConstIterator it = mainlineKeys_.End() - 1; it != mainlineKeys_.Begin(); --it)
+    {
+        if (time >= (*it)->time_)
+        {
+            mainkey = *it;
+            break;
+        }
+    }
+    return mainkey;
+}
+
+void Animation::UnMapToRoot(SpatialTimelineKey* tkey, float time, bool includeFirstKey, SpatialInfo& info) const
+{
+    const unsigned timeline = tkey->timeline_->id_;
+
+    if (includeFirstKey)
+        info = tkey->info_;
+
+    // Get the Main Key at time
+    MainlineKey* mainkey = GetMainlineKey(time);
+
+    // Get the Ref of the timeline in the boneRefs
+    Ref* ref = mainkey->GetBoneRef(timeline);
+    // Get the Ref of the timeline in the objectRefs if has no ref in the bone.
+    if (!ref)
+        ref = mainkey->GetObjectRef(timeline);
+
+    // UnMap the spatialinfo until reaching the root
+    while (ref && ref->parent_ != -1)
+    {
+        ref = mainkey->boneRefs_[ref->parent_];
+        info.UnmapFromParent(timelines_[ref->timeline_]->GetTimeKey(time)->info_);
+    }
+}
 
 // From http://www.brashmonkey.com/ScmlDocs/ScmlReference.html
 
@@ -498,7 +686,7 @@ bool TimeKey::Load(const pugi::xml_node& node)
     if (strcmp(node.name(), "key"))
         return false;
 
-    id_ = node.attribute("id").as_int();
+    id_ = node.attribute("id").as_uint();
 
     time_ = node.attribute("time").as_float(0.f) * 0.001f;
 
@@ -594,11 +782,11 @@ MainlineKey::~MainlineKey()
 
 void MainlineKey::Reset()
 {
-    for (unsigned i = 0; i < boneRefs_.Size(); ++i)
+    for (size_t i = 0; i < boneRefs_.Size(); ++i)
         delete boneRefs_[i];
     boneRefs_.Clear();
 
-    for (unsigned i = 0; i < objectRefs_.Size(); ++i)
+    for (size_t i = 0; i < objectRefs_.Size(); ++i)
         delete objectRefs_[i];
     objectRefs_.Clear();
 }
@@ -625,30 +813,67 @@ bool MainlineKey::Load(const pugi::xml_node& node)
     return true;
 }
 
-Ref::Ref()
+Ref* MainlineKey::GetRef(unsigned timeline) const
 {
-
+    for (PODVector<Ref*>::ConstIterator it = boneRefs_.Begin(); it != boneRefs_.End(); ++it)
+    {
+        if ((*it)->timeline_ == timeline)
+            return *it;
+    }
+    for (PODVector<Ref*>::ConstIterator it = objectRefs_.Begin(); it != objectRefs_.End(); ++it)
+    {
+        if ((*it)->timeline_ == timeline)
+            return *it;
+    }
+    return 0;
 }
 
-Ref::~Ref()
+Ref* MainlineKey::GetBoneRef(unsigned timeline) const
 {
+    for (PODVector<Ref*>::ConstIterator it = boneRefs_.Begin(); it != boneRefs_.End(); ++it)
+    {
+        if ((*it)->timeline_ == timeline)
+            return *it;
+    }
+    return 0;
 }
+
+Ref* MainlineKey::GetObjectRef(unsigned timeline) const
+{
+    for (PODVector<Ref*>::ConstIterator it = objectRefs_.Begin(); it != objectRefs_.End(); ++it)
+    {
+        if ((*it)->timeline_ == timeline)
+            return *it;
+    }
+    return 0;
+}
+
+
+Ref::Ref() { }
+
+Ref::~Ref() { }
 
 bool Ref::Load(const pugi::xml_node& node)
 {
-    if (strcmp(node.name(), "bone_ref") != 0 && strcmp(node.name(), "object_ref") != 0)
+    if (strcmp(node.name(), "bone_ref") && strcmp(node.name(), "object_ref"))
         return false;
 
-    id_ = node.attribute("id").as_int();
+    id_ = node.attribute("id").as_uint();
     parent_ = node.attribute("parent").as_int(-1);
-    timeline_ = node.attribute("timeline").as_int();
-    key_ = node.attribute("key").as_int();
-    zIndex_ = node.attribute("z_index").as_int();
+    timeline_ = node.attribute("timeline").as_uint();
+    key_ = node.attribute("key").as_uint();
+    zIndex_ = node.attribute("z_index").as_int(-1);
+    
+    xml_attribute colorAttr = node.attribute("color");
+    color_ = colorAttr.empty() ? Color::WHITE : ToColor(colorAttr.as_string());
 
     return true;
 }
 
-
+void Ref::Copy(Ref& copy) const
+{
+    copy = *this;
+}
 
 Timeline::Timeline()
 {
@@ -662,7 +887,7 @@ Timeline::~Timeline()
 
 void Timeline::Reset()
 {
-    for (unsigned i = 0; i < keys_.Size(); ++i)
+    for (size_t i = 0; i < keys_.Size(); ++i)
         delete keys_[i];
     keys_.Clear();
 }
@@ -671,10 +896,11 @@ bool Timeline::Load(const pugi::xml_node& node)
 {
     Reset();
 
-    if (strcmp(node.name(), "timeline") != 0)
+    if (strcmp(node.name(), "timeline"))
         return false;
 
     name_ = String(node.attribute("name").as_string());
+    hashname_ = StringHash(name_);
 
     String typeString;
     xml_attribute typeAttr = node.attribute("type");
@@ -708,7 +934,7 @@ bool Timeline::Load(const pugi::xml_node& node)
         objectType_ = POINT;
         for (xml_node keyNode = node.child("key"); !keyNode.empty(); keyNode = keyNode.next_sibling("key"))
         {
-            keys_.Push(new SpriteTimelineKey(this));
+            keys_.Push(new PointTimelineKey(this));
             if (!keys_.Back()->Load(keyNode))
                 return false;
         }
@@ -727,10 +953,24 @@ bool Timeline::Load(const pugi::xml_node& node)
     return true;
 }
 
-TimelineKey::TimelineKey(Timeline* timeline)
+SpatialTimelineKey* Timeline::GetTimeKey(float time) const
 {
-    this->timeline_ = timeline;
+    if (time == 0.f)
+        return keys_.Front();
+
+    for (PODVector<SpatialTimelineKey*>::ConstIterator it = keys_.End()-1; it != keys_.Begin(); --it)
+    {
+        if (time >= (*it)->time_)
+            return *it;
+    }
+
+    return keys_.Front();
 }
+
+
+TimelineKey::TimelineKey(Timeline* timeline) :
+    timeline_(timeline)
+{ }
 
 TimelineKey::~TimelineKey()
 {
@@ -759,17 +999,15 @@ SpatialInfo::SpatialInfo(float x, float y, float angle, float scale_x, float sca
     this->spin = spin;
 }
 
-SpatialInfo SpatialInfo::UnmapFromParent(const SpatialInfo& parentInfo) const
+void SpatialInfo::UnmapFromParent(const SpatialInfo& parentInfo)
 {
-    float unmappedX;
-    float unmappedY;
-    float unmappedAngle = parentInfo.angle_ + Sign(parentInfo.scaleX_*parentInfo.scaleY_) * angle_;
-    if (unmappedAngle >= 360.f)
-        unmappedAngle -= 360.f;
+    angle_ = parentInfo.angle_ + Sign(parentInfo.scaleX_*parentInfo.scaleY_) * angle_;
+    if (angle_ >= 360.f)
+        angle_ -= 360.f;
 
-    float unmappedScaleX = scaleX_ * parentInfo.scaleX_;
-    float unmappedScaleY = scaleY_ * parentInfo.scaleY_;
-    float unmappedAlpha = alpha_ * parentInfo.alpha_;
+    scaleX_ = scaleX_ * parentInfo.scaleX_;
+    scaleY_ = scaleY_ * parentInfo.scaleY_;
+    alpha_ = alpha_ * parentInfo.alpha_;
 
     if (x_ != 0.0f || y_ != 0.0f)
     {
@@ -779,16 +1017,14 @@ SpatialInfo SpatialInfo::UnmapFromParent(const SpatialInfo& parentInfo) const
         float s = Sin(parentInfo.angle_);
         float c = Cos(parentInfo.angle_);
 
-        unmappedX = (preMultX * c) - (preMultY * s) + parentInfo.x_;
-        unmappedY = (preMultX * s) + (preMultY * c) + parentInfo.y_;
+        x_ = (preMultX * c) - (preMultY * s) + parentInfo.x_;
+        y_ = (preMultX * s) + (preMultY * c) + parentInfo.y_;
     }
     else
     {
-        unmappedX = parentInfo.x_;
-        unmappedY = parentInfo.y_;
+        x_ = parentInfo.x_;
+        y_ = parentInfo.y_;
     }
-
-    return SpatialInfo(unmappedX, unmappedY, unmappedAngle, unmappedScaleX, unmappedScaleY, unmappedAlpha, spin);
 }
 
 
@@ -800,32 +1036,13 @@ void SpatialInfo::Interpolate(const SpatialInfo& other, float t)
     scaleY_ = Linear(scaleY_, other.scaleY_, t);
     alpha_ = Linear(alpha_, other.alpha_, t);
     angle_ = AngleLinear(angle_, other.angle_, spin, t);
-
-//    if (spin > 0.0f && (other.angle_ - angle_ < 0.0f))
-//    {
-//        angle_ = Linear(angle_, other.angle_ + 360.0f, t);
-//    }
-//    else if (spin < 0.0f && (other.angle_ - angle_ > 0.0f))
-//    {
-//        angle_ = Linear(angle_, other.angle_ - 360.0f, t);
-//    }
-//    else
-//    {
-//        angle_ = Linear(angle_, other.angle_, t);
-//    }
 }
 
 
 SpatialTimelineKey::SpatialTimelineKey(Timeline* timeline) :
-    TimelineKey(timeline)
-{
+    TimelineKey(timeline) { }
 
-}
-
-SpatialTimelineKey::~SpatialTimelineKey()
-{
-
-}
+SpatialTimelineKey::~SpatialTimelineKey() { }
 
 bool SpatialTimelineKey::Load(const xml_node& node)
 {
@@ -862,34 +1079,6 @@ void SpatialTimelineKey::Interpolate(const TimelineKey& other, float t)
 }
 
 
-#ifdef USE_KEYPOOLS
-    BoneTimelineKey* BoneTimelineKey::Get()
-    {
-        if (!freeindexes_.Size())
-        {
-            pool_.Resize(pool_.Size()+1);
-            freeindexes_.Push(&pool_.Back());
-            URHO3D_LOGWARNINGF("BoneTimelineKey() - Get : No More Key - create a new one !");
-        }
-        return freeindexes_.Back();
-    }
-
-    void BoneTimelineKey::Free(BoneTimelineKey* elt)
-    {
-        freeindexes_.Push(elt);
-    }
-
-    void BoneTimelineKey::FreeAlls()
-    {
-        freeindexes_.Resize(pool_.Size());
-        for (unsigned i=0; i<pool_.Size();i++)
-            freeindexes_[i] = &pool_[i];
-    }
-
-    PODVector<BoneTimelineKey*> BoneTimelineKey::freeindexes_;
-    Vector<BoneTimelineKey> BoneTimelineKey::pool_;
-#endif
-
 BoneTimelineKey::BoneTimelineKey() :
     SpatialTimelineKey(0)
 {
@@ -909,17 +1098,17 @@ BoneTimelineKey::~BoneTimelineKey()
 
 TimelineKey* BoneTimelineKey::Clone() const
 {
-#ifdef USE_KEYPOOLS
-    BoneTimelineKey* result = Get();
-    if (result)
-        result->timeline_ = timeline_;
-    else
-        result = new BoneTimelineKey(timeline_);
-#else
     BoneTimelineKey* result = new BoneTimelineKey(timeline_);
-#endif
     *result = *this;
     return result;
+}
+
+void BoneTimelineKey::Copy(TimelineKey* copy) const
+{
+    BoneTimelineKey* c = static_cast<BoneTimelineKey*>(copy);
+    if (!c)
+        return;
+    *c = *this;
 }
 
 bool BoneTimelineKey::Load(const xml_node& node)
@@ -928,17 +1117,12 @@ bool BoneTimelineKey::Load(const xml_node& node)
         return false;
 
     xml_node boneNode = node.child("bone");
-//    length_ = boneNode.attribute("length").as_float(200.0f);
-//    width_ = boneNode.attribute("width").as_float(10.0f);
-
     return true;
 }
 
 BoneTimelineKey& BoneTimelineKey::operator=(const BoneTimelineKey& rhs)
 {
     SpatialTimelineKey::operator=(rhs);
-//    length_ = rhs.length_;
-//    width_ = rhs.width_;
 
     return *this;
 }
@@ -948,38 +1132,8 @@ void BoneTimelineKey::Interpolate(const TimelineKey& other, float t)
     SpatialTimelineKey::Interpolate(other, t);
 
     const BoneTimelineKey& o = (const BoneTimelineKey&)other;
-//    length_ = Linear(length_, o.length_, t);
-//    width_ = Linear(width_, o.width_, t);
 }
 
-
-#ifdef USE_KEYPOOLS
-    SpriteTimelineKey* SpriteTimelineKey::Get()
-    {
-        if (!freeindexes_.Size())
-        {
-            pool_.Resize(pool_.Size()+1);
-            freeindexes_.Push(&pool_.Back());
-            URHO3D_LOGWARNINGF("SpriteTimelineKey() - Get : No More Key - create a new one !");
-        }
-        return freeindexes_.Back();
-    }
-
-    void SpriteTimelineKey::Free(SpriteTimelineKey* elt)
-    {
-        freeindexes_.Push(elt);
-    }
-
-    void SpriteTimelineKey::FreeAlls()
-    {
-        freeindexes_.Resize(pool_.Size());
-        for (unsigned i=0; i<pool_.Size();i++)
-            freeindexes_[i] = &pool_[i];
-    }
-
-    PODVector<SpriteTimelineKey*> SpriteTimelineKey::freeindexes_;
-    Vector<SpriteTimelineKey> SpriteTimelineKey::pool_;
-#endif
 
 SpriteTimelineKey::SpriteTimelineKey() :
     SpatialTimelineKey(0)
@@ -1000,17 +1154,17 @@ SpriteTimelineKey::~SpriteTimelineKey()
 
 TimelineKey* SpriteTimelineKey::Clone() const
 {
-#ifdef USE_KEYPOOLS
-    SpriteTimelineKey* result = Get();
-    if (result)
-        result->timeline_ = timeline_;
-    else
-        result = new SpriteTimelineKey(timeline_);
-#else
     SpriteTimelineKey* result = new SpriteTimelineKey(timeline_);
-#endif
     *result = *this;
     return result;
+}
+
+void SpriteTimelineKey::Copy(TimelineKey* copy) const
+{
+    SpriteTimelineKey* c = static_cast<SpriteTimelineKey*>(copy);
+    if (!c)
+        return;
+    *c = *this;
 }
 
 bool SpriteTimelineKey::Load(const pugi::xml_node& node)
@@ -1019,8 +1173,9 @@ bool SpriteTimelineKey::Load(const pugi::xml_node& node)
         return false;
 
     xml_node objectNode = node.child("object");
-    folderId_ = objectNode.attribute("folder").as_int(-1);
-    fileId_ = objectNode.attribute("file").as_int(-1);
+    folderId_ = objectNode.attribute("folder").as_uint(0);
+    fileId_ = objectNode.attribute("file").as_uint(0);
+    fx_ = objectNode.attribute("fx").as_uint(0);
 
     xml_attribute pivotXAttr = objectNode.attribute("pivot_x");
     xml_attribute pivotYAttr = objectNode.attribute("pivot_y");
@@ -1051,6 +1206,7 @@ SpriteTimelineKey& SpriteTimelineKey::operator=(const SpriteTimelineKey& rhs)
 
     folderId_ = rhs.folderId_;
     fileId_ = rhs.fileId_;
+    fx_ = rhs.fx_;
     useDefaultPivot_ = rhs.useDefaultPivot_;
     pivotX_ = rhs.pivotX_;
     pivotY_ = rhs.pivotY_;
@@ -1058,34 +1214,6 @@ SpriteTimelineKey& SpriteTimelineKey::operator=(const SpriteTimelineKey& rhs)
     return *this;
 }
 
-
-#ifdef USE_KEYPOOLS
-    BoxTimelineKey* BoxTimelineKey::Get()
-    {
-        if (!freeindexes_.Size())
-        {
-            pool_.Resize(pool_.Size()+1);
-            freeindexes_.Push(&pool_.Back());
-            URHO3D_LOGWARNINGF("BoxTimelineKey() - Get : No More Key - create a new one !");
-        }
-        return freeindexes_.Back();
-    }
-
-    void BoxTimelineKey::Free(BoxTimelineKey* elt)
-    {
-        freeindexes_.Push(elt);
-    }
-
-    void BoxTimelineKey::FreeAlls()
-    {
-        freeindexes_.Resize(pool_.Size());
-        for (unsigned i=0; i<pool_.Size();i++)
-            freeindexes_[i] = &pool_[i];
-    }
-
-    PODVector<BoxTimelineKey*> BoxTimelineKey::freeindexes_;
-    Vector<BoxTimelineKey> BoxTimelineKey::pool_;
-#endif
 
 BoxTimelineKey::BoxTimelineKey() :
     SpatialTimelineKey(0)
@@ -1105,17 +1233,17 @@ BoxTimelineKey::~BoxTimelineKey()
 
 TimelineKey* BoxTimelineKey::Clone() const
 {
-#ifdef USE_KEYPOOLS
-    BoxTimelineKey* result = Get();
-    if (result)
-        result->timeline_ = timeline_;
-    else
-        result = new BoxTimelineKey(timeline_);
-#else
     BoxTimelineKey* result = new BoxTimelineKey(timeline_);
-#endif
     *result = *this;
     return result;
+}
+
+void BoxTimelineKey::Copy(TimelineKey* copy) const
+{
+    BoxTimelineKey* c = static_cast<BoxTimelineKey*>(copy);
+    if (!c)
+        return;
+    *c = *this;
 }
 
 bool BoxTimelineKey::Load(const pugi::xml_node& node)
@@ -1162,6 +1290,60 @@ BoxTimelineKey& BoxTimelineKey::operator=(const BoxTimelineKey& rhs)
     pivotY_ = rhs.pivotY_;
 
     return *this;
+}
+
+PointTimelineKey::PointTimelineKey() :
+    SpatialTimelineKey(0)
+{
+
+}
+
+PointTimelineKey::PointTimelineKey(Timeline* timeline) :
+    SpatialTimelineKey(timeline)
+{
+
+}
+
+PointTimelineKey::~PointTimelineKey()
+{
+
+}
+
+TimelineKey* PointTimelineKey::Clone() const
+{
+    PointTimelineKey* result = new PointTimelineKey(timeline_);
+    *result = *this;
+    return result;
+}
+
+void PointTimelineKey::Copy(TimelineKey* copy) const
+{
+    PointTimelineKey* c = static_cast<PointTimelineKey*>(copy);
+    if (!c)
+        return;
+    *c = *this;
+}
+
+bool PointTimelineKey::Load(const xml_node& node)
+{
+    if (!SpatialTimelineKey::Load(node))
+        return false;
+
+    xml_node boneNode = node.child("bone");
+
+    return true;
+}
+
+PointTimelineKey& PointTimelineKey::operator=(const PointTimelineKey& rhs)
+{
+    SpatialTimelineKey::operator=(rhs);
+
+    return *this;
+}
+
+void PointTimelineKey::Interpolate(const TimelineKey& other, float t)
+{
+    SpatialTimelineKey::Interpolate(other, t);
 }
 
 }

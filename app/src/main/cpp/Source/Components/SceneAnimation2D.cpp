@@ -12,7 +12,7 @@
 #include <Urho3D/Scene/Scene.h>
 #include <Urho3D/Scene/SceneEvents.h>
 
-
+#include <Urho3D/Urho2D/SpriterData2D.h>
 
 #include "SplinePath2D.h"
 
@@ -94,7 +94,7 @@ void SceneObject2D::GetCurrentStates(ObjectActionState2D& state)
     state.scale_ = node_->GetWorldScale();
     state.rotation_ = node_->GetWorldRotation();
     state.alpha_ = sprite_ ? sprite_->GetAlpha() : 1.f;
-    state.animationid_ = animatedsprite_ ? animatedsprite_->GetSpriterAnimationId() : -1;
+    state.animationid_ = animatedsprite_ ? animatedsprite_->GetAnimationIndex() : -1;
 }
 
 void SceneObject2D::CopyState(const ObjectActionState2D& src, ObjectActionState2D& dst)
@@ -145,7 +145,10 @@ void SceneObject2D::UpdateActionStates(int key, const Vector<SharedPtr<SceneActi
     if (animatedsprite_ && !action->animation_.Empty())
     {
         if (!action->animatedobjects_.Size() || action->animatedobjects_.Contains(node_->GetID()))
-            state.animationid_ = animatedsprite_->GetSpriterAnimationId(action->animation_);
+        {
+            Spriter::Animation* animation = animatedsprite_->GetSpriterAnimation(action->animation_);
+            state.animationid_ = animation ? animation->id_ : -1;
+        }
     }
 
     if (action->path_)
@@ -598,7 +601,7 @@ void SceneAction2D::Execute(unsigned key, const Vector<SharedPtr<SceneAction2D> 
                 if (animationid != -1)
                 {
                     object->animatedsprite_->SetSpriterAnimation(animationid);
-                    object->animatedsprite_->SetTime(time);
+                    object->animatedsprite_->SetCurrentAnimationTime(time);
 
 //                    URHO3D_LOGINFOF("SceneAction2D() - Execute : timeline=%s object=%s(%u) actionkey=%u Setting Animation to %s",
 //                                    timeline_->name_.CString(), object->node_->GetName().CString(), object->node_->GetID(), key, object->animatedsprite_->GetAnimation().CString());

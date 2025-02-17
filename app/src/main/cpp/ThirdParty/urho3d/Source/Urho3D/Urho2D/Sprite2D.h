@@ -37,50 +37,61 @@ class URHO3D_API Sprite2D : public Resource
 
 public:
     /// Construct.
-    Sprite2D(Context* context);
+    explicit Sprite2D(Context* context);
     /// Destruct.
-    virtual ~Sprite2D();
+    ~Sprite2D();
     /// Register object factory.
+    /// @nobind
     static void RegisterObject(Context* context);
 
     /// Load resource from stream. May be called from a worker thread. Return true if successful.
-    virtual bool BeginLoad(Deserializer& source);
+    bool BeginLoad(Deserializer& source) override;
     /// Finish resource loading. Always called from the main thread. Return true if successful.
-    virtual bool EndLoad();
+    bool EndLoad() override;
 
     /// Set texture.
+    /// @property
     void SetTexture(Texture2D* texture);
     /// Set rectangle.
+    /// @property
     void SetRectangle(const IntRect& rectangle);
-    /// Set offset.
-    void SetOffset(const IntVector2& offset);
     /// Set hot spot.
+    /// @property
     void SetHotSpot(const Vector2& hotSpot);
+    /// Set offset.
+    /// @property
+    void SetOffset(const IntVector2& offset);
+    /// @property
     /// Set source size.
     void SetSourceSize(int width, int height);
     /// Set texture edge offset in pixels. This affects the left/right and top/bottom edges equally to prevent edge sampling artifacts. Default 0.
+    /// @property
     void SetTextureEdgeOffset(float offset);
     /// Set sprite sheet.
     void SetSpriteSheet(SpriteSheet2D* spriteSheet);
 
-    void SetRotated(bool isrotated);
-
     /// Return texture.
+    /// @property
     Texture2D* GetTexture() const { return texture_; }
 
     /// Return rectangle.
+    /// @property
     const IntRect& GetRectangle() const { return rectangle_; }
 
-    /// Return offset.
-    const IntVector2& GetOffset() const { return offset_; }
-
     /// Return hot spot.
+    /// @property
     const Vector2& GetHotSpot() const { return hotSpot_; }
 
     /// Return Source Size.
+    /// @property
     const IntVector2& GetSourceSize() const { return sourceSize_; }
 
+    /// Return offset.
+    /// @property
+    const IntVector2& GetOffset() const { return offset_; }
+
     /// Return texture edge offset.
+    /// @property
     float GetTextureEdgeOffset() const { return edgeOffset_; }
 
     /// Return sprite sheet.
@@ -92,8 +103,6 @@ public:
     bool GetDrawRectangle(Rect& rect, const Vector2& hotSpot, bool flipX = false, bool flipY = false) const;
     /// Return texture rectangle.
     bool GetTextureRectangle(Rect& rect, bool flipX = false, bool flipY = false) const;
-
-    bool GetRotated() const;
 
     /// Set fixed draw rectangle with scale, with current flip and hotspot
     void SetFixedRectangles(const Vector2& scale = Vector2::ONE, float spanOffset=0.f, bool flipX = false, bool flipY = false);
@@ -116,10 +125,10 @@ private:
     SharedPtr<Texture2D> texture_;
     /// Rectangle.
     IntRect rectangle_;
-    /// Offset (for trimmed sprite).
-    IntVector2 offset_;
     /// Hot spot.
     Vector2 hotSpot_;
+    /// Offset (for trimmed sprite).
+    IntVector2 offset_;
     /// Source Size
     IntVector2 sourceSize_;
 
@@ -129,8 +138,6 @@ private:
     SharedPtr<Texture2D> loadTexture_;
     /// Offset to fix texture edge bleeding.
     float edgeOffset_;
-
-    bool isRotated_;
 
     /// Fixed Draw Rect
     Rect fixedDrawRect_;

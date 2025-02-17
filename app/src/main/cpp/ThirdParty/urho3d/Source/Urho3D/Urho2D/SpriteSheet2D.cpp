@@ -44,9 +44,7 @@ SpriteSheet2D::SpriteSheet2D(Context* context) :
 {
 }
 
-SpriteSheet2D::~SpriteSheet2D()
-{
-}
+SpriteSheet2D::~SpriteSheet2D() = default;
 
 void SpriteSheet2D::RegisterObject(Context* context)
 {
@@ -63,8 +61,6 @@ bool SpriteSheet2D::BeginLoad(Deserializer& source)
     spriteMapping_.Clear();
 
     String extension = GetExtension(source.GetName());
-    if (extension == ".sjson")
-        return BeginLoadFromJSONSpriterFile(source);
 
     if (extension == ".plist")
         return BeginLoadFromPListFile(source);
@@ -75,16 +71,11 @@ bool SpriteSheet2D::BeginLoad(Deserializer& source)
     if (extension == ".json")
         return BeginLoadFromJSONFile(source);
 
-
-    URHO3D_LOGERROR("Unsupported file type");
     return false;
 }
 
 bool SpriteSheet2D::EndLoad()
 {
-    if (loadSpriterFile_)
-        return EndLoadFromJSONSpriterFile();
-
     if (loadPListFile_)
         return EndLoadFromPListFile();
 
@@ -152,7 +143,7 @@ void SpriteSheet2D::DefineSprite(unsigned textureindex, const String& name, cons
         spriteMapping_[name] = 0;
 }
 
-void SpriteSheet2D::DefineSprite(const String& name, int fw, int fh, int fx, int fy, int sw, int sh, int ssx, int ssy, bool rotated)
+void SpriteSheet2D::DefineSprite(const String& name, int fw, int fh, int fx, int fy, int sw, int sh, int ssx, int ssy)
 {
     if (GetSprite(name))
         return;
@@ -163,16 +154,14 @@ void SpriteSheet2D::DefineSprite(const String& name, int fw, int fh, int fx, int
     SharedPtr<Sprite2D> sprite(new Sprite2D(context_));
     sprite->SetName(name);
     sprite->SetTexture(texture_);
-    sprite->SetRectangle(rotated ? IntRect(fx, fy, fx + fh, fy + fw) : IntRect(fx, fy, fx + fw, fy + fh));
+    sprite->SetRectangle(IntRect(fx, fy, fx + fw, fy + fh));
     sprite->SetSourceSize(sw, sh);
     if (ssx != 0 && ssy != 0)
     {
         sprite->SetOffset(IntVector2(-ssx, -ssy));
         sprite->SetHotSpot(Vector2(((float)ssx + sw / 2) / fw, 1.0f - ((float)ssy + sh / 2) / fh));
     }
-    if (rotated) URHO3D_LOGWARNINGF("sprite %s is rotated", name.CString());
 
-    sprite->SetRotated(rotated);
     sprite->SetSpriteSheet(this);
     spriteMapping_[name] = sprite;
 }
@@ -181,7 +170,7 @@ Sprite2D* SpriteSheet2D::GetSprite(const String& name) const
 {
     HashMap<String, SharedPtr<Sprite2D> >::ConstIterator i = spriteMapping_.Find(name);
     if (i == spriteMapping_.End())
-        return 0;
+        return nullptr;
 
     return i->second_;
 }
@@ -203,7 +192,9 @@ bool SpriteSheet2D::BeginLoadFromPListFile(Deserializer& source)
     const String& textureFileName = metadata["realTextureFileName"]->GetString();
 
     // If we're async loading, request the texture now. Finish during EndLoad().
-    loadTextureName_ = GetParentPath(GetName()) + textureFileName;
+	loadTextureName_ = textureFileName;
+	if (GetPath(loadTextureName_).Empty())
+		loadTextureName_ = GetParentPath(GetName()) + loadTextureName_;
     if (GetAsyncLoadState() == ASYNC_LOADING)
         GetSubsystem<ResourceCache>()->BackgroundLoadResource<Texture2D>(loadTextureName_, true, this);
 
@@ -217,7 +208,7 @@ bool SpriteSheet2D::EndLoadFromPListFile()
     if (!texture_)
     {
         URHO3D_LOGERROR("Could not load texture " + loadTextureName_);
-        loadXMLFile_.Reset();
+        loadPListFile_.Reset();
         loadTextureName_.Clear();
         return false;
     }
@@ -229,31 +220,26 @@ bool SpriteSheet2D::EndLoadFromPListFile()
         String name = i->first_.Split('.')[0];
 
         const PListValueMap& frameInfo = i->second_.GetValueMap();
-        if (frameInfo["rotated"]->GetBool())
-        {
-            URHO3D_LOGWARNING("Rotated sprite is not support now");
-            continue;
-        }
-
         IntRect rectangle = frameInfo["frame"]->GetIntRect();
         Vector2 hotSpot(0.5f, 0.5f);
         IntVector2 offset(0, 0);
 
         IntRect sourceColorRect = frameInfo["sourceColorRect"]->GetIntRect();
-        if (sourceColorRect.left_ != 0 && sourceColorRect.top_ != 0 && rectangle.Width() && rectangle.Height())
+        if (sourceColorRect.left_ != 0 && sourceColorRect.top_ != 0 &&
+            rectangle.Width() && rectangle.Height())
         {
             offset.x_ = -sourceColorRect.left_;
             offset.y_ = -sourceColorRect.top_;
 
             IntVector2 sourceSize = frameInfo["sourceSize"]->GetIntVector2();
-            hotSpot.x_ = ((float)offset.x_ + sourceSize.x_ / 2) / rectangle.Width();
-            hotSpot.y_ = 1.0f - ((float)offset.y_ + sourceSize.y_ / 2) / rectangle.Height();
+            hotSpot.x_ = (offset.x_ + sourceSize.x_ / 2.f) / rectangle.Width();
+            hotSpot.y_ = 1.0f - (offset.y_ + sourceSize.y_ / 2.f) / rectangle.Height();
         }
 
         DefineSprite(name, rectangle, hotSpot, offset);
     }
 
-    loadXMLFile_.Reset();
+    loadPListFile_.Reset();
     loadTextureName_.Clear();
     return true;
 }
@@ -278,30 +264,38 @@ bool SpriteSheet2D::BeginLoadFromXMLFile(Deserializer& source)
         return false;
     }
 
+    ResourceCache* cache = GetSubsystem<ResourceCache>();
+
     if (rootElem.HasAttribute("imagePath"))
     {
         // If we're async loading, request the texture now. Finish during EndLoad().
-        loadTextureName_ = GetParentPath(GetName()) + rootElem.GetAttribute("imagePath");
+	    loadTextureName_ = rootElem.GetAttribute("imagePath");
+	    if (GetPath(loadTextureName_).Empty())
+		    loadTextureName_ = GetParentPath(GetName()) + loadTextureName_;
+
         if (GetAsyncLoadState() == ASYNC_LOADING)
-            GetSubsystem<ResourceCache>()->BackgroundLoadResource<Texture2D>(loadTextureName_, true, this);
+            cache->BackgroundLoadResource<Texture2D>(loadTextureName_, true, this);
     }
-    else
+    else // Multi Textures
     {
-        // Multi Textures
         loadTexturesCount_ = 0;
-        ResourceCache* cache = GetSubsystem<ResourceCache>();
+
         loadTextureNames_.Clear();
         XMLElement textureElem = rootElem.GetChild("Texture");
         while (textureElem)
         {
             // If we're async loading, request the texture now. Finish during EndLoad().
-            loadTextureNames_.Push(GetParentPath(GetName()) + textureElem.GetAttribute("imagePath"));
+            loadTextureName_ = textureElem.GetAttribute("imagePath");
+            if (GetPath(loadTextureName_).Empty())
+                loadTextureName_ = GetParentPath(GetName()) + loadTextureName_;
+            loadTextureNames_.Push(loadTextureName_);
+
             if (GetAsyncLoadState() == ASYNC_LOADING)
                 cache->BackgroundLoadResource<Texture2D>(loadTextureNames_.Back(), true, this);
 
             textureElem = textureElem.GetNext("Texture");
         }
-
+        loadTextureName_.Clear();
         loadTexturesCount_ = GetAsyncLoadState() == ASYNC_LOADING ? 0U : loadTextureNames_.Size();
     }
 
@@ -327,6 +321,7 @@ bool SpriteSheet2D::EndLoadFromXMLFile()
         while (subTextureElem)
         {
             String name = subTextureElem.GetAttribute("name");
+            name = name.Split('.')[0];
 
             int x = subTextureElem.GetInt("x");
             int y = subTextureElem.GetInt("y");
@@ -337,14 +332,19 @@ bool SpriteSheet2D::EndLoadFromXMLFile()
             Vector2 hotSpot(0.5f, 0.5f);
             IntVector2 offset(0, 0);
 
-            if (subTextureElem.HasAttribute("frameWidth") && subTextureElem.HasAttribute("frameHeight") && width && height)
+            if (subTextureElem.HasAttribute("hotspotx") && subTextureElem.HasAttribute("hotspoty"))
             {
-                offset.x_ = subTextureElem.GetInt("frameX");
-                offset.y_ = subTextureElem.GetInt("frameY");
+                hotSpot.x_ = (float)subTextureElem.GetInt("hotspotx")/width;
+                hotSpot.y_ = 1.f - (float)subTextureElem.GetInt("hotspoty")/height;
+            }
+            else if (subTextureElem.HasAttribute("frameWidth") && subTextureElem.HasAttribute("frameHeight"))
+            {
                 int frameWidth = subTextureElem.GetInt("frameWidth");
                 int frameHeight = subTextureElem.GetInt("frameHeight");
-                hotSpot.x_ = ((float)offset.x_ + frameWidth / 2) / width;
-                hotSpot.y_ = 1.0f - ((float)offset.y_ + frameHeight / 2) / height;
+                offset.x_ = subTextureElem.GetInt("frameX");
+                offset.y_ = subTextureElem.GetInt("frameY");
+                hotSpot.x_ = (offset.x_ + frameWidth / 2.f) / width;
+                hotSpot.y_ = 1.0f - (offset.y_ + frameHeight / 2.f) / height;
             }
 
             DefineSprite(name, rectangle, hotSpot, offset);
@@ -397,14 +397,19 @@ bool SpriteSheet2D::EndLoadFromXMLFile()
                     Vector2 hotSpot(0.5f, 0.5f);
                     IntVector2 offset(0, 0);
 
-                    if (subTextureElem.HasAttribute("frameWidth") && subTextureElem.HasAttribute("frameHeight") && width && height)
+                    if (subTextureElem.HasAttribute("hotspotx") && subTextureElem.HasAttribute("hotspoty"))
                     {
-                        offset.x_ = subTextureElem.GetInt("frameX");
-                        offset.y_ = subTextureElem.GetInt("frameY");
+                        hotSpot.x_ = (float)subTextureElem.GetInt("hotspotx")/width;
+                        hotSpot.y_ = 1.f - (float)subTextureElem.GetInt("hotspoty")/height;
+                    }
+                    else if (subTextureElem.HasAttribute("frameWidth") && subTextureElem.HasAttribute("frameHeight"))
+                    {
                         int frameWidth = subTextureElem.GetInt("frameWidth");
                         int frameHeight = subTextureElem.GetInt("frameHeight");
-                        hotSpot.x_ = ((float)offset.x_ + frameWidth / 2) / width;
-                        hotSpot.y_ = 1.0f - ((float)offset.y_ + frameHeight / 2) / height;
+                        offset.x_ = subTextureElem.GetInt("frameX");
+                        offset.y_ = subTextureElem.GetInt("frameY");
+                        hotSpot.x_ = (offset.x_ + frameWidth / 2.f) / width;
+                        hotSpot.y_ = 1.0f - (offset.y_ + frameHeight / 2.f) / height;
                     }
 
                     DefineSprite(itexture, name, rectangle, hotSpot, offset);
@@ -449,7 +454,10 @@ bool SpriteSheet2D::BeginLoadFromJSONFile(Deserializer& source)
     }
 
     // If we're async loading, request the texture now. Finish during EndLoad().
-    loadTextureName_ = GetParentPath(GetName()) + rootElem.Get("imagePath").GetString();
+	loadTextureName_ = rootElem.Get("imagePath").GetString();
+	if (GetPath(loadTextureName_).Empty())
+		loadTextureName_ = GetParentPath(GetName()) + loadTextureName_;
+
     if (GetAsyncLoadState() == ASYNC_LOADING)
         GetSubsystem<ResourceCache>()->BackgroundLoadResource<Texture2D>(loadTextureName_, true, this);
 
@@ -493,8 +501,8 @@ bool SpriteSheet2D::EndLoadFromJSONFile()
             offset.y_ = subTextureVal.Get("frameY").GetInt();
             int frameWidth = frameWidthVal.GetInt();
             int frameHeight = frameHeightVal.GetInt();
-            hotSpot.x_ = ((float)offset.x_ + frameWidth / 2) / width;
-            hotSpot.y_ = 1.0f - ((float)offset.y_ + frameHeight / 2) / height;
+            hotSpot.x_ = (offset.x_ + frameWidth / 2.f) / width;
+            hotSpot.y_ = 1.0f - (offset.y_ + frameHeight / 2.f) / height;
         }
 
         DefineSprite(name, rectangle, hotSpot, offset);
@@ -502,39 +510,6 @@ bool SpriteSheet2D::EndLoadFromJSONFile()
 
     loadJSONFile_.Reset();
     loadTextureName_.Clear();
-    return true;
-}
-
-bool SpriteSheet2D::BeginLoadFromJSONSpriterFile(Deserializer& source)
-{
-    loadSpriterFile_ = new JSONFile(context_);
-    if (!loadSpriterFile_->Load(source))
-    {
-        URHO3D_LOGERROR("Could not load sprite sheet");
-        loadSpriterFile_.Reset();
-        return false;
-    }
-
-    SetMemoryUse(source.GetSize());
-
-    JSONValue rootElem = loadSpriterFile_->GetRoot();
-    if (rootElem.IsNull())
-    {
-        URHO3D_LOGERROR("Invalid sprite sheet");
-        loadSpriterFile_.Reset();
-        return false;
-    }
-
-    JSONValue metadata = rootElem.Get("meta");
-
-    // If we're async loading, request the texture now. Finish during EndLoad().
-    loadTextureName_ = GetParentPath(GetName()) + metadata.Get("image").GetString();
-
-    URHO3D_LOGINFOF("BeginLoadFromJSONSpriterFile : filename=%s", loadTextureName_.CString());
-
-    if (GetAsyncLoadState() == ASYNC_LOADING)
-        GetSubsystem<ResourceCache>()->BackgroundLoadResource<Texture2D>(loadTextureName_, true, this);
-
     return true;
 }
 
@@ -563,8 +538,7 @@ bool SpriteSheet2D::EndLoadFromJSONSpriterFile()
                      frameInfo.Get("w").GetInt(), frameInfo.Get("h").GetInt(),
                      frameInfo.Get("x").GetInt(),  frameInfo.Get("y").GetInt(),
                      sourceSize.Get("w").GetInt(), sourceSize.Get("h").GetInt(),
-                     -spriteSource.Get("x").GetInt(), -spriteSource.Get("y").GetInt(),
-                     frame.Get("rotated").GetString() == "true");
+                     -spriteSource.Get("x").GetInt(), -spriteSource.Get("y").GetInt());
     }
 
     loadSpriterFile_.Reset();
