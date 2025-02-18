@@ -356,7 +356,7 @@ void Game::Start()
 	// Create All Statics : Camera, Scene
 	GameStatics::Initialize(context_);
 
-    URHO3D_LOGINFOF("Game() - texture capacity = %d", GameStatics::graphics_->GetMaxTextureSize());
+//    URHO3D_LOGINFOF("Game() - texture capacity = %d", GameStatics::graphics_->GetMaxTextureSize());
 
 	// Detect Controls (Touch, Joystick)
 	SetupControllers();
@@ -642,11 +642,7 @@ void Game::ResetScreen()
 {
     URHO3D_LOGINFO("Game() - ResetScreen ...");
 
-//    GameStatics::rootScene_->GetOrCreateComponent<Renderer2D>(LOCAL);
-
     GameStatics::SetGameScale();
-
-//    GameStatics::ui_->GetRoot()->SetSize(GameStatics::graphics_->GetWidth(), GameStatics::graphics_->GetHeight());
 
     // Set Camera
     GameStatics::camera_->SetNearClip(DEFAULT_NEARCLIP);
@@ -1099,7 +1095,7 @@ void Game::HandleKeyDown(StringHash eventType, VariantMap& eventData)
     int keycode = eventData[P_KEY].GetInt();
 
 	// Close console (if open)
-	if (scancode == SCANCODE_ESCAPE)
+    if (scancode == SCANCODE_ESCAPE)
 	{
 		Console* console = GetSubsystem<Console>();
 		if (console)
@@ -1113,6 +1109,7 @@ void Game::HandleKeyDown(StringHash eventType, VariantMap& eventData)
         if (console)
             console->Toggle();
     }
+#ifdef URHO3D_PROFILING
     // Toggle debug HUD with F2
     else if (scancode == SCANCODE_F2)
     {
@@ -1129,6 +1126,7 @@ void Game::HandleKeyDown(StringHash eventType, VariantMap& eventData)
                 debugHud->SetMode(DEBUGHUD_SHOW_NONE);
         }
     }
+#endif
 #ifdef ACTIVE_GAMELOOPTESTING
     // Switch Start/Stop Record Test
     else if (scancode == SCANCODE_F3)
@@ -1213,7 +1211,7 @@ void Game::HandleKeyDown(StringHash eventType, VariantMap& eventData)
             ++quality;
             if (quality > QUALITY_HIGH)
                 quality = QUALITY_LOW;
-            renderer->SetTextureQuality(quality);
+            renderer->SetTextureQuality((MaterialQuality)quality);
         }
         // Material quality
         else if (scancode == SCANCODE_2)
@@ -1222,7 +1220,7 @@ void Game::HandleKeyDown(StringHash eventType, VariantMap& eventData)
             ++quality;
             if (quality > QUALITY_HIGH)
                 quality = QUALITY_LOW;
-            renderer->SetMaterialQuality(quality);
+            renderer->SetMaterialQuality((MaterialQuality)quality);
         }
         // Specular lighting
         else if (scancode == SCANCODE_3)
