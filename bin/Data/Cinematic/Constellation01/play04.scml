@@ -19,7 +19,7 @@
     </folder>
     <entity id="0" name="entity">
         <obj_info name="bone_000" type="bone" w="472.116" h="10"/>
-        <animation id="0" name="playscene" length="3000" interval="100">
+        <animation id="0" name="playscene" length="3000" interval="100" looping="false">
             <mainline>
                 <key id="0">
                     <bone_ref id="0" timeline="15" key="0"/>

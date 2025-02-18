@@ -201,7 +201,6 @@ void AnimatedSprite2D::SetAnimationSet(AnimationSet2D* animationSet)
 
     // Clear animation name
     animationName_.Clear();
-    loopMode_ = LM_DEFAULT;
 }
 
 void AnimatedSprite2D::SetEntity(const String& entity)
@@ -244,7 +243,7 @@ void AnimatedSprite2D::SetSpriterEntity(int index)
     SetAnimation(GetAnimation());
 }
 
-void AnimatedSprite2D::SetAnimation(const String& name, LoopMode2D loopMode)
+void AnimatedSprite2D::SetAnimation(const String& name)
 {
     if (!animationSet_)
         return;
@@ -264,8 +263,6 @@ void AnimatedSprite2D::SetAnimation(const String& name, LoopMode2D loopMode)
         return;
     }
 
-    loopMode_ = loopMode;
-
 #ifdef URHO3D_SPINE
     if (skeleton_)
         SetSpineAnimation();
@@ -276,9 +273,15 @@ void AnimatedSprite2D::SetAnimation(const String& name, LoopMode2D loopMode)
 
 void AnimatedSprite2D::SetLoopMode(LoopMode2D loopMode)
 {
-    loopMode_ = loopMode;
-    if (spriterInstance_)
+    // URHO3D_LOGINFOF("AnimatedSprite2D() - SetLoopMode : %s(%u) loopMode=%s(%d)",
+    //                 node_->GetName().CString(), node_->GetID(), loopModeNames[loopMode], loopMode); 
+
+    if (loopMode_ != loopMode)
+        loopMode_ = loopMode;
+
+    if (spriterInstance_ && spriterInstance_->GetLooping() != (Spriter::LoopMode)loopMode)
         SetSpriterAnimation();
+
 }
 
 void AnimatedSprite2D::SetSpeed(float speed)
@@ -308,7 +311,7 @@ void AnimatedSprite2D::SetAnimationSetAttr(const ResourceRef& value)
 void AnimatedSprite2D::SetAnimationAttr(const String& name)
 {
     animationName_ = name;
-    SetAnimation(animationName_, loopMode_);
+    SetAnimation(name);
 }
 
 void AnimatedSprite2D::CleanDependences()
@@ -1032,7 +1035,7 @@ void AnimatedSprite2D::UpdateSourceBatchesSpine()
 }
 #endif
 
-void AnimatedSprite2D::SetSpriterAnimation(int index, LoopMode2D loopMode)
+void AnimatedSprite2D::SetSpriterAnimation(int index)
 {
     if (!spriterInstance_)
         return;
@@ -1044,7 +1047,7 @@ void AnimatedSprite2D::SetSpriterAnimation(int index, LoopMode2D loopMode)
     }
     else
     {
-        if (!spriterInstance_->SetAnimation(index, (Spriter::LoopMode)loopMode))
+        if (!spriterInstance_->SetAnimation(index, (Spriter::LoopMode)loopMode_))
             return;
 
         animationIndex_ = index;

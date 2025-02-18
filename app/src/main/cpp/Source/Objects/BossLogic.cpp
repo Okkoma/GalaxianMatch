@@ -656,11 +656,20 @@ void BossLogic::OnUpdate(StringHash eventType, VariantMap& eventData)
 
 void BossLogic::Update(float timestep)
 {
-    if (animators_[0]->HasFinishedAnimation() && state_ >= ATTACK1 && state_ <= BREAK5)
+    if (state_ >= ATTACK1 && state_ <= BREAK5)
     {
-        if (GetCurrentLife() > 0)
+        // URHO3D_LOGINFOF("BossLogic() - Update : Node=%s(%u) ... state=%d path=%d actionTimer=%F looping=%u", 
+        //                 node_->GetName().CString(), node_->GetID(), state_, path_, actiontimer_, animators_.Front()->GetSpriterInstance()->GetLooping());
+
+        if (animators_.Front()->HasFinishedAnimation())
         {
-            if (animators_[0]->GetSpriterInstance()->GetLooping())
+            if (GetCurrentLife() == 0)
+            {
+                SetState(DIE);
+                return;
+            }
+
+            if (animators_.Front()->GetSpriterInstance()->GetLooping())
             {
                 numloops_++;
                 if (numloops_ >= maxLoopsByState_)
@@ -668,17 +677,15 @@ void BossLogic::Update(float timestep)
                     SetState(MOVE);
                     numloops_ = 0;
                 }
-//                URHO3D_LOGINFOF("BossLogic() - Update : Node=%s(%u) ... state=%d loops=%d ", node_->GetName().CString(), node_->GetID(), state_, numloops_);
+                URHO3D_LOGINFOF("BossLogic() - Update : Node=%s(%u) ... state=%d loops=%d ", node_->GetName().CString(), node_->GetID(), state_, numloops_);
             }
             else
                 SetState(MOVE);
+
+//            SetTrigAttacksEnable(false);
+
+            return;
         }
-        else
-            SetState(DIE);
-
-//        SetTrigAttacksEnable(false);
-
-        return;
     }
 
     if (state_ == DIE)

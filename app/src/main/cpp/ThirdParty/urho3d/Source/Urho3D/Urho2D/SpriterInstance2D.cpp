@@ -33,14 +33,17 @@
 namespace Urho3D
 {
 
+extern const char* loopModeNames[];
+
 namespace Spriter
 {
 
 SpriterInstance::SpriterInstance(Component* owner, SpriterData* spriteData) :
     owner_(owner),
     spriterData_(spriteData),
-    entity_(0),
-    animation_(0)
+    entity_(nullptr),
+    animation_(nullptr),
+    looping_(false)
 {
 }
 
@@ -48,8 +51,8 @@ SpriterInstance::~SpriterInstance()
 {
     Dispose();
 
-    OnSetAnimation(0);
-    OnSetEntity(0);
+    OnSetAnimation(nullptr);
+    OnSetEntity(nullptr);
 }
 
 bool SpriterInstance::SetEntity(int index)
@@ -107,8 +110,7 @@ bool SpriterInstance::SetAnimation(const String& animationName, LoopMode loopMod
         return false;
 
     Animation* animation = GetAnimation(animationName);
-
-    if (animation && animation != animation_)
+    if (animation)
     {
         OnSetAnimation(animation, loopMode);
         return true;
@@ -143,7 +145,15 @@ void SpriterInstance::SetSpatialInfo(float x, float y, float angle, float scaleX
 
 bool SpriterInstance::HasFinishedAnimation() const
 {
+    if (!animation_)
+        return true;
+
     return looping_ ? false : currentTime_ == animation_->length_;
+}
+
+bool SpriterInstance::GetLooping() const
+{ 
+    return looping_;
 }
 
 void SpriterInstance::OnSetEntity(Entity* entity)
@@ -151,7 +161,7 @@ void SpriterInstance::OnSetEntity(Entity* entity)
     if (entity == this->entity_)
         return;
 
-    OnSetAnimation(0);
+    OnSetAnimation(nullptr);
 
     this->entity_ = entity;
 }
@@ -159,7 +169,7 @@ void SpriterInstance::OnSetEntity(Entity* entity)
 void SpriterInstance::OnSetAnimation(Animation* animation, LoopMode loopMode)
 {
     if (loopMode == Default)
-        looping_ = animation_ ? animation_->looping_ : false;
+        looping_ = animation ? animation->looping_ : false;
     else if (loopMode == ForceLooped)
         looping_ = true;
     else
@@ -169,7 +179,7 @@ void SpriterInstance::OnSetAnimation(Animation* animation, LoopMode loopMode)
     {
         animation_ = animation;
         currentTime_ = 0.0f;
-        mainlineKey_ = 0;
+        mainlineKey_ = nullptr;
 
         RestoreKeys();
     }
@@ -180,11 +190,8 @@ bool SpriterInstance::Update(float deltaTime)
     if (!animation_)
         return false;
 
-    if (HasFinishedAnimation())
+    if (!looping_ && HasFinishedAnimation())
         return false;
-
-//    if (!deltaTime)
-//        currentTime_ = 0.f;
 
     if (!UpdateMainlineKeys(deltaTime))
         return false;
@@ -208,7 +215,7 @@ void SpriterInstance::ResetCurrentTime()
         return;
 
     currentTime_ = 0.f;
-    mainlineKey_ = 0;
+    mainlineKey_ = nullptr;
 
     RestoreKeys();
 }
@@ -224,7 +231,7 @@ bool SpriterInstance::UpdateMainlineKeys(float deltaTime)
 
     prevmainlineKey_ = mainlineKey_;
 
-    mainlineKey_ = 0;
+    mainlineKey_ = nullptr;
     for (unsigned i = 0; i < mainlineKeys.Size(); ++i)
     {
         if (mainlineKeys[i]->time_ > currentTime_)
@@ -325,7 +332,7 @@ void SpriterInstance::UpdateTimelineKeys()
                 tKey->zIndex_ = ref->zIndex_;
 
                 if (resetcomponent)
-                    updater.ucomponent_ = 0;
+                    updater.ucomponent_ = nullptr;
             }
             else
             {
@@ -358,7 +365,7 @@ TimelineKey* SpriterInstance::GetTimelineKey(Timeline* timeline, Ref* ref, float
 
     if (nextTimelineKeyIndex >= timeline->keys_.Size())
     {
-        if (animation_->looping_ && looping_)
+        if (looping_)
             nextTimelineKeyIndex = 0;
         else
             return timelineKey;

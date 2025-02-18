@@ -123,10 +123,10 @@ public:
     /// Set spriter entity by index
     void SetSpriterEntity(int index);
     /// Set animation by name and loop mode.
-    void SetAnimation(const String& name = String::EMPTY, LoopMode2D loopMode = LM_DEFAULT);
+    void SetAnimation(const String& name = String::EMPTY);
     /// Set Spriter animation by index.
-    void SetSpriterAnimation(int index=-1, LoopMode2D loopMode = LM_DEFAULT);
-    /// Set loop mode.
+    void SetSpriterAnimation(int index=-1);
+    /// Set default loop mode for all animations.
     void SetLoopMode(LoopMode2D loopMode);
     /// Set speed.
     void SetSpeed(float speed);

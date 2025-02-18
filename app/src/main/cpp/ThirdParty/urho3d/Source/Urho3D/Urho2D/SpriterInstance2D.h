@@ -113,7 +113,7 @@ public:
     Spriter::MainlineKey* GetCurrentMainKey() const { return mainlineKey_; }
 
     bool HasFinishedAnimation() const;
-    bool GetLooping() const { return looping_; }
+    bool GetLooping() const;
 
     /// Update animation.
     bool Update(float deltaTime);
