@@ -63,7 +63,15 @@ script/archive
 script/zipper
 TODO.txt
 *.workspace*
+*.code-workspace
 
 # VSCode
 .vscode/
+
+# Temporary
+app/src/main/cpp/Test/Network/
+app/src/main/cpp/ThirdParty/u3d/
+app/src/main/temp*
+
+
 
