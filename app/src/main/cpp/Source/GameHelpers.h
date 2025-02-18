@@ -3,6 +3,7 @@
 #include <cstdarg>
 
 #include <Urho3D/Graphics/Light.h>
+#include <Urho3D/Container/List.h>
 
 #include "DefsGame.h"
 
@@ -151,6 +152,8 @@ public:
     static void SetImage(Sprite* uielt, const Sprite2D* sprite2d);
     static void SetImage(BorderImage* uielt, const Sprite2D* sprite2d);
     static void GetNodeChildWithNameStartsWith(Node* entry, PODVector<Node*>& dest, const String& name, bool recursive);
+    template< typename T> static typename List<T>::Iterator GetListIteratorAt(List<T>& list, unsigned index);
+    template< typename T> static typename List<T>::ConstIterator GetListConstIteratorAt(const List<T>& list, unsigned index);
 
     /// Audio Helpers
     static void SpawnSound(Node* node, const char* fileName, float gain = 1.f);

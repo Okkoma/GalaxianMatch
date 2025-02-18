@@ -65,6 +65,7 @@
 #include "GameAttributes.h"
 #include "GameEvents.h"
 #include "GameStatics.h"
+#include "GameUI.h"
 
 #include "AnimatedSprite.h"
 #include "InteractiveFrame.h"
@@ -1836,6 +1837,36 @@ void GameHelpers::GetNodeChildWithNameStartsWith(Node* entry, PODVector<Node*>& 
             GetNodeChildWithNameStartsWith(node, dest, name, recursive);
     }
 }
+
+template< typename T> typename List<T>::Iterator GameHelpers::GetListIteratorAt(List<T>& list, unsigned index)
+{
+    if (index >= list.Size())
+        return list.End();
+    typename List<T>::Iterator it = list.Begin();
+    while (index)
+    {
+        ++it;
+        --index;
+    }
+    return it;
+}
+
+template< typename T> typename List<T>::ConstIterator GameHelpers::GetListConstIteratorAt(const List<T>& list, unsigned index)
+{
+    if (index >= list.Size())
+        return list.End();
+    typename List<T>::ConstIterator it = list.Begin();
+    while (index)
+    {
+        ++it;
+        --index;
+    }
+    return it;
+}
+
+template List<Message>::Iterator GameHelpers::GetListIteratorAt(List<Message>& list, unsigned index);
+template List<Message>::ConstIterator GameHelpers::GetListConstIteratorAt(const List<Message>& list, unsigned index);
+
 
 
 /// Audio Helpers

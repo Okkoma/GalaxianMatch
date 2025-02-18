@@ -226,7 +226,7 @@ float UIDialog::GetCurrentMessageDelay() const
     if (imessage_ != -1 && messages_.Size())
     {
         if (imessage_ < messages_.Size())
-            return messages_.GetConstIteratorAt(imessage_)->activationDelay_;
+            return GameHelpers::GetListConstIteratorAt(messages_, imessage_)->activationDelay_;
     }
 
     return DefaultCompanionActivationDelay;
@@ -237,7 +237,7 @@ float UIDialog::GetNextMessageDelay() const
     if (imessage_ != -1 && messages_.Size())
     {
         if (imessage_+1 < messages_.Size())
-            return messages_.GetConstIteratorAt(imessage_+1)->activationDelay_;
+            return GameHelpers::GetListConstIteratorAt(messages_, imessage_+1)->activationDelay_;
         else if (loopMessagesEnable_ && imessage_+1 >= messages_.Size())
             return messages_.Front().activationDelay_;
     }
@@ -448,7 +448,7 @@ void UIDialog::StartMessage(bool animated, bool incmessage)
 
         if (!currentmessage_.Exists())
         {
-            List<Message>::Iterator it = messages_.GetIteratorAt(imessage_);
+            List<Message>::Iterator it = GameHelpers::GetListIteratorAt(messages_, imessage_);
             while (it != messages_.End())
             {
                 // find an activable message
