@@ -89,15 +89,15 @@ void SpriteMapInfo::Set(unsigned key, Sprite2D* sprite, Spriter::CharacterMap* m
 AnimatedSprite2D::AnimatedSprite2D(Context* context) :
     StaticSprite2D(context),
 #ifdef URHO3D_SPINE
-    skeleton_(0),
-    animationStateData_(0),
-    animationState_(0),
+    skeleton_(nullptr),
+    animationStateData_(nullptr),
+    animationState_(nullptr),
 #endif
     speed_(1.0f),
     loopMode_(LM_DEFAULT),
     useCharacterMap_(false),
     characterMapDirty_(true),
-    customSourceBatches_(0),
+    customSourceBatches_(nullptr),
     animationIndex_(0)
 {
     sourceBatches_.Reserve(10);
@@ -273,9 +273,6 @@ void AnimatedSprite2D::SetAnimation(const String& name)
 
 void AnimatedSprite2D::SetLoopMode(LoopMode2D loopMode)
 {
-    // URHO3D_LOGINFOF("AnimatedSprite2D() - SetLoopMode : %s(%u) loopMode=%s(%d)",
-    //                 node_->GetName().CString(), node_->GetID(), loopModeNames[loopMode], loopMode); 
-
     if (loopMode_ != loopMode)
         loopMode_ = loopMode;
 
@@ -478,9 +475,7 @@ bool AnimatedSprite2D::ApplyCharacterMap(Spriter::CharacterMap* characterMap)
         characterMapApplied_.Push(characterMap->hashname_);
 
     sourceBatchesDirty_ = true;
-
     useCharacterMap_ = true;
-
     characterMaps_.Push(characterMap);
 
     return true;
@@ -489,9 +484,7 @@ bool AnimatedSprite2D::ApplyCharacterMap(Spriter::CharacterMap* characterMap)
 void AnimatedSprite2D::SwapSprite(const StringHash& characterMap, Sprite2D* replacement, unsigned index, bool keepProportion)
 {
     Sprite2D* original = GetCharacterMapSprite(characterMap, index);
-
     SwapSprite(original, replacement, keepProportion);
-
     sourceBatchesDirty_ = true;
 }
 
@@ -662,7 +655,7 @@ bool AnimatedSprite2D::IsCharacterMapApplied(const String& characterMap) const
 Sprite2D* AnimatedSprite2D::GetSprite(unsigned zorder) const
 {
     if (zorder >= GetNumSpriteKeys())
-        return 0;
+        return nullptr;   
 
     if (zorder < spritesInfos_.Size())
         return spritesInfos_[zorder]->sprite_;
@@ -684,7 +677,7 @@ const PODVector<Spriter::SpriteTimelineKey* >& AnimatedSprite2D::GetSpriteKeys()
 const SpriteMapInfo* AnimatedSprite2D::GetSpriteMapInfo(unsigned key) const
 {
     HashMap<unsigned, SpriteMapInfo >::ConstIterator it = spriteMapping_.Find(key);
-    return it != spriteMapping_.End() ? &it->second_ : 0;
+    return it != spriteMapping_.End() ? &it->second_ : nullptr;
 }
 
 SpriteInfo* AnimatedSprite2D::GetSpriteInfo(unsigned key, const SpriteMapInfo* mapinfo, Sprite2D* sprite, Sprite2D* origin)
@@ -778,7 +771,7 @@ Sprite2D* AnimatedSprite2D::GetMappedSprite(int folderid, int fileid) const
 Sprite2D* AnimatedSprite2D::GetSwappedSprite(Sprite2D* original) const
 {
     if (!original)
-        return 0;
+        return nullptr;   
 
     HashMap<Sprite2D*, SharedPtr<Sprite2D> >::ConstIterator it = swappedSprites_.Find(original);
     return it != swappedSprites_.End() ? it->second_.Get() : original;
@@ -1567,7 +1560,7 @@ void AnimatedSprite2D::UpdateSourceBatchesSpriter(Vector<SourceBatch2D>* sourceB
 
     Vector<Vertex2D>& vertices = sourceBatches[iBatch].vertices_;
 
-    Texture *texture = 0, *ttexture = 0;
+    Texture *texture = nullptr, *ttexture = nullptr;
 
     for (unsigned i = 0; i < numSpriteKeys; ++i)
     {
@@ -1726,8 +1719,8 @@ void AnimatedSprite2D::UpdateSourceBatchesSpriter_Custom(Vector<SourceBatch2D>* 
     Material* tmaterial;
 
     Sprite2D* sprite;
-    Texture2D* texture = 0;
-    Texture2D* ttexture = 0;
+    Texture2D* texture = nullptr;
+    Texture2D* ttexture = nullptr;
     Spriter::SpriteTimelineKey* spriteKey;
 
     int textureunit = -1;
@@ -1986,19 +1979,19 @@ void AnimatedSprite2D::Dispose(bool removeNode)
     if (animationState_)
     {
         spAnimationState_dispose(animationState_);
-        animationState_ = 0;
+        animationState_ = nullptr;
     }
 
     if (animationStateData_)
     {
         spAnimationStateData_dispose(animationStateData_);
-        animationStateData_ = 0;
+        animationStateData_ = nullptr;
     }
 
     if (skeleton_)
     {
         spSkeleton_dispose(skeleton_);
-        skeleton_ = 0;
+        skeleton_ = nullptr;
     }
 #endif
     if (spriterInstance_)
@@ -2015,7 +2008,7 @@ void AnimatedSprite2D::Dispose(bool removeNode)
 
     animationName_.Clear();
 
-    customSourceBatches_ = 0;
+    customSourceBatches_ = nullptr;
 }
 
 
