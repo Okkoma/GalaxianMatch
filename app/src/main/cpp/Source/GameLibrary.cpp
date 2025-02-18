@@ -76,9 +76,10 @@ void UnRegisterGameLibrary(Context* context)
 	MatchesManager::Reset();
     Tutorial::Reset();
 
+#ifdef ACTIVE_GAMELOOPTESTING
     InputPlayer::Release();
     InputRecorder::Release();
-
+#endif
 	URHO3D_LOGINFO("UnRegisterGameLibrary : ... OK !");
 }
 
