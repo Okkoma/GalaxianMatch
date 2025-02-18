@@ -1187,6 +1187,7 @@ void Game::HandleKeyDown(StringHash eventType, VariantMap& eventData)
         GameStatics::AddEarnStars(1);
     }
 #endif
+#ifdef ACTIVE_GAMELOOPTESTING
     else if (scancode == SCANCODE_F7)
     {
         InputPlayer* player = InputPlayer::Get();
@@ -1199,6 +1200,7 @@ void Game::HandleKeyDown(StringHash eventType, VariantMap& eventData)
                 player->StartFile("didacticiel_play01");
         }
     }
+#endif
 	// Common rendering quality controls, only when UI has no focused element
 	else if (!GetSubsystem<UI>()->GetFocusElement())
 	{

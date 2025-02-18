@@ -1,3 +1,4 @@
+#ifdef ACTIVE_GAMELOOPTESTING
 #include <Urho3D/Urho3D.h>
 
 #include <Urho3D/Core/Context.h>
@@ -916,4 +917,4 @@ void InputPlayer::HandleRandomTest(StringHash eventType, VariantMap& eventData)
         SetMode(-1);
     }
 }
-
+#endif

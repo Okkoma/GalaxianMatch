@@ -1,3 +1,4 @@
+#ifdef ACTIVE_GAMELOOPTESTING
 #pragma once
 
 #include <Urho3D/Core/Timer.h>
@@ -139,4 +140,5 @@ private:
 };
 
 extern bool PlayInputRecordTest(int test);
+#endif
 
