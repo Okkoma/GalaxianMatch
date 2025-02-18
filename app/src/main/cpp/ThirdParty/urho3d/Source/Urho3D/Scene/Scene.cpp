@@ -1181,55 +1181,6 @@ void Scene::NodeIDChanged(Node* node, unsigned newFirstNodeID, unsigned newFirst
             node->SetID(newFirstNodeID);
         }
     }
-    // CreateMode change
-    else if (node->changeModeEnabled_)
-    {
-        if (mode == REPLICATED)
-        {
-            if (id > 0)
-            {
-                replicatedNodes_.Erase(id);
-                CleanNetworkReplication(node);
-//                MarkReplicationDirty(node);
-            }
-
-            HashMap<unsigned, Node*>::Iterator i = localNodes_.Find(newFirstNodeID);
-            if (i != localNodes_.End() && i->second_ != node)
-                URHO3D_LOGWARNING("Scene() - NodeIDChanged : REPLICATED To LOCAL Mode with Overwriting node ID " + String(newFirstNodeID));
-
-            localNodes_[newFirstNodeID] = node;
-            node->SetID(newFirstNodeID);
-        }
-        else
-        {
-            if (id > 0) localNodes_.Erase(id);
-
-            HashMap<unsigned, Node*>::Iterator i = replicatedNodes_.Find(newFirstNodeID);
-            if (i != replicatedNodes_.End() && i->second_ != node)
-                URHO3D_LOGWARNING("Scene() - NodeIDChanged : LOCAL To REPLICATED Mode with Overwriting node ID " + String(newFirstNodeID));
-
-            replicatedNodes_[newFirstNodeID] = node;
-            node->SetID(newFirstNodeID);
-            MarkNetworkUpdate(node);
-            MarkReplicationDirty(node);
-        }
-        // ChangeID for already created components
-        const Vector<SharedPtr<Component> >& components = node->GetComponents();
-        for (Vector<SharedPtr<Component> >::ConstIterator i = components.Begin(); i != components.End(); ++i)
-        {
-            ComponentIDChanged(*i, newFirstComponentID);
-            newFirstComponentID++;
-        }
-        // ChangeID for child nodes
-        newFirstNodeID++;
-        const Vector<SharedPtr<Node> >& children = node->GetChildren();
-        for (Vector<SharedPtr<Node> >::ConstIterator i = children.Begin(); i != children.End(); ++i)
-        {
-            NodeIDChanged(*i, newFirstNodeID, newFirstComponentID);
-            newFirstNodeID++;
-            newFirstComponentID += (*i)->GetNumComponents();
-        }
-    }
 }
 
 void Scene::ComponentIDChanged(Component* component, unsigned newID)
@@ -1256,22 +1207,6 @@ void Scene::ComponentIDChanged(Component* component, unsigned newID)
         {
             localComponents_[id] = 0;
             localComponents_[newID] = component;
-        }
-        component->SetID(newID);
-    }
-    else if (component->changeModeEnabled_)
-    // CreateMode change
-    {
-        if (mode == REPLICATED)
-        {
-            replicatedComponents_.Erase(id);
-            CleanNetworkReplication(component);
-            localComponents_[newID] = component;
-        }
-        else
-        {
-            localComponents_.Erase(id);
-            replicatedComponents_[newID] = component;
         }
         component->SetID(newID);
     }

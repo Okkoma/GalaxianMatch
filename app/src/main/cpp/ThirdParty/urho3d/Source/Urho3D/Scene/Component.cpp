@@ -57,8 +57,7 @@ Component::Component(Context* context) :
     node_(0),
     id_(0),
     networkUpdate_(false),
-    enabled_(true),
-    changeModeEnabled_(true)
+    enabled_(true)
 {
 }
 
@@ -143,12 +142,6 @@ void Component::SetEnabled(bool enable)
             scene->SendEvent(E_COMPONENTENABLEDCHANGED, eventData);
         }
     }
-}
-
-/// FromBones :: Set enabled/disabled ChangeMode.
-void Component::SetChangeModeEnable(bool enable)
-{
-    changeModeEnabled_ = enable;
 }
 
 void Component::Remove()

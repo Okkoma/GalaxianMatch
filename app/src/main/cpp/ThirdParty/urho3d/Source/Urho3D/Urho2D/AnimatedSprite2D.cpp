@@ -1156,10 +1156,7 @@ void AnimatedSprite2D::UpdateTriggers()
                     {
                         triggerNode = node_->CreateChild(timeline->name_, LOCAL);
                         triggerNode->SetTemporary(true);
-                        triggerNode->isPoolNode_ = node_->isPoolNode_;
-                        triggerNode->SetChangeModeEnable(false);
                         triggerNodes_.Push(WeakPtr<Node>(triggerNode));
-                        //renderNodes_.Push(triggerNode);
                     }
 
                     Vector<String> params = args[1].Split('|');
@@ -1224,8 +1221,6 @@ void AnimatedSprite2D::UpdateTriggers()
                     {
                         node = node_->CreateChild(it->first_, LOCAL);
                         node->SetTemporary(true);
-                        node->isPoolNode_ = node_->isPoolNode_;
-                        node->SetChangeModeEnable(false);
                     }
                     updater.ucomponent_ = node;
                 }
@@ -1303,21 +1298,17 @@ void AnimatedSprite2D::UpdateTriggers()
             {
                 physicNode = node_->CreateChild(timeline->name_, LOCAL);
                 physicNode->SetTemporary(true);
-                physicNode->isPoolNode_ = node_->isPoolNode_;
-                physicNode->SetChangeModeEnable(false);
 
                 triggerNodes_.Push(WeakPtr<Node>(physicNode));
 
                 if (isAbox)
                 {
                     collisionBox = physicNode->CreateComponent<CollisionBox2D>(LOCAL);
-                    collisionBox->SetChangeModeEnable(false);
                     collisionBox->SetTrigger(false);
                 }
                 else
                 {
                     collisionCircle = physicNode->CreateComponent<CollisionCircle2D>(LOCAL);
-                    collisionCircle->SetChangeModeEnable(false);
                     collisionCircle->SetTrigger(collidertype == 'T');
                 }
             }

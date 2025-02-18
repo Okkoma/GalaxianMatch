@@ -76,9 +76,6 @@ public:
     /// Set enabled/disabled state.
     void SetEnabled(bool enable);
 
-    /// FromBones : Set enabled/disabled ChangeMode.
-    void SetChangeModeEnable(bool enable);
-
     /// Remove from the scene node. If no other shared pointer references exist, causes immediate deletion.
     void Remove();
 
@@ -145,8 +142,6 @@ protected:
     bool networkUpdate_;
     /// Enabled flag.
     bool enabled_;
-    /// FromBones : Allow to Skip the change mode in Scene::ComponentChangeID
-    bool changeModeEnabled_;
 };
 
 template <class T> T* Component::GetComponent() const { return static_cast<T*>(GetComponent(T::GetTypeStatic())); }
