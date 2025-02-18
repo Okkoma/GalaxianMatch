@@ -18,8 +18,6 @@
 #include "TicTacToeLogic.h"
 #include "BlastLogic.h"
 
-#include "ObjectPool.h"
-
 #include "LevelGraph.h"
 
 #include "MAN_Matches.h"
@@ -75,7 +73,6 @@ void UnRegisterGameLibrary(Context* context)
 {
 	URHO3D_LOGINFO("UnRegisterGameLibrary : ... ");
 
-	ObjectPool::Reset();
 	MatchesManager::Reset();
     Tutorial::Reset();
 

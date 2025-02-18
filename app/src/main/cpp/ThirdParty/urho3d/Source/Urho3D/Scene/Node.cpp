@@ -47,7 +47,6 @@ namespace Urho3D
 
 Node::Node(Context* context) :
     Animatable(context),
-    isPoolNode_(false),
     worldTransform_(Matrix3x4::IDENTITY),
     dirty_(false),
     dirty2D_(false),
@@ -64,8 +63,7 @@ Node::Node(Context* context) :
     worldRotation_(Quaternion::IDENTITY),
     rotation2D_(0),
     worldRotation2D_(0),
-    owner_(0),
-    changeModeEnabled_(true)
+    owner_(0)
 {
 }
 
@@ -855,12 +853,6 @@ void Node::Scale(const Vector3& scale)
     MarkNetworkUpdate();
 }
 
-/// FromBones :: Set enabled/disabled ChangeMode.
-void Node::SetChangeModeEnable(bool enable)
-{
-    changeModeEnabled_ = enable;
-}
-
 void Node::SetEnabled(bool enable)
 {
     SetEnabled(enable, false, true);
@@ -1077,7 +1069,6 @@ Component* Node::CreateComponent(StringHash type, CreateMode mode, unsigned id)
     SharedPtr<Component> newComponent = DynamicCast<Component>(context_->CreateObject(type));
     if (!newComponent)
     {
-//        URHO3D_LOGERROR("Could not create unknown component type " + type.ToString());
         URHO3D_LOGERRORF("Could not create unknown component type %u", type.Value());
         return 0;
     }
@@ -1120,9 +1111,6 @@ Component* Node::CloneComponent(Component* component, CreateMode mode, unsigned 
         URHO3D_LOGERROR("Could not clone component " + component->GetTypeName());
         return 0;
     }
-
-    // FromBones ObjectPool Attr
-    cloneComponent->changeModeEnabled_ = component->changeModeEnabled_;
 
     const Vector<AttributeInfo>* compAttributes = component->GetAttributes();
     const Vector<AttributeInfo>* cloneAttributes = cloneComponent->GetAttributes();
@@ -2407,10 +2395,6 @@ Node* Node::CloneRecursive(Node* parent, SceneResolver& resolver, CreateMode mod
     if (!nodeid)
         resolver.AddNode(id_, cloneNode);
 
-    // FromBones ObjectPool Attr
-    cloneNode->isPoolNode_ = isPoolNode_;
-    cloneNode->changeModeEnabled_ = changeModeEnabled_;
-
     // Copy attributes
     const Vector<AttributeInfo>* attributes = GetAttributes();
     for (unsigned j = 0; j < attributes->Size(); ++j)
@@ -2426,61 +2410,26 @@ Node* Node::CloneRecursive(Node* parent, SceneResolver& resolver, CreateMode mod
     }
 
     // Clone components
-    if (isPoolNode_ && componentid)
+    for (Vector<SharedPtr<Component> >::ConstIterator i = components_.Begin(); i != components_.End(); ++i)
     {
-        for (Vector<SharedPtr<Component> >::ConstIterator i = components_.Begin(); i != components_.End(); ++i)
-        {
-            Component* component = *i;
-            if (component->IsTemporary())
-                continue;
+        Component* component = *i;
+        if (component->IsTemporary())
+            continue;
 
-            componentid++;
+        Component* cloneComponent = cloneNode->CloneComponent(component,
+                  (mode == REPLICATED && component->GetID() < FIRST_LOCAL_ID) ? REPLICATED : LOCAL, 0, applyAttr);
 
-            Component* cloneComponent = cloneNode->CloneComponent(component,
-                (mode == REPLICATED && component->GetID() < FIRST_LOCAL_ID) ? REPLICATED : LOCAL, componentid, applyAttr);
-        }
-    }
-    else
-    {
-        for (Vector<SharedPtr<Component> >::ConstIterator i = components_.Begin(); i != components_.End(); ++i)
-        {
-            Component* component = *i;
-            if (component->IsTemporary())
-                continue;
-
-            Component* cloneComponent = cloneNode->CloneComponent(component,
-                (mode == REPLICATED && component->GetID() < FIRST_LOCAL_ID) ? REPLICATED : LOCAL, 0, applyAttr);
-
-            resolver.AddComponent(component->GetID(), cloneComponent);
-        }
+        resolver.AddComponent(component->GetID(), cloneComponent);
     }
 
     // Clone child nodes recursively
-    if (isPoolNode_ && nodeid)
+    for (Vector<SharedPtr<Node> >::ConstIterator i = children_.Begin(); i != children_.End(); ++i)
     {
-        for (Vector<SharedPtr<Node> >::ConstIterator i = children_.Begin(); i != children_.End(); ++i)
-        {
-            Node* node = *i;
-            if (node->IsTemporary())
-                continue;
+        Node* node = *i;
+        if (node->IsTemporary())
+            continue;
 
-            node->isPoolNode_ = isPoolNode_;
-            node->changeModeEnabled_ = changeModeEnabled_;
-            nodeid++;
-
-            node->CloneRecursive(cloneNode, resolver, mode, nodeid, componentid, applyAttr);
-        }
-    }
-    else
-    {
-        for (Vector<SharedPtr<Node> >::ConstIterator i = children_.Begin(); i != children_.End(); ++i)
-        {
-            Node* node = *i;
-            if (node->IsTemporary())
-                continue;
-
-            node->CloneRecursive(cloneNode, resolver, mode, 0, 0, applyAttr);
-        }
+        node->CloneRecursive(cloneNode, resolver, mode, 0, 0, applyAttr);
     }
 
     {

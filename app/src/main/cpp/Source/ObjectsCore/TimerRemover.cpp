@@ -10,8 +10,6 @@
 
 #include "GameStatics.h"
 
-#include "ObjectPool.h"
-
 #include "TimerRemover.h"
 
 
@@ -181,9 +179,7 @@ void TimerRemover::Stop(VariantMap& eventData)
     if (objectType_ == NODE)
     {
         Node* node = static_cast<Node*>(object_.Get());
-        if (removeState_ == POOLRESTORE)
-            ObjectPool::Free(node);
-        else if (removeState_ == FREEMEMORY)
+        if (removeState_ == FREEMEMORY)
             node->Remove();
         else if (removeState_ == ENABLE)
             node->SetEnabled(true);

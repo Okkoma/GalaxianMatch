@@ -153,9 +153,6 @@ void SplashScreen::HandleCloseSplash(StringHash eventType, VariantMap& eventData
 
     float delay = Max(keepDelay_+SPLASHSCREEN_MOVEDELAY, delay_);
 
-    // Reset controls
-    GameStatics::input_->ResetStates();
-
     SendEvent(SPLASHSCREEN_STARTCLOSE);
 
     splashUI_bottom->SetVisible(true);

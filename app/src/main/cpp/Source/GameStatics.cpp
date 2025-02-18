@@ -76,7 +76,6 @@
 #include "sCinematic.h"
 #include "sOptions.h"
 
-#include "ObjectPool.h"
 #include "DelayAction.h"
 #include "DelayInformer.h"
 #include "TimerRemover.h"
@@ -684,9 +683,6 @@ bool GameStatics::PreloadResources()
 
         GOT::DumpAll();
         COT::DumpAll();
-
-        if (ObjectPool::Get())
-            ObjectPool::Get()->DumpCategories();
     #endif
 
         const Vector<StringHash>& bosses = COT::GetObjectsInCategory(COT::BOSSES);
@@ -1261,9 +1257,6 @@ void GameStatics::Stop()
     // Stop current State (Menu, Play etc...) and delete Manager
     if (stateManager_)
         stateManager_->Stop();
-
-    if (rootScene_)
-        rootScene_->CleanupNetwork();
 
     if (rootScene_)
         GameHelpers::StopMusics();

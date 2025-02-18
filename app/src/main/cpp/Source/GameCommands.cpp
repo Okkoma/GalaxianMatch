@@ -15,8 +15,6 @@
 #include "GameHelpers.h"
 #include "GameStateManager.h"
 
-#include "ObjectPool.h"
-
 #include "GameCommands.h"
 
 
@@ -40,11 +38,6 @@ void GameCommands::Launch(Context* context, const String& input)
     else if (inputLower == "statics")
         GameStatics::Dump();
 
-    else if (inputLower == "pool")
-    {
-        if (ObjectPool::Get())
-            ObjectPool::Get()->DumpCategories();
-    }
     else if (inputLower == "render")
     {
         GameStatics::rootScene_->GetComponent<Renderer2D>()->Dump();

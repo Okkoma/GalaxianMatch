@@ -16,8 +16,6 @@
 #include "GameHelpers.h"
 #include "GameOptions.h"
 
-#include "ObjectPool.h"
-
 #include "GameAttributes.h"
 
 
@@ -302,10 +300,6 @@ bool GOT::PreLoadObjects(int& state, HiresTimer* timer, const long long& delay, 
     {
         objects_.Clear();
 
-        // Reset the object pool
-        if (useObjectPool)
-            ObjectPool::Reset(preloaderGOT);
-
         gotinfosIt = infos_.Begin();
 
 #ifdef ACTIVE_PRELOADER_ASYNC
@@ -397,12 +391,7 @@ bool GOT::PreLoadObjects(int& state, HiresTimer* timer, const long long& delay, 
     // Set ObjectPool Categories
     if (state == 7)
     {
-        if (useObjectPool)
-            if (!ObjectPool::Get()->CreateCategories(GameStatics::rootScene_, infos_, objects_, timer, delay))
-                return false;
-
         URHO3D_LOGINFOF("GOT() - PreloadObjects ... OK !");
-
         return true;
     }
 
@@ -417,9 +406,6 @@ void GOT::UnLoadObjects(Node* root)
     Context* context = root->GetContext();
 
     objects_.Clear();
-
-    // Erase Pools
-	ObjectPool::Reset();
 
 	root->Remove();
 

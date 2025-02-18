@@ -224,8 +224,6 @@ public:
     /// Modify scale in parent space (for Urho2D).
     void Scale2D(const Vector2& scale) { Scale(Vector3(scale, 1.0f)); }
 
-    /// FromBones :: Set enabled/disabled ChangeMode.
-    void SetChangeModeEnable(bool enable);
     /// Set enabled/disabled state without recursion. Components in a disabled node become effectively disabled regardless of their own enable/disable state.
     void SetEnabled(bool enable);
     /// Set enabled state on self and child nodes. Nodes' own enabled state is remembered (IsEnabledSelf) and can be restored.
@@ -604,9 +602,6 @@ public:
     /// Set local transform silently without marking the node & child nodes dirty. Used by animation code.
     void SetTransformSilent(const Vector3& position, const Quaternion& rotation, const Vector3& scale);
 
-    /// FromBones : ObjectPool node
-    bool isPoolNode_;
-
 protected:
     /// Handle attribute animation added.
     virtual void OnAttributeAnimationAdded();
@@ -696,9 +691,6 @@ private:
     StringHash nameHash_;
     /// Attribute buffer for network updates.
     mutable VectorBuffer attrBuffer_;
-
-    /// FromBones : Allow to Skip the change mode in Scene::NodeChangeID
-    bool changeModeEnabled_;
 
 protected:
     /// User variables.

@@ -74,8 +74,6 @@
 
 //#include "GOC_Animator2D.h"
 #include "Matches.h"
-#include "ObjectPool.h"
-
 
 #include "GameHelpers.h"
 
@@ -643,17 +641,6 @@ bool GameHelpers::CleanScene(Scene* rootscene, const String& stateToClean, int s
     // clean-up step 0 : remove common nodes & physics
     if (!step)
     {
-        URHO3D_LOGINFOF("GameHelpers() - CleanScene : ... CleanupNetwork ...");
-
-        rootscene->CleanupNetwork();
-
-        URHO3D_LOGINFOF("GameHelpers() - CleanScene : ... ObjectPool Restore ...");
-
-        if (ObjectPool::Get())
-            ObjectPool::Get()->RestoreCategories();
-        else
-            URHO3D_LOGWARNINGF(" ... no ObjectPool to restore !");
-
         PODVector<Node*> nodesToRemove;
 
         if (stateToClean == "Play")
@@ -674,11 +661,6 @@ bool GameHelpers::CleanScene(Scene* rootscene, const String& stateToClean, int s
         for (unsigned i=0; i < nodesToRemove.Size(); ++i)
             if (nodesToRemove[i])
                 GameHelpers::RemoveNodeSafe(nodesToRemove[i], false);
-
-        /// TODO : Test this with network
-        // Clear Replicated Nodes
-        rootscene->Clear(true, false);
-//        rootscene_->Clear(!GameStatics::ClientMode_, false);
 
         /// For Debug
 //        GameHelpers::DumpNode(rootscene, 2, true);

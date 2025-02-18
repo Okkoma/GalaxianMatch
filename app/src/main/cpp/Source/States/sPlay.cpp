@@ -80,7 +80,6 @@
 
 #include "Network.h"
 
-#include "ObjectPool.h"
 #include "InteractiveFrame.h"
 #include "TextMessage.h"
 #include "DelayAction.h"
@@ -1878,12 +1877,6 @@ void PlayState::HandleUpdate(StringHash eventType, VariantMap& eventData)
             if (boss)
                 boss->GetDerivedComponent<BossLogic>()->Hit(5);
         }
-    }
-    // Tip Dump Pool
-    if (input->GetKeyPress(KEY_O))
-    {
-        if (ObjectPool::Get())
-            ObjectPool::Get()->DumpCategories();
     }
     if (input->GetKeyDown(KEY_PAGEUP))
     {

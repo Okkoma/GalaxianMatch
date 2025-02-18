@@ -208,9 +208,6 @@ void GameState::Begin()
 
     stateManager_->StartSceneCleaner();
 
-    // Reset controls
-    GameStatics::input_->ResetStates();
-
     begun_ = true;
     SendEvent(GAME_STATEBEGIN);
     URHO3D_LOGINFOF("GameState() - Begin : id=%s", stateId_.CString());
