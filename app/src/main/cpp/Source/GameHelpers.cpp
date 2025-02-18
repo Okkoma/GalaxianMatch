@@ -1124,8 +1124,8 @@ void GameHelpers::AddText3DFadeAnim(Node* rootNode, const String& text, Text* or
     // add offset in y
     correcttextposition.y_ += originaltext->GetFontSize();
 
-    Vector3 position = GameHelpers::ScreenToWorld2D(originaltext->GetScreenPosition().x_ * GameStatics::uiScale_ + correcttextposition.x_ * GameStatics::uiScale_,
-                                                    originaltext->GetScreenPosition().y_ * GameStatics::uiScale_ + correcttextposition.y_ * GameStatics::uiScale_);
+    Vector3 position(GameHelpers::ScreenToWorld2D(originaltext->GetScreenPosition().x_ * GameStatics::uiScale_ + correcttextposition.x_ * GameStatics::uiScale_,
+                                                  originaltext->GetScreenPosition().y_ * GameStatics::uiScale_ + correcttextposition.y_ * GameStatics::uiScale_));
 
     node->SetPosition(position);
 
@@ -1549,17 +1549,17 @@ void GameHelpers::ClampSizeTo(IntVector2& size, int dimension)
 
 Vector2 GameHelpers::ScreenToWorld2D(int screenx, int screeny)
 {
-    return GameStatics::viewport_->ScreenToWorldPoint(screenx, screeny, 0.f).ToVector2();
+    return ToVector2(GameStatics::viewport_->ScreenToWorldPoint(screenx, screeny, 0.f));
 }
 
 Vector2 GameHelpers::ScreenToWorld2D(const IntVector2& screenpoint)
 {
-    return GameStatics::viewport_->ScreenToWorldPoint(screenpoint.x_, screenpoint.y_, 0.f).ToVector2();
+    return ToVector2(GameStatics::viewport_->ScreenToWorldPoint(screenpoint.x_, screenpoint.y_, 0.f));
 }
 
 Vector2 GameHelpers::ScreenToWorld2D_FixedZoom(const IntVector2& screenpoint)
 {
-    return GameStatics::fixedViewport_->ScreenToWorldPoint(screenpoint.x_, screenpoint.y_, 0.f).ToVector2();
+    return ToVector2(GameStatics::fixedViewport_->ScreenToWorldPoint(screenpoint.x_, screenpoint.y_, 0.f));
 }
 
 //Vector3 GameHelpers::ScreenToWorld2D(int x, int y)
@@ -1624,7 +1624,10 @@ void GameHelpers::OrthoWorldToScreen(IntRect& rect, const BoundingBox& b)
     // Works well, we just need to have z > 0.f so use PIXEL_SIZE as value.
     IntVector2 imin = GameStatics::viewport_->WorldToScreenPoint(Vector3(b.min_.x_, b.max_.y_, PIXEL_SIZE));
     IntVector2 imax = GameStatics::viewport_->WorldToScreenPoint(Vector3(b.max_.x_, b.min_.y_, PIXEL_SIZE));
-    rect.Define(imin, imax);
+    rect.left_   = imin.x_;
+    rect.right_  = imax.x_;
+    rect.top_    = imin.y_;
+    rect.bottom_ = imax.y_;
 }
 
 void GameHelpers::EqualizeValues(PODVector<float>& values, int coeff, bool incbleft, bool incbright)

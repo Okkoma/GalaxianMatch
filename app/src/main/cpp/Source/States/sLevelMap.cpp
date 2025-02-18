@@ -1095,7 +1095,7 @@ void LevelMapState::UpdateSceneRect()
 {
     BoundingBox graphBox;
     for (unsigned i=0; i < selectablenodes_.Size(); i++)
-        graphBox.Merge(selectablenodes_[i]->GetWorldPosition2D());
+        graphBox.Merge(selectablenodes_[i]->GetWorldPosition());
     GameHelpers::OrthoWorldToScreen(GameStatics::screenSceneRect_, graphBox);
     GameStatics::screenSceneRect_.left_  = 0;
     GameStatics::screenSceneRect_.right_ = GameStatics::graphics_->GetWidth();

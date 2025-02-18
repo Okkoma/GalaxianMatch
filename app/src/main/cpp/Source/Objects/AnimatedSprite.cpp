@@ -134,7 +134,8 @@ void AnimatedSprite::Update(float timeStep)
 void AnimatedSprite::GetBatches(PODVector<UIBatch>& batches, PODVector<float>& vertexData, const IntRect& currentScissor)
 {
     bool allOpaque = true;
-    if (GetDerivedOpacity() < 1.0f || color_[C_TOPLEFT].a_ < 1.0f || color_[C_TOPRIGHT].a_ < 1.0f || color_[C_BOTTOMLEFT].a_ < 1.0f || color_[C_BOTTOMRIGHT].a_ < 1.0f)
+    if (GetDerivedOpacity() < 1.0f || GetColor(C_TOPLEFT).a_ < 1.0f || GetColor(C_TOPRIGHT).a_ < 1.0f ||
+        GetColor(C_BOTTOMLEFT).a_ < 1.0f || GetColor(C_BOTTOMRIGHT).a_ < 1.0f)
         allOpaque = false;
 
     UIBatch batch(this, blendMode_ == BLEND_REPLACE && !allOpaque ? BLEND_ALPHA : blendMode_, currentScissor, texture_, &vertexData);

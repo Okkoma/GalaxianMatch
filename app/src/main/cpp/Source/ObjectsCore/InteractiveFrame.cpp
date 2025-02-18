@@ -330,7 +330,7 @@ void InteractiveFrame::Clean()
 
 void InteractiveFrame::SetScreenPosition(const IntVector2& position, bool instant)
 {
-    position_ = GameHelpers::ScreenToWorld2D_FixedZoom(position);
+    position_ = Vector3(GameHelpers::ScreenToWorld2D_FixedZoom(position));
 
     if (instant)
     {
@@ -342,17 +342,17 @@ void InteractiveFrame::SetScreenPosition(const IntVector2& position, bool instan
 
 void InteractiveFrame::SetScreenPositionEntrance(const IntVector2& position)
 {
-    positionexit_[0] = positionentrance_ = GameHelpers::ScreenToWorld2D_FixedZoom(position);
+    positionexit_[0] = positionentrance_ = Vector3(GameHelpers::ScreenToWorld2D_FixedZoom(position));
 }
 
 void InteractiveFrame::SetScreenPositionExit(int index, const IntVector2& position)
 {
-    positionexit_[index] = GameHelpers::ScreenToWorld2D_FixedZoom(position);
+    positionexit_[index] = Vector3(GameHelpers::ScreenToWorld2D_FixedZoom(position));
 }
 
 void InteractiveFrame::SetScreenPositionEntranceForBonus(const IntVector2& position)
 {
-    positionentrancebonus_ = GameHelpers::ScreenToWorld2D_FixedZoom(position);
+    positionentrancebonus_ = Vector3(GameHelpers::ScreenToWorld2D_FixedZoom(position));
 }
 
 void InteractiveFrame::SetSelectionMode(int mode)

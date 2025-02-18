@@ -37,6 +37,10 @@ enum
 };
 
 
+inline Vector2 ToVector2(const Vector3& v)
+{
+    return Vector2(v.x_, v.y_);
+}
 
 class GameHelpers
 {
