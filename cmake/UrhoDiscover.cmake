@@ -164,7 +164,7 @@ endfunction ()
 function (urho_find_process search_path filename dirname excludepaths results errors)
     message (" .. Searching for Urho3D directories in path = ${search_path} (this may take some time)")
     if (MSVC)
-        string(REPLACE "/" "\\" filterdir "${filterdir}")
+        string(REPLACE "/" "\\" dirname "${dirname}")
         execute_process (
             COMMAND powershell -Command "Get-ChildItem -Path '${search_path}' -Recurse -Filter '${filename}' | 
                                             Where-Object { $_.DirectoryName -like \"*${dirname}*\" | 
