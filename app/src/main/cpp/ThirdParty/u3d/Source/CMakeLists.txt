@@ -149,9 +149,11 @@ if (URHO3D_CLANG_TOOLS)
     add_subdirectory (Clang-Tools)
 endif ()
 
-# In order to get clean module segregation, always exclude player/samples from AAR
-if (NOT ANDROID)
+if (URHO3D_TOOLS AND NOT ANDROID)
     add_subdirectory (Tools)
+endif ()
+
+if (URHO3D_SAMPLES AND NOT ANDROID)
     add_subdirectory (Samples)
 endif ()
 
