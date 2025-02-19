@@ -48,19 +48,12 @@
 #include <Urho3D/Physics2D/RigidBody2D.h>
 #include <Urho3D/Physics2D/CollisionCircle2D.h>
 
-#include <Urho3D/Urho2D/Renderer2D.h>
-#include <Urho3D/Urho2D/AnimatedSprite2D.h>
-#include <Urho3D/Urho2D/AnimationSet2D.h>
-#include <Urho3D/Urho2D/ParticleEmitter2D.h>
-#include <Urho3D/Urho2D/ParticleEffect2D.h>
-#include <Urho3D/Urho2D/Sprite2D.h>
-#include <Urho3D/Urho2D/SpriteSheet2D.h>
-#include <Urho3D/Urho2D/StaticSprite2D.h>
-
 #include <Urho3D/Audio/Audio.h>
 #include <Urho3D/Audio/Sound.h>
 #include <Urho3D/Audio/SoundSource.h>
 #include <Urho3D/Audio/SoundSource3D.h>
+
+#include "Graphics2D.h"
 
 #include "GameAttributes.h"
 #include "GameEvents.h"
@@ -73,7 +66,6 @@
 #include "DelayInformer.h"
 #include "TimerRemover.h"
 
-//#include "GOC_Animator2D.h"
 #include "Matches.h"
 
 #include "GameHelpers.h"
