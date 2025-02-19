@@ -1,45 +1,28 @@
-//
-// Copyright (c) 2008-2016 the Urho3D project.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-//
+#include <Urho3D/Urho3D.h>
 
-#include "../Precompiled.h"
+#include <Urho3D/Core/Context.h>
 
-#include "../Core/Context.h"
-#include "../IO/Log.h"
-#include "../Graphics/DebugRenderer.h"
-#include "../Graphics/Material.h"
-#include "../Graphics/Texture2D.h"
-#include "../Resource/ResourceCache.h"
-#include "../Scene/Scene.h"
-#include "../Urho2D/Renderer2D.h"
-#include "../Urho2D/Sprite2D.h"
-#include "../Urho2D/StaticSprite2D.h"
+#include <Urho3D/Graphics/DebugRenderer.h>
+#include <Urho3D/Graphics/Material.h>
+#include <Urho3D/Graphics/Texture2D.h>
+#include <Urho3D/Graphics/Technique.h>
 
-#include "../DebugNew.h"
+#include <Urho3D/IO/Log.h>
+
+#include <Urho3D/Resource/ResourceCache.h>
+
+#include <Urho3D/Scene/Scene.h>
+
+#include "Sprite2D.h"
+#include "Renderer2D.h"
+
+#include "StaticSprite2D.h"
 
 namespace Urho3D
 {
+    extern const char* blendModeNames[];
+}
 
-extern const char* URHO2D_CATEGORY;
-extern const char* blendModeNames[];
 
 StaticSprite2D::StaticSprite2D(Context* context) :
     Drawable2D(context),
@@ -62,7 +45,7 @@ StaticSprite2D::~StaticSprite2D() { }
 
 void StaticSprite2D::RegisterObject(Context* context)
 {
-    context->RegisterFactory<StaticSprite2D>(URHO2D_CATEGORY);
+    context->RegisterFactory<StaticSprite2D>();
 
     URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AM_DEFAULT);
     URHO3D_COPY_BASE_ATTRIBUTES(Drawable2D);
@@ -459,4 +442,3 @@ void StaticSprite2D::DrawDebugGeometry(DebugRenderer* debug, bool depthTest)
     }
 }
 
-}

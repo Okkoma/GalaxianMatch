@@ -14,10 +14,10 @@
 
 namespace Urho3D
 {
-
-extern const char* horizontalAlignments[];
-extern const char* verticalAlignments[];
-extern const char* textEffects[];
+    extern const char* horizontalAlignments[];
+    extern const char* verticalAlignments[];
+    extern const char* textEffects[];
+}
 
 static const float TEXT_SCALING = 1.0f / 128.0f;
 static const float DEFAULT_EFFECT_DEPTH_BIAS = 0.1f;
@@ -39,38 +39,31 @@ Text2D::~Text2D()
 void Text2D::RegisterObject(Context* context)
 {
     context->RegisterFactory<Text2D>();
-
+    URHO3D_COPY_BASE_ATTRIBUTES(Drawable2D);
     URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AM_DEFAULT);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Font", GetFontAttr, SetFontAttr, ResourceRef, ResourceRef(Font::GetTypeStatic()), AM_DEFAULT);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Material", GetMaterialAttr, SetMaterialAttr, ResourceRef, ResourceRef(Material::GetTypeStatic()),
         AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Font Size", int, text_.fontSize_, DEFAULT_FONT_SIZE, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Font Size", GetFontSize, SetFontSizeAttr, int, DEFAULT_FONT_SIZE, AM_DEFAULT);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Text", GetTextAttr, SetTextAttr, String, String::EMPTY, AM_DEFAULT);
-    URHO3D_ENUM_ATTRIBUTE("Text Alignment", text_.textAlignment_, horizontalAlignments, HA_LEFT, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Row Spacing", float, text_.rowSpacing_, 1.0f, AM_DEFAULT);
+    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Text Alignment", GetTextAlignment, SetTextAlignment, HorizontalAlignment, Urho3D::horizontalAlignments, HA_LEFT, AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Auto Localizable", GetAutoLocalizable, SetAutoLocalizable, bool, false, AM_FILE);
-    URHO3D_ATTRIBUTE("Word Wrap", bool, text_.wordWrap_, false, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Word Wrap", GetWordwrap, SetWordwrap, bool, false, AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Can Be Occluded", IsOccludee, SetOccludee, bool, true, AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Draw Distance", GetDrawDistance, SetDrawDistance, float, 0.0f, AM_DEFAULT);
-
     URHO3D_ACCESSOR_ATTRIBUTE("Width", GetWidth, SetWidth, int, 0, AM_DEFAULT);
     URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Horiz Alignment", GetHorizontalAlignment, SetHorizontalAlignment, HorizontalAlignment,
-        horizontalAlignments, HA_LEFT, AM_DEFAULT);
-    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Vert Alignment", GetVerticalAlignment, SetVerticalAlignment, VerticalAlignment, verticalAlignments,
+        Urho3D::horizontalAlignments, HA_LEFT, AM_DEFAULT);
+    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Vert Alignment", GetVerticalAlignment, SetVerticalAlignment, VerticalAlignment, Urho3D::verticalAlignments,
         VA_TOP, AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Opacity", GetOpacity, SetOpacity, float, 1.0f, AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Color", GetColorAttr, SetColor, Color, Color::WHITE, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Top Left Color", Color, text_.color_[0], Color::WHITE, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Top Right Color", Color, text_.color_[1], Color::WHITE, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Bottom Left Color", Color, text_.color_[2], Color::WHITE, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Bottom Right Color", Color, text_.color_[3], Color::WHITE, AM_DEFAULT);
-    URHO3D_ENUM_ATTRIBUTE("Text Effect", text_.textEffect_, textEffects, TE_NONE, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Shadow Offset", IntVector2, text_.shadowOffset_, IntVector2(1, 1), AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Stroke Thickness", int, text_.strokeThickness_, 1, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Round Stroke", bool, text_.roundStroke_, false, AM_DEFAULT);
+    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Text Effect", GetTextEffect, SetTextEffect, TextEffect, Urho3D::textEffects, TE_NONE, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Shadow Offset", GetEffectShadowOffset, SetEffectShadowOffset, IntVector2, IntVector2(1, 1), AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Stroke Thickness", GetEffectStrokeThickness, SetEffectStrokeThickness, int, 1, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Round Stroke", GetEffectRoundStroke, SetEffectRoundStroke, bool, false, AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Effect Color", GetEffectColor, SetEffectColor, Color, Color::BLACK, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Effect Depth Bias", float, text_.effectDepthBias_, DEFAULT_EFFECT_DEPTH_BIAS, AM_DEFAULT);
-    URHO3D_COPY_BASE_ATTRIBUTES(Drawable2D);
+    URHO3D_ACCESSOR_ATTRIBUTE("Effect Depth Bias", GetEffectDepthBias, SetEffectDepthBias, float, DEFAULT_EFFECT_DEPTH_BIAS, AM_DEFAULT);
 }
 
 void Text2D::ApplyAttributes()
@@ -112,6 +105,15 @@ bool Text2D::SetFont(Font* font, int size)
     UpdateTextMaterials();
 
     return success;
+}
+
+void Text2D::SetFontSizeAttr(int size)
+{
+    text_.SetFontSize2(size);
+
+    MarkTextDirty();
+    UpdateTextBatches();
+    UpdateTextMaterials();
 }
 
 bool Text2D::SetFontSize(int size)
@@ -223,10 +225,8 @@ void Text2D::SetEffectDepthBias(float bias)
 
 void Text2D::SetWidth(int width)
 {
-    // C.VILLE : we need to fix width to correctly use word wrapping
+    // we need to fix width to correctly use word wrapping
     text_.SetFixedWidth(width);
-//    text_.SetMinWidth(width);
-//    text_.SetWidth(width);
 
     MarkTextDirty();
 }
@@ -404,14 +404,13 @@ void Text2D::MarkTextDirty()
 
 void Text2D::SetMaterialAttr(const ResourceRef& value)
 {
-    ResourceCache* cache = GetSubsystem<ResourceCache>();
-    SetMaterial(cache->GetResource<Material>(value.name_));
+    SetMaterial(GetSubsystem<ResourceCache>()->GetResource<Material>(value.name_));
 }
 
 void Text2D::SetFontAttr(const ResourceRef& value)
 {
-    ResourceCache* cache = GetSubsystem<ResourceCache>();
-    text_.font_ = cache->GetResource<Font>(value.name_);
+    // text_.font_ = GetSubsystem<ResourceCache>()->GetResource<Font>(value.name_);
+    text_.SetFontAttr(value);
 }
 
 void Text2D::SetTextAttr(const String& value)
@@ -431,7 +430,7 @@ ResourceRef Text2D::GetMaterialAttr() const
 
 ResourceRef Text2D::GetFontAttr() const
 {
-    return GetResourceRef(text_.font_, Font::GetTypeStatic());
+    return text_.GetFontAttr();
 }
 
 void Text2D::UpdateTextBatches()
@@ -444,7 +443,7 @@ void Text2D::UpdateTextBatches()
 
     Vector3 offset(Vector3::ZERO);
 
-    if (text_.text_.Length())
+    if (text_.GetText().Length())
     {
         text_.GetBatches(uiBatches_, uiVertexData_, IntRect::ZERO);
 
@@ -653,8 +652,11 @@ void Text2D::UpdateSourceBatches()
     Matrix2x3 worldTransform(node_->GetWorldPosition2D(), node_->GetWorldRotation2D(), node_->GetWorldScale2D());
 
     // Apply world transform
+    int draworder = GetDrawOrder();
+    URHO3D_LOGERRORF("Text2D::UpdateSourceBatches() - draworder=%d", draworder);
     for (unsigned i = 0; i < sourceBatches_.Size(); ++i)
     {
+        sourceBatches_[i].drawOrder_ = draworder;
         Vector<Vertex2D>& vertices = sourceBatches_[i].vertices_;
         for (unsigned j = 0; j < vertices.Size(); ++j)
             vertices[j].position_ = worldTransform * vertices[j].position_;
@@ -703,4 +705,3 @@ void Text2D::OnDrawOrderChanged()
         sourceBatches_[i].drawOrder_ = draworder;
 }
 
-}

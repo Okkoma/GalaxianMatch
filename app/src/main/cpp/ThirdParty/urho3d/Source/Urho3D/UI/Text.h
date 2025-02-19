@@ -74,7 +74,6 @@ class URHO3D_API Text : public UIElement
 {
     URHO3D_OBJECT(Text, UIElement);
 
-    friend class Text2D;
     friend class Text3D;
 
 public:

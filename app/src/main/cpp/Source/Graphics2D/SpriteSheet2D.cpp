@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2008-2016 the Urho3D project.
+// Copyright (c) 2008-2022 the Urho3D project.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,21 +20,20 @@
 // THE SOFTWARE.
 //
 
-#include "../Precompiled.h"
+#include <Urho3D/Urho3D.h>
 
-#include "../Core/Context.h"
-#include "../Graphics/Texture2D.h"
-#include "../IO/Deserializer.h"
-#include "../IO/FileSystem.h"
-#include "../IO/Log.h"
-#include "../Resource/PListFile.h"
-#include "../Resource/ResourceCache.h"
-#include "../Resource/XMLFile.h"
-#include "../Resource/JSONFile.h"
-#include "../Urho2D/Sprite2D.h"
-#include "../Urho2D/SpriteSheet2D.h"
+#include <Urho3D/Core/Context.h>
+#include <Urho3D/Graphics/Texture2D.h>
+#include <Urho3D/IO/Deserializer.h>
+#include <Urho3D/IO/FileSystem.h>
+#include <Urho3D/IO/Log.h>
+#include <Urho3D/Resource/ResourceCache.h>
+#include <Urho3D/Resource/PListFile.h>
+#include <Urho3D/Resource/XMLFile.h>
+#include <Urho3D/Resource/JSONFile.h>
 
-#include "../DebugNew.h"
+#include "Sprite2D.h"
+#include "SpriteSheet2D.h"
 
 namespace Urho3D
 {

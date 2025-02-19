@@ -1,12 +1,15 @@
 #pragma once
 
 #include <Urho3D/UI/Text.h>
-#include <Urho3D/Urho2D/Drawable2D.h>
+
+#include "Drawable2D.h"
 
 namespace Urho3D
 {
+    class Text;
+}
 
-class Text;
+using namespace Urho3D;
 
 /// 2D text component.
 class Text2D : public Drawable2D
@@ -32,6 +35,7 @@ public:
     bool SetFont(Font* font, int size = DEFAULT_FONT_SIZE);
     /// Set font size only while retaining the existing font. Return true if successful.
     bool SetFontSize(int size);
+    void SetFontSizeAttr(int size);
     /// Set material.
     void SetMaterial(Material* material);
     /// Set text. Text is assumed to be either ASCII or UTF8-encoded.
@@ -138,7 +142,7 @@ public:
     String GetTextAttr() const;
 
     /// Get color attribute. Uses just the top-left color.
-    const Color& GetColorAttr() const { return text_.color_[0]; }
+    const Color& GetColorAttr() const { return text_.GetColorAttr(); }
 
     /// Only Used by Renderer2D
     virtual const BoundingBox& GetWorldBoundingBox2D();
@@ -176,5 +180,4 @@ protected:
     SharedPtr<Material> material_;
 };
 
-}
 

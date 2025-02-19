@@ -1,60 +1,40 @@
-//
-// Copyright (c) 2008-2016 the Urho3D project.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-//
+#include <Urho3D/Urho3D.h>
 
-#include "../Precompiled.h"
+#include <Urho3D/Core/Context.h>
+#include <Urho3D/Core/Profiler.h>
 
-#include "../Container/ArrayPtr.h"
-#include "../Core/Context.h"
-#include "../Graphics/Graphics.h"
-#include "../Graphics/Texture2D.h"
-#include "../IO/FileSystem.h"
-#include "../IO/Log.h"
-#include "../Math/AreaAllocator.h"
-#include "../Resource/Image.h"
-#include "../Resource/ResourceCache.h"
-#include "../Resource/XMLFile.h"
-#include "../Urho2D/AnimationSet2D.h"
-#include "../Urho2D/Sprite2D.h"
-#include "../Urho2D/SpriterData2D.h"
-#include "../Urho2D/SpriteSheet2D.h"
+#include <Urho3D/IO/File.h>
+#include <Urho3D/IO/FileSystem.h>
+#include <Urho3D/IO/Log.h>
 
-#include "../DebugNew.h"
+#include <Urho3D/Graphics/Graphics.h>
+#include <Urho3D/Graphics/Texture2D.h>
+#include <Urho3D/Math/AreaAllocator.h>
+
+#include <Urho3D/Resource/Image.h>
+#include <Urho3D/Resource/ResourceCache.h>
+#include <Urho3D/Resource/XMLFile.h>
 
 #ifdef URHO3D_SPINE
 #include <spine/spine.h>
 #include <spine/extension.h>
 #endif
 
+#include "Sprite2D.h"
+#include "SpriteSheet2D.h"
+#include "SpriterData2D.h"
+#include "AnimationSet2D.h"
+
 #ifdef URHO3D_SPINE
-// Current animation set
-static Urho3D::AnimationSet2D* currentAnimationSet = 0;
+Urho3D::Context* urho2dSpineContext_ = nullptr;
 
 void _spAtlasPage_createTexture(spAtlasPage* self, const char* path)
 {
     using namespace Urho3D;
-    if (!currentAnimationSet)
+    if (!urho2dSpineContext_)
         return;
 
-    ResourceCache* cache = currentAnimationSet->GetSubsystem<ResourceCache>();
+    ResourceCache* cache = urho2dSpineContext_->GetSubsystem<ResourceCache>();
     Sprite2D* sprite = cache->GetResource<Sprite2D>(path);
     // Add reference
     if (sprite)
@@ -80,10 +60,10 @@ char* _spUtil_readFile(const char* path, int* length)
 {
     using namespace Urho3D;
 
-    if (!currentAnimationSet)
+    if (!urho2dSpineContext_)
         return 0;
 
-    ResourceCache* cache = currentAnimationSet->GetSubsystem<ResourceCache>();
+    ResourceCache* cache = urho2dSpineContext_->GetSubsystem<ResourceCache>();
     SharedPtr<File> file = cache->GetFile(path);
     if (!file)
         return 0;
@@ -101,8 +81,6 @@ char* _spUtil_readFile(const char* path, int* length)
 }
 #endif
 
-namespace Urho3D
-{
 
 String AnimationSet2D::customSpritesheetFile_;
 
@@ -661,5 +639,3 @@ void AnimationSet2D::Dispose()
     spriteSheet_.Reset();
 }
 
-
-}
