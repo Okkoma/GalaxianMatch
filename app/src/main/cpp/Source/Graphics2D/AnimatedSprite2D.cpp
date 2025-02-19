@@ -1249,7 +1249,7 @@ void AnimatedSprite2D::UpdateTriggers()
     }
 
     updatedPhysicNodes_.Clear();
-
+/*
     // Update Physic Triggers
     const HashMap<Spriter::Timeline*, Spriter::BoxTimelineKey* >& physicTriggers = spriterInstance_->GetPhysicTriggers();
     if (physicTriggers.Size())
@@ -1272,13 +1272,11 @@ void AnimatedSprite2D::UpdateTriggers()
             bool isAbox = collidertype == 'B';
 
             physicNode = node_->GetChild(timeline->name_);
-
-            /*
-                Timeline name begin by
-                'T' it's a Trigger
-                'C' it's a Circle
-                'B' it's a Box
-            */
+           
+            //   Timeline name begin by
+            //   'T' it's a Trigger
+            //   'C' it's a Circle
+            //   'B' it's a Box            
 
             if (!physicNode)
             {
@@ -1318,7 +1316,8 @@ void AnimatedSprite2D::UpdateTriggers()
                 size.y_ = key->height_ * info.scaleY_ * PIXEL_SIZE;
                 pivot.x_ = info.x_ * PIXEL_SIZE,
                 pivot.y_ = info.y_ * PIXEL_SIZE;
-                collisionBox->SetBox(center, size, pivot, angle);
+//                collisionBox->SetBox(center, size, pivot, angle);
+                collisionBox->UpdateBox(center, size, pivot, angle);
             }
             else
             {
@@ -1344,7 +1343,7 @@ void AnimatedSprite2D::UpdateTriggers()
             updatedPhysicNodes_.Push(physicNode);
         }
     }
-
+*/
     for (Vector<WeakPtr<Node> >::ConstIterator it = triggerNodes_.Begin(); it != triggerNodes_.End(); ++it)
     {
         if (*it && !updatedPhysicNodes_.Contains(*it))
