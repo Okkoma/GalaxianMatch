@@ -810,6 +810,7 @@ void GameHelpers::SpawnParticleEffect(Context* context, Node* node, const Vector
 
     URHO3D_LOGINFOF("GameHelpers() - SpawnParticleEffect %s to node=%u", effectName.CString(), newNode->GetID());
 }
+const Color TRANSPARENT(0.f, 0.f, 0.f, 0.f);
 
 void GameHelpers::SpawnParticleEffect(Context* context, const String& effectName, int layer, const Vector2& position, float worldAngle, float worldScale, bool removeTimer, float duration, const Color& color, CreateMode mode)
 {
@@ -827,7 +828,7 @@ void GameHelpers::SpawnParticleEffect(Context* context, const String& effectName
     {
         particleEffect = particleEffect->Clone();
         particleEffect->SetStartColor(color);
-        particleEffect->SetFinishColor(Color::TRANSPARENT);
+        particleEffect->SetFinishColor(TRANSPARENT);
     }
 
     ParticleEmitter2D* particleEmitter = newNode->CreateComponent<ParticleEmitter2D>();
@@ -845,7 +846,7 @@ void GameHelpers::SpawnParticleEffect(Context* context, const String& effectName
         SharedPtr<ValueAnimation> alphaAnimation(new ValueAnimation(context));
         alphaAnimation->SetKeyFrame(0.f, Color::GRAY);
         alphaAnimation->SetKeyFrame(0.75f * duration, Color::YELLOW);
-        alphaAnimation->SetKeyFrame(duration, Color::TRANSPARENT);
+        alphaAnimation->SetKeyFrame(duration, TRANSPARENT);
         objectAnimation->AddAttributeAnimation("Color", alphaAnimation, WM_ONCE);
         particleEmitter->SetObjectAnimation(objectAnimation);
 
@@ -889,7 +890,7 @@ Node* GameHelpers::SpawnParticleEffectInNode(Context* context, const String& eff
         SharedPtr<ObjectAnimation> objectAnimation(new ObjectAnimation(context));
         SharedPtr<ValueAnimation> alphaAnimation(new ValueAnimation(context));
         alphaAnimation->SetKeyFrame(0.f, color);
-        alphaAnimation->SetKeyFrame(duration, Color::TRANSPARENT);
+        alphaAnimation->SetKeyFrame(duration, TRANSPARENT);
         objectAnimation->AddAttributeAnimation("Color", alphaAnimation, WM_ONCE);
         particleEmitter->SetObjectAnimation(objectAnimation);
 
