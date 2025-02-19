@@ -789,7 +789,7 @@ void Game::ShowHeader(UIElement* uiroot)
 
         ResourceCache* cache = context_->GetSubsystem<ResourceCache>();
         SharedPtr<XMLFile> xmlfile(cache->GetResource<XMLFile>("UI/header.xml"));
-        uiroot->LoadChildXML(xmlfile->GetRoot());
+        uiroot->LoadChildXML(xmlfile->GetRoot(), xmlfile);
 
         headerHolder_ = uiroot->GetChild(String("HeaderHolder"));
         if (headerHolder_)

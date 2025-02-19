@@ -977,7 +977,8 @@ void SceneAnimation2D::RegisterObject(Context* context)
 
 bool SceneAnimation2D::LoadXML(const XMLElement& source, bool setInstanceDefault, bool applyAttr)
 {
-    if (!Serializable::LoadXML(source, setInstanceDefault, applyAttr))
+//    if (!Serializable::LoadXML(source, setInstanceDefault, applyAttr))
+    if (!Serializable::LoadXML(source))
         return false;
 
     XMLElement elem = source.GetChild("timeline");

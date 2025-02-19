@@ -1420,7 +1420,7 @@ void MatchGrid::AddTouchEffect(const Vector2& position, float scale, float delay
     node->SetEnabled(true);
 
     // touch effect is in local gridnode==objectnode, position is worldposition so adjust scale
-    node->SetWorldPosition(position);
+    node->SetWorldPosition(Vector3(position));
 
     StaticSprite2D* drawable = node->GetDerivedComponent<StaticSprite2D>();
     drawable->SetLayer(FRONTLAYER);

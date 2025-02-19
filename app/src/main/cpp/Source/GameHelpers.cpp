@@ -210,7 +210,7 @@ bool GameHelpers::LoadSceneXML(Context* context, Node* node, CreateMode mode, co
 
     const XMLElement& xmlNode = xmlFile->GetRoot("node");
 
-    if (!node->LoadXML(xmlNode, mode))
+    if (!node->LoadXML(xmlNode))//, mode))
     {
         URHO3D_LOGERRORF("GameHelpers() - LoadSceneXML : Can not Load XML %s file for the node", file.CString());
         return false;
@@ -269,7 +269,7 @@ bool GameHelpers::LoadNodeXML(Context* context, Node* node, const String& fileNa
 
     const XMLElement& xmlNode = xmlFile->GetRoot("node");
 
-    if (!node->LoadXML(xmlNode, mode, false, applyAttr))
+    if (!node->LoadXML(xmlNode))//, mode, false, applyAttr))
     {
         URHO3D_LOGERRORF("GameHelpers() - LoadNodeXML : Can not Load XML %s file for the node", fileName.CString());
         return false;
@@ -613,7 +613,7 @@ void GameHelpers::CopyAttributes(Node* source, Node* dest, bool apply, bool remo
 /// clean scene and keep the nodes preloader and pools
 bool GameHelpers::CleanScene(Scene* rootscene, const String& stateToClean, int step)
 {
-    URHO3D_LOGINFOF("GameHelpers() - CleanScene : ... state=%s step=%d", stateToClean.CString(), step);
+    URHO3D_LOGINFOF("GameHelpers() - CleanScene : ... stateToClean=%s step=%d", stateToClean.CString(), step);
 
     if (!rootscene)
     {
