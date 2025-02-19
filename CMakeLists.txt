@@ -2,8 +2,10 @@ cmake_minimum_required(VERSION 3.10.2)
 
 project (SpaceMatch)
 
-set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/app/src/main/cpp/ThirdParty/urho3d)
+#set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/app/src/main/cpp/ThirdParty/urho3d)
+set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/app/src/main/cpp/ThirdParty/u3d)
 #set (URHO3D_HOME " ")
+
 include (${CMAKE_SOURCE_DIR}/cmake/Urho3D.cmake)
 
 # Default Options
