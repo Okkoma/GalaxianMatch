@@ -13,7 +13,7 @@
 #include <Urho3D/Urho2D/AnimatedSprite2D.h>
 #include <Urho3D/Urho2D/ParticleEffect2D.h>
 #include <Urho3D/Urho2D/ParticleEmitter2D.h>
-#include <Urho3D/Urho2D/Text2D.h>
+#include "Text2D.h"
 
 void RegisterGraphics2DLibrary(Urho3D::Context* context);
 

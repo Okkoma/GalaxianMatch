@@ -5,5 +5,5 @@
 
 void RegisterGraphics2DLibrary(Urho3D::Context* context)
 {
-
+    Urho3D::Text2D::RegisterObject(context);
 }

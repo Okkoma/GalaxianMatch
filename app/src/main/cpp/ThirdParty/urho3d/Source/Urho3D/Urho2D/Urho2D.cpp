@@ -29,7 +29,6 @@
 #include "../Urho2D/Renderer2D.h"
 #include "../Urho2D/Sprite2D.h"
 #include "../Urho2D/SpriteSheet2D.h"
-#include "../Urho2D/Text2D.h"
 #include "../Urho2D/TileMap2D.h"
 #include "../Urho2D/TileMapLayer2D.h"
 #include "../Urho2D/TmxFile2D.h"
@@ -57,8 +56,6 @@ void RegisterUrho2DLibrary(Context* context)
 
     ParticleEffect2D::RegisterObject(context);
     ParticleEmitter2D::RegisterObject(context);
-
-    Text2D::RegisterObject(context);
 
     TmxFile2D::RegisterObject(context);
     TileMap2D::RegisterObject(context);
