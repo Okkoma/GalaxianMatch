@@ -21,9 +21,6 @@
 #include <Urho3D/Scene/Scene.h>
 #include <Urho3D/Scene/SceneEvents.h>
 
-#include <Urho3D/Urho2D/Sprite2D.h>
-#include <Urho3D/Urho2D/StaticSprite2D.h>
-
 #include <Urho3D/Input/Input.h>
 
 #include <Urho3D/UI/UI.h>
@@ -32,6 +29,8 @@
 #include <Urho3D/UI/DropDownList.h>
 #include <Urho3D/UI/Text.h>
 #include <Urho3D/UI/MessageBox.h>
+
+#include "Graphics2D.h"
 
 #include "Game.h"
 #include "GameAttributes.h"

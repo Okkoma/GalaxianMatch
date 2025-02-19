@@ -15,9 +15,6 @@
 #include <Urho3D/Physics2D/PhysicsEvents2D.h>
 #include <Urho3D/Physics2D/ConstraintDistance2D.h>
 
-#include <Urho3D/Urho2D/SpriterInstance2D.h>
-#include <Urho3D/Urho2D/AnimatedSprite2D.h>
-
 #include "GameAttributes.h"
 #include "GameEvents.h"
 #include "GameHelpers.h"

@@ -4,12 +4,12 @@
 #include <Urho3D/Core/Timer.h>
 
 #include "DefsJNI.h"
+#include "Graphics2D.h"
 
 namespace Urho3D
 {
     class Context;
     class Scene;
-    class AnimatedSprite2D;
 }
 
 using namespace Urho3D;

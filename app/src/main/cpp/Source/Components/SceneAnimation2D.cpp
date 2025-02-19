@@ -12,8 +12,6 @@
 #include <Urho3D/Scene/Scene.h>
 #include <Urho3D/Scene/SceneEvents.h>
 
-#include <Urho3D/Urho2D/SpriterData2D.h>
-
 #include "SplinePath2D.h"
 
 #include "SceneAnimation2D.h"

@@ -4,6 +4,8 @@
 
 #include "GameOptions.h"
 
+#include "Graphics2D.h"
+
 #include "GameRand.h"
 #include "GameAttributes.h"
 #include "GameEvents.h"
@@ -34,6 +36,8 @@
 void RegisterGameLibrary(Context* context)
 {
     URHO3D_LOGINFO("RegisterGameLibrary : ... ");
+
+    RegisterGraphics2DLibrary(context);
 
     Network::RegisterLibrary(context);
 

@@ -3,8 +3,8 @@
 #include <Urho3D/Core/Timer.h>
 #include <Urho3D/Scene/LogicComponent.h>
 #include <Urho3D/Scene/Serializable.h>
-#include <Urho3D/Urho2D/StaticSprite2D.h>
-#include <Urho3D/Urho2D/AnimatedSprite2D.h>
+
+#include "Graphics2D.h"
 
 using namespace Urho3D;
 

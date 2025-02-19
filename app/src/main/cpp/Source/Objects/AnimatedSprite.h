@@ -2,8 +2,8 @@
 
 #include <Urho3D/UI/UIBatch.h>
 #include <Urho3D/UI/Sprite.h>
-#include <Urho3D/Urho2D/AnimatedSprite2D.h>
 
+#include "Graphics2D.h"
 
 using namespace Urho3D;
 

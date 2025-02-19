@@ -11,9 +11,6 @@
 #include <Urho3D/Graphics/Graphics.h>
 #include <Urho3D/Graphics/DebugRenderer.h>
 
-#include <Urho3D/Urho2D/AnimationSet2D.h>
-#include <Urho3D/Urho2D/AnimatedSprite2D.h>
-
 #include <Urho3D/Scene/Scene.h>
 #include <Urho3D/Scene/SceneEvents.h>
 
@@ -22,6 +19,8 @@
 #include <Urho3D/UI/UI.h>
 #include <Urho3D/UI/Font.h>
 #include <Urho3D/UI/UIEvents.h>
+
+#include "Graphics2D.h"
 
 #include "Game.h"
 #include "GameUI.h"

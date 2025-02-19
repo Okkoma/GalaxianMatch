@@ -17,7 +17,6 @@ namespace Urho3D
     class MessageBox;
     class Sprite;
     class BorderImage;
-    class AnimatedSprite2D;
 }
 
 using namespace Urho3D;

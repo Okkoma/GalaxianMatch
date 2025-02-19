@@ -42,7 +42,7 @@
 #include <Urho3D/UI/Menu.h>
 #include <Urho3D/UI/Window.h>
 
-#include <Urho3D/Urho2D/Renderer2D.h>
+#include "Graphics2D.h"
 
 #include "GameOptions.h"
 #include "GameAttributes.h"

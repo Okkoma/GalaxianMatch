@@ -9,11 +9,10 @@
 #include <Urho3D/IO/FileSystem.h>
 #include <Urho3D/IO/Log.h>
 
-#include <Urho3D/Urho2D/Drawable2D.h>
-
 #include <Urho3D/Resource/ResourceCache.h>
 #include <Urho3D/Resource/XMLFile.h>
 
+#include "Graphics2D.h"
 
 #include "LevelGraph.h"
 

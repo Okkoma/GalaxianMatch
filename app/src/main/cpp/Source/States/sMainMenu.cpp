@@ -20,11 +20,6 @@
 #include <Urho3D/Scene/SceneEvents.h>
 #include <Urho3D/Scene/Scene.h>
 
-#include <Urho3D/Urho2D/Renderer2D.h>
-#include <Urho3D/Urho2D/AnimatedSprite2D.h>
-#include <Urho3D/Urho2D/StaticSprite2D.h>
-#include <Urho3D/Urho2D/Text2D.h>
-
 #include <Urho3D/Input/Input.h>
 
 #include <Urho3D/UI/UI.h>
@@ -35,6 +30,8 @@
 #include <Urho3D/UI/Text3D.h>
 #include <Urho3D/UI/Sprite.h>
 #include <Urho3D/UI/MessageBox.h>
+
+#include "Graphics2D.h"
 
 #include "Game.h"
 #include "GameEvents.h"

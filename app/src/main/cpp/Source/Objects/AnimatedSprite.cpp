@@ -2,12 +2,8 @@
 
 #include <Urho3D/Core/Context.h>
 #include <Urho3D/Core/CoreEvents.h>
-
 #include <Urho3D/IO/Log.h>
-
 #include <Urho3D/Graphics/Texture2D.h>
-#include <Urho3D/Urho2D/Sprite2D.h>
-
 #include <Urho3D/UI/UI.h>
 
 #include "GameStatics.h"

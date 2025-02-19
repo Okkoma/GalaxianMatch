@@ -6,6 +6,8 @@
 
 #include "GameOptions.h"
 
+#include "Graphics2D.h"
+
 namespace Urho3D
 {
     class Context;
@@ -21,7 +23,6 @@ namespace Urho3D
     class Sprite;
     class Cursor;
     class Plane;
-    class Renderer2D;
 }
 
 using namespace Urho3D;

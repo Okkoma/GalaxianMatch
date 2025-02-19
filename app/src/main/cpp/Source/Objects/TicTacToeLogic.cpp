@@ -18,8 +18,7 @@
 #include <Urho3D/Physics2D/PhysicsEvents2D.h>
 #include <Urho3D/Physics2D/PhysicsWorld2D.h>
 
-#include <Urho3D/Urho2D/AnimatedSprite2D.h>
-#include <Urho3D/Urho2D/SpriterInstance2D.h>
+#include "Graphics2D.h"
 
 #include "GameAttributes.h"
 #include "GameStatics.h"

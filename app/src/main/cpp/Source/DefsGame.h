@@ -5,7 +5,8 @@
 #include <Urho3D/Core/Context.h>
 #include <Urho3D/Scene/Node.h>
 #include <Urho3D/Scene/Scene.h>
-#include <Urho3D/Urho2D/Drawable2D.h>
+
+#include "Graphics2D.h"
 
 #include "MemoryObjects.h"
 

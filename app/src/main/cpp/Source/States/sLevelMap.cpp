@@ -27,12 +27,6 @@
 #include <Urho3D/Physics2D/CollisionCircle2D.h>
 #include <Urho3D/Physics2D/RigidBody2D.h>
 
-#include <Urho3D/Urho2D/Renderer2D.h>
-#include <Urho3D/Urho2D/AnimatedSprite2D.h>
-#include <Urho3D/Urho2D/AnimationSet2D.h>
-#include <Urho3D/Urho2D/StaticSprite2D.h>
-#include <Urho3D/Urho2D/Sprite2D.h>
-
 #include <Urho3D/Input/Input.h>
 
 #include <Urho3D/UI/UI.h>
@@ -43,6 +37,8 @@
 #include <Urho3D/UI/Text3D.h>
 #include <Urho3D/UI/Sprite.h>
 #include <Urho3D/UI/Menu.h>
+
+#include "Graphics2D.h"
 
 #include "Game.h"
 #include "GameOptions.h"

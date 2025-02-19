@@ -3,10 +3,11 @@
 #include <Urho3D/IO/Log.h>
 
 #include <Urho3D/Graphics/Camera.h>
-#include <Urho3D/Urho2D/AnimatedSprite2D.h>
 
 #include <Urho3D/UI/UI.h>
 #include <Urho3D/UI/UIEvents.h>
+
+#include "Graphics2D.h"
 
 #include "GameEvents.h"
 #include "GameHelpers.h"

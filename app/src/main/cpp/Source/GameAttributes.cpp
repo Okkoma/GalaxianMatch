@@ -7,10 +7,7 @@
 
 #include <Urho3D/IO/FileSystem.h>
 
-#include <Urho3D/Urho2D/AnimatedSprite2D.h>
-#include <Urho3D/Urho2D/AnimationSet2D.h>
-#include <Urho3D/Urho2D/StaticSprite2D.h>
-#include <Urho3D/Urho2D/Sprite2D.h>
+#include "Graphics2D.h"
 
 #include "GameStatics.h"
 #include "GameHelpers.h"

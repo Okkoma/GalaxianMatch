@@ -2,9 +2,10 @@
 
 #include <Urho3D/Scene/Component.h>
 
+#include "Graphics2D.h"
+
 namespace Urho3D
 {
-    class AnimatedSprite2D;
     class RigidBody2D;
 }
 

@@ -25,9 +25,6 @@
 #include <Urho3D/UI/UI.h>
 #include <Urho3D/UI/BorderImage.h>
 
-#include <Urho3D/Urho2D/AnimationSet2D.h>
-#include <Urho3D/Urho2D/AnimatedSprite2D.h>
-
 #include <SDL/SDL.h>
 
 #include "TextMessage.h"

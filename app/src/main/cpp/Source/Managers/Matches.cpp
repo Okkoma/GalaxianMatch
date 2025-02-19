@@ -18,12 +18,7 @@
 #include <Urho3D/Physics2D/CollisionShape2D.h>
 #include <Urho3D/Physics2D/RigidBody2D.h>
 
-#include <Urho3D/Urho2D/Drawable2D.h>
-#include <Urho3D/Urho2D/StaticSprite2D.h>
-#include <Urho3D/Urho2D/SpriterInstance2D.h>
-#include <Urho3D/Urho2D/AnimatedSprite2D.h>
-#include <Urho3D/Urho2D/Sprite2D.h>
-#include <Urho3D/Urho2D/Renderer2D.h>
+#include "Graphics2D.h"
 
 #include "TimerRemover.h"
 #include "DelayAction.h"

@@ -52,15 +52,7 @@
 #include <Urho3D/Physics2D/RigidBody2D.h>
 #include <Urho3D/Physics2D/PhysicsWorld2D.h>
 
-#include <Urho3D/Urho2D/Renderer2D.h>
-#include <Urho3D/Urho2D/AnimatedSprite2D.h>
-#include <Urho3D/Urho2D/AnimationSet2D.h>
-#include <Urho3D/Urho2D/ParticleEmitter2D.h>
-#include <Urho3D/Urho2D/ParticleEffect2D.h>
-#include <Urho3D/Urho2D/Sprite2D.h>
-#include <Urho3D/Urho2D/StaticSprite2D.h>
-#include <Urho3D/Urho2D/SpriteSheet2D.h>
-
+#include "Graphics2D.h"
 
 #include "GameOptions.h"
 #include "GameAttributes.h"

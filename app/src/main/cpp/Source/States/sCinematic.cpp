@@ -23,11 +23,9 @@
 #include <Urho3D/UI/UIEvents.h>
 #include <Urho3D/UI/Menu.h>
 
-#include <Urho3D/Urho2D/Renderer2D.h>
-#include <Urho3D/Urho2D/AnimatedSprite2D.h>
-#include <Urho3D/Urho2D/StaticSprite2D.h>
-
 #include <Urho3D/Input/Input.h>
+
+#include "Graphics2D.h"
 
 #include "Game.h"
 #include "GameEvents.h"

@@ -46,6 +46,7 @@ setup_main_executable ()
 set_target_properties(${TARGET_NAME} PROPERTIES CXX_STANDARD 17)
 
 target_include_directories (${TARGET_NAME} PRIVATE ${SRC_ROOT}/Components/ ${SRC_ROOT}/GraphicEffects/
+                                                   ${SRC_ROOT}/Graphics2D/ 
                                                    ${SRC_ROOT}/Objects/ ${SRC_ROOT}/ObjectsCore/
                                                    ${SRC_ROOT}/States/ ${SRC_ROOT}/Managers/
                                                    ${SRC_ROOT}/Network/ ${SRC_ROOT}/Resources/

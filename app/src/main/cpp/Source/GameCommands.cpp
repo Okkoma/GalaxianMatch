@@ -5,9 +5,6 @@
 
 #include <Urho3D/IO/Log.h>
 
-#include <Urho3D/Urho2D/Renderer2D.h>
-#include <Urho3D/Urho2D/AnimatedSprite2D.h>
-
 #include "DefsGame.h"
 
 #include "GameRand.h"
