@@ -109,8 +109,8 @@ bool Text2D::SetFont(Font* font, int size)
 
 void Text2D::SetFontSizeAttr(int size)
 {
-    text_.SetFontSize2(size);
-
+    //text_.SetFontSize2(size);
+    text_.SetFontSize(size);
     MarkTextDirty();
     UpdateTextBatches();
     UpdateTextMaterials();
@@ -118,8 +118,8 @@ void Text2D::SetFontSizeAttr(int size)
 
 bool Text2D::SetFontSize(int size)
 {
-    text_.SetFontSize2(size);
-
+    //text_.SetFontSize2(size);
+    text_.SetFontSize(size);
     MarkTextDirty();
     UpdateTextBatches();
     UpdateTextMaterials();
@@ -373,7 +373,7 @@ int Text2D::GetRowWidth(unsigned index) const
 {
     return text_.GetRowWidth(index);
 }
-
+/*
 IntVector2 Text2D::GetCharPosition(unsigned index)
 {
     return text_.GetCharPosition(index);
@@ -383,7 +383,7 @@ IntVector2 Text2D::GetCharSize(unsigned index)
 {
     return text_.GetCharSize(index);
 }
-
+*/
 const Color& Text2D::GetColor(Corner corner) const
 {
     return text_.GetColor(corner);
@@ -653,7 +653,7 @@ void Text2D::UpdateSourceBatches()
 
     // Apply world transform
     int draworder = GetDrawOrder();
-    URHO3D_LOGERRORF("Text2D::UpdateSourceBatches() - draworder=%d", draworder);
+
     for (unsigned i = 0; i < sourceBatches_.Size(); ++i)
     {
         sourceBatches_[i].drawOrder_ = draworder;
