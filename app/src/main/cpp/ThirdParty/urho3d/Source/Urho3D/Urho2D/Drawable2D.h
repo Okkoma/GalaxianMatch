@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include "../Math/Matrix2x3.h"
 #include "../Graphics/Drawable.h"
 #include "../Graphics/GraphicsDefs.h"
 
@@ -180,5 +181,7 @@ int GetTextureUnit(Material* material, Texture* texture);
 
 Color MultColors(const Color& c1, const Color& c2);
 Color MultColors(const Color& c1, const Color& c2, const Color& c3);
+
+Rect Transform2D(const Rect& rect, const Matrix2x3& transform);
 
 }

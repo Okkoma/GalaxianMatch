@@ -35,7 +35,6 @@ namespace Urho3D
 class Polyhedron;
 class Frustum;
 class Matrix2;
-class Matrix2x3;
 class Matrix3;
 class Matrix4;
 class Matrix3x4;
@@ -253,8 +252,6 @@ public:
     void Clip(const BoundingBox& box);
     /// Transform with a 2x2 matrix.
     void Transform(const Matrix2& transform);
-    /// Transform with a 2x3 matrix.
-    void Transform(const Matrix2x3& transform);
     /// Transform with a 3x3 matrix.
     void Transform(const Matrix3& transform);
     /// Transform with a 3x4 matrix.
@@ -295,8 +292,6 @@ public:
 
     /// Return transformed by a 2x2 matrix.
     BoundingBox Transformed(const Matrix2& transform) const;
-    /// Return transformed by a 2x3 matrix.
-    BoundingBox Transformed(const Matrix2x3& transform) const;
     /// Return transformed by a 3x3 matrix.
     BoundingBox Transformed(const Matrix3& transform) const;
     /// Return transformed by a 3x4 matrix.

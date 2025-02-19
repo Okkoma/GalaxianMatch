@@ -49,8 +49,7 @@ Node::Node(Context* context) :
     Animatable(context),
     worldTransform_(Matrix3x4::IDENTITY),
     dirty_(false),
-    dirty2D_(false),
-    worldTransform2D_(Matrix2x3::IDENTITY),
+
     enabled_(true),
     enabledPrev_(true),
     networkUpdate_(false),
@@ -61,8 +60,6 @@ Node::Node(Context* context) :
     rotation_(Quaternion::IDENTITY),
     scale_(Vector3::ONE),
     worldRotation_(Quaternion::IDENTITY),
-    rotation2D_(0),
-    worldRotation2D_(0),
     owner_(0)
 {
 }
@@ -476,7 +473,6 @@ void Node::SetPosition(const Vector3& position)
 void Node::SetRotation(const Quaternion& rotation)
 {
     rotation_ = rotation;
-    rotation2D_ = rotation_.RollAngle();
     MarkDirty();
 
     MarkNetworkUpdate();
@@ -512,7 +508,6 @@ void Node::SetTransform(const Vector3& position, const Quaternion& rotation)
 {
     position_ = position;
     rotation_ = rotation;
-    rotation2D_ = rotation.RollAngle();
     MarkDirty();
 
     MarkNetworkUpdate();
@@ -522,7 +517,6 @@ void Node::SetTransform(const Vector3& position, const Quaternion& rotation, con
 {
     position_ = position;
     rotation_ = rotation;
-    rotation2D_ = rotation.RollAngle();
     scale_ = scale;
     MarkDirty();
 
@@ -605,7 +599,6 @@ void Node::SetPosition2D(const Vector2& position)
 
 void Node::SetRotation2D(float rotation)
 {
-    rotation2D_ = rotation;
     rotation_ = Quaternion(rotation, Vector3::FORWARD);
 
     MarkDirty();
@@ -633,7 +626,6 @@ void Node::SetTransform2D(const Vector2& position, float rotation)
 {
     position_.x_ = position.x_;
     position_.y_ = position.y_;
-    rotation2D_ = rotation;
     rotation_ = Quaternion(rotation, Vector3::FORWARD);
 
     MarkDirty();
@@ -643,22 +635,11 @@ void Node::SetTransform2D(const Vector2& position, float rotation)
 void Node::SetTransform2D(const Vector2& position, float rotation, const Vector2& scale)
 {
     position_ = position;
-    rotation2D_ = rotation;
     rotation_ = Quaternion(rotation, Vector3::FORWARD);
     SetScale2D(scale);
 
     MarkDirty();
     MarkNetworkUpdate();
-}
-
-void Node::SetTransform2D(const Matrix2x3& matrix)
-{
-    SetTransform2D(matrix.Translation(), matrix.Rotation(), matrix.Scale());
-}
-
-void Node::SetWorldPosition2D(const Vector2& position)
-{
-    SetPosition2D((parent_ == scene_ || !parent_) ? position : parent_->GetWorldTransform2D().Inverse() * position);
 }
 
 void Node::SetWorldRotation2D(float worldrotation)
@@ -683,14 +664,6 @@ void Node::SetWorldTransform2D(const Vector2& position, float rotation, const Ve
     SetWorldRotation2D(rotation);
     SetWorldScale2D(scale);
 }
-
-void Node::SetWorldTransform2D(const Matrix2x3& worldtransform)
-{
-    SetWorldPosition2D(worldtransform.Translation());
-    SetWorldRotation2D(worldtransform.Rotation());
-    SetWorldScale2D(worldtransform.Scale());
-}
-
 
 void Node::Translate(const Vector3& delta, TransformSpace space)
 {
@@ -721,25 +694,21 @@ void Node::Rotate(const Quaternion& delta, TransformSpace space)
     {
     case TS_LOCAL:
         rotation_ = (rotation_ * delta).Normalized();
-        rotation2D_ = rotation_.RollAngle();
         break;
 
     case TS_PARENT:
         rotation_ = (delta * rotation_).Normalized();
-        rotation2D_ = rotation_.RollAngle();
         break;
 
     case TS_WORLD:
         if (parent_ == scene_ || !parent_)
         {
             rotation_ = (delta * rotation_).Normalized();
-            rotation2D_ = rotation_.RollAngle();
         }
         else
         {
             Quaternion worldRotation = GetWorldRotation();
             rotation_ = rotation_ * worldRotation.Inverse() * delta * worldRotation;
-            rotation2D_ = rotation_.RollAngle();
         }
         break;
     }
@@ -759,13 +728,11 @@ void Node::RotateAround(const Vector3& point, const Quaternion& delta, Transform
     case TS_LOCAL:
         parentSpacePoint = GetTransform() * point;
         rotation_ = (rotation_ * delta).Normalized();
-        rotation2D_ = rotation_.RollAngle();
         break;
 
     case TS_PARENT:
         parentSpacePoint = point;
         rotation_ = (delta * rotation_).Normalized();
-        rotation2D_ = rotation_.RollAngle();
         break;
 
     case TS_WORLD:
@@ -773,14 +740,12 @@ void Node::RotateAround(const Vector3& point, const Quaternion& delta, Transform
         {
             parentSpacePoint = point;
             rotation_ = (delta * rotation_).Normalized();
-            rotation2D_ = rotation_.RollAngle();
         }
         else
         {
             parentSpacePoint = parent_->GetWorldTransform().Inverse() * point;
             Quaternion worldRotation = GetWorldRotation();
             rotation_ = rotation_ * worldRotation.Inverse() * delta * worldRotation;
-            rotation2D_ = rotation_.RollAngle();
         }
         break;
     }
@@ -893,10 +858,9 @@ void Node::MarkDirty()
         // Therefore if we are recursing here to mark this node dirty, and it already was,
         // then all children of this node must also be already dirty, and we don't need to
         // reflag them again.
-        if (cur->dirty_ && cur->dirty2D_)
+        if (cur->dirty_)
             return;
         cur->dirty_ = true;
-        cur->dirty2D_ = true;
 
         // Notify listener components first, then mark child nodes
         for (Vector<WeakPtr<Component> >::Iterator i = cur->listeners_.Begin(); i != cur->listeners_.End();)
@@ -1320,7 +1284,7 @@ void Node::AddListener(Component* component)
 
     listeners_.Push(WeakPtr<Component>(component));
     // If the node is currently dirty, notify immediately
-    if (dirty_ || dirty2D_)
+    if (dirty_)
         component->OnMarkedDirty(this);
 }
 
@@ -1346,11 +1310,6 @@ Vector3 Node::LocalToWorld(const Vector4& vector) const
     return GetWorldTransform() * vector;
 }
 
-Vector2 Node::LocalToWorld2D(const Vector2& vector) const
-{
-    return GetWorldTransform2D() * vector;
-}
-
 Vector3 Node::WorldToLocal(const Vector3& position) const
 {
     return GetWorldTransform().Inverse() * position;
@@ -1359,11 +1318,6 @@ Vector3 Node::WorldToLocal(const Vector3& position) const
 Vector3 Node::WorldToLocal(const Vector4& vector) const
 {
     return GetWorldTransform().Inverse() * vector;
-}
-
-Vector2 Node::WorldToLocal2D(const Vector2& vector) const
-{
-    return GetWorldTransform2D().Inverse() * vector;
 }
 
 unsigned Node::GetNumChildren(bool recursive) const
@@ -2079,7 +2033,6 @@ void Node::SetTransformSilent(const Vector3& position, const Quaternion& rotatio
 {
     position_ = position;
     rotation_ = rotation;
-    rotation2D_ = rotation.RollAngle();
     scale_ = scale;
 }
 
@@ -2262,45 +2215,20 @@ Component* Node::SafeCreateComponent(const String& typeName, StringHash type, Cr
 void Node::UpdateWorldTransform() const
 {
     Matrix3x4 transform = GetTransform();
-    Matrix2x3 transform2d = GetTransform2D();
 
     // Assume the root node (scene) has identity transform
     if (parent_ == scene_ || !parent_)
     {
         worldTransform_ = transform;
         worldRotation_ = rotation_;
-        worldTransform2D_ = transform2d;
-        worldRotation2D_ = rotation2D_;
     }
     else
     {
         worldTransform_ = parent_->GetWorldTransform() * transform;
         worldRotation_ = parent_->GetWorldRotation() * rotation_;
-        worldTransform2D_ = parent_->GetWorldTransform2D() * transform2d;
-        worldRotation2D_ = parent_->GetWorldRotation2D() + rotation2D_;
     }
 
     dirty_ = false;
-    dirty2D_ = false;
-}
-
-void Node::UpdateWorldTransform2D() const
-{
-    Matrix2x3 transform2d = GetTransform2D();
-
-    // Assume the root node (scene) has identity transform
-    if (parent_ == scene_ || !parent_)
-    {
-        worldTransform2D_ = transform2d;
-        worldRotation2D_ = rotation2D_;
-    }
-    else
-    {
-        worldTransform2D_ = parent_->GetWorldTransform2D() * transform2d;
-        worldRotation2D_ = parent_->GetWorldRotation2D() + rotation2D_;
-    }
-
-    dirty2D_ = false;
 }
 
 void Node::RemoveChild(Vector<SharedPtr<Node> >::Iterator i)

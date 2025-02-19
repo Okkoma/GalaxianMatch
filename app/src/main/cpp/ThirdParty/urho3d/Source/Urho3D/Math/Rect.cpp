@@ -22,7 +22,6 @@
 
 #include "../Precompiled.h"
 #include "../Math/Matrix3x4.h"
-#include "../Math/Matrix2x3.h"
 
 #include "../Math/Rect.h"
 
@@ -71,30 +70,4 @@ void Rect::Clip(const Rect& rect)
     }
 }
 
-void Rect::Transform(const Matrix2& transform)
-{
-    *this = Transformed(Matrix2x3(transform));
-}
-
-void Rect::Transform(const Matrix2x3& transform)
-{
-    *this = Transformed(transform);
-}
-
-Rect Rect::Transformed(const Matrix2& transform) const
-{
-    return Transformed(Matrix2x3(transform));
-}
-
-Rect Rect::Transformed(const Matrix2x3& transform) const
-{
-    Vector2 newCenter = transform * Center();
-    Vector2 oldEdge = Size() * 0.5f;
-    Vector2 newEdge = Vector2(
-        Abs(transform.m00_) * oldEdge.x_ + Abs(transform.m01_) * oldEdge.y_,
-        Abs(transform.m10_) * oldEdge.x_ + Abs(transform.m11_) * oldEdge.y_
-    );
-
-    return Rect(newCenter - newEdge, newCenter + newEdge);
-}
 }

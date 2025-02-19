@@ -181,7 +181,7 @@ void Drawable2D::ForceUpdateBatches()
 
     if (drawRect_.Defined() && worldBoundingBoxDirty_)
     {
-        Rect worldDrawRect = drawRect_.Transformed(node_->GetWorldTransform2D());
+        Rect worldDrawRect = Transform2D(drawRect_, Matrix2x3(node_->GetWorldPosition2D(), node_->GetWorldRotation2D(), node_->GetWorldScale2D()));
         worldBoundingBox_.min_.x_ = worldDrawRect.min_.x_;
         worldBoundingBox_.min_.y_ = worldDrawRect.min_.y_;
         worldBoundingBox_.max_.x_ = worldDrawRect.max_.x_;
@@ -260,6 +260,15 @@ Color MultColors(const Color& c1, const Color& c2)
 Color MultColors(const Color& c1, const Color& c2, const Color& c3)
 {
     return Color(c1.r_ * c2.r_ * c3.r_, c1.g_ * c2.g_ * c3.g_, c1.b_ * c2.b_ * c3.b_, c1.a_ * c2.a_ * c3.a_);
+}
+
+Rect Transform2D(const Rect& rect, const Matrix2x3& transform)
+{
+    Vector2 oldEdge = rect.Size() * 0.5f;
+    Vector2 newEdge = Vector2(Abs(transform.m00_) * oldEdge.x_ + Abs(transform.m01_) * oldEdge.y_,
+                              Abs(transform.m10_) * oldEdge.x_ + Abs(transform.m11_) * oldEdge.y_);
+    Vector2 newCenter = transform * rect.Center();
+    return Rect(newCenter - newEdge, newCenter + newEdge);
 }
 
 }

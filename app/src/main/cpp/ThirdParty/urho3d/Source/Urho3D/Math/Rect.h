@@ -29,7 +29,6 @@ namespace Urho3D
 {
 
 class Matrix2;
-class Matrix2x3;
 
 /// Two-dimensional bounding rectangle.
 class URHO3D_API Rect
@@ -156,11 +155,6 @@ public:
     /// Clip with another rect.
     void Clip(const Rect& rect);
 
-    /// Transform with a 2x2 matrix.
-    void Transform(const Matrix2& transform);
-    /// Transform with a 2x3 matrix.
-    void Transform(const Matrix2x3& transform);
-
     /// Return true if this rect is defined via a previous call to Define() or Merge().
     bool Defined() const
     {
@@ -178,11 +172,6 @@ public:
 
     /// Rturn a Rect adjusted by value
     Rect Adjusted(float value) const { return Rect(min_-Vector2(value,value), max_+Vector2(value,value)); }
-
-    /// Return transformed by a 2x2 matrix.
-    Rect Transformed(const Matrix2& transform) const;
-    /// Return transformed by a 2x3 matrix.
-    Rect Transformed(const Matrix2x3& transform) const;
 
     /// Test for equality with another rect with epsilon.
     bool Equals(const Rect& rhs) const { return min_.Equals(rhs.min_) && max_.Equals(rhs.max_); }

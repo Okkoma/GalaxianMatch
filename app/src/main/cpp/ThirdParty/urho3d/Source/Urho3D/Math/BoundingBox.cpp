@@ -24,7 +24,6 @@
 
 #include "../Math/Frustum.h"
 #include "../Math/Polyhedron.h"
-#include "../Math/Matrix2x3.h"
 
 #include "../DebugNew.h"
 
@@ -122,23 +121,6 @@ void BoundingBox::Transform(const Matrix3& transform)
 void BoundingBox::Transform(const Matrix3x4& transform)
 {
     *this = Transformed(transform);
-}
-
-BoundingBox BoundingBox::Transformed(const Matrix2& transform) const
-{
-    return Transformed(Matrix2x3(transform));
-}
-
-BoundingBox BoundingBox::Transformed(const Matrix2x3& transform) const
-{
-    Vector2 newCenter = transform * Center2D();
-    Vector2 oldEdge = Size2D() * 0.5f;
-    Vector2 newEdge = Vector2(
-        Abs(transform.m00_) * oldEdge.x_ + Abs(transform.m01_) * oldEdge.y_,
-        Abs(transform.m10_) * oldEdge.x_ + Abs(transform.m11_) * oldEdge.y_
-    );
-
-    return BoundingBox(newCenter - newEdge, newCenter + newEdge);
 }
 
 BoundingBox BoundingBox::Transformed(const Matrix3& transform) const

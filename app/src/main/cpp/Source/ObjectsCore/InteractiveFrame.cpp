@@ -1111,9 +1111,10 @@ void InteractiveFrame::DrawDebugGeometry(DebugRenderer* debug, bool depthTest)
     if (debug && node_)
     {
         debug->AddNode(node_, 1.f, false);
+        Matrix2x3 transform(node_->GetWorldPosition2D(), node_->GetWorldRotation2D(), node_->GetWorldScale2D());
         Rect rect;
-        rect.min_ = node_->GetWorldTransform2D() * abilityMoveRect_.min_;
-        rect.max_ = node_->GetWorldTransform2D() * abilityMoveRect_.max_;
+        rect.min_ = transform * abilityMoveRect_.min_;
+        rect.max_ = transform * abilityMoveRect_.max_;
         GameHelpers::DrawDebugRect(rect, debug, depthTest);
     }
 }

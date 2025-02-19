@@ -1107,7 +1107,8 @@ inline void AnimatedSprite2D::LocalToWorld(Spriter::SpatialTimelineKey* key, Vec
         rotation = 360.f - rotation;
     }
 
-    position = (node_->GetWorldTransform2D() * Matrix2x3(Vector2(centerx, centery), 0.f, Vector2(spatialinfo.scaleX_, spatialinfo.scaleY_))).Translation();
+    Matrix2x3 worldtransform(GetNode()->GetWorldPosition2D(), GetNode()->GetWorldRotation2D(), GetNode()->GetWorldScale2D());
+    position = (worldtransform * Matrix2x3(Vector2(centerx, centery), 0.f, Vector2(spatialinfo.scaleX_, spatialinfo.scaleY_))).Translation();
 }
 
 void AnimatedSprite2D::UpdateTriggers()
@@ -1443,7 +1444,7 @@ bool AnimatedSprite2D::UpdateDrawRectangle()
         scale.y_ = spatialinfo.scaleY_;
 
         sprite->GetDrawRectangle(drawRect, pivot);
-        drawRect_.Merge(drawRect.Transformed(Matrix2x3(position * PIXEL_SIZE, angle, scale)));
+        drawRect_.Merge(Transform2D(drawRect, Matrix2x3(position * PIXEL_SIZE, angle, scale)));
     }
 
     drawRectDirty_ = false;

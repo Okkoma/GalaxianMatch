@@ -307,7 +307,7 @@ void StaticSprite2D::OnWorldBoundingBoxUpdate()
     if (!UpdateDrawRectangle())
         return;
 
-    Rect worldDrawRect = drawRect_.Transformed(Matrix2x3(node_->GetWorldPosition2D(), node_->GetWorldRotation2D(), node_->GetWorldScale2D()));
+    Rect worldDrawRect = Transform2D(drawRect_, Matrix2x3(node_->GetWorldPosition2D(), node_->GetWorldRotation2D(), node_->GetWorldScale2D()));
     worldBoundingBox_.min_.x_ = worldDrawRect.min_.x_;
     worldBoundingBox_.min_.y_ = worldDrawRect.min_.y_;
     worldBoundingBox_.max_.x_ = worldDrawRect.max_.x_;

@@ -167,15 +167,13 @@ public:
     void SetTransform2D(const Vector2& position, float rotation, const Vector2& scale);
     /// Urho2D : Set both position, rotation and uniform scale in parent space as an atomic operation.
     void SetTransform2D(const Vector2& position, float rotation, float scale) { SetTransform2D(position, rotation, Vector2(scale,scale)); }
-    /// Urho2D : Set transformation in parent space.
-    void SetTransform2D(const Matrix2x3& matrix);
-    /// Urho2D : Set position in world space.
-    void SetWorldPosition2D(const Vector2& position);
-    /// Urho2D : Set position in world space.
-    void SetWorldPosition2D(float x, float y) { SetWorldPosition2D(Vector2(x, y)); }
+    /// Set position in world space (for Urho2D).
+    void SetWorldPosition2D(const Vector2& position) { SetWorldPosition(Vector3(position)); }
+    /// Set position in world space (for Urho2D).
+    void SetWorldPosition2D(float x, float y) { SetWorldPosition(Vector3(x, y, 0.0f)); }
     /// Urho2D : Set rotation in world space.
     void SetWorldRotation2D(float rotation);
-    /// Urho2D :Set scale in world space.
+    /// Urho2D : Set scale in world space.
     void SetWorldScale2D(const Vector2& scale);
     /// Urho2D : Set scale in world space.
     void SetWorldScale2D(float x, float y) { SetWorldScale2D(Vector2(x, y)); }
@@ -185,24 +183,17 @@ public:
     void SetWorldTransform2D(const Vector2& position, float rotation, const Vector2& scale);
     /// Urho2D : Set both position, rotation and uniform scale in world space as an atomic operation.
     void SetWorldTransform2D(const Vector2& position, float rotation, float scale) { SetWorldTransform2D(position, rotation, Vector2(scale,scale)); }
-    /// Urho2D : Set transformation in world space.
-    void SetWorldTransform2D(const Matrix2x3& matrix);
 
     /// Move the scene node in the chosen transform space.
     void Translate(const Vector3& delta, TransformSpace space = TS_LOCAL);
-
     /// Move the scene node in the chosen transform space (for Urho2D).
     void Translate2D(const Vector2& delta, TransformSpace space = TS_LOCAL) { Translate(Vector3(delta), space); }
-
     /// Rotate the scene node in the chosen transform space.
     void Rotate(const Quaternion& delta, TransformSpace space = TS_LOCAL);
-
     /// Rotate the scene node in the chosen transform space (for Urho2D).
     void Rotate2D(float delta, TransformSpace space = TS_LOCAL) { Rotate(Quaternion(delta), space); }
-
     /// Rotate around a point in the chosen transform space.
     void RotateAround(const Vector3& point, const Quaternion& delta, TransformSpace space = TS_LOCAL);
-
     /// Rotate around a point in the chosen transform space (for Urho2D).
     void RotateAround2D(const Vector2& point, float delta, TransformSpace space = TS_LOCAL)
     {
@@ -332,7 +323,7 @@ public:
     const Quaternion& GetRotation() const { return rotation_; }
 
     /// Return rotation in parent space (for Urho2D).
-    float GetRotation2D() const { return rotation2D_; }
+    float GetRotation2D() const { return rotation_.RollAngle(); }
 
     /// Return forward direction in parent space. Positive Z axis equals identity rotation.
     Vector3 GetDirection() const { return rotation_ * Vector3::FORWARD; }
@@ -358,43 +349,40 @@ public:
     /// Return position in world space.
     Vector3 GetWorldPosition() const
     {
-        if (dirty_ || dirty2D_)
+        if (dirty_)
             UpdateWorldTransform();
 
         return worldTransform_.Translation();
     }
 
     /// Return position in world space (for Urho2D).
+    /// @property
     Vector2 GetWorldPosition2D() const
     {
-        if (dirty2D_)
-            UpdateWorldTransform2D();
-
-        return worldTransform2D_.Translation();
+        Vector3 worldPosition = GetWorldPosition();
+        return Vector2(worldPosition.x_, worldPosition.y_);
     }
 
     /// Return rotation in world space.
     Quaternion GetWorldRotation() const
     {
-        if (dirty_ || dirty2D_)
+        if (dirty_)
             UpdateWorldTransform();
 
         return worldRotation_;
     }
 
     /// Return rotation in world space (for Urho2D).
+    /// @property
     float GetWorldRotation2D() const
     {
-        if (dirty2D_)
-            UpdateWorldTransform2D();
-
-         return worldRotation2D_;
+        return GetWorldRotation().RollAngle();
     }
 
     /// Return direction in world space.
     Vector3 GetWorldDirection() const
     {
-        if (dirty_ || dirty2D_)
+        if (dirty_)
             UpdateWorldTransform();
 
         return worldRotation_ * Vector3::FORWARD;
@@ -403,7 +391,7 @@ public:
     /// Return node's up vector in world space.
     Vector3 GetWorldUp() const
     {
-        if (dirty_ || dirty2D_)
+        if (dirty_)
             UpdateWorldTransform();
 
         return worldRotation_ * Vector3::UP;
@@ -412,7 +400,7 @@ public:
     /// Return node's right vector in world space.
     Vector3 GetWorldRight() const
     {
-        if (dirty_ || dirty2D_)
+        if (dirty_)
             UpdateWorldTransform();
 
         return worldRotation_ * Vector3::RIGHT;
@@ -421,18 +409,16 @@ public:
     /// Return scale in world space.
     Vector3 GetWorldScale() const
     {
-        if (dirty_ || dirty2D_)
+        if (dirty_)
             UpdateWorldTransform();
 
         return worldTransform_.Scale();
     }
 
     /// Return scale in world space (for Urho2D).
+    /// @property
     Vector2 GetWorldScale2D() const
     {
-        if (dirty2D_)
-            UpdateWorldTransform2D();
-
         Vector3 worldScale = GetWorldScale();
         return Vector2(worldScale.x_, worldScale.y_);
     }
@@ -440,37 +426,23 @@ public:
     /// Return world space transform matrix.
     const Matrix3x4& GetWorldTransform() const
     {
-        if (dirty_ || dirty2D_)
+        if (dirty_)
             UpdateWorldTransform();
 
         return worldTransform_;
-    }
-
-    /// Return world space transform matrix 2D
-    const Matrix2x3& GetWorldTransform2D() const
-    {
-        if (dirty2D_)
-            UpdateWorldTransform2D();
-
-        return worldTransform2D_;
     }
 
     /// Convert a local space position to world space.
     Vector3 LocalToWorld(const Vector3& position) const;
     /// Convert a local space position or rotation to world space.
     Vector3 LocalToWorld(const Vector4& vector) const;
-    /// Convert a local space position or rotation to world space (for Urho2D).
-    Vector2 LocalToWorld2D(const Vector2& vector) const;
     /// Convert a world space position to local space.
     Vector3 WorldToLocal(const Vector3& position) const;
     /// Convert a world space position or rotation to local space.
     Vector3 WorldToLocal(const Vector4& vector) const;
-    /// Convert a world space position or rotation to local space (for Urho2D).
-    Vector2 WorldToLocal2D(const Vector2& vector) const;
 
     /// Return whether transform has changed and world transform needs recalculation.
-    bool IsDirty() const { return dirty_ || dirty2D_; }
-    bool IsDirty2D() const { return dirty2D_; }
+    bool IsDirty() const { return dirty_; }
 
     /// Return number of child scene nodes.
     unsigned GetNumChildren(bool recursive = false) const;
@@ -618,8 +590,6 @@ private:
     Component* SafeCreateComponent(const String& typeName, StringHash type, CreateMode mode, unsigned id);
     /// Recalculate the world transform.
     void UpdateWorldTransform() const;
-    /// Recalculate the world transform2D.
-    void UpdateWorldTransform2D() const;
     /// Remove child node by iterator.
     void RemoveChild(Vector<SharedPtr<Node> >::Iterator i);
     /// Return child nodes recursively.
@@ -640,11 +610,9 @@ private:
 
     /// World-space transform matrix.
     mutable Matrix3x4 worldTransform_;
-    /// World-space transform matrix 2D.
-    mutable Matrix2x3 worldTransform2D_;
     /// World transform needs update flag.
     mutable bool dirty_;
-    mutable bool dirty2D_;
+
     /// Enabled flag.
     bool enabled_;
     /// Last SetEnabled flag before any SetDeepEnabled.
@@ -669,9 +637,6 @@ private:
     Vector3 scale_;
     /// World-space rotation.
     mutable Quaternion worldRotation_;
-    /// rotation2D
-    float rotation2D_;
-    mutable float worldRotation2D_;
 
     /// Components.
     Vector<SharedPtr<Component> > components_;
