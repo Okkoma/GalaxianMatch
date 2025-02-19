@@ -649,12 +649,7 @@ bool GameStatics::PreloadResources()
 
     if (preloaderState_ > 2)
     {
-    #ifdef ACTIVE_POOL
-        ok = GOT::PreLoadObjects(preloaderState_, &timer, preloadDelayUsec_, GameStatics::rootScene_->GetChild("PreLoadGOT"), true);
-    #else
         ok = GOT::PreLoadObjects(preloaderState_, &timer, preloadDelayUsec_, GameStatics::rootScene_->GetChild("PreLoadGOT"), false);
-    #endif
-
         if (!ok)
         {
             long long dt = timer.GetUSec(false);
