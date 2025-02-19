@@ -115,6 +115,18 @@ enum
     LEVELMAPACTION_CINEMATICREPLAY
 };
 
+enum LevelMapLayers : int
+{
+    LMLayer_Link = 1,
+    LMLayer_Selector = 1,
+    LMLayer_Planet = 2,
+    LMLayer_Arrow = 3,
+    LMLayer_MissionAnim = 4,
+    LMLayer_MissionScore = 4,
+    LMLayer_CineReplay = 4,
+    LMLayer_PeerAnim = 4,
+};
+
 const char* LevelMapActionStr[] =
 {
     "LEVELMAPACTION_STARTLEVEL",
@@ -513,7 +525,7 @@ void LevelMapState::SetMissionNodes(Node* root)
             if (missionstateAnim)
             {
                 missionstateAnim->SetAnimation(missionstate);
-                missionstateAnim->SetLayer(2);
+                missionstateAnim->SetLayer(LMLayer_MissionAnim);
                 missionstateAnim->SetEnabled(true);
             }
         }
@@ -526,7 +538,7 @@ void LevelMapState::SetMissionNodes(Node* root)
             if (peerstateAnim)
             {
                 peerstateAnim->SetAnimation("on");
-                peerstateAnim->SetLayer(3);
+                peerstateAnim->SetLayer(LMLayer_PeerAnim);
                 peerstateAnim->SetEnabled(false);
             }
         }
@@ -552,7 +564,7 @@ void LevelMapState::SetMissionNodes(Node* root)
         selector_ = missionDefaultNode->CloneInside(root, LOCAL);
 
         AnimatedSprite2D* animatedsprite = selector_->GetComponent<AnimatedSprite2D>();
-        animatedsprite->SetLayer(1);
+        animatedsprite->SetLayer(LMLayer_Selector);
         animatedsprite->SetAnimation("selected");
         animatedsprite->SetEnabled(true);
     }
@@ -607,7 +619,7 @@ void LevelMapState::SetLinks()
 
             StaticSprite2D* staticsprite = linknode->CreateComponent<StaticSprite2D>();
             staticsprite->SetSprite(sprite);
-            staticsprite->SetLayer(0);
+            staticsprite->SetLayer(LMLayer_Link);
 
 //            URHO3D_LOGINFOF("LevelMapState() - SetMissionNodes ... Add Link Mission%u->Mission%u!", missionid1, missionid2);
 
@@ -689,7 +701,7 @@ void LevelMapState::SetPlanetNodes(Node* root)
                 entity.AppendWithFormat("Planet%d", planetid);
                 animatedsprite->SetEntity(entity);
                 animatedsprite->SetAnimation(anim);
-                animatedsprite->SetLayer(2);
+                animatedsprite->SetLayer(LMLayer_Planet);
                 animatedsprite->SetEnabled(true);
             }
 
@@ -730,7 +742,7 @@ void LevelMapState::SetPlanetNodes(Node* root)
         Node* missionscore = planetInfo->CreateChild("MissionScore", LOCAL);
         AnimatedSprite2D* animatedsprite = missionscore->CreateComponent<AnimatedSprite2D>();
         animatedsprite->SetAnimationSet(animationset);
-        animatedsprite->SetLayer(3);
+        animatedsprite->SetLayer(LMLayer_MissionScore);
     }
 
     // Create Cinematic Replay
@@ -738,7 +750,7 @@ void LevelMapState::SetPlanetNodes(Node* root)
                                                                 Vector2::ZERO, 0.f, true, CinematicButtonColliderCenter, CinematicButtonColliderRadius);
     if (button)
     {
-        button->SetLayer(3);
+        button->SetLayer(LMLayer_CineReplay);
         button->SetAnimation("idle");
     }
 }
@@ -780,7 +792,7 @@ void LevelMapState::SetPlanetLinkButtons()
                     button->GetNode()->SetWorldPosition2D(position);
                     button->GetNode()->SetRotation2D(angle + (length.x_ > 0.f ? -90.f : 90.f));
                     button->GetNode()->SetWorldScale2D(scale, scale);
-                    button->SetLayer(4);
+                    button->SetLayer(LMLayer_Arrow);
                     button->SetAnimation("selected");
                 }
             }
