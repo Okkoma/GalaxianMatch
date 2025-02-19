@@ -24,6 +24,7 @@
 
 #include "../Math/Frustum.h"
 #include "../Math/Polyhedron.h"
+#include "../Math/Matrix2x3.h"
 
 #include "../DebugNew.h"
 

@@ -22,6 +22,7 @@
 
 #include "../Precompiled.h"
 #include "../Math/Matrix3x4.h"
+#include "../Math/Matrix2x3.h"
 
 #include "../Math/Rect.h"
 
