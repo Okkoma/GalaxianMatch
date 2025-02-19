@@ -3,7 +3,8 @@
 #include <Urho3D/Graphics/Drawable.h>
 #include <Urho3D/Graphics/GraphicsDefs.h>
 #include <Urho3D/Graphics/Material.h>
-#include <Urho3D/Math/Matrix2x3.h>
+
+#include "Matrix2x3.h"
 
 namespace Urho3D
 {

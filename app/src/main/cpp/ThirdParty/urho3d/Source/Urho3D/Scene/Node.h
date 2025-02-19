@@ -24,7 +24,6 @@
 
 #include "../IO/VectorBuffer.h"
 #include "../Math/Matrix3x4.h"
-#include "../Math/Matrix2x3.h"
 #include "../Scene/Animatable.h"
 
 namespace Urho3D
@@ -342,9 +341,6 @@ public:
 
     /// Return parent space transform matrix.
     Matrix3x4 GetTransform() const { return Matrix3x4(position_, rotation_, scale_); }
-
-    /// Return parent space transform matrix.
-    Matrix2x3 GetTransform2D() const { return Matrix2x3(GetPosition2D(), GetRotation2D(), GetScale2D()); }
 
     /// Return position in world space.
     Vector3 GetWorldPosition() const

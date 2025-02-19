@@ -78,7 +78,7 @@ void Drawable2D::SetLayer(int layer)
         return;
 
     layer_ = layer;
-    URHO3D_LOGERRORF("Drawable2D::SetLayer() - layer=%d", layer);
+
     OnDrawOrderChanged();
     MarkNetworkUpdate();
 }

@@ -1,13 +1,6 @@
-#include "../Precompiled.h"
-
-#include "../Math/Matrix2x3.h"
+#include "Matrix2x3.h"
 
 #include <cstdio>
-
-#include "../DebugNew.h"
-
-namespace Urho3D
-{
 
 const Matrix2x3 Matrix2x3::ZERO(
     0.0f, 0.0f, 0.0f,
@@ -51,4 +44,3 @@ String Matrix2x3::ToString() const
     return String(tempBuffer);
 }
 
-}

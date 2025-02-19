@@ -1,18 +1,17 @@
 #pragma once
 
-#include "../Math/Matrix2.h"
-#include "../Math/Matrix3.h"
-#include "../Math/Matrix3x4.h"
+#include <Urho3D/Math/Matrix2.h>
+#include <Urho3D/Math/Matrix3.h>
+#include <Urho3D/Math/Matrix3x4.h>
 
 #ifdef URHO3D_SSE
 #include <emmintrin.h>
 #endif
 
-namespace Urho3D
-{
+using namespace Urho3D;
 
 /// 2x3 matrix for scene node transform calculations In Urho2D
-class URHO3D_API Matrix2x3
+class Matrix2x3
 {
 public:
     /// Construct an identity matrix.
@@ -173,6 +172,7 @@ public:
             (m10_ * rhs.x_ + m11_ * rhs.y_ + m12_)
         );
     }
+
     /// Multiply a Vector3 which is assumed to represent position3D and skip the z-coordinate.
     Vector3 operator *(const Vector3& rhs) const
     {
@@ -182,6 +182,7 @@ public:
             rhs.z_
         );
     }
+
     /// Multiply a matrix 2x3
     Matrix2x3 operator *(const Matrix2x3& rhs) const
     {
@@ -430,6 +431,4 @@ public:
 
 /// Multiply a 2x3 matrix with a scalar.
 inline Matrix2x3 operator *(float lhs, const Matrix2x3& rhs) { return rhs * lhs; }
-
-}
 
