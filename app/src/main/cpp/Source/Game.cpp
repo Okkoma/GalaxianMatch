@@ -366,8 +366,7 @@ void Game::Start()
 	// Network, HUD, Localization
 	SetupSubSystems();
 
-    SubscribeToEvent(E_APPPAUSED, URHO3D_HANDLER(Game, HandleAppPaused));
-    SubscribeToEvent(E_APPRESUMED, URHO3D_HANDLER(Game, HandleAppResumed));
+    SubscribeToEvent(E_INPUTFOCUS, URHO3D_HANDLER(Game, HandleInputFocus));
 
 	// Preload Ressources
     SubscribeToEvent(E_SCENEUPDATE, URHO3D_HANDLER(Game, HandlePreloadResources));
@@ -986,18 +985,22 @@ void Game::OnBonusFrameMessageAck(StringHash eventType, VariantMap& eventData)
     GameHelpers::SetMusic(MAINMUSIC, 1.f);
 }
 
-void Game::HandleAppPaused(StringHash eventType, VariantMap& eventData)
+void Game::HandleInputFocus(StringHash eventType, VariantMap& eventData)
 {
-    URHO3D_LOGINFO("Game() - HandleAppPaused !");
-    GameStatics::gameState_.Save();
+    bool focus = eventData[InputFocus::P_FOCUS].GetBool();
+    bool minimized = eventData[InputFocus::P_MINIMIZED].GetBool();
+    URHO3D_LOGINFOF("Game() - HandleInputFocus  : focus=%u minimized=%u", focus, minimized);
+    if (focus && !minimized)
+    {
+        URHO3D_LOGINFO("Game() - HandleInputFocus : restore focus => check earn star");
+        GameStatics::CheckTimeForEarningStars();
+    }
+    else if (!focus && minimized)
+    {
+        URHO3D_LOGINFO("Game() - HandleInputFocus : minimized and lost focus => save");
+        GameStatics::gameState_.Save();
+    }
 }
-
-void Game::HandleAppResumed(StringHash eventType, VariantMap& eventData)
-{
-    URHO3D_LOGINFO("Game() - HandleAppResumed !");
-    GameStatics::CheckTimeForEarningStars();
-}
-
 
 void Game::HandlePreloadResources(StringHash eventType, VariantMap& eventData)
 {

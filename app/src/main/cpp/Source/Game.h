@@ -52,8 +52,7 @@ private:
 	void SetupSubSystems();
     void ResetScreen();
 
-    void HandleAppPaused(StringHash eventType, VariantMap& eventData);
-    void HandleAppResumed(StringHash eventType, VariantMap& eventData);
+    void HandleInputFocus(StringHash eventType, VariantMap& eventData);
     void HandleRewardsEvents(StringHash eventType, VariantMap& eventData);
     void OnBonusFrameMessageAck(StringHash eventType, VariantMap& eventData);
 
