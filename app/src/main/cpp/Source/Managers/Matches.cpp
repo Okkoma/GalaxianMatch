@@ -111,7 +111,7 @@ void Match::DumpMatches(Vector<Match*>& matches)
 {
     String s;
     for (Vector<Match*>::ConstIterator it=matches.Begin(); it!=matches.End(); ++it)
-        s += String((void*)(*it)) + " - ";
+        s += String((long unsigned)(void*)(*it)) + " - ";
 
     URHO3D_LOGINFOF("Match() - DumpMatches : Num=%u Matches=%s", matches.Size(), s.CString());
 }

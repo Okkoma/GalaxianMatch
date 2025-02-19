@@ -83,8 +83,8 @@ bool CinematicState::GetCinematicParts(int mode, int firstlevel, int selectedlev
     if (!cinematicstate)
         return false;
 
-    if (GameStatics::graphics_->GetMaxTextureSize() < 2048)
-        return false;
+//    if (GameStatics::graphics_->GetMaxTextureSize() < 2048)
+//        return false;
 
     const int zone = GameStatics::playerState_->zone;
     const int currentCinematicPartShown = GameStatics::playerState_->cinematicShown_[zone-1];

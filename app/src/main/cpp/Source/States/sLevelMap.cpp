@@ -2455,11 +2455,11 @@ void LevelMapState::OnPostRenderUpdate(StringHash eventType, VariantMap& eventDa
             GameStatics::ui_->DebugDraw(element);
         }
 
-        const Vector<WeakPtr<UIElement> >& elements = GameStatics::ui_->GetElementsAlwaysOnTop();
-        for (Vector<WeakPtr<UIElement> >::ConstIterator it=elements.Begin(); it!=elements.End(); ++it)
-        {
-            if (*it)
-                GameStatics::ui_->DebugDraw(*it);
-        }
+//        const Vector<WeakPtr<UIElement> >& elements = GameStatics::ui_->GetElementsAlwaysOnTop();
+//        for (Vector<WeakPtr<UIElement> >::ConstIterator it=elements.Begin(); it!=elements.End(); ++it)
+//        {
+//            if (*it)
+//                GameStatics::ui_->DebugDraw(*it);
+//        }
     }
 }

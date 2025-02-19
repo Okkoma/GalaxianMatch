@@ -112,7 +112,7 @@ void AnimatedSprite::SwitchIndependentUpdate()
     {
 //        URHO3D_LOGINFOF("AnimatedSprite() - SwitchIndependentUpdate : name=%s ", name_.CString());
         SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(AnimatedSprite, HandleUpdate));
-        GameStatics::ui_->AddElementAlwaysOnTop(this);
+//        GameStatics::ui_->AddElementAlwaysOnTop(this);
     }
 }
 

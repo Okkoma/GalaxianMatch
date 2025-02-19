@@ -298,7 +298,7 @@ void MatchesManager::UpdateGridPositions()
         totalrect.Merge(rect);
         grid.SetGridRect(rect);
 
-        grid.gridNode_->SetPosition(rect.Center());
+        grid.gridNode_->SetPosition(Vector3(rect.Center()));
         grid.objectsNode_->SetPosition(grid.gridNode_->GetPosition());
     }
 
@@ -868,7 +868,7 @@ void MatchesManager::DrawDebugGeometry(DebugRenderer* debug, bool depth) const
 
 MatchGridInfo::MatchGridInfo() :
     RefCounted(),
-    abilitySelected_(StringHash::ZERO),
+    abilitySelected_(0),
     hintsearchTimer_(0U)
 {
     netTosendCommands_.Reserve(100);
