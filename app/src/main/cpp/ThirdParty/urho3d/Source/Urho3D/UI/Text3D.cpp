@@ -330,7 +330,7 @@ void Text3D::SetEffectDepthBias(float bias)
 
 void Text3D::SetWidth(int width)
 {
-    // C.VILLE : we need to fix width to correctly use word wrapping
+    // we need to fix width to correctly use word wrapping
     text_.SetFixedWidth(width);
 //    text_.SetMinWidth(width);
 //    text_.SetWidth(width);

@@ -85,6 +85,9 @@ public:
     /// Set wordwrap. In wordwrap mode the text element will respect its current width. Otherwise it resizes itself freely.
     /// @property
     void SetWordwrap(bool enable);
+    /// The text will be automatically translated. The text value used as string identifier.
+    /// @property
+    void SetAutoLocalizable(bool enable);
     /// Set text effect.
     /// @property
     void SetTextEffect(TextEffect textEffect);
@@ -149,6 +152,9 @@ public:
     /// Return wordwrap mode.
     /// @property
     bool GetWordwrap() const;
+    /// Return auto localizable mode.
+    /// @property
+    bool GetAutoLocalizable() const { return text_.GetAutoLocalizable(); }
     /// Return text effect.
     /// @property
     TextEffect GetTextEffect() const;

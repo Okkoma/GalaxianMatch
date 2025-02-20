@@ -78,6 +78,7 @@ void Text3D::RegisterObject(Context* context)
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Text", GetTextAttr, SetTextAttr, String, String::EMPTY, AM_DEFAULT);
     URHO3D_ENUM_ATTRIBUTE("Text Alignment", text_.textAlignment_, horizontalAlignments, HA_LEFT, AM_DEFAULT);
     URHO3D_ATTRIBUTE("Row Spacing", float, text_.rowSpacing_, 1.0f, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Auto Localizable", GetAutoLocalizable, SetAutoLocalizable, bool, false, AM_FILE);
     URHO3D_ATTRIBUTE("Word Wrap", bool, text_.wordWrap_, false, AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Can Be Occluded", IsOccludee, SetOccludee, bool, true, AM_DEFAULT);
     URHO3D_ACCESSOR_ATTRIBUTE("Fixed Screen Size", IsFixedScreenSize, SetFixedScreenSize, bool, false, AM_DEFAULT);
@@ -272,6 +273,12 @@ void Text3D::SetWordwrap(bool enable)
     MarkTextDirty();
 }
 
+void Text3D::SetAutoLocalizable(bool enable)
+{
+    text_.SetAutoLocalizable(enable);
+    MarkTextDirty();
+}
+
 void Text3D::SetTextEffect(TextEffect textEffect)
 {
     text_.SetTextEffect(textEffect);
@@ -312,8 +319,10 @@ void Text3D::SetEffectDepthBias(float bias)
 
 void Text3D::SetWidth(int width)
 {
-    text_.SetMinWidth(width);
-    text_.SetWidth(width);
+    // we need to fix width to correctly use word wrapping
+    text_.SetFixedWidth(width);
+//    text_.SetMinWidth(width);
+//    text_.SetWidth(width);
 
     MarkTextDirty();
 }
