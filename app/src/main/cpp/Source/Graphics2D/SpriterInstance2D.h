@@ -87,7 +87,7 @@ public:
     const HashMap<String, NodeUpdater >& GetNodeUpdaters() const { return nodeUpdaters_; }
     const HashMap<Timeline*, PointTimelineKey* >& GetEventTriggers() const { return eventTriggers_; }
     const HashMap<Timeline*, BoxTimelineKey* >& GetPhysicTriggers() const { return physicTriggers_; }
-    
+
 /// Return time passed on the current animation.
     float GetCurrentTime() const { return currentTime_; }
 
@@ -103,7 +103,9 @@ public:
 
 private:
     /// Clear mainline key and timeline keys.
-    void RestoreKeys();
+    void ClearKeys();
+    void ResizeKeys();
+    void ClearTriggers();
     void Dispose();
 
     /// Handle set entity.
@@ -116,6 +118,7 @@ private:
 
     /// Get timeline key by ref.
     TimelineKey* GetTimelineKey(Timeline* timeline, Ref* ref, float targetTime, TimelineKey* reuse) const;
+    SpriteTimelineKey* GetSpriteTimelineKey(Timeline* timeline, Ref* ref, float targetTime, SpriteTimelineKey* entry) const;
 
     /// Parent component.
     Component* owner_;

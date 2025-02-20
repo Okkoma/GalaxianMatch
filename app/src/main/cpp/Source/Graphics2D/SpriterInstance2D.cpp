@@ -26,6 +26,8 @@ SpriterInstance::SpriterInstance(Component* owner, SpriterData* spriteData) :
     animation_(nullptr),
     looping_(false)
 {
+    boneKeys_.Reserve(10);
+    spriteKeys_.Reserve(20);
 }
 
 SpriterInstance::~SpriterInstance()
@@ -103,7 +105,7 @@ bool SpriterInstance::SetAnimation(const String& animationName, LoopMode loopMod
 Animation* SpriterInstance::GetAnimation(const String& name) const
 {
     if (!entity_)
-        return 0;
+        return nullptr;
 
     for (unsigned i = 0; i < entity_->animations_.Size(); ++i)
     {
@@ -111,7 +113,7 @@ Animation* SpriterInstance::GetAnimation(const String& name) const
             return entity_->animations_[i];
     }
 
-    return 0;
+    return nullptr;
 }
 
 void SpriterInstance::SetSpatialInfo(const SpatialInfo& spatialInfo)
@@ -133,7 +135,7 @@ bool SpriterInstance::HasFinishedAnimation() const
 }
 
 bool SpriterInstance::GetLooping() const
-{ 
+{
     return looping_;
 }
 
@@ -162,7 +164,7 @@ void SpriterInstance::OnSetAnimation(Animation* animation, LoopMode loopMode)
         currentTime_ = 0.0f;
         mainlineKey_ = nullptr;
 
-        RestoreKeys();
+        ClearTriggers();
     }
 }
 
@@ -177,7 +179,7 @@ bool SpriterInstance::Update(float deltaTime)
     if (!UpdateMainlineKeys(deltaTime))
         return false;
 
-    RestoreKeys();
+    ClearTriggers();
 
     UpdateTimelineKeys();
 
@@ -198,7 +200,7 @@ void SpriterInstance::ResetCurrentTime()
     currentTime_ = 0.f;
     mainlineKey_ = nullptr;
 
-    RestoreKeys();
+    ClearTriggers();
 }
 
 bool SpriterInstance::UpdateMainlineKeys(float deltaTime)
@@ -254,13 +256,12 @@ void SpriterInstance::UpdateTimelineKeys()
         if (i < boneKeys_.Size())
         {
             // reuse key
-            BoneTimelineKey*& tKey = boneKeys_[i];
-            tKey = (BoneTimelineKey*) GetTimelineKey(timeline, ref, adjustedTime_, tKey);
+            BoneTimelineKey* tKey = (BoneTimelineKey*) GetTimelineKey(timeline, ref, adjustedTime_, boneKeys_[i]);
             tKey->info_.UnmapFromParent(ref->parent_ >= 0 ? boneKeys_[ref->parent_]->info_ : spatialInfo_);
         }
         else
         {
-            BoneTimelineKey* tKey = (BoneTimelineKey*) GetTimelineKey(timeline, ref, adjustedTime_, 0);
+            BoneTimelineKey* tKey = (BoneTimelineKey*) GetTimelineKey(timeline, ref, adjustedTime_, nullptr);
             tKey->info_.UnmapFromParent(ref->parent_ >= 0 ? boneKeys_[ref->parent_]->info_ : spatialInfo_);
             boneKeys_.Push(tKey);
         }
@@ -283,15 +284,14 @@ void SpriterInstance::UpdateTimelineKeys()
             if (numSpriteKeys_ < spriteKeys_.Size())
             {
                 // reuse key
-                SpriteTimelineKey*& tKey = spriteKeys_[numSpriteKeys_];
-                tKey = (SpriteTimelineKey*) GetTimelineKey(timeline, ref, adjustedTime_, tKey);
+                SpriteTimelineKey* tKey = (SpriteTimelineKey*) GetTimelineKey(timeline, ref, adjustedTime_, spriteKeys_[numSpriteKeys_]);
                 tKey->info_.UnmapFromParent(ref->parent_ >= 0 ? boneKeys_[ref->parent_]->info_ : spatialInfo_);
                 tKey->zIndex_ = ref->zIndex_;
                 tKey->color_ = ref->color_;
             }
             else
             {
-                SpriteTimelineKey* tKey = (SpriteTimelineKey*) GetTimelineKey(timeline, ref, adjustedTime_, 0);
+                SpriteTimelineKey* tKey = (SpriteTimelineKey*) GetTimelineKey(timeline, ref, adjustedTime_, nullptr);
                 tKey->info_.UnmapFromParent(ref->parent_ >= 0 ? boneKeys_[ref->parent_]->info_ : spatialInfo_);
                 tKey->zIndex_ = ref->zIndex_;
                 tKey->color_ = ref->color_;
@@ -307,11 +307,9 @@ void SpriterInstance::UpdateTimelineKeys()
                 bool resetcomponent = !nodeUpdaters_.Contains(name);
                 NodeUpdater& updater = nodeUpdaters_[name];
 
-                PointTimelineKey*& tKey = updater.timekey_;
-                tKey = (PointTimelineKey*) GetTimelineKey(timeline, ref, adjustedTime_, tKey);
+                PointTimelineKey* tKey = (PointTimelineKey*) GetTimelineKey(timeline, ref, adjustedTime_, tKey);
                 tKey->info_.UnmapFromParent(ref->parent_ >= 0 ? boneKeys_[ref->parent_]->info_ : spatialInfo_);
                 tKey->zIndex_ = ref->zIndex_;
-
                 if (resetcomponent)
                     updater.ucomponent_ = nullptr;
             }
@@ -324,13 +322,14 @@ void SpriterInstance::UpdateTimelineKeys()
             }
         }
     }
+    ResizeKeys();
 }
 
 TimelineKey* SpriterInstance::GetTimelineKey(Timeline* timeline, Ref* ref, float targetTime, TimelineKey* entry) const
 {
     TimelineKey* timelineKey;
     if (entry) // reuse key
-    {     
+    {
         timeline->keys_[ref->key_]->Copy(entry);
         timelineKey = entry;
     }
@@ -344,7 +343,6 @@ TimelineKey* SpriterInstance::GetTimelineKey(Timeline* timeline, Ref* ref, float
         return timelineKey;
 
     unsigned nextTimelineKeyIndex = ref->key_ + 1;
-
     if (nextTimelineKeyIndex >= timeline->keys_.Size())
     {
         if (looping_)
@@ -359,7 +357,30 @@ TimelineKey* SpriterInstance::GetTimelineKey(Timeline* timeline, Ref* ref, float
     return timelineKey;
 }
 
-void SpriterInstance::RestoreKeys()
+void SpriterInstance::ClearKeys()
+{
+    if (!boneKeys_.Empty())
+    {
+        for (unsigned i = 0; i < boneKeys_.Size(); ++i)
+            delete boneKeys_[i];
+        boneKeys_.Clear();
+    }
+    if (!spriteKeys_.Empty())
+    {
+        for (unsigned i = 0; i < spriteKeys_.Size(); ++i)
+            delete spriteKeys_[i];
+        spriteKeys_.Clear();
+    }
+}
+
+void SpriterInstance::ResizeKeys()
+{
+    for (unsigned i = numSpriteKeys_; i < spriteKeys_.Size(); i++)
+        delete spriteKeys_[i];
+    spriteKeys_.Resize(numSpriteKeys_);
+}
+
+void SpriterInstance::ClearTriggers()
 {
     if (!eventTriggers_.Empty())
     {
@@ -377,30 +398,10 @@ void SpriterInstance::RestoreKeys()
 
 void SpriterInstance::Dispose()
 {
-    if (!boneKeys_.Empty())
-    {
-        for (unsigned i = 0; i < boneKeys_.Size(); ++i)
-            delete boneKeys_[i];
-        boneKeys_.Clear();
-    }
-    if (!spriteKeys_.Empty())
-    {
-        for (unsigned i = 0; i < spriteKeys_.Size(); ++i)
-            delete spriteKeys_[i];
-        spriteKeys_.Clear();
-    }
-    if (!eventTriggers_.Empty())
-    {
-        for (HashMap<Timeline*, PointTimelineKey* >::ConstIterator it=eventTriggers_.Begin();it!=eventTriggers_.End(); ++it)
-            delete it->second_;
-        eventTriggers_.Clear();
-    }
-    if (!physicTriggers_.Empty())
-    {
-        for (HashMap<Timeline*, BoxTimelineKey* >::ConstIterator it=physicTriggers_.Begin();it!=physicTriggers_.End(); ++it)
-            delete it->second_;
-        physicTriggers_.Clear();
-    }
+    ClearKeys();
+
+    ClearTriggers();
+
     if (!nodeUpdaters_.Empty())
     {
         for (HashMap<String, NodeUpdater >::ConstIterator it=nodeUpdaters_.Begin();it!=nodeUpdaters_.End(); ++it)
