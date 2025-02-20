@@ -123,7 +123,10 @@ void BlastLogic::Start()
         node_->SetAnimationEnabled(true);
 
         if (body_)
+        {
             SubscribeToEvent(node_, E_PHYSICSBEGINCONTACT2D, URHO3D_HANDLER(BlastLogic, OnBeginContact));
+            SubscribeToEvent(node_, E_NODEBEGINCONTACT2D, URHO3D_HANDLER(BlastLogic, OnBeginContact));
+        }
 
         if (steeringMode_ == NOSTEERING)
             body_->SetLinearVelocity(speed_ * initialDirection_);
@@ -189,9 +192,17 @@ void BlastLogic::OnNodeSet(Node* node)
 
 void BlastLogic::OnBeginContact(StringHash eventType, VariantMap& eventData)
 {
-    using namespace PhysicsBeginContact2D;
-
-    Node* othernode = ((RigidBody2D*) (eventData[P_BODYA].GetPtr() == body_ ? eventData[P_BODYB].GetPtr() : eventData[P_BODYA].GetPtr()))->GetNode();
+    Node* othernode = nullptr;
+    if (eventType == E_PHYSICSBEGINCONTACT2D)
+    {
+        using namespace PhysicsBeginContact2D;
+        othernode = ((RigidBody2D*) (eventData[P_BODYA].GetPtr() == body_ ? eventData[P_BODYB].GetPtr() : eventData[P_BODYA].GetPtr()))->GetNode();
+    }
+    else if (eventType == E_NODEBEGINCONTACT2D)
+    {
+        using namespace NodeBeginContact2D;
+        othernode = (Node*) eventData[P_OTHERNODE].GetPtr();
+    }
 
 //    URHO3D_LOGINFOF("BlastLogic() - OnBeginContact : %s(%u) Begin Contact with node %s(%u)",
 //                      body_->GetNode()->GetName().CString(), body_->GetNode()->GetID(), othernode->GetName().CString(), othernode->GetID());

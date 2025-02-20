@@ -285,6 +285,7 @@ void BossLogic::SubscribeToEvents()
     if (animators_.Size())
     {
         SubscribeToEvent(animators_[0]->GetNode(), E_PHYSICSBEGINCONTACT2D, URHO3D_HANDLER(BossLogic, OnBeginContact));
+        SubscribeToEvent(animators_[0]->GetNode(), E_NODEBEGINCONTACT2D, URHO3D_HANDLER(BossLogic, OnBeginContact));
         SubscribeToEvent(animators_[0]->GetNode(), SPRITER_ENTITY, URHO3D_HANDLER(BossLogic, OnSpawnEntity));
     }
 }
@@ -384,7 +385,7 @@ bool BossLogic::SetState(int state)
         bool changestate = false;
         numloops_ = 0;
 
-//        SetTrigAttacksEnable(state >= ATTACK1 && state <= ATTACK5 ? true : false);
+        SetTrigAttacksEnable(state >= ATTACK1 && state <= ATTACK5 ? true : false);
 
         const String animName(animationNames_[state]);
 
@@ -502,41 +503,40 @@ void BossLogic::OnEvent(StringHash eventType, VariantMap& eventData)
 
 void BossLogic::OnBeginContact(StringHash eventType, VariantMap& eventData)
 {
-    using namespace PhysicsBeginContact2D;
+    Node* othernode = nullptr;
+    CollisionShape2D* bodyshape = nullptr;
+    CollisionShape2D* othershape = nullptr;
 
-    RigidBody2D* other = 0;
-
+    if (eventType == E_PHYSICSBEGINCONTACT2D)
     {
-        RigidBody2D* b1 = (RigidBody2D*) eventData[P_BODYA].GetPtr();
-        RigidBody2D* b2 = (RigidBody2D*) eventData[P_BODYB].GetPtr();
-        CollisionShape2D* csOther = 0;
-
-        if (b1 == body_)
+        using namespace PhysicsBeginContact2D;
+        if ((RigidBody2D*) eventData[P_BODYA].GetPtr() == body_)
         {
-            // no trigger for body shape
-            if (((CollisionShape2D*) eventData[P_SHAPEA].GetPtr())->IsTrigger())
-                return;
-
-            other = (RigidBody2D*) eventData[P_BODYB].GetPtr();;
-            csOther = (CollisionShape2D*) eventData[P_SHAPEB].GetPtr();
+            bodyshape = (CollisionShape2D*) eventData[P_SHAPEA].GetPtr();
+            othershape = (CollisionShape2D*) eventData[P_SHAPEB].GetPtr();
+            othernode = ((RigidBody2D*) eventData[P_BODYB].GetPtr())->GetNode();
         }
         else
         {
-            // no trigger for body shape
-            if (((CollisionShape2D*) eventData[P_SHAPEB].GetPtr())->IsTrigger())
-                return;
-
-            other = (RigidBody2D*) eventData[P_BODYA].GetPtr();;
-            csOther = (CollisionShape2D*) eventData[P_SHAPEA].GetPtr();
+            bodyshape = (CollisionShape2D*) eventData[P_SHAPEB].GetPtr();
+            othershape = (CollisionShape2D*) eventData[P_SHAPEA].GetPtr();
+            othernode = ((RigidBody2D*) eventData[P_BODYA].GetPtr())->GetNode();
         }
-
-        // other shape must be a Trigger
-        if (!csOther->IsTrigger())
-            return;
+    }
+    else if (eventType == E_NODEBEGINCONTACT2D)
+    {
+        using namespace NodeBeginContact2D;
+        othernode = (Node*) eventData[P_OTHERNODE].GetPtr();
+        bodyshape = (CollisionShape2D*) eventData[P_SHAPE].GetPtr();
+        othershape = (CollisionShape2D*) eventData[P_OTHERSHAPE].GetPtr();
     }
 
-    if (other && other->GetNode() && other->GetNode()->GetVar(GOA::FACTION) != Variant::EMPTY)
-        if (other->GetNode()->GetVar(GOA::FACTION).GetInt() == GO_Player)
+    // no trigger for body shape / other shape must be a Trigger
+    if (bodyshape->IsTrigger() || !othershape->IsTrigger())
+        return;
+
+    if (othernode && othernode->GetVar(GOA::FACTION) != Variant::EMPTY)
+        if (othernode->GetVar(GOA::FACTION).GetInt() == GO_Player)
             Hit(5);
 }
 
@@ -655,7 +655,7 @@ void BossLogic::Update(float timestep)
 {
     if (state_ >= ATTACK1 && state_ <= BREAK5)
     {
-        // URHO3D_LOGINFOF("BossLogic() - Update : Node=%s(%u) ... state=%d path=%d actionTimer=%F looping=%u", 
+        // URHO3D_LOGINFOF("BossLogic() - Update : Node=%s(%u) ... state=%d path=%d actionTimer=%F looping=%u",
         //                 node_->GetName().CString(), node_->GetID(), state_, path_, actiontimer_, animators_.Front()->GetSpriterInstance()->GetLooping());
 
         if (animators_.Front()->HasFinishedAnimation())
@@ -679,7 +679,7 @@ void BossLogic::Update(float timestep)
             else
                 SetState(MOVE);
 
-//            SetTrigAttacksEnable(false);
+            SetTrigAttacksEnable(false);
 
             return;
         }
