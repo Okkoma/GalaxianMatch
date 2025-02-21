@@ -208,11 +208,6 @@ bool Sprite2D::GetTextureRectangle(Rect& rect, bool flipX, bool flipY) const
     return true;
 }
 
-float round(float f, float prec)
-{
-    return (float)(floor(f*(1.0f/prec) + 0.5f) * prec);
-}
-
 void Sprite2D::SetFixedRectangles(const Vector2& scale, float spanOffset, bool flipX, bool flipY)
 {
     Vector2 hotspot(flipX ? (1.0f - hotSpot_.x_) : hotSpot_.x_, flipY ? (1.0f - hotSpot_.y_) : hotSpot_.y_);
