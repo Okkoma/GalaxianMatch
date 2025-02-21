@@ -54,7 +54,9 @@
 #include "GameUI.h"
 #include "GameTest.h"
 
+#if defined(TEST_NETWORK)
 #include "Network.h"
+#endif
 
 #include "InteractiveFrame.h"
 #include "DelayAction.h"
@@ -441,7 +443,9 @@ void Game::Stop()
     engine_->DumpProfiler();
 #endif
 
+#if defined(TEST_NETWORK)
     Network::Remove();
+#endif
 
     /// GAME EXIT
 }

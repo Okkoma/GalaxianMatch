@@ -75,7 +75,9 @@
 #include "GameCommands.h"
 #include "GameUI.h"
 
+#if defined(TEST_NETWORK)
 #include "Network.h"
+#endif
 
 #include "InteractiveFrame.h"
 #include "TextMessage.h"

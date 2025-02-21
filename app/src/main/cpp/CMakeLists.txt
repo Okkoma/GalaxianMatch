@@ -35,29 +35,34 @@ endif()
 
 # Define source files
 set (SRC_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/Source")
-file (GLOB_RECURSE SOURCE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" ./Source/*.cpp ./Source/*.h)
+set (SRC_DIRS / /Components/ /GraphicEffects/ /Graphics2D/ /Objects/ /ObjectsCore/ /States/ /Managers/ /Resources/)
+              
+if (SPACEMATCH_WITH_NETWORK)
+    list (APPEND SRC_DIRS /Network/)
+    list (APPEND INC_DIRS ${SRC_ROOT}/Network/)
+endif ()
 
-# Add specific TODO.txt file
-#set (SOURCE_FILES "${SOURCE_FILES}" "../../../../TODO.txt")
+foreach (DIR ${SRC_DIRS})
+    file (GLOB CPP_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" ./Source${DIR}*.cpp)
+    list (APPEND SOURCE_FILES ${CPP_FILES})
+    list (APPEND INC_DIRS ${SRC_ROOT}${DIR})
+endforeach ()
 
 # Setup target with resource copying
 setup_main_executable ()
 
 set_target_properties(${TARGET_NAME} PROPERTIES CXX_STANDARD 17)
 
-target_include_directories (${TARGET_NAME} PRIVATE ${SRC_ROOT}/Components/ ${SRC_ROOT}/GraphicEffects/
-                                                   ${SRC_ROOT}/Graphics2D/ 
-                                                   ${SRC_ROOT}/Objects/ ${SRC_ROOT}/ObjectsCore/
-                                                   ${SRC_ROOT}/States/ ${SRC_ROOT}/Managers/
-                                                   ${SRC_ROOT}/Network/ ${SRC_ROOT}/Resources/
-                                                   ${SRC_ROOT}/ ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/ )
+target_include_directories (${TARGET_NAME} PRIVATE ${INC_DIRS})
                                                   
 add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty)
 
-if (EMSCRIPTEN)
-    target_link_libraries (${TARGET_NAME} datachannel-wasm)
-else ()
-    target_link_libraries (${TARGET_NAME} datachannel-static)    
+if (SPACEMATCH_WITH_NETWORK)
+    if (WEB)
+        target_link_libraries (${TARGET_NAME} datachannel-wasm)
+    else ()
+        target_link_libraries (${TARGET_NAME} datachannel-static)    
+    endif ()
 endif ()
 
 if (SPACEMATCH_WITH_TEST)

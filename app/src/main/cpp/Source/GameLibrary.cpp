@@ -25,7 +25,9 @@
 #include "MAN_Matches.h"
 #include "Tutorial.h"
 
+#if defined(TEST_NETWORK)
 #include "Network.h"
+#endif
 
 #include "GameTest.h"
 
@@ -39,7 +41,9 @@ void RegisterGameLibrary(Context* context)
 
     RegisterGraphics2DLibrary(context);
 
+#if defined(TEST_NETWORK)
     Network::RegisterLibrary(context);
+#endif
 
     GameRand::InitTable();
 

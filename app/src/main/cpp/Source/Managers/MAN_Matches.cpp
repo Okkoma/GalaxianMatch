@@ -34,7 +34,10 @@
 #include "GameEvents.h"
 #include "TimerRemover.h"
 #include "sPlay.h"
+
+#if defined(TEST_NETWORK)
 #include "Network.h"
+#endif
 
 #ifdef ACTIVE_GAMELOOPTESTING
 #include "GameTest.h"
@@ -1756,9 +1759,9 @@ inline void MatchGridInfo::GetSecondSelection(Match*& newHit)
     }
 }
 
-
 void MatchGridInfo::Net_ReceiveCommands(VectorBuffer& buffer)
 {
+#if defined(TEST_NETWORK)
     buffer.Seek(0);
     while (!buffer.IsEof())
     {
@@ -1778,17 +1781,21 @@ void MatchGridInfo::Net_ReceiveCommands(VectorBuffer& buffer)
                 cmddata.params_.SetData(buffer, paramsize);
         }
     }
+#endif
 }
 
 void NetCommandData::WriteToBuffer(VectorBuffer& buffer) const
 {
+#if defined(TEST_NETWORK)   
     buffer.WriteUByte(cmd_);
     buffer.WriteVLE(params_.GetSize());
     buffer.Write(params_.GetData(), params_.GetSize());
+#endif
 }
 
 NetCommandData* MatchGridInfo::Net_PrepareCommand(NetCommand cmd)
 {
+#if defined(TEST_NETWORK)
     if (!Network::Get(false))
         return nullptr;
     if (!GameStatics::peerConnected_)
@@ -1798,10 +1805,14 @@ NetCommandData* MatchGridInfo::Net_PrepareCommand(NetCommand cmd)
     NetCommandData& cmddata = netTosendCommands_.Back();
     cmddata.cmd_ = cmd;
     return &cmddata;
+#else
+    return nullptr;
+#endif
 }
 
 void MatchGridInfo::Net_SendCommands()
 {
+#if defined(TEST_NETWORK)
     if (!Network::Get(false))
         return;
     if (!GameStatics::peerConnected_ || !netTosendCommands_.Size())
@@ -1814,20 +1825,24 @@ void MatchGridInfo::Net_SendCommands()
     Network::Get()->SendBuffer(preparedCommands_, "griddata");
 
     netTosendCommands_.Clear();
+#endif
 }
 
 void MatchGridInfo::Net_SendGrid()
 {
+#if defined(TEST_NETWORK)
     NetCommandData* cmd = Net_PrepareCommand(NETGRID_SET);
     if (!cmd)
         return;
 
     mgrid_.Save(cmd->params_);
     Net_SendCommands();
+#endif
 }
 
 void MatchGridInfo::Net_UpdateControl()
 {
+#if defined(TEST_NETWORK)
     // For Test Match
 //    if (state_ == NoMatchState)
 //    {
@@ -1917,8 +1932,8 @@ void MatchGridInfo::Net_UpdateControl()
     }
 
     netReceivedCommands_.PopFront();
+#endif
 }
-
 
 void MatchGridInfo::UpdateControl()
 {
@@ -1965,12 +1980,14 @@ void MatchGridInfo::UpdateControl()
                             {
                                 AcquireItems(hit);
 
+                            #if defined(TEST_NETWORK)
                                 NetCommandData* cmddata = Net_PrepareCommand(NETITEM_ACQUIRE);
                                 if (cmddata)
                                 {
                                     cmddata->params_.WriteUByte(hit.x_);
                                     cmddata->params_.WriteUByte(hit.y_);
                                 }
+                            #endif
                             }
                             else
                             {
@@ -1980,7 +1997,8 @@ void MatchGridInfo::UpdateControl()
                                     {
                                         ApplyCurrentAbilityOn(MatchesManager::Get()->GetMatchAtPosition(hitposition_));
                                         URHO3D_LOGWARNINGF("MatchGridInfo() - UpdateInput : Use Ability on Selection x=%d y=%d type=%d", hit.x_, hit.y_, hit.ctype_);
-
+                                    
+                                    #if defined(TEST_NETWORK)
                                         NetCommandData* cmddata = Net_PrepareCommand(NETABILITY_APPLY);
                                         if (cmddata)
                                         {
@@ -1988,6 +2006,7 @@ void MatchGridInfo::UpdateControl()
                                             cmddata->params_.WriteUByte(hit.x_);
                                             cmddata->params_.WriteUByte(hit.y_);
                                         }
+                                    #endif
                                     }
                                 }
                                 else
@@ -1998,7 +2017,7 @@ void MatchGridInfo::UpdateControl()
 
                                     SelectStartMatch(hit);
                                     canUnselect_ = false;
-
+                                #if defined(TEST_NETWORK)
                                     NetCommandData* cmddata = Net_PrepareCommand(NETMATCH_SELECT);
                                     if (cmddata)
                                     {
@@ -2006,6 +2025,7 @@ void MatchGridInfo::UpdateControl()
                                         cmddata->params_.WriteUByte(hit.y_);
                                         URHO3D_LOGWARNINGF("MatchGridInfo() - UpdateInput : NETMATCH_SELECT x=%u y=%u (size=%u)!", hit.x_, hit.y_, cmddata->params_.GetSize());
                                     }
+                                #endif
                                 }
                             }
 
@@ -2060,13 +2080,15 @@ void MatchGridInfo::UpdateControl()
                         SelectStartMatch(*newHit);
                         inputposition_ = GameStatics::input_->GetNumTouches() ? GameStatics::input_->GetTouch(0)->position_ : GameStatics::input_->GetMousePosition();
 
+                    #if defined(TEST_NETWORK)
                         NetCommandData* cmddata = Net_PrepareCommand(NETMATCH_SELECT);
                         if (cmddata)
                         {
                             cmddata->params_.WriteUByte(newHit->x_);
                             cmddata->params_.WriteUByte(newHit->y_);
-                            URHO3D_LOGWARNINGF("MatchGridInfo() - UpdateInput : NETMATCH_SELECT x=%u y=%u (size=%u)!", newHit->x_, newHit->y_, cmddata->params_.GetSize());
+                                URHO3D_LOGWARNINGF("MatchGridInfo() - UpdateInput : NETMATCH_SELECT x=%u y=%u (size=%u)!", newHit->x_, newHit->y_, cmddata->params_.GetSize());
                         }
+                    #endif
                     }
                     else
                     {
@@ -2110,6 +2132,7 @@ void MatchGridInfo::UpdateControl()
                                     selected_[1] = newhit;
                                     MoveSelection();
 
+                                #if defined(TEST_NETWORK)
                                     NetCommandData* cmddata = Net_PrepareCommand(NETMATCH_MOVE);
                                     if (cmddata)
                                     {
@@ -2118,6 +2141,7 @@ void MatchGridInfo::UpdateControl()
                                         cmddata->params_.WriteUByte(selected_[1].x_);
                                         cmddata->params_.WriteUByte(selected_[1].y_);
                                     }
+                                #endif
                                 }
                                 else
                                 {
@@ -2129,6 +2153,7 @@ void MatchGridInfo::UpdateControl()
                                         ResetSelection();
                                         SelectStartMatch(newhit);
 
+                                    #if defined(TEST_NETWORK)
                                         NetCommandData* cmddata = Net_PrepareCommand(NETMATCH_SELECT);
                                         if (cmddata)
                                         {
@@ -2136,6 +2161,7 @@ void MatchGridInfo::UpdateControl()
                                             cmddata->params_.WriteUByte(newhit.y_);
                                             URHO3D_LOGWARNINGF("MatchGridInfo() - UpdateInput : NETMATCH_SELECT x=%u y=%u (size=%u)!", newhit.x_, newhit.y_, cmddata->params_.GetSize());
                                         }
+                                    #endif
                                     }
                                     else
                                     {

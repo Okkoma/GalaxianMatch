@@ -1,9 +1,5 @@
 #pragma once
 
-#if defined(TEST_NETWORK)
-#include "Network.h"
-#endif
-
 #include "GameStateManager.h"
 
 namespace Urho3D
