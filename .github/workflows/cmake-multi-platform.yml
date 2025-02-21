@@ -57,7 +57,7 @@ jobs:
     - name: Setup Build Environnement Linux
       run: |
         sudo apt update
-        sudo apt install -y --no-install-recommends libgl1-mesa-dev libxcursor-dev libxi-dev libxinerama-dev
+        sudo apt install -y --no-install-recommends libglu1-mesa-dev libxcursor-dev libxi-dev libxinerama-dev
         sudo apt install -y --no-install-recommends libxrandr-dev libxrender-dev libxss-dev libxxf86vm-dev
         sudo apt install -y --no-install-recommends libasound2-dev libpulse-dev libibus-1.0-dev
         sudo apt install -y --no-install-recommends libdbus-1-dev libreadline6-dev libssl-dev libudev-dev
