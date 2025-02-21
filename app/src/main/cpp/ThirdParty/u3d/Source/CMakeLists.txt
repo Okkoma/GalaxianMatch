@@ -149,7 +149,7 @@ if (URHO3D_CLANG_TOOLS)
     add_subdirectory (Clang-Tools)
 endif ()
 
-if (URHO3D_TOOLS AND NOT ANDROID)
+if (NOT ANDROID)
     add_subdirectory (Tools)
 endif ()
 
