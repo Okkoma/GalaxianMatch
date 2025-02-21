@@ -48,4 +48,6 @@ endif ()
 
 if (URHO3D_HOME)
 	add_subdirectory (app/src/main/cpp ${ARGN})
+else ()
+    message ("can't add game source cause URHO3D_HOME is undefined here (surely need to check the cached var in UrhoCommon)")
 endif ()

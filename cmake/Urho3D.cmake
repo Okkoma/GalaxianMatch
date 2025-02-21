@@ -110,6 +110,7 @@ endif ()
 
 # Check URHO3D_HOME
 if (URHO3D_HOME AND NOT EXISTS ${URHO3D_HOME})
+    message ("${URHO3D_HOME} don't exist ... reset URHO3D_HOME !")
     unset (URHO3D_HOME)
 endif ()
 
@@ -211,8 +212,12 @@ if (origin)
     endif ()
     
     if (NOT URHOCOMMON_INUSE)
+        # save temporary u3d home
+        set (URHO3D_HOME_TEMP ${URHO3D_HOME})
         # Include UrhoCommon for the main user project if not already used
         include (${URHO3D_CMAKE_MODULE}/UrhoCommon.cmake)
+        # restore u3d home
+        set (URHO3D_HOME ${URHO3D_HOME_TEMP})
     endif ()
 endif ()
 

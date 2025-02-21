@@ -341,7 +341,7 @@ if (IS_URHO3D)
     cmake_dependent_option (URHO3D_MACOSX_BUNDLE "Use MACOSX_BUNDLE when setting up macOS executable targets (Xcode/macOS platform only)" FALSE "XCODE AND NOT ARM" FALSE)
 else ()
     # Add Urho3d options for external and user projects
-    set (URHO3D_HOME "" CACHE PATH "Path to Urho3D build tree or SDK installation location (downstream project only)")
+    set (URHO3D_HOME "${URHO3D_HOME}" CACHE PATH "Path to Urho3D build tree or SDK installation location (downstream project only)")
     if (CMAKE_PROJECT_NAME MATCHES ^Urho3D-ExternalProject-)
         set (URHO3D_SSE ${HAVE_SSE})
     else ()
