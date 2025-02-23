@@ -150,9 +150,7 @@ LevelMapState::LevelMapState(Context* context) :
 
 LevelMapState::~LevelMapState()
 {
-#ifdef ACTIVE_SPLASHUI
     SendEvent(SPLASHSCREEN_STOP);
-#endif
 
     URHO3D_LOGINFO("~LevelMapState()");
 }
@@ -212,7 +210,7 @@ bool LevelMapState::HasCinematicAvailable(int levelid) const
         if (currentCinematicPartShown >= CINEMATIC_BOSSINTRO && GameStatics::playerState_->missionstates[levelid-1].state_ >= GameStatics::MissionState::MISSION_UNLOCKED)
         {
             String filename;
-            filename.AppendWithFormat("Data/Cinematic/constellation%d-boss.xml", zone);
+            filename.AppendWithFormat("Cinematic/constellation%d-boss.xml", zone);
             if (context_->GetSubsystem<FileSystem>()->FileExists(GameStatics::gameConfig_.appDir_ + filename))
             {
                 URHO3D_LOGINFOF("LevelMapState() - HasCinematicAvailable : bosslvl=%d ok !", levelid);
@@ -350,12 +348,12 @@ void LevelMapState::End()
         }
         else
         {
-        #ifndef ACTIVE_SPLASHUI
+
             GameHelpers::SetMoveAnimation(mapscene_, Vector3::ZERO, Vector3(-10.f, 0.f, 0.f), 0.f, SWITCHSCREENTIME);
             GameHelpers::SetMoveAnimationUI(uilevelmap_, IntVector2::ZERO, IntVector2(-GameStatics::graphics_->GetWidth()/2, 0), 0.f, SWITCHSCREENTIME);
-        #else
-            SetVisibleUI(false);
-        #endif
+
+            //SetVisibleUI(false);
+
             SendEvent(GAME_LEVELTOLOAD);
         }
     }

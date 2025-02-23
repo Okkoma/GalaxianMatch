@@ -62,9 +62,9 @@
 #include "DelayAction.h"
 
 #include "MAN_Matches.h"
-#ifdef ACTIVE_SPLASHUI
+
 #include "SplashScreen.h"
-#endif
+
 #include "sOptions.h"
 #include "sPlay.h"
 #include "sCinematic.h"
@@ -394,9 +394,7 @@ void Game::Start()
     options_ = ((OptionState*)GameStatics::stateManager_->GetState("Options"));
 
     // Splashscreen
-#ifdef ACTIVE_SPLASHUI
-    splashScreen_ = SharedPtr<SplashScreen>(new SplashScreen(context_, GAME_LEVELTOLOAD, GAME_LEVELREADY, "UI/splash02.webp", 0.f));
-#endif
+    splashScreen_ = SharedPtr<SplashScreen>(new SplashScreen(context_, GAME_LEVELTOLOAD, GAME_LEVELREADY, "UI/splash02-1024.webp", 0.f));
 
 	URHO3D_LOGINFO("Game() - ----------------------------------------");
 	URHO3D_LOGINFO("Game() - Start .... OK !                        -");
@@ -629,16 +627,15 @@ void Game::SetupSubSystems()
                 // Create debug HUD.
                 DebugHud* debugHud = engine_->CreateDebugHud();
                 if (debugHud)
-                {
                     debugHud->SetDefaultStyle(xmlFile);
-                    SubscribeToEvent(E_KEYDOWN, URHO3D_HANDLER(Game, HandleKeyDown));
-                }
 
                 // Default style on root
                 ui->GetRoot()->SetDefaultStyle(xmlFile);
             }
         }
 	}
+
+	SubscribeToEvent(E_KEYDOWN, URHO3D_HANDLER(Game, HandleKeyDown));
 }
 
 void Game::ResetScreen()
@@ -1191,6 +1188,27 @@ void Game::HandleKeyDown(StringHash eventType, VariantMap& eventData)
     {
         GameStatics::AddEarnStars(1);
     }
+    // Tips Coins and Stars
+    else if (keycode == KEY_M)
+    {
+        URHO3D_LOGINFOF("Game() - HandleKeyDown : Key M pressed => Add a move");
+        SendEvent(GAME_MOVEADDED);
+    }
+    else if (scancode == SCANCODE_S)
+    {
+        URHO3D_LOGINFOF("Game() - HandleKeyDown : Key S pressed => Add a Try");
+        GameStatics::AddBonus(Slot(COT::STARS, StringHash("star1"), 1), this);
+    }
+    else if (scancode == SCANCODE_C)
+    {
+        URHO3D_LOGINFOF("Game() - HandleKeyDown : Key C pressed => Add a Coin");
+        GameStatics::AddBonus(Slot(COT::COINS, StringHash("coin1"), 1), this);
+    }
+    else if (scancode == SCANCODE_T)
+    {
+        URHO3D_LOGINFOF("Game() - HandleKeyDown : Key T pressed => Check Time for winning stars");
+        GameStatics::CheckTimeForEarningStars();
+    }
 #endif
 #ifdef ACTIVE_GAMELOOPTESTING
     else if (scancode == SCANCODE_F7)
@@ -1273,29 +1291,6 @@ void Game::HandleKeyDown(StringHash eventType, VariantMap& eventData)
             screenshot.SavePNG(GetSubsystem<FileSystem>()->GetProgramDir() + "Data/Screenshot_" +
                 Time::GetTimeStamp().Replaced(':', '_').Replaced('.', '_').Replaced(' ', '_') + ".png");
         }
-#ifdef ACTIVE_TIPS
-        // Tips Coins and Stars
-        else if (keycode == KEY_M)
-        {
-            URHO3D_LOGINFOF("Game() - HandleKeyDown : Key M pressed => Add a move");
-            SendEvent(GAME_MOVEADDED);
-        }
-        else if (scancode == SCANCODE_S)
-        {
-            URHO3D_LOGINFOF("Game() - HandleKeyDown : Key S pressed => Add a Try");
-            GameStatics::AddBonus(Slot(COT::STARS, StringHash("star1"), 1), this);
-        }
-        else if (scancode == SCANCODE_C)
-        {
-            URHO3D_LOGINFOF("Game() - HandleKeyDown : Key C pressed => Add a Coin");
-            GameStatics::AddBonus(Slot(COT::COINS, StringHash("coin1"), 1), this);
-        }
-        else if (scancode == SCANCODE_T)
-        {
-            URHO3D_LOGINFOF("Game() - HandleKeyDown : Key T pressed => Check Time for winning stars");
-            GameStatics::CheckTimeForEarningStars();
-        }
-#endif
 	}
 }
 

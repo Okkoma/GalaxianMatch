@@ -123,9 +123,7 @@ PlayState::PlayState(Context* context) :
     ctrlCameraWithMouse_(false)
 {
 //    URHO3D_LOGINFO("PlayState()");
-#ifdef ACTIVE_SPLASHUI
     SetCleanerLocked(false);
-#endif
 }
 
 PlayState::~PlayState()
@@ -1069,13 +1067,11 @@ void PlayState::ResizeAbilityPanel(bool instant)
         abilitypanel_->SetAbilityMoveZone(-1, 1, 0.3f);
 
         // Update the ScreenSize parameter for the shader "FadeOutside" applied on the abilities
-        Node* node = GOT::GetObject(StringHash("Abilities"));
-        AnimatedSprite2D* sprite = node->GetComponent<AnimatedSprite2D>();
-        Material* material = sprite->GetCustomMaterial();
+        Material* material = GOT::GetObject(StringHash("Abilities"))->GetComponent<AnimatedSprite2D>()->GetCustomMaterial();
         if (material)
         {
             material->SetShaderParameter("ScreenSize", Vector2(graphics->GetWidth(), graphics->GetHeight()));
-            URHO3D_LOGINFOF("PlayState() - ResizeAbilityPanel : update screensize !");
+            URHO3D_LOGINFOF("PlayState() - ResizeAbilityPanel : update screensize %d,%d !", graphics->GetWidth(), graphics->GetHeight());
         }
     }
 }
@@ -1351,9 +1347,7 @@ void PlayState::HandleSceneLoading(StringHash eventType, VariantMap& eventData)
 
         SendEvent(GAME_LEVELREADY);
 
-    #ifndef ACTIVE_SPLASHUI
         SendEvent(SPLASHSCREEN_STARTOPEN);
-    #endif
 
         SetVisibleUI(true);
     }
@@ -1379,13 +1373,11 @@ void PlayState::HandleSceneAppears(StringHash eventType, VariantMap& eventData)
     GameStatics::SetMouseVisible(!GameStatics::gameConfig_.touchEnabled_, false);
 //    GetSubsystem<Input>()->SetMouseVisible(!GameStatics::gameConfig_.touchEnabled_);
 
-#ifndef ACTIVE_SPLASHUI
     // Entrance Animation
     GameHelpers::SetMoveAnimationUI(uiplay_, IntVector2(500 * stateManager_->GetStackMove(), 0), IntVector2(0, 0), 0.f, SWITCHSCREENTIME);
     GameHelpers::SetMoveAnimation(GameStatics::rootScene_->GetChild("Scene"), Vector3(10.f * stateManager_->GetStackMove(), 0.f, 0.f), Vector3::ZERO, 0.f, SWITCHSCREENTIME);
 
-    SendEvent(SPLASHSCREEN_FINISHOPEN);
-#endif
+//    SendEvent(SPLASHSCREEN_FINISHOPEN);
 
     URHO3D_LOGINFOF("PlayState() - HandleSceneAppears : ... coins=%d stars=%d moves=%d OK !", GameStatics::coins_, GameStatics::tries_, GameStatics::moves_);
 }
@@ -1788,17 +1780,16 @@ void PlayState::HandleUpdate(StringHash eventType, VariantMap& eventData)
     }
 
     // Debug Stuff
-    if (GameStatics::gameConfig_.debugRenderEnabled_)
+    if (input->GetKeyPress(KEY_G))
     {
-        if (rootScene_)
+        if (GameStatics::gameConfig_.debugRenderEnabled_ && rootScene_)
         {
-            if (input->GetKeyPress(KEY_G))
-            {
-                drawDebug_ = !drawDebug_;
-                URHO3D_LOGINFOF("PlayState() - HandleKeyDown : KEY_G : Debug=%s", drawDebug_ ? "ON":"OFF");
-                SubscribeToDebugEvents(drawDebug_);
-            }
+            drawDebug_ = !drawDebug_;
+            URHO3D_LOGINFOF("PlayState() - HandleKeyDown : KEY_G : Debug=%s", drawDebug_ ? "ON":"OFF");
+            SubscribeToDebugEvents(drawDebug_);
         }
+        else
+            URHO3D_LOGINFOF("PlayState() - HandleKeyDown : KEY_G : !debugRenderEnabled_");
     }
 
     if (input->GetKeyDown(KEY_LCTRL))
@@ -2335,9 +2326,9 @@ void PlayState::OnWinMessageAck(StringHash eventType, VariantMap& eventData)
         URHO3D_LOGINFO("PlayState() - Game Next Level !");
         SubscribeToEvent(this, GAME_NEXTLEVEL, URHO3D_HANDLER(PlayState, HandleNewLevel));
 //        SetVisibleUI(false);
-    #ifdef ACTIVE_SPLASHUI
+
         SendEvent(GAME_LEVELTOLOAD);
-    #endif
+
         DelayInformer::Get(this, 1.5f, GAME_NEXTLEVEL);
     }
 

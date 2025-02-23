@@ -375,9 +375,7 @@ bool CinematicState::LaunchSceneFile()
     URHO3D_LOGINFOF("CinematicState() - LaunchSceneFile ! LoadTime = %u currentmusic=%d animationSpeed_=%F cinematicLength=%F",
                     timer.GetMSec(false), GameStatics::currentMusic_, animationSpeed_, cinematicLength);
 
-#ifdef ACTIVE_SPLASHUI
     SendEvent(GAME_LEVELREADY);
-#endif
 
     ChangeToAnimation(0);
 
