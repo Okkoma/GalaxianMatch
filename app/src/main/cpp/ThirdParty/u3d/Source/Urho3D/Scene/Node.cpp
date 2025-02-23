@@ -1105,15 +1105,21 @@ Node* Node::Clone(CreateMode mode)
 
 Node* Node::CloneInside(Node* parent, CreateMode mode, bool applyAttr)
 {
-    if (!parent) parent = parent_;
+    if (!parent)
+        parent = parent_;
 
-    // The scene itself can not be cloned
-    if (this == scene_ || !parent_)
+    if (!parent)
     {
         URHO3D_LOGERROR("Can not clone node without a parent");
+        return nullptr;        
+    }
+    // The scene itself can not be cloned
+    if (this == scene_)
+    {
+        URHO3D_LOGERROR("Can not clone the scene itself");
         return nullptr;
     }
-
+    
     URHO3D_PROFILE(CloneNode);
 
     SceneResolver resolver;
