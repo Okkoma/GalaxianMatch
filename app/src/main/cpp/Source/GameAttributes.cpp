@@ -218,8 +218,8 @@ StringHash GOT::Register(const String& typeName, const StringHash& category, con
 
 void GOT::LoadJSONFile(Context* context, const String& name)
 {
-    FileSystem* fs = context->GetSubsystem<FileSystem>();
-    JSONFile* jsonFile = context->GetSubsystem<ResourceCache>()->GetResource<JSONFile>(name);
+    ResourceCache* cache = context->GetSubsystem<ResourceCache>();
+    JSONFile* jsonFile = cache->GetResource<JSONFile>(name);
     if (!jsonFile)
     {
         URHO3D_LOGWARNINGF("GOT() - LoadJSONFile : %s not exist !", name.CString());
@@ -278,9 +278,9 @@ void GOT::LoadJSONFile(Context* context, const String& name)
             }
         }
 
-        fileName = "Data/Objects/" + fileName;
+        fileName = "Objects/" + fileName;
 
-        if (fs->FileExists(GameStatics::gameConfig_.appDir_ + fileName))
+        if (cache->Exists(fileName))
             Register(typeName, StringHash(category), fileName, GOTypeProps::GetValue(typeProperty), replicateMode, qtyInPool, defaultValue, maxDropQty);
         else
             URHO3D_LOGWARNINGF("GOT() - LoadJSONFile : filename=%s not found !", fileName.CString());

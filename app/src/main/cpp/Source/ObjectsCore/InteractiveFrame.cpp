@@ -456,7 +456,6 @@ void InteractiveFrame::SetBonusStart(float time)
 }
 
 
-
 void InteractiveFrame::UpdateAbilities()
 {
     // Check Static Abilities
@@ -568,7 +567,6 @@ void InteractiveFrame::AddAbility(int ability, bool autostart)
     if (qty > 1)
     {
         Text3D* qtytxt = node->GetComponent<Text3D>();
-//        Text3D* qtytxt = node->GetOrCreateComponent<Text3D>();
         if (qtytxt)
         {
 //            URHO3D_LOGINFOF("InteractiveFrame() - AddAbility : ability=%d -> Set Quantity Text Label to %d !", ability, qty);

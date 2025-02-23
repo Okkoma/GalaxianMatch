@@ -237,6 +237,8 @@ void MatchesManager::SetObjectiveRemainingQty(unsigned char index, int remain, i
 
 void MatchesManager::UpdateGridPositions()
 {
+    URHO3D_LOGINFO("MatchesManager() - UpdateGridPositions : ... ");
+
     const float tilesize = 2.f * halfTileSize;
     float totalgridsizex = 0.f;
     float totalgridsizey = 0.f;
@@ -309,7 +311,7 @@ void MatchesManager::UpdateGridPositions()
 
     GameHelpers::OrthoWorldToScreen(GameStatics::screenSceneRect_, BoundingBox(totalrect));
 
-    URHO3D_LOGINFOF("MatchesManager() - SetSceneScale : gridsize=%F,%F uiscale=%F scenescale=%F switchscaleXY=%s",
+    URHO3D_LOGINFOF("MatchesManager() - UpdateGridPositions : gridsize=%f,%f uiscale=%f scenescale=%f switchscaleXY=%s",
                     totalgridsizex, totalgridsizey, GameStatics::uiScale_, sceneScale_, GameStatics::switchScaleXY_ ? "true:gdx>=gdy" : "false:gdx<gdy");
 }
 

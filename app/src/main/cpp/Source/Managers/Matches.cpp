@@ -666,8 +666,6 @@ static const float   WallRotations[] = { 0.f, 90.f, 90.f, 0.f };
 
 void MatchGrid::InitializeTiles()
 {
-    URHO3D_LOGINFOF("MatchGrid() - InitializeTiles : ... ");
-
     Node* scene = GameStatics::rootScene_->GetChild("Scene");
     String gridname;
     gridname.AppendWithFormat("Grid%d", gridid_);
@@ -675,12 +673,18 @@ void MatchGrid::InitializeTiles()
     if (!gridNode_)
         gridNode_ = scene->CreateChild(gridname, LOCAL);
 
-    // Initialize Ground Tiles
+    const Vector<StringHash>& groundtypes = COT::GetObjectsInCategory(COT::GROUND2);
+    if (!groundtypes.Size())
+    {
+        URHO3D_LOGERROR("MatchGrid() - InitializeTiles : ... no groundtypes found !");
+        return;
+    }
 
-    const StringHash groundcat(COT::GROUND2);
-
-    const Vector<StringHash>& groundtypes = COT::GetObjectsInCategory(groundcat);
+    // Initialize Ground Tiles  
     tiles_.Resize(width_, height_);
+
+    URHO3D_LOGINFOF("MatchGrid() - InitializeTiles : ... gridNode=%s(%u) groundtypes=%u", 
+        gridNode_ ? gridNode_->GetName().CString() : "NULL", gridNode_ ? gridNode_->GetID() : 0, groundtypes.Size());
 
     unsigned char feature;
     Vector3 position;
@@ -688,29 +692,35 @@ void MatchGrid::InitializeTiles()
     {
         for (unsigned x=0; x < width_; x++)
         {
-            WeakPtr<Node>& tile = tiles_(x, y);
             feature = grid_(x, y).ground_;
-
             if (!feature)
             {
-                tile.Reset();
+                tiles_(x, y).Reset();
                 continue;
             }
 
-            StringHash got = groundtypes[--feature];
-            tile = GOT::GetObject(got)->CloneInside(gridNode_, LOCAL);
-            tile->SetVar(GOA::GOT, got);
-            position.x_ = (float(2*int(x)-int(width_)) + 1.f) * halfTileSize;
-            position.y_ = (float(int(height_)-2*int(y)) - 1.f) * halfTileSize;
-            tile->SetPosition(position);
-            tile->SetEnabled(true);
-            tile->SetVar(GOA::GRIDCOORD, IntVector3(x, y, gridid_));
-            StaticSprite2D* sprite = tile->GetDerivedComponent<StaticSprite2D>();
-            if (sprite)
+            const StringHash got(groundtypes[feature-1]);
+
+            WeakPtr<Node>& tile = tiles_(x, y);
+            Node* groundobject = GOT::GetObject(got);          
+            tile = WeakPtr<Node>(groundobject->CloneInside(gridNode_, LOCAL));
+            if (tile)
             {
-                sprite->SetColor(gridColor_);
-                sprite->SetAlpha(1.f);
+                tile->SetVar(GOA::GOT, got);
+                position.x_ = (float(2*int(x)-int(width_)) + 1.f) * halfTileSize;
+                position.y_ = (float(int(height_)-2*int(y)) - 1.f) * halfTileSize;
+                tile->SetPosition(position);
+                tile->SetEnabled(true);
+                tile->SetVar(GOA::GRIDCOORD, IntVector3(x, y, gridid_));
+                StaticSprite2D* sprite = tile->GetDerivedComponent<StaticSprite2D>();
+                if (sprite)
+                {
+                    sprite->SetColor(gridColor_);
+                    sprite->SetAlpha(1.f);
+                }
             }
+            else
+                URHO3D_LOGERRORF("MatchGrid() - InitializeTiles : can't add groundtile at %d,%d !", x, y);
         }
     }
 
@@ -755,19 +765,24 @@ void MatchGrid::InitializeTiles()
                     continue;
 
                 Node* node = GOT::GetObject(COT::GROUND1)->CloneInside(backgrid, LOCAL);
-                position.x_ = (float(2*int(x)-int(width_)) + 1.f) * halfTileSize;
-                position.y_ = (float(int(height_+previewLines_+1)-2*int(y)) - 1.f) * halfTileSize;
-                node->SetVar(GOA::GOT, COT::GROUND1);
-                node->SetPosition(position);
-                node->SetEnabled(true);
-                node->GetComponent<RigidBody2D>()->Remove();
-                StaticSprite2D* sprite = node->GetDerivedComponent<StaticSprite2D>();
-                if (sprite)
+                if (node)
                 {
-                    sprite->SetLayer(BACKGRIDLAYER);
-                    sprite->SetColor(gridColor_);
-                    sprite->SetAlpha(0.2f);
+                    position.x_ = (float(2*int(x)-int(width_)) + 1.f) * halfTileSize;
+                    position.y_ = (float(int(height_+previewLines_+1)-2*int(y)) - 1.f) * halfTileSize;
+                    node->SetVar(GOA::GOT, COT::GROUND1);
+                    node->SetPosition(position);
+                    node->SetEnabled(true);
+                    node->GetComponent<RigidBody2D>()->Remove();
+                    StaticSprite2D* sprite = node->GetDerivedComponent<StaticSprite2D>();
+                    if (sprite)
+                    {
+                        sprite->SetLayer(BACKGRIDLAYER);
+                        sprite->SetColor(gridColor_);
+                        sprite->SetAlpha(0.2f);
+                    }
                 }
+                else
+                    URHO3D_LOGERRORF("MatchGrid() - InitializeTiles : can't add previewgroundtile at %d,%d !", x, y);
             }
         }
     }

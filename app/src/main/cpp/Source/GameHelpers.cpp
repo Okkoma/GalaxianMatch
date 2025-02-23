@@ -1161,9 +1161,16 @@ void GameHelpers::ApplySizeRatio(int w, int h, IntVector2& size)
 
 void GameHelpers::ApplySizeRatioMaximized(int w, int h, IntVector2& size)
 {
-    float scale = Max(size.x_/w, size.y_/h);
-
-    size *= scale;
+    if (size.x_ < w && size.y_ < h)
+    {
+        size.x_ = w; size.y_ = h;
+    }
+    else
+    {
+        float scale = Max((float)size.x_/(float)w, (float)size.y_/(float)h);
+        size.x_ = size.x_ * scale;
+        size.y_ = size.y_ * scale;
+    }
 }
 
 void GameHelpers::AddTextFadeAnim(UIElement* uiroot, const String& msg, Text* originaltext, const IntVector2& deltamove, float fadetime, float scalefactor)

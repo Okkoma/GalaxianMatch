@@ -582,14 +582,14 @@ bool GameStatics::PreloadResources()
         }
 
         URHO3D_LOGINFO("GameStatics() - --------------------------------------------------------");
-        URHO3D_LOGINFO("GameStatics() - PreLoadResources ...                                   -");
+        URHO3D_LOGINFOF("GameStatics() - PreLoadResources ... appdir=%s", GameStatics::gameConfig_.appDir_.CString());
         URHO3D_LOGINFO("GameStatics() - --------------------------------------------------------");
 
         GameStatics::rootScene_->SetAsyncLoadingMs(preloadDelayUsec_/1000);
 
         GameHelpers::SetGameLogEnable(GameStatics::rootScene_->GetContext(), GAMELOG_PRELOAD, false);
 
-        GOT::LoadJSONFile(GameStatics::rootScene_->GetContext(), "Data/Objects/GOTPackage1.json");
+        GOT::LoadJSONFile(GameStatics::rootScene_->GetContext(), "Objects/GOTPackage1.json");
 
         Slot::ITEMS_2MOVES.SetIndex();
         Slot::ITEMS_4MOVES.SetIndex();
@@ -616,7 +616,7 @@ bool GameStatics::PreloadResources()
         {
             preloader = GameStatics::rootScene_->CreateChild("PreLoad", LOCAL);
 
-            if (GameHelpers::LoadNodeXML(GameStatics::rootScene_->GetContext(), preloader, "Data/Scenes/PreLoader.xml", LOCAL))
+            if (GameHelpers::LoadNodeXML(GameStatics::rootScene_->GetContext(), preloader, "Scenes/PreLoader.xml", LOCAL))
                 preloader->SetEnabled(false);
         }
 

@@ -299,7 +299,9 @@ void SplashState::End()
 void SplashState::HandleStop(StringHash eventType, VariantMap& eventData)
 {
     URHO3D_LOGINFO("SplashState() - HandleStop !");
-    stateManager_->PopStack();
+
+    //if (eventType == SPLASH_STOP)
+        stateManager_->PopStack();
 }
 
 void SplashState::HandleScreenResized(StringHash eventType, VariantMap& eventData)
