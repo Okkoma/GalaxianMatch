@@ -312,7 +312,7 @@ dep_option(VIDEO_OPENGL        "Include OpenGL support" ON "NOT ANDROID AND NOT 
 # Urho3D - hide OpenGLES option from all desktop platforms, although a few of them appears to have the necessary header file to build SDL OpenGLES video driver
 dep_option(VIDEO_OPENGLES      "Include OpenGL ES support" ON "ANDROID OR IOS OR TVOS OR ARM OR WEB" OFF)
 # Urho3D - only make PTHREADS option available on UNIX-like platforms
-dep_option(PTHREADS            "Use POSIX threads for multi-threading" ON UNIX OFF)
+dep_option(PTHREADS            "Use POSIX threads for multi-threading" ON "UNIX AND NOT EMSCRIPTEN" OFF)
 dep_option(PTHREADS_SEM        "Use pthread semaphores" ON PTHREADS OFF)
 # Urho3D - SDL_DLOPEN was originally set as option twice (one here and one in the subsystem section above), we keep the one here so that we can make the option dependent on other conditions
 dep_option(SDL_DLOPEN          "Use dlopen for shared object loading" ON "UNIX\;NOT IOS OR NOT IPHONEOS_DEPLOYMENT_TARGET OR NOT IPHONEOS_DEPLOYMENT_TARGET VERSION_LESS 8" OFF)    # No need to check for tvOS as its target version is 9 or above
