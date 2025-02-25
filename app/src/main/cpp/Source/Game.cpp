@@ -73,8 +73,39 @@
 
 #include "Game.h"
 
-URHO3D_DEFINE_APPLICATION_MAIN(Game);
+#if defined(__EMSCRIPTEN__)
+#include <emscripten/emscripten.h>
+#include <emscripten/bind.h>
 
+EM_JS(int, GetBrowserCanvasWidth, (), {
+    const { width, height } = canvas.getBoundingClientRect();
+
+    return width;
+});
+
+EM_JS(int, GetBrowserCanvasHeight, (), {
+    const { width, height } = canvas.getBoundingClientRect();
+    return height;
+});
+
+EM_JS(int, GetBrowserWindowWidth, (), {
+    return window.innerWidth;
+});
+
+EM_JS(int, GetBrowserWindowHeight, (), {
+    return window.innerHeight;
+});
+
+EM_JS(int, GetDeviceScreenWidth, (), {
+    return Math.round(window.screen.width * window.devicePixelRatio)
+});
+
+EM_JS(int, GetDeviceScreenHeight, (), {
+    return Math.round(window.screen.height * window.devicePixelRatio)
+});
+#endif
+
+URHO3D_DEFINE_APPLICATION_MAIN(Game);
 
 
 extern int UISIZE[NUMUIELEMENTSIZE];
@@ -130,24 +161,43 @@ void Game::Setup()
 
     if (!engineConfigApplied_)
     {
-        std::cout << "Apply default configuration..." << std::endl;
-
         engineParameters_["WindowTitle"] = GameStatics::GAMENAME;
         engineParameters_["WindowIcon"] = "Textures/icone.png";
         engineParameters_["ResourcePaths"] = "CoreData;Data";
         if (!engineParameters_.Contains("LogName"))
             engineParameters_["LogName"] = GameStatics::GAMENAME + ".log";
 
-//    #ifdef DESKTOP_GRAPHICS
-        engineParameters_["WindowWidth"] = GameStatics::targetwidth_;
+    #if defined(__ANDROID__) || defined(IOS)
+        engineParameters_["WindowWidth"]  = 0;
+        engineParameters_["WindowHeight"] = 0;
+        engineParameters_["FullScreen"]   = true;
+        std::cout << "Apply default configuration Android / IOS" << std::endl;
+    #elif defined(__EMSCRIPTEN__)
+        const int sw = GetDeviceScreenWidth();
+        const int sh = GetDeviceScreenHeight();
+        // check screen ratio : use fullscreen on mobile device
+        const bool fullscreen = (float)sh > (float)sw * 1.5f;
+        int w = GetBrowserWindowWidth();
+        int h = GetBrowserWindowHeight();
+        if (fullscreen)
+        {
+            w = sw;
+            h = sh;
+        }
+        engineParameters_["WindowWidth"]  = w;
+        engineParameters_["WindowHeight"] = h;
+        engineParameters_["FullScreen"]   = fullscreen;
+        std::cout << "Apply default configuration Web : window(" << w << " x " << h << ") screen(" << sw << " x " << sh << ") fullscreen=" << fullscreen << std::endl;
+    #else
+        engineParameters_["WindowWidth"]  = GameStatics::targetwidth_;
         engineParameters_["WindowHeight"] = GameStatics::targetheight_;
-//    #else
-//        engineParameters_["WindowWidth"] = 0;
-//        engineParameters_["WindowHeight"] = 0;
-//    #endif
+        engineParameters_["FullScreen"]   = false;
+        std::cout << "Apply default configuration Desktop" << std::endl;
+    #endif
+
         engineParameters_["Orientations"] = "Portrait PortraitUpsideDown";
         engineParameters_["WorkerThreads"] = true;
-        engineParameters_["FullScreen"]  = false;
+
         engineParameters_["WindowResizable"]  = true;
         engineParameters_["Headless"] = false;
         engineParameters_["Shadows"] = false;
@@ -201,6 +251,14 @@ void Game::Setup()
     SDL_SetHint(SDL_HINT_ACCELEROMETER_AS_JOYSTICK, "0");
 }
 
+struct ExtraConfig
+{
+    ExtraConfig() : soundEnabled_(true), musicEnabled_(true) { }
+    bool soundEnabled_;
+    bool musicEnabled_;
+};
+
+ExtraConfig extraConfig;
 
 bool Game::LoadGameConfig(const char* fileName, GameConfig* config)
 {
@@ -317,7 +375,8 @@ bool Game::LoadGameConfig(const char* fileName, GameConfig* config)
             else if (name == "debugLights_") config->debugLights_ = value;
             else if (name == "debugUI_") config->debugUI_ = value;
             else if (name == "debugAnimatedSprite2D") config->debugAnimatedSprite2D = value;
-
+            else if (name == "SoundEnabled_") extraConfig.soundEnabled_ = value;
+            else if (name == "MusicEnabled_") extraConfig.musicEnabled_ = value;
             config->logString += ToString("  (bool) %s = %s \n", name.CString(), value ? "true":"false");
             std::cout << config->logString.CString();
 //            std::cout << "  (bool) " << name.CString() << " = " << (value ? "true":"false") << std::endl;
@@ -390,6 +449,9 @@ void Game::Start()
 
 	// Start Managers
     GameStatics::Start();
+
+    GameStatics::playerState_->musicEnabled_ = (int)extraConfig.musicEnabled_;
+    GameStatics::playerState_->soundEnabled_ = (int)extraConfig.soundEnabled_;
 
     options_ = ((OptionState*)GameStatics::stateManager_->GetState("Options"));
 
@@ -775,6 +837,7 @@ void Game::CreateAccessMenu(UIElement* uiroot)
         URHO3D_LOGINFOF("Game() - CreateAccessMenu ... on %s !", uiroot->GetName().CString());
     }
 }
+
 
 void Game::ShowHeader(UIElement* uiroot)
 {
@@ -1388,6 +1451,9 @@ void Game::SetCompanionMessages()
     if (GameStateManager::Get()->GetActiveState()->GetStateHash() == STATE_LEVELMAP)
     {
         URHO3D_LOGINFOF("Game() - SetCompanionMessages : Add Companion Messages for STATE_LEVELMAP !");
+
+        // for testing
+        //companionBox_->AddMessage(STATE_LEVELMAP, false, "tuto_zoom", "capi", 0.f, "UI/Companion/animatedcursors.scml", "cursor_zoom", GameStatics::ui_->GetRoot(), Vector2(0.5f,0.5f));
 
         if (GameStatics::playerState_->zone == 1)
         {
