@@ -377,6 +377,7 @@ Input::Input(Context* context) :
     suppressNextMouseMove_(false),
     inResize_(false),
     screenModeChanged_(false),
+    mouseMoveScaled_(false),
     initialized_(false)
 {
     context_->RequireSDL(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER);
@@ -463,6 +464,10 @@ void Input::Update()
         const int width = graphics_->GetWidth() - buffer * 2;
         const int height = graphics_->GetHeight() - buffer * 2;
 
+        // SetMousePosition utilizes backbuffer coordinate system, scale now from window coordinates
+        mpos.x_ = (int)(mpos.x_ * inputScale_.x_);
+        mpos.y_ = (int)(mpos.y_ * inputScale_.y_);
+
         bool warp = false;
         if (mpos.x_ < buffer)
         {
@@ -507,6 +512,7 @@ void Input::Update()
     {
         const IntVector2 mousePosition = GetMousePosition();
         mouseMove_ = mousePosition - lastMousePosition_;
+        mouseMoveScaled_ = true; // Already in backbuffer scale, since GetMousePosition() operates in that
 
 #ifndef __EMSCRIPTEN__
         if (graphics_->GetExternalWindow())
@@ -1427,14 +1433,16 @@ IntVector2 Input::GetMousePosition() const
         return ret;
 
     SDL_GetMouseState(&ret.x_, &ret.y_);
+    ret.x_ = (int)(ret.x_ * inputScale_.x_);
+    ret.y_ = (int)(ret.y_ * inputScale_.y_);
 
     return ret;
 }
 
-const IntVector2& Input::GetMouseMove() const
+IntVector2 Input::GetMouseMove() const
 {
     if (!suppressNextMouseMove_)
-        return mouseMove_;
+        return mouseMoveScaled_ ? mouseMove_ : IntVector2((int)(mouseMove_.x_ * inputScale_.x_), (int)(mouseMove_.y_ * inputScale_.y_));
     else
         return IntVector2::ZERO;
 }
@@ -1442,7 +1450,7 @@ const IntVector2& Input::GetMouseMove() const
 int Input::GetMouseMoveX() const
 {
     if (!suppressNextMouseMove_)
-        return mouseMove_.x_;
+        return mouseMoveScaled_ ? mouseMove_.x_ : (int)(mouseMove_.x_ * inputScale_.x_);
     else
         return 0;
 }
@@ -1450,7 +1458,7 @@ int Input::GetMouseMoveX() const
 int Input::GetMouseMoveY() const
 {
     if (!suppressNextMouseMove_)
-        return mouseMove_.y_;
+        return mouseMoveScaled_ ? mouseMove_.y_ : mouseMove_.y_ * inputScale_.y_;
     else
         return 0;
 }
@@ -1870,7 +1878,9 @@ void Input::SetMousePosition(const IntVector2& position)
     if (!graphics_)
         return;
 
-    SDL_WarpMouseInWindow(graphics_->GetWindow(), position.x_, position.y_);
+    //SDL_WarpMouseInWindow(graphics_->GetWindow(), position.x_, position.y_);
+    SDL_WarpMouseInWindow(graphics_->GetWindow(), (int)(position.x_ / inputScale_.x_), (int)(position.y_ / inputScale_.y_));
+
 }
 
 void Input::CenterMousePosition()
@@ -1975,6 +1985,8 @@ void Input::HandleSDLEvent(void* sdlEvent)
         {
             int x, y;
             SDL_GetMouseState(&x, &y);
+            x = (int)(x * inputScale_.x_);
+            y = (int)(y * inputScale_.y_);
 
             SDL_Event event;
             event.type = SDL_FINGERDOWN;
@@ -1996,6 +2008,8 @@ void Input::HandleSDLEvent(void* sdlEvent)
         {
             int x, y;
             SDL_GetMouseState(&x, &y);
+            x = (int)(x * inputScale_.x_);
+            y = (int)(y * inputScale_.y_);
 
             SDL_Event event;
             event.type = SDL_FINGERUP;
@@ -2025,18 +2039,27 @@ void Input::HandleSDLEvent(void* sdlEvent)
             }
 #endif
 
+            // Accumulate without scaling for accuracy, needs to be scaled to backbuffer coordinates when asked
             mouseMove_.x_ += evt.motion.xrel;
             mouseMove_.y_ += evt.motion.yrel;
+            mouseMoveScaled_ = false;
 
             if (!suppressNextMouseMove_)
             {
                 using namespace MouseMove;
 
                 VariantMap& eventData = GetEventDataMap();
-                eventData[P_X] = evt.motion.x;
-                eventData[P_Y] = evt.motion.y;
-                eventData[P_DX] = evt.motion.xrel;
-                eventData[P_DY] = evt.motion.yrel;
+                //eventData[P_X] = evt.motion.x;
+                //eventData[P_Y] = evt.motion.y;
+                //eventData[P_DX] = evt.motion.xrel;
+                //eventData[P_DY] = evt.motion.yrel;
+
+                eventData[P_X] = (int)(evt.motion.x * inputScale_.x_);
+                eventData[P_Y] = (int)(evt.motion.y * inputScale_.y_);
+                // The "on-the-fly" motion data needs to be scaled now, though this may reduce accuracy
+                eventData[P_DX] = (int)(evt.motion.xrel * inputScale_.x_);
+                eventData[P_DY] = (int)(evt.motion.yrel * inputScale_.y_);
+
                 eventData[P_BUTTONS] = (unsigned)mouseButtonDown_;
                 eventData[P_QUALIFIERS] = (unsigned)GetQualifiers();
                 SendEvent(E_MOUSEMOVE, eventData);
@@ -2047,6 +2070,9 @@ void Input::HandleSDLEvent(void* sdlEvent)
         {
             int x, y;
             SDL_GetMouseState(&x, &y);
+            // FROM U3D
+            x = (int)(x * inputScale_.x_);
+            y = (int)(y * inputScale_.y_);
 
             SDL_Event event;
             event.type = SDL_FINGERMOTION;
@@ -2055,8 +2081,10 @@ void Input::HandleSDLEvent(void* sdlEvent)
             event.tfinger.pressure = 1.0f;
             event.tfinger.x = (float)x / (float)graphics_->GetWidth();
             event.tfinger.y = (float)y / (float)graphics_->GetHeight();
-            event.tfinger.dx = (float)evt.motion.xrel / (float)graphics_->GetWidth();
-            event.tfinger.dy = (float)evt.motion.yrel / (float)graphics_->GetHeight();
+            //event.tfinger.dx = (float)evt.motion.xrel / (float)graphics_->GetWidth();
+            //event.tfinger.dy = (float)evt.motion.yrel / (float)graphics_->GetHeight();
+            event.tfinger.dx = (float)evt.motion.xrel * inputScale_.x_ / (float)graphics_->GetWidth();
+            event.tfinger.dy = (float)evt.motion.yrel * inputScale_.y_ / (float)graphics_->GetHeight();
             SDL_PushEvent(&event);
         }
         break;
@@ -2468,9 +2496,24 @@ void Input::HandleScreenMode(StringHash eventType, VariantMap& eventData)
     // After setting a new screen mode we should not be minimized
     minimized_ = (SDL_GetWindowFlags(window) & SDL_WINDOW_MINIMIZED) != 0;
 
+    // OLD
     // Remember that screen mode changed in case we lose focus (needed on Linux)
-    if (!inResize_)
-        screenModeChanged_ = true;
+//    if (!inResize_)
+//        screenModeChanged_ = true;
+
+    // FROM U3D
+    // Calculate input coordinate scaling from SDL window to backbuffer ratio
+    int winWidth, winHeight;
+    int gfxWidth = graphics_->GetWidth();
+    int gfxHeight = graphics_->GetHeight();
+    SDL_GetWindowSize(window, &winWidth, &winHeight);
+    if (winWidth > 0 && winHeight > 0 && gfxWidth > 0 && gfxHeight > 0)
+    {
+        inputScale_.x_ = (float)gfxWidth / (float)winWidth;
+        inputScale_.y_ = (float)gfxHeight / (float)winHeight;
+    }
+    else
+        inputScale_ = Vector2::ONE;
 }
 
 void Input::HandleBeginFrame(StringHash eventType, VariantMap& eventData)

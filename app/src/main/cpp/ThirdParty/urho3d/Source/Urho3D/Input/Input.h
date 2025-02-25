@@ -256,7 +256,7 @@ public:
     /// Return mouse position within window. Should only be used with a visible mouse cursor.
     IntVector2 GetMousePosition() const;
     /// Return mouse movement since last frame.
-    const IntVector2& GetMouseMove() const;
+    IntVector2 GetMouseMove() const;
     /// Return horizontal mouse movement since last frame.
     int GetMouseMoveX() const;
     /// Return vertical mouse movement since last frame.
@@ -439,6 +439,8 @@ private:
     bool inResize_;
     /// Flag for automatic focus (without click inside window) after screen mode change, needed on Linux.
     bool screenModeChanged_;
+    /// Whether mouse move is accumulated in backbuffer scale or not (when using events directly).
+    bool mouseMoveScaled_;
     /// Initialized flag.
     bool initialized_;
 
