@@ -1172,7 +1172,6 @@ void GameStatics::Start()
 #else
         gameState_.Reset();
 #endif
-
         gameState_.Save();
     }
 

@@ -313,11 +313,14 @@ const Matrix3x4& Sprite::GetTransform() const
                 break;
 
             case HA_CENTER:
-                pos.x_ += (float)(parent_->GetSize().x_ / 2);
+                pos.x_ += (float)parent_->GetSize().x_ / 2.f;
                 break;
 
             case HA_RIGHT:
                 pos.x_ += (float)parent_->GetSize().x_;
+                break;
+
+            case HA_CUSTOM:
                 break;
             }
             switch (GetVerticalAlignment())
@@ -326,11 +329,14 @@ const Matrix3x4& Sprite::GetTransform() const
                 break;
 
             case VA_CENTER:
-                pos.y_ += (float)(parent_->GetSize().y_ / 2);
+                pos.y_ += (float)parent_->GetSize().y_ / 2.f;
                 break;
 
             case VA_BOTTOM:
                 pos.y_ += (float)(parent_->GetSize().y_);
+                break;
+
+            case VA_CUSTOM:
                 break;
             }
         }

@@ -83,7 +83,9 @@ void AnimatedSprite::SetAnimation(const String& animation)
         SetScale2D(sc);
     }
 
-//    URHO3D_LOGINFOF("AnimatedSprite() - SetAnimationAttr : name=%s size=%d,%d ", name_.CString(), GetSize().x_, GetSize().y_);
+    positionDirty_ = true;
+
+//    URHO3D_LOGINFOF("AnimatedSprite() - SetAnimationAttr : name=%s size=%d,%d scale=%f,%f", name_.CString(), GetSize().x_, GetSize().y_, scale_.x_ * scale2D_.x_, scale_.y_ * scale2D_.y_);
 }
 
 void AnimatedSprite::SetScale2D(float scale)
@@ -140,18 +142,16 @@ void AnimatedSprite::GetBatches(PODVector<UIBatch>& batches, PODVector<float>& v
     batch.vertexEnd_ = vertexData.Size();
     UIBatch::AddOrMerge(batch, batches);
 
-//    if (GetName() == "zoom")
-//        URHO3D_LOGINFOF("AnimatedSprite() - GetBatches : name=%s vertexdatasize=%u pos=%s enable=%s visible=%s size=%d,%d scale=%F,%F scale2D=%F,%F",
-//                        name_.CString(), batch.vertexEnd_-batch.vertexStart_, GetPosition().ToString().CString(),
-//                        IsEnabled() ? "true":"false", IsVisible() ? "true":"false", GetSize().x_, GetSize().y_, scale_.x_, scale_.y_, scale2D_.x_, scale2D_.y_);
-
     // Reset hovering for next frame
     hovering_ = false;
 }
 
 const Matrix3x4& AnimatedSprite::GetTransform() const
 {
-    if (positionDirty_)
+    // TODO: issue whith u3d (compare with urho3d)
+    // we desactive positionDirty_ at now
+
+//    if (positionDirty_)
     {
         Vector2 pos = floatPosition_;
 
@@ -198,8 +198,8 @@ const Matrix3x4& AnimatedSprite::GetTransform() const
         }
         else
             parentTransform = Matrix3x4::IDENTITY;
-
-        Matrix3x4 mainTransform(Vector3(pos, 0.0f), Quaternion(rotation_, Vector3::FORWARD), Vector3(scale_ * scale2D_, 1.0f));
+        Vector3 scale(scale_.x_ * scale2D_.x_, scale_.y_ * scale2D_.y_, 0.f);
+        Matrix3x4 mainTransform(Vector3(pos, 0.0f), Quaternion(rotation_, Vector3::FORWARD), scale);
 
         transform_ = parentTransform * mainTransform;
         positionDirty_ = false;

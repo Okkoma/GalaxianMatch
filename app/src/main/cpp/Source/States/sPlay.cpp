@@ -1,3 +1,5 @@
+#include <functional>
+
 #include <Urho3D/Urho3D.h>
 
 #include <Urho3D/Core/StringUtils.h>
