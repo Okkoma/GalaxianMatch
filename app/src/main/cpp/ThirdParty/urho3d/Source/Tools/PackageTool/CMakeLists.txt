@@ -79,7 +79,7 @@ if (NOT CMAKE_PROJECT_NAME STREQUAL Urho3D AND NOT URHO3D_AS_SUBMODULE)
     add_definitions (-DMINI_URHO)
     # Setup SDK-like include dir in the build tree for building the mini-urho
     set (DEST_INCLUDE_DIR include/Urho3D)
-    file (MAKE_DIRECTORY ${URHO3D_BUILD_DIR}/${DEST_INCLUDE_DIR}/ThirdParty)
+    file (MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/${DEST_INCLUDE_DIR}/ThirdParty)
     # Add dependency targets
     if (NOT CMAKE_SYSTEM_NAME STREQUAL Linux)
         include (CheckIncludeFile)
@@ -88,7 +88,7 @@ if (NOT CMAKE_PROJECT_NAME STREQUAL Urho3D AND NOT URHO3D_AS_SUBMODULE)
         set (LIBS LibCpuId)
     endif ()
     add_subdirectory (${BAKED_CMAKE_SOURCE_DIR}/Source/ThirdParty/LZ4 host/LZ4)
-    set (INCLUDE_DIRS ${BAKED_CMAKE_BINARY_DIR}/include ${BAKED_CMAKE_BINARY_DIR}/include/Urho3D ${URHO3D_BUILD_DIR}/${DEST_INCLUDE_DIR}/ThirdParty)
+    set (INCLUDE_DIRS ${BAKED_CMAKE_BINARY_DIR}/include ${BAKED_CMAKE_BINARY_DIR}/include/Urho3D ${CMAKE_BINARY_DIR}/${DEST_INCLUDE_DIR}/ThirdParty)
 endif ()
 # Define target name
 if (TARGET PackageTool)     # The target name is already taken by host-tool external project, so use a postfix for the target-tool
