@@ -162,7 +162,6 @@ void Game::Setup()
     if (!engineConfigApplied_)
     {
         engineParameters_["WindowTitle"] = GameStatics::GAMENAME;
-        engineParameters_["WindowIcon"] = "Textures/icone.png";
         engineParameters_["ResourcePaths"] = "CoreData;Data";
         if (!engineParameters_.Contains("LogName"))
             engineParameters_["LogName"] = GameStatics::GAMENAME + ".log";
@@ -179,6 +178,9 @@ void Game::Setup()
         const bool fullscreen = (float)sh > (float)sw * 1.5f;
         int w = GetBrowserWindowWidth();
         int h = GetBrowserWindowHeight();
+
+        std::cout << "Apply default configuration Web : window(" << w << " x " << h << ") screen(" << sw << " x " << sh << ") fullscreen=" << fullscreen << std::endl;
+
         if (fullscreen)
         {
             w = sw;
@@ -186,9 +188,9 @@ void Game::Setup()
         }
         engineParameters_["WindowWidth"]  = w;
         engineParameters_["WindowHeight"] = h;
-        engineParameters_["FullScreen"]   = fullscreen;
-        std::cout << "Apply default configuration Web : window(" << w << " x " << h << ") screen(" << sw << " x " << sh << ") fullscreen=" << fullscreen << std::endl;
+        engineParameters_["FullScreen"]   = fullscreen;        
     #else
+        engineParameters_["WindowIcon"] = "Textures/icone.png";    
         engineParameters_["WindowWidth"]  = GameStatics::targetwidth_;
         engineParameters_["WindowHeight"] = GameStatics::targetheight_;
         engineParameters_["FullScreen"]   = false;
