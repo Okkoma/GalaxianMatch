@@ -293,8 +293,14 @@ int EmscriptenInput::HandleSDLEvents(void* userData, SDL_Event* event)
 {
     auto* const inputInst = (Input*)userData;
 
-    inputInst->HandleSDLEvent(event);
-
+    if (auto* graphics = inputInst->GetSubsystem<Graphics>())
+    {
+        if (graphics->IsInitialized())
+        {
+            inputInst->HandleSDLEvent(event);
+        }
+    }
+    
     return 0;
 }
 
