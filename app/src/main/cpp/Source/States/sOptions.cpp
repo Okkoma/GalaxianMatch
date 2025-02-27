@@ -135,8 +135,8 @@ void OptionState::Begin()
 
     ReadOptions();
 
-//    // Reset controls
-//    GetSubsystem<Input>()->ResetStates();
+    // Reset controls
+    GetSubsystem<Input>()->ResetStates();
 
     GameStatics::UpdateViews();
 
@@ -168,8 +168,8 @@ void OptionState::End()
 
 	UnsubscribeToEvents();
 
-//    // Reset controls
-//    GetSubsystem<Input>()->ResetStates();
+    // Reset controls
+    GetSubsystem<Input>()->ResetStates();
 
     GameHelpers::SetMoveAnimation(GameStatics::rootScene_->GetChild("Options"), Vector3::ZERO, Vector3(-10.f * stateManager_->GetStackMove(), 0.f, 0.f), 0.f, SWITCHSCREENTIME);
     GameHelpers::SetMoveAnimationUI(uioptions_, IntVector2::ZERO, IntVector2(-uioptions_->GetSize().x_, 0), 0.f, SWITCHSCREENTIME);
@@ -707,18 +707,18 @@ void OptionState::SubscribeToEvents()
 
     Button* gamereset = uioptions_->GetChildStaticCast<Button>(OPTION_GAMERESET, true);
     if (gamereset)
-        SubscribeToEvent(gamereset, E_RELEASED, URHO3D_HANDLER(OptionState, HandleGameReset));
+        SubscribeToEvent(gamereset, E_PRESSED, URHO3D_HANDLER(OptionState, HandleGameReset));
 
     if (framed_)
     {
         if (closebutton_)
-            SubscribeToEvent(closebutton_, E_RELEASED, URHO3D_HANDLER(OptionState, HandleCloseFrame));
+            SubscribeToEvent(closebutton_, E_PRESSED, URHO3D_HANDLER(OptionState, HandleCloseFrame));
     }
     else
     {
         UIElement* menubutton = uioptions_->GetChild(String("menubutton"));
         if (menubutton)
-            SubscribeToEvent(menubutton, E_RELEASED, URHO3D_HANDLER(OptionState, HandleReturnMenu));
+            SubscribeToEvent(menubutton, E_PRESSED, URHO3D_HANDLER(OptionState, HandleReturnMenu));
     }
 }
 
@@ -743,18 +743,18 @@ void OptionState::UnsubscribeToEvents()
 
     Button* gamereset = uioptions_->GetChildStaticCast<Button>(OPTION_GAMERESET, true);
     if (gamereset)
-        UnsubscribeFromEvent(gamereset, E_RELEASED);
+        UnsubscribeFromEvent(gamereset, E_PRESSED);
 
     if (framed_)
     {
         if (closebutton_)
-            UnsubscribeFromEvent(closebutton_, E_RELEASED);
+            UnsubscribeFromEvent(closebutton_, E_PRESSED);
     }
     else
     {
         UIElement* menubutton = uioptions_->GetChild(String("menubutton"));
         if (menubutton)
-            UnsubscribeFromEvent(menubutton, E_RELEASED);
+            UnsubscribeFromEvent(menubutton, E_PRESSED);
     }
 }
 
@@ -769,7 +769,7 @@ void OptionState::SubscribeToShopEvents()
     for (unsigned i=0; i < switches.Size(); i++)
     {
         if (switches[i])
-            SubscribeToEvent(switches[i].Get(), E_RELEASED, URHO3D_HANDLER(OptionState, HandleShopSwitchTab));
+            SubscribeToEvent(switches[i].Get(), E_PRESSED, URHO3D_HANDLER(OptionState, HandleShopSwitchTab));
     }
 
     // Subscribe to Tab Buttons
@@ -780,7 +780,7 @@ void OptionState::SubscribeToShopEvents()
         for (unsigned j=0; j < buttons.Size(); j++)
         {
             if (buttons[j])
-                SubscribeToEvent(buttons[j].Get(), E_RELEASED, URHO3D_HANDLER(OptionState, HandleShopButtonClick));
+                SubscribeToEvent(buttons[j].Get(), E_PRESSED, URHO3D_HANDLER(OptionState, HandleShopButtonClick));
         }
     }
 }
@@ -796,7 +796,7 @@ void OptionState::UnsubscribeShopEvents()
     for (unsigned i=0; i < switches.Size(); i++)
     {
         if (switches[i])
-            UnsubscribeFromEvent(switches[i].Get(), E_RELEASED);
+            UnsubscribeFromEvent(switches[i].Get(), E_PRESSED);
     }
 
     // Unsubscribe to from Buttons
@@ -807,7 +807,7 @@ void OptionState::UnsubscribeShopEvents()
         for (unsigned j=0; j < buttons.Size(); j++)
         {
             if (buttons[j])
-                UnsubscribeFromEvent(buttons[j].Get(), E_RELEASED);
+                UnsubscribeFromEvent(buttons[j].Get(), E_PRESSED);
         }
     }
 }
@@ -887,6 +887,7 @@ void OptionState::OnShopMessageAck(StringHash eventType, VariantMap& eventData)
 	using namespace MessageACK;
 
     UnsubscribeFromEvent(E_MESSAGEACK);
+    MessageBox_->ReleaseRef();
     MessageBox_.Reset();
 
 	if (eventData[P_OK].GetBool())
@@ -911,6 +912,7 @@ void OptionState::OnGameResetMessageAck(StringHash eventType, VariantMap& eventD
 	using namespace MessageACK;
 
     UnsubscribeFromEvent(E_MESSAGEACK);
+    MessageBox_->ReleaseRef();
     MessageBox_.Reset();
 
 	if (eventData[P_OK].GetBool())

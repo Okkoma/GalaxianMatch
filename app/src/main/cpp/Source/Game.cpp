@@ -188,9 +188,9 @@ void Game::Setup()
         }
         engineParameters_["WindowWidth"]  = w;
         engineParameters_["WindowHeight"] = h;
-        engineParameters_["FullScreen"]   = fullscreen;        
+        engineParameters_["FullScreen"]   = fullscreen
     #else
-        engineParameters_["WindowIcon"] = "Textures/icone.png";    
+        engineParameters_["WindowIcon"] = "Textures/icone.png";
         engineParameters_["WindowWidth"]  = GameStatics::targetwidth_;
         engineParameters_["WindowHeight"] = GameStatics::targetheight_;
         engineParameters_["FullScreen"]   = false;
@@ -924,19 +924,19 @@ void Game::SubscribeToAccessMenuEvents()
         UIElement* button;
         button = popup->GetChild(String("back"));
         if (button)
-            game_->SubscribeToEvent(button, E_RELEASED, URHO3D_HANDLER(Game, HandleGoBack));
+            game_->SubscribeToEvent(button, E_PRESSED, URHO3D_HANDLER(Game, HandleGoBack));
 
         button = popup->GetChild(String("options"));
         if (button)
-            game_->SubscribeToEvent(button, E_RELEASED, URHO3D_HANDLER(Game, HandleShowOptions));
+            game_->SubscribeToEvent(button, E_PRESSED, URHO3D_HANDLER(Game, HandleShowOptions));
 
         button = popup->GetChild(String("shop"));
         if (button)
-            game_->SubscribeToEvent(button, E_RELEASED, URHO3D_HANDLER(Game, HandleShowShop));
+            game_->SubscribeToEvent(button, E_PRESSED, URHO3D_HANDLER(Game, HandleShowShop));
 
         button = popup->GetChild(String("cinematic"));
         if (button)
-            game_->SubscribeToEvent(button, E_RELEASED, URHO3D_HANDLER(Game, HandleWatchCinematic));
+            game_->SubscribeToEvent(button, E_PRESSED, URHO3D_HANDLER(Game, HandleWatchCinematic));
     }
 }
 
@@ -950,16 +950,16 @@ void Game::UnsubscribeFromAccessMenuEvents()
         UIElement* button;
         button = popup->GetChild(String("back"));
         if (button)
-            game_->UnsubscribeFromEvent(button, E_RELEASED);
+            game_->UnsubscribeFromEvent(button, E_PRESSED);
         button = popup->GetChild(String("options"));
         if (button)
-            game_->UnsubscribeFromEvent(button, E_RELEASED);
+            game_->UnsubscribeFromEvent(button, E_PRESSED);
         button = popup->GetChild(String("shop"));
         if (button)
-            game_->UnsubscribeFromEvent(button, E_RELEASED);
+            game_->UnsubscribeFromEvent(button, E_PRESSED);
         button = popup->GetChild(String("cinematic"));
         if (button)
-            game_->UnsubscribeFromEvent(button, E_RELEASED);
+            game_->UnsubscribeFromEvent(button, E_PRESSED);
     }
 }
 
@@ -1056,6 +1056,7 @@ void Game::HandleInputFocus(StringHash eventType, VariantMap& eventData)
     bool focus = eventData[InputFocus::P_FOCUS].GetBool();
     bool minimized = eventData[InputFocus::P_MINIMIZED].GetBool();
     URHO3D_LOGINFOF("Game() - HandleInputFocus  : focus=%u minimized=%u", focus, minimized);
+
     if (focus && !minimized)
     {
         URHO3D_LOGINFO("Game() - HandleInputFocus : restore focus => check earn star");
@@ -1369,6 +1370,9 @@ void Game::HandleScreenResized(StringHash eventType, VariantMap& eventData)
         dialogInfo_->Resize();
     if (companionBox_)
         companionBox_->Resize();
+
+    GameStatics::InitMouse(context_);
+    GameStatics::SetMouseVisible(true, false);
 
     SendEvent(GAME_SCREENRESIZED);
 }
