@@ -249,6 +249,8 @@ bool LevelMapState::ResetMap(bool purge)
     URHO3D_LOGINFOF("LevelMapState() - ResetMap ... purge=%s       -", purge?"true":"false");
     URHO3D_LOGINFO("LevelMapState() - ----------------------------------------");
 
+    GameStatics::input_->ResetStates();
+
     if (switchPlanetModeInformer_ && !switchPlanetModeInformer_->Expired())
         switchPlanetModeInformer_->Free();
 
@@ -2112,7 +2114,7 @@ void LevelMapState::HandleSelection(StringHash eventType, VariantMap& eventData)
                             inside = true;
                             selectedLevelID_ = -1;
                             UpdateActionAnimations(LEVELMAPACTION_GOTOPREVIOUSZONE);
-        //                    GameStatics::input_->ResetStates();
+                            GameStatics::input_->ResetStates();
                         }
                         else if (deltay > 0 && nextZoneButton_)
                         {
@@ -2120,7 +2122,7 @@ void LevelMapState::HandleSelection(StringHash eventType, VariantMap& eventData)
                             inside = true;
                             selectedLevelID_ = -1;
                             UpdateActionAnimations(LEVELMAPACTION_GOTONEXTZONE);
-        //                    GameStatics::input_->ResetStates();
+                            GameStatics::input_->ResetStates();
                         }
                     }
                 }

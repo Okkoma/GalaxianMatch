@@ -147,7 +147,9 @@ public:
     /// Destruct.
     virtual ~Input();
 
+    /// Reset all the keys, joystick, touch states
     void ResetStates();
+
     /// Poll for window messages. Called by HandleBeginFrame().
     void Update();
     /// Set whether ALT-ENTER fullscreen toggle is enabled.

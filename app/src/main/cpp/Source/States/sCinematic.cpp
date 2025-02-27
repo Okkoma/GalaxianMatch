@@ -234,8 +234,8 @@ void CinematicState::End()
 
 	UnsubscribeFromAllEvents();
 
-//    // Reset controls
-//    GetSubsystem<Input>()->ResetStates();
+    // Reset controls
+    GetSubsystem<Input>()->ResetStates();
 
 	// Call base class implementation
 	GameState::End();

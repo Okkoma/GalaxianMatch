@@ -603,7 +603,7 @@ void PlayState::EndScene()
 
     GameHelpers::CleanScene(GameStatics::rootScene_, GetStateId(), 0);
 
-//    GetSubsystem<Input>()->ResetStates();
+    GetSubsystem<Input>()->ResetStates();
 
     URHO3D_LOGINFO("PlayState() - EndScene ... OK !");
 

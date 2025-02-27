@@ -84,8 +84,8 @@ void MenuState::Begin()
     URHO3D_LOGINFO("MainMenu() - Begin ...                               -");
     URHO3D_LOGINFO("MainMenu() - ----------------------------------------");
 
-//    // Reset controls
-//    GetSubsystem<Input>()->ResetStates();
+    // Reset controls
+    GetSubsystem<Input>()->ResetStates();
 
     GameStatics::camera_->SetZoom(GameStatics::uiScale_);
     GameStatics::UpdateViews();
@@ -151,8 +151,8 @@ void MenuState::End()
     Game::Get()->UnsubscribeFromAccessMenuEvents();
 	UnsubscribeFromAllEvents();
 
-//    // Reset controls
-//    GetSubsystem<Input>()->ResetStates();
+    // Reset controls
+    GetSubsystem<Input>()->ResetStates();
 
 	// Call base class implementation
 	GameState::End();
@@ -718,8 +718,8 @@ void MenuState::HandleQuitMessageAck(StringHash eventType, VariantMap& eventData
 		return;
     }
 
-//    // Initialize controls
-//    GetSubsystem<Input>()->ResetStates();
+    // Initialize controls
+    GetSubsystem<Input>()->ResetStates();
 
     SubscribeToMenuEvents();
 }

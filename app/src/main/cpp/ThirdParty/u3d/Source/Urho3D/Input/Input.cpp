@@ -156,8 +156,8 @@ EmscriptenInput::EmscriptenInput(Input* inputInst) :
     emscripten_set_mousemove_callback(NULL, vInputInst, true, EmscriptenInput::HandleMouseJump);
 
     // Handle focus changes
-    emscripten_set_focusout_callback(NULL, vInputInst, false, EmscriptenInput::HandleFocusChange);
-    emscripten_set_focus_callback(NULL, vInputInst, false, EmscriptenInput::HandleFocusChange);
+    //emscripten_set_focusout_callback(NULL, vInputInst, false, EmscriptenInput::HandleFocusChange);
+    //emscripten_set_focus_callback(NULL, vInputInst, false, EmscriptenInput::HandleFocusChange);
 
     // Handle SDL events
     SDL_AddEventWatch(EmscriptenInput::HandleSDLEvents, vInputInst);
@@ -260,6 +260,8 @@ EM_BOOL EmscriptenInput::HandleFocusChange(int eventType, const EmscriptenFocusE
 
     inputInst->SuppressNextMouseMove();
 
+    URHO3D_LOGWARNINGF("EmscriptenInput::HandleFocusChange eventType=%d", eventType);
+    
     if (eventType == EMSCRIPTEN_EVENT_FOCUSOUT)
         inputInst->LoseFocus();
     else if (eventType == EMSCRIPTEN_EVENT_FOCUS)
@@ -292,15 +294,7 @@ EM_BOOL EmscriptenInput::HandleMouseJump(int eventType, const EmscriptenMouseEve
 int EmscriptenInput::HandleSDLEvents(void* userData, SDL_Event* event)
 {
     auto* const inputInst = (Input*)userData;
-
-    if (auto* graphics = inputInst->GetSubsystem<Graphics>())
-    {
-        if (graphics->IsInitialized())
-        {
-            inputInst->HandleSDLEvent(event);
-        }
-    }
-    
+    inputInst->HandleSDLEvent(event);
     return 0;
 }
 
@@ -1638,6 +1632,11 @@ void Input::LoseFocus()
     SendInputFocusEvent();
 }
 
+void Input::ResetStates()
+{
+    ResetState();
+}
+
 void Input::ResetState()
 {
     keyDown_.Clear();
@@ -2369,10 +2368,16 @@ void Input::HandleSDLEvent(void* sdlEvent)
                 break;
 
             case SDL_WINDOWEVENT_RESIZED:
-                graphics_->OnWindowResized();
+                if (graphics_)
+                    graphics_->OnWindowResized();
+                else
+                    URHO3D_LOGERRORF("Input::HandleSDLEvent SDL_WINDOWEVENT_RESIZED no graphics !");
                 break;
             case SDL_WINDOWEVENT_MOVED:
-                graphics_->OnWindowMoved();
+                if (graphics_)
+                    graphics_->OnWindowMoved();
+                else
+                    URHO3D_LOGERRORF("Input::HandleSDLEvent SDL_WINDOWEVENT_RESIZED no graphics !");
                 break;
 
             default: break;
