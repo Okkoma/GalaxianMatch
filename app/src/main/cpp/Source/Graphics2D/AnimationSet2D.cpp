@@ -550,6 +550,7 @@ bool AnimationSet2D::EndLoadSpriter()
                 {
                     IntVector2 size = texturesSizes[i];
                     SharedPtr<Texture2D> texture(new Texture2D(context_));
+
                     texture->SetMipsToSkip(QUALITY_LOW, 0);
                     texture->SetNumLevels(1);
                     texture->SetSize(size.x_, size.y_, Graphics::GetRGBAFormat());
@@ -558,32 +559,43 @@ bool AnimationSet2D::EndLoadSpriter()
                     SharedArrayPtr<unsigned char> textureData(new unsigned char[textureDataSize]);
                     memset(textureData.Get(), 0, textureDataSize);
 
+                    SharedPtr<Image> image(new Image(context_));
+                    image->SetSize(size.x_, size.y_, 4);
+                    image->Clear(Color(0,0,0,0));
                     for (unsigned j = 0; j < spriteInfos.Size(); ++j)
                     {
                         SpriterInfoFile& info = spriteInfos[j];
                         if (info.texid_ != i)
                             continue;
 
-                        Image* image = info.image_;
+                        Image* currentimage = info.image_;
 
-                        for (int y = 0; y < image->GetHeight(); ++y)
+                        for (int y = 0; y < currentimage->GetHeight(); ++y)
                         {
                             memcpy(textureData.Get() + ((info.y + y) * texturesSizes[i].x_ + info.x) * 4,
-                                image->GetData() + y * image->GetWidth() * 4, image->GetWidth() * 4);
+                                currentimage->GetData() + y * currentimage->GetWidth() * 4, currentimage->GetWidth() * 4);
                         }
 
                         SharedPtr<Sprite2D> sprite(new Sprite2D(context_));
-                        sprite->SetName(image->GetName());
+                        sprite->SetName(currentimage->GetName());
                         sprite->SetTexture(texture);
-                        sprite->SetRectangle(IntRect(info.x, info.y, info.x + image->GetWidth(), info.y + image->GetHeight()));
-                        sprite->SetSourceSize(image->GetWidth(), image->GetHeight());
+                        IntRect rectangle(info.x, info.y, info.x + currentimage->GetWidth(), info.y + currentimage->GetHeight());
+                        sprite->SetRectangle(rectangle);
+                        sprite->SetSourceSize(currentimage->GetWidth(), currentimage->GetHeight());
                         sprite->SetHotSpot(Vector2(info.file_->pivotX_, info.file_->pivotY_));
-
                         unsigned key = (info.file_->folder_->id_ << 16) + info.file_->id_;
                         spriterFileSprites_[key] = sprite;
+
+                        image->SetSubimage(currentimage, rectangle);
                     }
 
                     texture->SetData(0, 0, 0, texturesSizes[i].x_, texturesSizes[i].y_, textureData.Get());
+                    texture->SetName(GetName() + String(folderid) + String(i));
+
+                    image->SetName(texture->GetName());
+                    cache->AddManualResource(image);
+                    URHO3D_LOGERRORF("AnimationSet2D() - EndLoadSpriter : AddManualResource image=%s", image->GetName().CString());
+
                     numTextures++;
                 }
             }
@@ -595,6 +607,7 @@ bool AnimationSet2D::EndLoadSpriter()
 
                 SpriterInfoFile& info = spriteInfos[0];
                 texture->SetData(info.image_, true);
+                texture->SetName(info.image_->GetName());
 
                 sprite_ = new Sprite2D(context_);
                 sprite_->SetTexture(texture);
@@ -604,6 +617,12 @@ bool AnimationSet2D::EndLoadSpriter()
 
                 unsigned key = (info.file_->folder_->id_ << 16) + info.file_->id_;
                 spriterFileSprites_[key] = sprite_;
+
+                if (!cache->GetExistingResource<Image>(info.image_->GetName()))
+                {
+                    cache->AddManualResource(info.image_);
+                    URHO3D_LOGERRORF("AnimationSet2D() - EndLoadSpriter : AddManualResource image=%s", info.image_->GetName().CString());
+                }
 
                 numTextures++;
             }

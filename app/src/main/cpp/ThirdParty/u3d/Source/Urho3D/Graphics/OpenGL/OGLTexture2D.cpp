@@ -33,6 +33,7 @@
 #include "../../IO/Log.h"
 #include "../../Resource/ResourceCache.h"
 #include "../../Resource/XMLFile.h"
+#include "../../Resource/Image.h"
 
 #include "../../DebugNew.h"
 
@@ -52,7 +53,7 @@ void Texture2D::OnDeviceLost()
 
 void Texture2D::OnDeviceReset()
 {
-    if (!object_.name_ || dataPending_)
+    if (!object_.name_ || dataPending_ || dataLost_)
     {
         // If has a resource file, reload through the resource cache. Otherwise just recreate.
         auto* cache = GetSubsystem<ResourceCache>();
@@ -63,6 +64,13 @@ void Texture2D::OnDeviceReset()
         {
             Create();
             dataLost_ = true;
+        }
+
+        if (dataLost_)
+        {
+            auto* image = cache->GetExistingResource<Image>(GetName());
+            if (image)
+                dataLost_ = !SetData(image, true);
         }
     }
 

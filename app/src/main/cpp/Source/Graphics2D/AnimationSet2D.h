@@ -73,6 +73,7 @@ public:
     SpriteSheet2D* GetSpriteSheet() const { return spriteSheet_; }
     const HashMap<unsigned, SharedPtr<Sprite2D> >& GetSpriteMapping() const { return spriterFileSprites_; }
 
+    bool HasSpriteSheet() const { return hasSpriteSheet_; }
     bool IsMultiTextures() const { return mutliTextures_; }
 
     static String customSpritesheetFile_;
