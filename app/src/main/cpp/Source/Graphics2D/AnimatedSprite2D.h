@@ -83,14 +83,14 @@ class AnimatedSprite2D : public StaticSprite2D
 
 public:
     /// Construct.
-    AnimatedSprite2D(Context* context);
+    explicit AnimatedSprite2D(Context* context);
     /// Destruct.
-    virtual ~AnimatedSprite2D();
+    ~AnimatedSprite2D() override;
     /// Register object factory.
     static void RegisterObject(Context* context);
 
     /// Handle enabled/disabled state change.
-    virtual void OnSetEnabled();
+    void OnSetEnabled() override;
 
 /// ENTITY/ANIMATION SETTERS
 
@@ -224,12 +224,12 @@ public:
 
 protected:
     /// Handle draw order changed.
-	virtual void OnDrawOrderChanged();
+	void OnDrawOrderChanged() override;
     /// Handle scene being assigned.
-    virtual void OnSceneSet(Scene* scene);
+    void OnSceneSet(Scene* scene) override;
     /// Handle update vertices.
-    virtual void UpdateSourceBatches();
-    virtual bool UpdateDrawRectangle();
+    void UpdateSourceBatches() override;
+    bool UpdateDrawRectangle() override;
 
     /// Handle scene post update.
     void HandleScenePostUpdate(StringHash eventType, VariantMap& eventData);

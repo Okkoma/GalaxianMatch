@@ -512,37 +512,4 @@ bool SpriteSheet2D::EndLoadFromJSONFile()
     return true;
 }
 
-bool SpriteSheet2D::EndLoadFromJSONSpriterFile()
-{
-    ResourceCache* cache = GetSubsystem<ResourceCache>();
-    texture_ = cache->GetResource<Texture2D>(loadTextureName_);
-    if (!texture_)
-    {
-        URHO3D_LOGERROR("Could not load texture " + loadTextureName_);
-        loadSpriterFile_.Reset();
-        loadTextureName_.Clear();
-        return false;
-    }
-
-    const JSONArray& frames = loadSpriterFile_->GetRoot().Get("frames").GetArray();
-
-    for (unsigned i = 0; i < frames.Size(); i++)
-    {
-        const JSONValue& frame = frames.At(i);
-        const JSONValue& frameInfo = frame.Get("frame");
-        const JSONValue& sourceSize = frame.Get("sourceSize");
-        const JSONValue& spriteSource = frame.Get("spriteSourceSize");
-
-        DefineSprite(frame.Get("filename").GetString().Split('.')[0],
-                     frameInfo.Get("w").GetInt(), frameInfo.Get("h").GetInt(),
-                     frameInfo.Get("x").GetInt(),  frameInfo.Get("y").GetInt(),
-                     sourceSize.Get("w").GetInt(), sourceSize.Get("h").GetInt(),
-                     -spriteSource.Get("x").GetInt(), -spriteSource.Get("y").GetInt());
-    }
-
-    loadSpriterFile_.Reset();
-    loadTextureName_.Clear();
-    return true;
-}
-
 }

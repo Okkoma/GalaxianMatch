@@ -49,7 +49,7 @@ const char* loopModeNames[] =
     "Default",
     "ForceLooped",
     "ForceClamped",
-    0
+    nullptr
 };
 
 
@@ -640,7 +640,7 @@ bool AnimatedSprite2D::IsCharacterMapApplied(const String& characterMap) const
 Sprite2D* AnimatedSprite2D::GetSprite(unsigned zorder) const
 {
     if (zorder >= GetNumSpriteKeys())
-        return nullptr;   
+        return nullptr;
 
     if (zorder < spritesInfos_.Size())
         return spritesInfos_[zorder]->sprite_;
@@ -756,7 +756,7 @@ Sprite2D* AnimatedSprite2D::GetMappedSprite(int folderid, int fileid) const
 Sprite2D* AnimatedSprite2D::GetSwappedSprite(Sprite2D* original) const
 {
     if (!original)
-        return nullptr;   
+        return nullptr;
 
     HashMap<Sprite2D*, SharedPtr<Sprite2D> >::ConstIterator it = swappedSprites_.Find(original);
     return it != swappedSprites_.End() ? it->second_.Get() : original;
@@ -1272,11 +1272,11 @@ void AnimatedSprite2D::UpdateTriggers()
             bool isAbox = collidertype == 'B';
 
             physicNode = node_->GetChild(timeline->name_);
-           
+
             //   Timeline name begin by
             //   'T' it's a Trigger
             //   'C' it's a Circle
-            //   'B' it's a Box            
+            //   'B' it's a Box
 
             if (!physicNode)
             {
@@ -1948,7 +1948,6 @@ void AnimatedSprite2D::AddSprite_UI(Sprite2D* sprite, const IntVector2& size, co
     vertices[35] = vertices[11];
 }
 
-
 void AnimatedSprite2D::Dispose(bool removeNode)
 {
 #ifdef URHO3D_SPINE
@@ -1970,20 +1969,17 @@ void AnimatedSprite2D::Dispose(bool removeNode)
         skeleton_ = nullptr;
     }
 #endif
+
     if (spriterInstance_)
     {
-		ClearTriggers(removeNode);
-
+        ClearTriggers(removeNode);
         ResetCharacterMapping();
-
         spriterInstance_.Reset();
     }
 
     sourceBatches_.Clear();
     sourceBatches_.Resize(1);
-
     animationName_.Clear();
-
     customSourceBatches_ = nullptr;
 }
 

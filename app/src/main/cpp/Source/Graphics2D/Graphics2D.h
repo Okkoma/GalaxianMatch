@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Urho3D/Core/Context.h>
+#include <Urho3D/Graphics/GraphicsEvents.h>
 
 #include "Sprite2D.h"
 #include "SpriteSheet2D.h"

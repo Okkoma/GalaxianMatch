@@ -17,9 +17,9 @@ class StaticSprite2D : public Drawable2D
 
 public:
     /// Construct.
-    StaticSprite2D(Context* context);
+    explicit StaticSprite2D(Context* context);
     /// Destruct.
-    ~StaticSprite2D();
+    ~StaticSprite2D() override;
     /// Register object factory. Drawable2D must be registered first.
     static void RegisterObject(Context* context);
 
@@ -108,19 +108,19 @@ public:
     void SetHotSpotAttr(const Vector2& hotspot);
 
     /// Only Used by Renderer2D
-    virtual const BoundingBox& GetWorldBoundingBox2D();
+    const BoundingBox& GetWorldBoundingBox2D() override;
 
-    virtual bool UpdateDrawRectangle();
+    bool UpdateDrawRectangle() override;
 
-    virtual void DrawDebugGeometry(DebugRenderer* debug, bool depthTest);
+    void DrawDebugGeometry(DebugRenderer* debug, bool depthTest) override;
 
 protected:
     /// Recalculate the world-space bounding box.
-    virtual void OnWorldBoundingBoxUpdate();
+    void OnWorldBoundingBoxUpdate() override;
     /// Handle draw order changed.
-    virtual void OnDrawOrderChanged();
+    void OnDrawOrderChanged() override;
     /// Update source batches.
-    virtual void UpdateSourceBatches();
+    void UpdateSourceBatches() override;
     /// Update material.
     virtual void UpdateMaterial();
 

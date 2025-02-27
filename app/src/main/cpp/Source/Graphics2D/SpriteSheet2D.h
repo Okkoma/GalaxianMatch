@@ -42,7 +42,7 @@ public:
     /// Construct.
     explicit SpriteSheet2D(Context* context);
     /// Destruct.
-    ~SpriteSheet2D();
+    ~SpriteSheet2D() override;
     /// Register object factory.
     /// @nobind
     static void RegisterObject(Context* context);
@@ -88,9 +88,6 @@ private:
     bool BeginLoadFromJSONFile(Deserializer& source);
     /// End load from JSON file.
     bool EndLoadFromJSONFile();
-
-    bool BeginLoadFromJSONSpriterFile(Deserializer& source);
-    bool EndLoadFromJSONSpriterFile();
 
     /// Texture.
     SharedPtr<Texture2D> texture_;
