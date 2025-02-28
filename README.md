@@ -9,10 +9,10 @@ A simple space-themed match-3 game and my first published game.
 ## Build Prerequisites
 
 - **CMake** installed.
-- Install the dependencies for **Urho3D**. You can refer to the official documentation here: [Urho3D Build Instructions](https://u3d.io/docs/_building.html).
+- Install the dependencies for **U3D**. You can refer to the official documentation here: [Urho3D Build Instructions](https://u3d.io/docs/_building.html).
 
 
-## Build Instructions
+## Native Build Instructions
 
  Use CMake to generate the build files.
 
@@ -52,7 +52,7 @@ Complete the implementation of networked gameplay using WebSocket.
 
 This project relies on the following third-party libraries:
 
-- Urho3D engine
+- U3D engine
   - includes SDL, Box2D, ETCPACK, FreeType, GLEW, LZ4, LibCpuId, Mustache, PugiXml, SQLite, STB, StanHull, WebP, nanodbc, rapidjson
 - libdatachannel
   - requires openssl
@@ -61,7 +61,7 @@ This project relies on the following third-party libraries:
 
 ## Platforms
 
-**Tested:** Windows, Linux, Android
+**Tested:** Windows, Linux, Android, Web
 
 
 
