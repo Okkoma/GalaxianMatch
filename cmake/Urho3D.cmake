@@ -65,9 +65,8 @@ function (urho_find_origin dir root source origin)
                 set (${root}   "${currentpath}" PARENT_SCOPE)
                 break ()
             endif ()
-            if (EXISTS "${currentpath}/include/Urho3D/Urho3DAll.h" AND  # Detect Urho3D build tree
-                (EXISTS "${currentpath}/CMakeCache.txt" OR
-                 EXISTS "${currentpath}/../CMakeCache.txt"))
+            if (EXISTS "${currentpath}/include/Urho3D/Urho3DAll.h" AND 
+                EXISTS "${currentpath}/CMakeCache.txt")                         # Detect Urho3D build tree
                 set (${origin} "build" PARENT_SCOPE)
                 set (${root}   "${currentpath}" PARENT_SCOPE)
                 break ()

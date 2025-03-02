@@ -167,7 +167,7 @@ function (urho_find_process search_path filename dirname excludepaths results er
         string(REPLACE "/" "\\" dirname "${dirname}")
         execute_process (
             COMMAND powershell -Command "Get-ChildItem -Path '${search_path}' -Recurse -Filter '${filename}' | 
-                                            Where-Object { $_.DirectoryName -like \"*${dirname}*\" | 
+                                            Where-Object { $_.DirectoryName -like \"*${dirname}*\" } | 
                                             Select-Object FullName"
             ERROR_VARIABLE ERROR
             OUTPUT_STRIP_TRAILING_WHITESPACE
