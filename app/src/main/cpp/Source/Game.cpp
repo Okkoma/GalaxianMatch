@@ -188,7 +188,7 @@ void Game::Setup()
         }
         engineParameters_["WindowWidth"]  = w;
         engineParameters_["WindowHeight"] = h;
-        engineParameters_["FullScreen"]   = fullscreen
+        engineParameters_["FullScreen"]   = fullscreen;
     #else
         engineParameters_["WindowIcon"] = "Textures/icone.png";
         engineParameters_["WindowWidth"]  = GameStatics::targetwidth_;

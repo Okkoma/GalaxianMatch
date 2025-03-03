@@ -295,7 +295,7 @@ int EmscriptenInput::HandleSDLEvents(void* userData, SDL_Event* event)
     auto* const inputInst = (Input*)userData;  
   
     // prevents window actions from being launched if the graphics subsystem is not yet operational
-    if (evt.window.event == SDL_WINDOWEVENT_RESIZED || evt.window.event == SDL_WINDOWEVENT_MOVED)
+    if (event->window.event == SDL_WINDOWEVENT_RESIZED || event->window.event == SDL_WINDOWEVENT_MOVED)
     {
         if (!inputInst->GetSubsystem<Graphics>())
         {
