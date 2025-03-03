@@ -293,13 +293,13 @@ EM_BOOL EmscriptenInput::HandleMouseJump(int eventType, const EmscriptenMouseEve
 int EmscriptenInput::HandleSDLEvents(void* userData, SDL_Event* event)
 {
     auto* const inputInst = (Input*)userData;  
-  
+
     // prevents window actions from being launched if the graphics subsystem is not yet operational
     if (event->window.event == SDL_WINDOWEVENT_RESIZED || event->window.event == SDL_WINDOWEVENT_MOVED)
     {
-        if (!inputInst->GetSubsystem<Graphics>())
+        if (!inputInst->graphics_)
         {
-            URHO3D_LOGERRORF("Resize or move window without graphics subsystem !");
+            URHO3D_LOGERRORF("Resize or move window without initialized graphics !");
             return 0;
         }
     }
