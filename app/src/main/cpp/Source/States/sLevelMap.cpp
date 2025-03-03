@@ -1972,9 +1972,8 @@ void LevelMapState::HandleSelection(StringHash eventType, VariantMap& eventData)
     if (!GameStatics::allowInputs_ || GameStatics::ui_->GetFocusElement())
         return;
 
-    IntVector2 beginposition;
-    Node* touchbeginnode = 0;
-    Node* touchendnode = 0;
+    static IntVector2 beginposition;
+    static Node *touchbeginnode = nullptr, *touchendnode = nullptr;
     bool inside = false;
     bool touchmultigesture = false;
     bool launch = false;
@@ -2003,9 +2002,9 @@ void LevelMapState::HandleSelection(StringHash eventType, VariantMap& eventData)
             position.x_ = eventData[TouchBegin::P_X].GetInt();
             position.y_ = eventData[TouchBegin::P_Y].GetInt();
             beginposition = position;
-            touchbeginnode = touchendnode = 0;
+            touchbeginnode = touchendnode = nullptr;
             touchmultigesture = false;
-//            URHO3D_LOGINFOF("LevelMapState() - HandleSelection : E_TOUCHBEGIN=%s !", position.ToString().CString());
+            URHO3D_LOGINFOF("LevelMapState() - HandleSelection : E_TOUCHBEGIN=%s !", position.ToString().CString());
         }
         else if (eventType == E_TOUCHMOVE)
         {
@@ -2018,8 +2017,8 @@ void LevelMapState::HandleSelection(StringHash eventType, VariantMap& eventData)
             UnsubscribeFromEvent(E_TOUCHEND);
             position.x_ = eventData[TouchEnd::P_X].GetInt();
             position.y_ = eventData[TouchEnd::P_Y].GetInt();
-            touchendnode = 0;
-//            URHO3D_LOGINFOF("LevelMapState() - HandleSelection : E_TOUCHEND=%s !", position.ToString().CString());
+            touchendnode = nullptr;
+            URHO3D_LOGINFOF("LevelMapState() - HandleSelection : E_TOUCHEND=%s !", position.ToString().CString());
         }
 
         inside = false;
@@ -2100,30 +2099,16 @@ void LevelMapState::HandleSelection(StringHash eventType, VariantMap& eventData)
                 // allow the constellation swapping
                 if (planetMode_ == PlanetMode_Disable && eventType == E_TOUCHEND)
                 {
-                    int deltay = position.y_ - beginposition.y_;
-                    int deltax = position.x_ - beginposition.x_;
-                    int adeltax = Abs(deltax);
-                    int adeltay = Abs(deltay);
-
-                    const int TouchMoveThreshold = 200;
-                    if (adeltay > TouchMoveThreshold && adeltay > 2 * adeltax)
+                    const int deltay = position.y_ - beginposition.y_;
+                    const int tresholdy = GameStatics::graphics_->GetHeight() / 4;
+                    URHO3D_LOGINFOF("allow the constellation swapping deltay = %d (tresholdy=%d)", deltay, tresholdy);
+                    if (Abs(deltay) > tresholdy && ((deltay < 0 && prevZoneButton_) || (deltay > 0 && nextZoneButton_)))
                     {
-                        if (deltay < 0 && prevZoneButton_)
-                        {
-                            touchbeginnode = touchendnode = 0;
-                            inside = true;
-                            selectedLevelID_ = -1;
-                            UpdateActionAnimations(LEVELMAPACTION_GOTOPREVIOUSZONE);
-                            GameStatics::input_->ResetStates();
-                        }
-                        else if (deltay > 0 && nextZoneButton_)
-                        {
-                            touchbeginnode = touchendnode = 0;
-                            inside = true;
-                            selectedLevelID_ = -1;
-                            UpdateActionAnimations(LEVELMAPACTION_GOTONEXTZONE);
-                            GameStatics::input_->ResetStates();
-                        }
+                        touchbeginnode = touchendnode = nullptr;
+                        inside = true;
+                        selectedLevelID_ = -1;
+                        UpdateActionAnimations(deltay < 0 ? LEVELMAPACTION_GOTOPREVIOUSZONE : LEVELMAPACTION_GOTONEXTZONE);
+                        GameStatics::input_->ResetStates();
                     }
                 }
                 // allow to change to a nearest planet/mission
