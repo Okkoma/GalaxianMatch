@@ -239,6 +239,8 @@ protected:
     void UpdateTextMaterials(bool forceUpdate = false);
     /// Recalculate camera facing and fixed screen size.
     void CalculateFixedScreenSize(const FrameInfo& frame);
+    /// Handle change Language.
+    void HandleChangeLanguage(StringHash eventType, VariantMap& eventData);
 
     /// Internally used text element.
     Text text_;

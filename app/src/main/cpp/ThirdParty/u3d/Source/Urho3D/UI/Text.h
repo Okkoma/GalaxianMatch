@@ -150,6 +150,8 @@ public:
     /// Return text.
     /// @property
     const String& GetText() const { return text_; }
+    /// Return localizable stringid.
+    const String& GetStringID() const { return stringId_; }
 
     /// Return row alignment.
     /// @property

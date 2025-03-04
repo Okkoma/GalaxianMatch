@@ -31,6 +31,7 @@
 #include "../Graphics/VertexBuffer.h"
 #include "../IO/Log.h"
 #include "../Resource/ResourceCache.h"
+#include "../Resource/ResourceEvents.h"
 #include "../Scene/Node.h"
 #include "../UI/Font.h"
 #include "../UI/Text.h"
@@ -276,7 +277,13 @@ void Text3D::SetWordwrap(bool enable)
 void Text3D::SetAutoLocalizable(bool enable)
 {
     text_.SetAutoLocalizable(enable);
-    MarkTextDirty();
+    text_.UnsubscribeFromEvent(E_CHANGELANGUAGE);
+    if (enable)
+        SubscribeToEvent(E_CHANGELANGUAGE, URHO3D_HANDLER(Text3D, HandleChangeLanguage));
+    else
+        UnsubscribeFromEvent(E_CHANGELANGUAGE);
+
+    SetText(text_.GetStringID());
 }
 
 void Text3D::SetTextEffect(TextEffect textEffect)
@@ -319,11 +326,14 @@ void Text3D::SetEffectDepthBias(float bias)
 
 void Text3D::SetWidth(int width)
 {
-    // we need to fix width to correctly use word wrapping
-    text_.SetFixedWidth(width);
-//    text_.SetMinWidth(width);
-//    text_.SetWidth(width);
-
+    // use text with fixed width to correctly use word wrap
+    //if (text_.wordWrap_)
+        text_.SetFixedWidth(width);
+    //else
+    //{
+    //    text_.SetMinWidth(width);
+    //    text_.SetWidth(width);
+    //}
     MarkTextDirty();
 }
 
@@ -770,6 +780,11 @@ void Text3D::CalculateFixedScreenSize(const FrameInfo& frame)
     customWorldTransform_ = Matrix3x4(worldPosition, frame.camera_->GetFaceCameraRotation(
         worldPosition, node_->GetWorldRotation(), faceCameraMode_, minAngle_), worldScale);
     worldBoundingBoxDirty_ = true;
+}
+
+void Text3D::HandleChangeLanguage(StringHash eventType, VariantMap& eventData)
+{
+    SetText(text_.GetStringID());
 }
 
 }

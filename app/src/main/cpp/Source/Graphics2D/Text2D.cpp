@@ -5,6 +5,7 @@
 #include <Urho3D/Graphics/Technique.h>
 #include <Urho3D/IO/Log.h>
 #include <Urho3D/Resource/ResourceCache.h>
+#include <Urho3D/Resource/ResourceEvents.h>
 #include <Urho3D//Scene/Node.h>
 #include <Urho3D/UI/Font.h>
 
@@ -182,7 +183,12 @@ void Text2D::SetWordwrap(bool enable)
 void Text2D::SetAutoLocalizable(bool enable)
 {
     text_.SetAutoLocalizable(enable);
-    MarkTextDirty();
+    text_.UnsubscribeFromEvent(E_CHANGELANGUAGE);
+    if (enable)
+        SubscribeToEvent(E_CHANGELANGUAGE, URHO3D_HANDLER(Text2D, HandleChangeLanguage));
+    else
+        UnsubscribeFromEvent(E_CHANGELANGUAGE);
+    SetText(text_.GetStringID());
 }
 
 void Text2D::SetTextEffect(TextEffect textEffect)
@@ -703,5 +709,10 @@ void Text2D::OnDrawOrderChanged()
     int draworder = GetDrawOrder();
     for (unsigned i = 0; i < sourceBatches_.Size(); ++i)
         sourceBatches_[i].drawOrder_ = draworder;
+}
+
+void Text2D::HandleChangeLanguage(StringHash eventType, VariantMap& eventData)
+{
+    SetText(text_.GetStringID());
 }
 
