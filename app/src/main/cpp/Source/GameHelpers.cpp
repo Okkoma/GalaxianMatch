@@ -74,7 +74,7 @@
 /// Log Helpers
 
 static unsigned GameLogFilters_;
-static int GameLogLock_;
+static int GameLogLock_ = 0;
 
 void GameHelpers::SetGameLogFilter(unsigned logfilter)
 {

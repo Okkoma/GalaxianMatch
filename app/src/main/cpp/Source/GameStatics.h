@@ -435,7 +435,7 @@ public:
     static HashMap<StringHash, String> userAttributes_;
 
     // Player's States
-    enum ZoneState
+    enum ZoneState : int
     {
         ZONE_BLOCKED = 0,
         ZONE_UNBLOCKED = 1,
@@ -443,7 +443,7 @@ public:
     };
     struct MissionState
     {
-        enum
+        enum : int
         {
             MISSION_LOCKED,
             MISSION_UNLOCKED,
@@ -498,6 +498,8 @@ public:
         void Load();
         void Save();
         void Reset();
+
+        bool Check(bool fix);
 
         void SetMissionState(int missionid, const MissionState& mission);
         void GetMissionState(int missionid, MissionState& mission);

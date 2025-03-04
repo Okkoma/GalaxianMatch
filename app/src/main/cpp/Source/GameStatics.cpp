@@ -79,6 +79,10 @@
 
 #include "GameStatics.h"
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten/emscripten.h>
+#include <emscripten/bind.h>
+#endif
 
 int UISIZE[NUMUIELEMENTSIZE];
 
@@ -765,27 +769,77 @@ void GameStatics::SetLevelInfos()
     levelInfos_[BossLevel_[6]-1].newpowers_[0] = 5;
 }
 
+static void UpdateGameState(GameStatics::GameState* gamestate, bool reset)
+{
+    if (reset)
+        gamestate->Reset();
+    
+    GameStatics::CheckTimeForEarningStars();
+    gamestate->UpdateStoryItems();
+}
+
 void GameStatics::GameState::Load()
 {
-	String filename(gameConfig_.saveDir_ + String(savedGameFile_) + String(gameDataVersion_) + String(".bin"));
-
-    if (!GameHelpers::LoadData(context_, filename.CString(), &pstate_))
-        gameState_.Reset();
-
-    UpdateStoryItems();
-//    Dump();
+#if defined(__EMSCRIPTEN__)
+    // Read from IDB asynchronously
+    emscripten_idb_async_load("GALAXIANMATCH", "save.bin", this,
+        [](void* ref, void* data, int size) // on_load
+        {
+            GameState* gameState = static_cast<GameState*>(ref);
+            if (data && size == sizeof(PlayerState))
+            {                
+                memcpy((void*)&gameState->pstate_, data, size);
+                bool checked = gameState->Check(false);
+                URHO3D_LOGERRORF(checked ? "GameState::Load : load from IndexedDB success !" : 
+                                           "GameState::Load : load from IndexedDB, but error in the check, reset gamestate !");                
+                UpdateGameState(gameState, !checked);
+            }
+            else
+            {
+                URHO3D_LOGERROR("GameState::Load : failed to load from IndexedDB, invalid data size");
+                UpdateGameState(gameState, true);
+            }
+        },
+        [](void* ref) // on_error
+        {
+            URHO3D_LOGERROR("GameState::Load : failed to load from IndexedDB");
+            UpdateGameState(static_cast<GameState*>(ref), true);
+        }
+    );
+#else
+    String filename(gameConfig_.saveDir_ + String(savedGameFile_) + String(gameDataVersion_) + String(".bin"));
+    bool loaded = GameHelpers::LoadData(context_, filename.CString(), &pstate_);
+    if (loaded)
+        loaded = Check(false);
+    UpdateGameState(this, !loaded); // Reset if none or corrupt data
+#endif
 }
 
 void GameStatics::GameState::Save()
 {
 #if !defined(TESTMODE) && defined(ACTIVE_SERIALIZEGAMESTATE)
-    // Save GameData
     unsigned newtime = context_->GetSubsystem<Time>()->GetTimeSinceEpoch();
-    GameHelpers::SaveData(context_, &pstate_, sizeof(PlayerState), String(gameConfig_.saveDir_ + String(savedGameFile_) + String(gameDataVersion_) + String(".bin")).CString());
-
-    URHO3D_LOGINFOF("GameStatics::GameState() - Save : time=%u saveplaytime=%u", newtime, pstate_.lastplaytime);
-
+    URHO3D_LOGINFOF("GameStatics::GameState() - Save : time=%u saveplaytime=%u ...", newtime, pstate_.lastplaytime);
+#if defined(__EMSCRIPTEN__)
+    // Write to IndexedDB asynchronously for Emscripten
+    emscripten_idb_async_store("GALAXIANMATCH", "save.bin", &pstate_, sizeof(PlayerState), this, 
+        [](void* ref) // on_save
+        {
+            URHO3D_LOGINFO("GameStatics::GameState() - Save : ... IndexedDB OK !");
+            //static_cast<GameState*>(ref2)->Dump();
+        },
+        [](void* ref) // on_error
+        {
+            URHO3D_LOGERROR("GameStatics::GameState() - Save : failed to save.bin in GALAXIANMATCH IndexedDB !");
+        }
+    );
+#else
+    // Normal file save
+    GameHelpers::SaveData(context_, &pstate_, sizeof(PlayerState),
+        String(gameConfig_.saveDir_ + String(savedGameFile_) + String(gameDataVersion_) + String(".bin")).CString());
+    URHO3D_LOGINFO("GameStatics::GameState() - Save : ... OK !"); 
 //    Dump();
+#endif
 #endif
 }
 
@@ -884,6 +938,118 @@ void GameStatics::GameState::Reset()
     UpdateStoryItems();
 
 //    gameState_.Dump();
+}
+
+bool GameStatics::GameState::Check(bool fix)
+{
+    int correctionCount = 0;
+
+    // Check and clamp basic values
+    if (pstate_.level != Clamp(pstate_.level, 1, NBMAXLVL))
+    {
+        if (fix) pstate_.level = Clamp(pstate_.level, 1, NBMAXLVL);
+        URHO3D_LOGERRORF("GameState::Check() - Corrected level from %d to %d", pstate_.level, Clamp(pstate_.level, 1, NBMAXLVL));
+        correctionCount++;
+    }
+    if (pstate_.zone != Clamp(pstate_.zone, 1, (int)MAXZONES))
+    {
+        if (fix) pstate_.zone = Clamp(pstate_.zone, 1, (int)MAXZONES);
+        URHO3D_LOGERRORF("GameState::Check() - Corrected zone from %d to %d", pstate_.zone, Clamp(pstate_.zone, 1, (int)MAXZONES));
+        correctionCount++;
+    }
+    if (pstate_.tries != Clamp(pstate_.tries, 0, EARNSTAR_MAXAUTHORIZEDSTARS))
+    {
+        if (fix) pstate_.tries = Clamp(pstate_.tries, 0, EARNSTAR_MAXAUTHORIZEDSTARS);
+        URHO3D_LOGERRORF("GameState::Check() - Corrected tries from %d to %d", pstate_.tries, Clamp(pstate_.tries, 0, EARNSTAR_MAXAUTHORIZEDSTARS));
+        correctionCount++;
+    }
+    if (pstate_.coins != Max(pstate_.coins, 0))
+    {
+        if (fix) pstate_.coins = Max(pstate_.coins, 0);
+        URHO3D_LOGERRORF("GameState::Check() - Corrected coins from %d to %d", pstate_.coins, Max(pstate_.coins, 0));
+        correctionCount++;
+    }
+    if (pstate_.moves != Max(pstate_.moves, 0))
+    {
+        if (fix) pstate_.moves = Max(pstate_.moves, 0);
+        URHO3D_LOGERRORF("GameState::Check() - Corrected moves from %d to %d", pstate_.moves, Max(pstate_.moves, 0));
+        correctionCount++;
+    }
+    if (pstate_.score != Max(pstate_.score, 0))
+    {
+        if (fix) pstate_.score = Max(pstate_.score, 0);
+        URHO3D_LOGERRORF("GameState::Check() - Corrected score from %d to %d", pstate_.score, Max(pstate_.score, 0));
+        correctionCount++;
+    }
+    // Check mission states
+    for (int i = 0; i < NBMAXLVL; i++)
+    {
+        MissionState& mstate = pstate_.missionstates[i];
+        if (mstate.state_ != Clamp(mstate.state_, (int)MissionState::MISSION_LOCKED, (int)MissionState::MISSION_COMPLETED))
+        {
+            if (fix) mstate.state_ = Clamp(mstate.state_, (int)MissionState::MISSION_LOCKED, (int)MissionState::MISSION_COMPLETED);
+            URHO3D_LOGERRORF("GameState::Check() - Corrected mission %d state from %d to %d", i+1, mstate.state_, Clamp(mstate.state_, (int)MissionState::MISSION_LOCKED, (int)MissionState::MISSION_COMPLETED));
+            correctionCount++;
+        }
+        if (mstate.score_ != Clamp(mstate.score_, 0, 3))
+        {
+            if (fix) mstate.score_ = Clamp(mstate.score_, 0, 3);
+            URHO3D_LOGERRORF("GameState::Check() - Corrected mission %d score from %d to %d", i+1, mstate.score_, Clamp(mstate.score_, 0, 3));
+            correctionCount++;
+        }
+    }
+    // Check zone states
+    for (int i = 0; i < MAXZONES; i++)
+    {
+        if (pstate_.zonestates[i] != Clamp(pstate_.zonestates[i], ZONE_BLOCKED, CONSTELLATION_UNBLOCKED))
+        {
+            if (fix) pstate_.zonestates[i] = Clamp(pstate_.zonestates[i], ZONE_BLOCKED, CONSTELLATION_UNBLOCKED);
+            URHO3D_LOGERRORF("GameState::Check() - Corrected zone %d state from %d to %d", i+1, pstate_.zonestates[i], Clamp(pstate_.zonestates[i], ZONE_BLOCKED, CONSTELLATION_UNBLOCKED));
+            correctionCount++;
+        }
+    }
+    // Check powers
+    for (int i = 0; i < MAXABILITIES; i++)
+    {
+        if (pstate_.powers_[i].enabled_ != Clamp((int)pstate_.powers_[i].enabled_, 0, 1))
+        {
+            if (fix) pstate_.powers_[i].enabled_ = Clamp((int)pstate_.powers_[i].enabled_, 0, 1);
+            URHO3D_LOGERRORF("GameState::Check() - Corrected power %d enabled state from %d to %d", i+1, pstate_.powers_[i].enabled_, Clamp((int)pstate_.powers_[i].enabled_, 0, 1));
+            correctionCount++;
+        }
+        if (pstate_.powers_[i].shown_ != Clamp((int)pstate_.powers_[i].shown_, 0, 1))
+        {
+            if (fix) pstate_.powers_[i].shown_ = Clamp((int)pstate_.powers_[i].shown_, 0, 1);
+            URHO3D_LOGERRORF("GameState::Check() - Corrected power %d shown state from %d to %d", i+1, pstate_.powers_[i].shown_, Clamp((int)pstate_.powers_[i].shown_, 0, 1));
+            correctionCount++;
+        }
+        if (pstate_.powers_[i].qty_ != Max(pstate_.powers_[i].qty_, 0))
+        {
+            if (fix) pstate_.powers_[i].qty_ = Max(pstate_.powers_[i].qty_, 0);
+            URHO3D_LOGERRORF("GameState::Check() - Corrected power %d quantity from %d to %d", i+1, pstate_.powers_[i].qty_, Max(pstate_.powers_[i].qty_, 0));
+            correctionCount++;
+        }
+    }
+    // Check cinematics
+    for (int i = 0; i < MAXZONES; i++)
+    {
+        if (pstate_.cinematicShown_[i] != Clamp(pstate_.cinematicShown_[i], (int)CINEMATIC_NONE, (int)CINEMATIC_BOSSDEFEAT))
+        {
+            if (fix) pstate_.cinematicShown_[i] = Clamp(pstate_.cinematicShown_[i], (int)CINEMATIC_NONE, (int)CINEMATIC_BOSSDEFEAT);
+            URHO3D_LOGERRORF("GameState::Check() - Corrected cinematic %d state from %d to %d", i+1, pstate_.cinematicShown_[i], Clamp(pstate_.cinematicShown_[i], (int)CINEMATIC_NONE, (int)CINEMATIC_BOSSDEFEAT));
+            correctionCount++;
+        }
+    }
+    // Check consistency between level and zone
+    int minLevel = GetMinLevelId(pstate_.zone);
+    int maxLevel = GetMaxLevelId(pstate_.zone);
+    if (pstate_.level != Clamp(pstate_.level, minLevel, maxLevel))
+    {
+        if (fix) pstate_.level = Clamp(pstate_.level, minLevel, maxLevel);
+        correctionCount++;
+    }
+    URHO3D_LOGINFOF("GameState::Check() - PlayerState data validated. %d corrections made.", correctionCount);
+    return correctionCount == 0;
 }
 
 void GameStatics::GameState::SetMissionState(int missionid, const GameStatics::MissionState& mission)
@@ -1093,7 +1259,6 @@ void GameStatics::GameState::ResetTutorialState()
         pstate_.archivedmessages_[i] = 0U;
 }
 
-
 void GameStatics::GameState::Dump() const
 {
     URHO3D_LOGINFOF("GameStatics::GameState() - Dump : ...");
@@ -1101,10 +1266,10 @@ void GameStatics::GameState::Dump() const
                     pstate_.lastplaytime, pstate_.score, pstate_.level, pstate_.zone, pstate_.coins, pstate_.tries, pstate_.moves,
                     pstate_.powers_[0].qty_, pstate_.powers_[1].qty_, pstate_.powers_[2].qty_, pstate_.powers_[3]);
 
-    for (int i=0; i < NBMAXLVL; i++)
+    const int maxlevel = pstate_.level; // NBMAXLVL;
+    for (int i=0; i <= maxlevel; i++)
     {
         const MissionState& mstate = pstate_.missionstates[i];
-
         URHO3D_LOGINFOF("GameStatics::GameState() - Dump : mission=%d state=%d bonuses={slot1=%s, slot2=%s, slot3=%s, slot4=%s } linkedmissions=%d,%d,%d,%d",
                         i+1, mstate.state_,
                         mstate.bonuses_[0].GetString().CString(), mstate.bonuses_[1].GetString().CString(),
@@ -1118,6 +1283,7 @@ void GameStatics::GameState::Dump() const
     URHO3D_LOGINFOF("GameStatics::GameState() - Dump : ... OK !");
 }
 
+
 void GameStatics::CheckTimeForEarningStars()
 {
     // Earn 1 try for each EARNSTAR_DELAY passed (max 4 tries)
@@ -1128,15 +1294,12 @@ void GameStatics::CheckTimeForEarningStars()
         if (deltatime > 0)
         {
             int numNewTries = Min(Min(deltatime / EARNSTAR_DELAY, EARNSTAR_MAXAUTHORIZEDSTARS - tries_), MAX_ADDINGSTARS);
-
             URHO3D_LOGINFOF("GameStatics() - CheckTimeForEarningStars : time-lastvisit=%d EARNSTAR_DELAY=%d", deltatime, EARNSTAR_DELAY);
 
             if (numNewTries)
             {
                 URHO3D_LOGINFOF("GameStatics() - CheckTimeForEarningStars : Earn %d Stars", numNewTries);
-
                 playerState_->lastplaytime = newtime;
-
                 AddEarnStars(numNewTries);
             }
         }
@@ -1166,20 +1329,16 @@ void GameStatics::Start()
 
     // Load GameData (if not exist create new default file)
     {
-        // Load
 #if !defined(TESTMODE) && defined(ACTIVE_SERIALIZEGAMESTATE)
         gameState_.Load();
 #else
         gameState_.Reset();
 #endif
-        gameState_.Save();
     }
 
     // Change Localization after loading gameState_
     Localization* l10n = context_->GetSubsystem<Localization>();
 	l10n->SetLanguage(GameStatics::playerState_->language_);
-
-    CheckTimeForEarningStars();
 
 #ifdef DUMP_SIMLATE_FIRST100LEVELS
     // Dump Leveling Simulation : 100first levels

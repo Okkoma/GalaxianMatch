@@ -79,7 +79,6 @@
 
 EM_JS(int, GetBrowserCanvasWidth, (), {
     const { width, height } = canvas.getBoundingClientRect();
-
     return width;
 });
 
@@ -407,6 +406,7 @@ void Game::Start()
 
     URHO3D_LOGINFOF("Game() - Graphics API %s -", context_->GetSubsystem<Graphics>()->GetApiName().CString());
 
+    GameHelpers::ResetGameLog(context_);
     GameHelpers::SetGameLogFilter(GAMELOG_PRELOAD|GAMELOG_MAPPRELOAD|GAMELOG_MAPCREATE|GAMELOG_MAPUNLOAD|GAMELOG_WORLDUPDATE|GAMELOG_WORLDVISIBLE|GAMELOG_PLAYER);
 //    GameHelpers::SetGameLogFilter(GAMELOG_MAPPRELOAD|GAMELOG_MAPCREATE|GAMELOG_MAPUNLOAD|GAMELOG_WORLDUPDATE|GAMELOG_WORLDVISIBLE|GAMELOG_PLAYER);
 
