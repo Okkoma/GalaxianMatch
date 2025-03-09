@@ -84,8 +84,7 @@ UIElement* TouchState::GetTouchedElement()
 }
 
 #ifdef __EMSCRIPTEN__
-#define EM_TRUE 1
-#define EM_FALSE 0
+const char* EM_EMPTY = NULL;
 
 /// Glue between Urho Input and Emscripten HTML5
 /** HTML5 (Emscripten) is limited in the way it handles input. The EmscriptenInput class attempts to provide the glue between Urho3D Input behavior and HTML5, where SDL currently fails to do so.
@@ -149,17 +148,18 @@ EmscriptenInput::EmscriptenInput(Input* inputInst) :
     auto* vInputInst = (void*)inputInst;
 
     // Handle pointer lock
-    emscripten_set_pointerlockchange_callback(NULL, vInputInst, false, EmscriptenInput::HandlePointerLockChange);
+    emscripten_set_pointerlockchange_callback(EM_EMPTY, vInputInst, false, EmscriptenInput::HandlePointerLockChange);
 
     // Handle mouse events to prevent mouse jumps
-    emscripten_set_mousedown_callback(NULL, vInputInst, true, EmscriptenInput::HandleMouseJump);
-    emscripten_set_mousemove_callback(NULL, vInputInst, true, EmscriptenInput::HandleMouseJump);
+    emscripten_set_mousedown_callback(EM_EMPTY, vInputInst, true, EmscriptenInput::HandleMouseJump);
+    emscripten_set_mousemove_callback(EM_EMPTY, vInputInst, true, EmscriptenInput::HandleMouseJump);
 
     // Handle focus changes
-    // These callbacks are no longer required since the update to sdl2.30.
-    //emscripten_set_focusout_callback(NULL, vInputInst, false, EmscriptenInput::HandleFocusChange);
-    //emscripten_set_focus_callback(NULL, vInputInst, false, EmscriptenInput::HandleFocusChange);
-
+    // Add 'focusin' event to handler : it seems it's the good event, now. keep 'focus' event for compatibility
+    emscripten_set_focus_callback(EM_EMPTY, vInputInst, false, EmscriptenInput::HandleFocusChange);
+    emscripten_set_focusin_callback(EM_EMPTY, vInputInst, false, EmscriptenInput::HandleFocusChange);
+    emscripten_set_focusout_callback(EM_EMPTY, vInputInst, false, EmscriptenInput::HandleFocusChange);
+    
     // Handle SDL events
     SDL_AddEventWatch(EmscriptenInput::HandleSDLEvents, vInputInst);
 }
@@ -168,7 +168,7 @@ void EmscriptenInput::RequestPointerLock(MouseMode mode, bool suppressEvent)
 {
     requestedMouseMode_ = mode;
     suppressMouseModeEvent_ = suppressEvent;
-    emscripten_request_pointerlock(NULL, true);
+    emscripten_request_pointerlock(EM_EMPTY, true);
 }
 
 void EmscriptenInput::ExitPointerLock(bool suppressEvent)
@@ -201,7 +201,7 @@ bool EmscriptenInput::IsVisible()
 
 EM_BOOL EmscriptenInput::HandlePointerLockChange(int eventType, const EmscriptenPointerlockChangeEvent* keyEvent, void* userData)
 {
-    auto* const inputInst = (Input*)userData;
+    auto* const inputInst = static_cast<Input*>(userData);
 
     bool invalid = false;
     const bool suppress = suppressMouseModeEvent_;
@@ -251,19 +251,18 @@ EM_BOOL EmscriptenInput::HandlePointerLockChange(int eventType, const Emscripten
 
     invalidatedRequestedMouseMode_ = MM_INVALID;
     invalidatedSuppressMouseModeEvent_ = false;
-
     return EM_TRUE;
 }
 
-// To remove
 EM_BOOL EmscriptenInput::HandleFocusChange(int eventType, const EmscriptenFocusEvent* keyEvent, void* userData)
 {
-    auto* const inputInst = (Input*)userData;
+    auto* const inputInst = static_cast<Input*>(userData);
 
     inputInst->SuppressNextMouseMove();
+
     if (eventType == EMSCRIPTEN_EVENT_FOCUSOUT)
         inputInst->LoseFocus();
-    else if (eventType == EMSCRIPTEN_EVENT_FOCUS)
+    else
         inputInst->GainFocus();
 
     return EM_TRUE;
@@ -272,7 +271,7 @@ EM_BOOL EmscriptenInput::HandleFocusChange(int eventType, const EmscriptenFocusE
 EM_BOOL EmscriptenInput::HandleMouseJump(int eventType, const EmscriptenMouseEvent * mouseEvent, void* userData)
 {
     // Suppress mouse jump on pointer-lock change
-    auto* const inputInst = (Input*)userData;
+    auto* const inputInst = static_cast<Input*>(userData);
     bool suppress = false;
     if (eventType == EMSCRIPTEN_EVENT_MOUSEDOWN && inputInst->emscriptenEnteredPointerLock_)
     {
@@ -292,18 +291,14 @@ EM_BOOL EmscriptenInput::HandleMouseJump(int eventType, const EmscriptenMouseEve
 
 int EmscriptenInput::HandleSDLEvents(void* userData, SDL_Event* event)
 {
-    auto* const inputInst = (Input*)userData;  
+    auto* const inputInst = static_cast<Input*>(userData);
+    // prevents window resize or move if the graphics subsystem is not yet operational
+    if (!inputInst->graphics_ && (event->type == SDL_WINDOWEVENT) &&
+        (event->window.event == SDL_WINDOWEVENT_MOVED || event->window.event == SDL_WINDOWEVENT_RESIZED))
+        URHO3D_LOGERRORF("Can't resize or move window without initialized graphics !");
+    else
+        inputInst->HandleSDLEvent(event);
 
-    // prevents window actions from being launched if the graphics subsystem is not yet operational
-    if (event->window.event == SDL_WINDOWEVENT_RESIZED || event->window.event == SDL_WINDOWEVENT_MOVED)
-    {
-        if (!inputInst->graphics_)
-        {
-            URHO3D_LOGERRORF("Resize or move window without initialized graphics !");
-            return 0;
-        }
-    }
-    inputInst->HandleSDLEvent(event);
     return 0;
 }
 
