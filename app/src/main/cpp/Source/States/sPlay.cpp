@@ -2615,8 +2615,6 @@ void PlayState::OnPostRenderUpdate(StringHash eventType, VariantMap& eventData)
         {
             MatchesManager::Get()->DrawDebugGeometry(debugRenderer,true);
         }
-
-
         if (abilitypanel_)
             abilitypanel_->DrawDebugGeometry(debugRenderer,true);
     }

@@ -188,7 +188,8 @@ void Text2D::SetAutoLocalizable(bool enable)
         SubscribeToEvent(E_CHANGELANGUAGE, URHO3D_HANDLER(Text2D, HandleChangeLanguage));
     else
         UnsubscribeFromEvent(E_CHANGELANGUAGE);
-    SetText(text_.GetStringID());
+
+    ApplyAttributes();
 }
 
 void Text2D::SetTextEffect(TextEffect textEffect)
@@ -713,6 +714,6 @@ void Text2D::OnDrawOrderChanged()
 
 void Text2D::HandleChangeLanguage(StringHash eventType, VariantMap& eventData)
 {
-    SetText(text_.GetStringID());
+    ApplyAttributes();
 }
 

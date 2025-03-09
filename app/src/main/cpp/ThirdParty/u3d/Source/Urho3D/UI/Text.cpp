@@ -1,5 +1,6 @@
 //
 // Copyright (c) 2008-2022 the Urho3D project.
+// Copyright (c) 2022-2025 the U3D project.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -57,7 +58,6 @@ Text::Text(Context* context) :
     textAlignment_(HA_LEFT),
     rowSpacing_(1.0f),
     wordWrap_(false),
-    autoLocalizable_(false),
     charLocationsDirty_(true),
     selectionStart_(0),
     selectionLength_(0),
@@ -67,7 +67,8 @@ Text::Text(Context* context) :
     roundStroke_(false),
     effectColor_(Color::BLACK),
     effectDepthBias_(0.0f),
-    rowHeight_(0)
+    rowHeight_(0),
+    autoLocalizable_(false)
 {
     // By default Text does not derive opacity from parent elements
     useDerivedOpacity_ = false;
@@ -104,10 +105,7 @@ void Text::ApplyAttributes()
 
     // Localize now if attributes were loaded out-of-order
     if (autoLocalizable_ && stringId_.Length())
-    {
-        auto* l10n = GetSubsystem<Localization>();
-        text_ = l10n->Get(stringId_);
-    }
+        text_ = GetSubsystem<Localization>()->Get(stringId_);
 
     DecodeToUnicode();
 
@@ -279,8 +277,8 @@ bool Text::SetFontSize(float size)
     // Initial font must be set
     if (!font_)
         return false;
-    else
-        return SetFont(font_, size);
+    
+    return SetFont(font_, size);
 }
 
 void Text::DecodeToUnicode()
@@ -295,13 +293,10 @@ void Text::SetText(const String& text)
     if (autoLocalizable_)
     {
         stringId_ = text;
-        auto* l10n = GetSubsystem<Localization>();
-        text_ = l10n->Get(stringId_);
+        text_ = GetSubsystem<Localization>()->Get(stringId_);
     }
     else
-    {
         text_ = text;
-    }
 
     DecodeToUnicode();
     ValidateSelection();
@@ -343,14 +338,16 @@ void Text::SetAutoLocalizable(bool enable)
         if (enable)
         {
             stringId_ = text_;
-            auto* l10n = GetSubsystem<Localization>();
-            text_ = l10n->Get(stringId_);
+            text_ = GetSubsystem<Localization>()->Get(stringId_);
             SubscribeToEvent(E_CHANGELANGUAGE, URHO3D_HANDLER(Text, HandleChangeLanguage));
         }
         else
         {
-            text_ = stringId_;
-            stringId_ = "";
+            if (stringId_.Length())
+            {
+                text_ = stringId_;
+                stringId_ = String::EMPTY;
+            }
             UnsubscribeFromEvent(E_CHANGELANGUAGE);
         }
         DecodeToUnicode();
@@ -361,11 +358,7 @@ void Text::SetAutoLocalizable(bool enable)
 
 void Text::HandleChangeLanguage(StringHash eventType, VariantMap& eventData)
 {
-    auto* l10n = GetSubsystem<Localization>();
-    text_ = l10n->Get(stringId_);
-    DecodeToUnicode();
-    ValidateSelection();
-    UpdateText();
+    ApplyAttributes();
 }
 
 void Text::SetSelection(unsigned start, unsigned length)
@@ -462,8 +455,7 @@ String Text::GetTextAttr() const
 {
     if (autoLocalizable_ && stringId_.Length())
         return stringId_;
-    else
-        return text_;
+    return text_;
 }
 
 bool Text::FilterImplicitAttributes(XMLElement& dest) const

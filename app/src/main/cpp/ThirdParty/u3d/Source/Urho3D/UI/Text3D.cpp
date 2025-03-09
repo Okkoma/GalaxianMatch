@@ -1,5 +1,6 @@
 //
 // Copyright (c) 2008-2022 the Urho3D project.
+// Copyright (c) 2022-2025 the U3D project.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -283,7 +284,7 @@ void Text3D::SetAutoLocalizable(bool enable)
     else
         UnsubscribeFromEvent(E_CHANGELANGUAGE);
 
-    SetText(text_.GetStringID());
+    ApplyAttributes();
 }
 
 void Text3D::SetTextEffect(TextEffect textEffect)
@@ -784,7 +785,7 @@ void Text3D::CalculateFixedScreenSize(const FrameInfo& frame)
 
 void Text3D::HandleChangeLanguage(StringHash eventType, VariantMap& eventData)
 {
-    SetText(text_.GetStringID());
+    ApplyAttributes();
 }
 
 }
