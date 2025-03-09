@@ -103,13 +103,13 @@ endmacro ()
 if (EXISTS ${CMAKE_SOURCE_DIR}/cmake)
     set (PROJECT_CMAKE_DIR ${CMAKE_SOURCE_DIR}/cmake)
 else()
-    message ("Cannot find the cmake directory!")
+    message ("!!! Cannot find the cmake directory !")
     return ()
 endif ()
 
 # Check URHO3D_HOME
 if (URHO3D_HOME AND NOT EXISTS ${URHO3D_HOME})
-    message ("${URHO3D_HOME} don't exist ... reset URHO3D_HOME !")
+    message ("!! ${URHO3D_HOME} don't exist ... reset URHO3D_HOME !")
     unset (URHO3D_HOME)
 endif ()
 
@@ -139,9 +139,9 @@ endif ()
 # URHO3D_HOME should be set manually.
 if (NOT URHO3D_HOME AND NOT ANDROID) # TODO : android quick fix
     if (${PROJECTNAME}_URHO3D_DIRS)
-        message ("URHO3D_DISCOVER has found some Urho3D folders. Please select one with cmake-gui.")
+        message ("-- URHO3D_DISCOVER has found some Urho3D folders. Please select one with cmake-gui.")
     else ()
-        message ("URHO3D_HOME is undefined!")
+        message ("!! URHO3D_HOME is undefined !")
     endif ()
     return ()
 endif ()
@@ -161,7 +161,7 @@ unset (origin)
 if (NOT ANDROID) # TODO : android quick fix
     urho_find_origin ("${URHO3D_HOME}" URHO3D_ROOT_DIR URHO3D_SOURCE_DIR origin)
     if (NOT origin)
-        message (FATAL_ERROR "The Urho3D path appears to be invalid!")
+        message (FATAL_ERROR "!!! The Urho3D path appears to be invalid !")
     endif ()
 endif ()
 
@@ -211,12 +211,8 @@ if (origin)
     endif ()
     
     if (NOT URHOCOMMON_INUSE)
-        # save temporary u3d home
-        set (URHO3D_HOME_TEMP ${URHO3D_HOME})
         # Include UrhoCommon for the main user project if not already used
         include (${URHO3D_CMAKE_MODULE}/UrhoCommon.cmake)
-        # restore u3d home
-        set (URHO3D_HOME ${URHO3D_HOME_TEMP})
     endif ()
 endif ()
 

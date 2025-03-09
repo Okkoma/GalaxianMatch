@@ -42,9 +42,17 @@ rakefile
 local.properties
 Local
 source-tool/
+
 bin-*/
+bin/server/node_*/
+
+app/src/main/java/
+app/src/main/Android*
+app/Android*
+app/google*
 appn*/
 appt*/
+
 exe/server/package-lock*
 exe/server/node*/
 exe/gl/
@@ -53,15 +61,14 @@ exe/bin/CoreData/
 exe/bin/Data/
 exe/bin/Galaxian*
 keystore.properties
-bin/server/node_*/
-app/src/main/java/
-app/src/main/Android*
-app/Android*
-app/google*
+
 script/bake
 script/archive
 script/zipper
-TODO.txt
+
+TODO*.txt
+NOTE*.txt
+
 *.workspace*
 *.code-workspace
 
@@ -71,6 +78,7 @@ TODO.txt
 # Temporary
 app/src/main/cpp/Test/Network/
 app/src/main/temp*
+
 
 
 
