@@ -67,12 +67,13 @@ class BossLogic : public Component
         void ResetHitted();
         void Hit(int dps, bool updateobjectives=true, bool forced=false);
 
-        virtual void OnSetEnabled();
+        void OnSetEnabled() override;
 
     protected :
-        virtual void OnNodeSet(Node* node);
-        virtual void SubscribeToEvents();
-        virtual void UnsubscribeFromEvents();
+        void OnNodeSet(Node* node) override;
+
+        void SubscribeToEvents();
+        void UnsubscribeFromEvents();
 
         void SetTrigAttacksEnable(bool enable);
 

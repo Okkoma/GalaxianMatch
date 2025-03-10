@@ -103,8 +103,8 @@ public:
         return storage_[ addr ];
     }
 
-    void SetBufferFrom(const T* buffer) { if (Size()) memcpy(Buffer(), buffer, sizeof(T) * Size()); }
-    void SetBufferValue(unsigned value) { if (Size()) memset(Buffer(), value, sizeof(T) * Size()); }
+    void SetBufferFrom(const T* buffer) { if (Size()) memcpy((void*)Buffer(), (void*)buffer, sizeof(T) * Size()); }
+    void SetBufferValue(unsigned value) { if (Size()) memset((void*)Buffer(), value, sizeof(T) * Size()); }
     void SetBuffer(const T& value) { for (size_t i=0; i < Size(); i++) { storage_[i] = value; } }
 
     const size_t Height() const { return height_; }

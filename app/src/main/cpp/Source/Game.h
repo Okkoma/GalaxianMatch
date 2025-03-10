@@ -23,9 +23,9 @@ public:
 	Game(Context* context);
     virtual ~Game();
 
-	virtual void Setup();
-	virtual void Start();
-	virtual void Stop();
+	void Setup() override;
+	void Start() override;
+	void Stop() override;
 
     void CreateMenuButton(UIElement* uiroot);
     void CreateAccessMenu(UIElement* uiroot);

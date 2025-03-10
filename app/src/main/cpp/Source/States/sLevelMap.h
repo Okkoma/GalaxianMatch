@@ -32,11 +32,11 @@ public:
 	LevelMapState(Context* context);
 	~LevelMapState();
 
-	virtual bool Initialize();
-	virtual void Begin();
-	virtual void End();
+	bool Initialize() override;
+	void Begin() override;
+	void End() override;
 
-    virtual void OnAccessMenuOpenFrame(bool state);
+    void OnAccessMenuOpenFrame(bool state) override;
 
 	void StartLevel();
 	void StartState(int action);

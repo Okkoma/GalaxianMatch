@@ -173,8 +173,9 @@ public:
 
     // callbacks for Peering (threadable)
     void OnDataChannel(std::shared_ptr<rtc::DataChannel> dataChannel);
+#ifndef __EMSCRIPTEN__
     void OnTrack(std::shared_ptr<rtc::Track> track);
-
+#endif
     void OnLocalDescription(rtc::Description description);
     void OnLocalCandidate(rtc::Candidate candidate);
 

@@ -66,8 +66,8 @@ public:
 
     static void RegisterObject(Context* context);
 
-    virtual void OnShowPopup();
-    virtual void OnHidePopup();
+    void OnShowPopup() override;
+    void OnHidePopup() override;
 };
 
 class UIDialog : public Object

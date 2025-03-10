@@ -20,9 +20,9 @@ public:
     SplashState(Context* context);
     ~SplashState();
 
-    virtual bool Initialize();
-    virtual void Begin();
-    virtual void End();
+    bool Initialize() override;
+    void Begin() override;
+    void End() override;
 
 protected:
     void Create();

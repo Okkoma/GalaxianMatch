@@ -33,12 +33,12 @@ public:
 	PlayState(Context* context);
 	~PlayState();
 
-	virtual bool Initialize();
-	virtual void Begin();
-	virtual void End();
-    virtual void Launch();
+	bool Initialize() override;
+	void Begin() override;
+	void End() override;
+    void Launch() override;
 
-    virtual void OnAccessMenuOpenFrame(bool state);
+    void OnAccessMenuOpenFrame(bool state) override;
 
 #if defined(TEST_NETWORK)
     // Network Callbacks

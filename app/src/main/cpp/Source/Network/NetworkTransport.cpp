@@ -55,12 +55,14 @@ void NetworkWebTransport::Connect(const String& adress, const String& type)
     // WebSocket Initialization
     if (!websocket_)
     {
+    #ifndef __EMSCRIPTEN__
         // set the configuration
         rtc::WebSocket::Configuration config = {};
         config.disableTlsVerification = true;
-
         websocket_ = std::make_shared<rtc::WebSocket>(config);
-
+    #else
+        websocket_ = std::make_shared<rtc::WebSocket>();
+    #endif
         // set the callbacks
         websocket_->onOpen    (std::bind(&NetworkWebTransport::OnOpen, this));
         websocket_->onClosed  (std::bind(&NetworkWebTransport::OnClosed, this));
@@ -390,8 +392,9 @@ void NetworkPeerTransport::CreatePeerConnection(bool addchanels)
         peerconnection_->onLocalCandidate       (std::bind(&NetworkPeerTransport::OnLocalCandidate, this, std::placeholders::_1));
 
         peerconnection_->onDataChannel          (std::bind(&NetworkPeerTransport::OnDataChannel, this, std::placeholders::_1));
+    #ifndef __EMSCRIPTEN__
         peerconnection_->onTrack                (std::bind(&NetworkPeerTransport::OnTrack, this, std::placeholders::_1));
-
+    #endif
         peerconnection_->onStateChange          (std::bind(&NetworkPeerTransport::OnStateChange, this, std::placeholders::_1));
         peerconnection_->onGatheringStateChange (std::bind(&NetworkPeerTransport::OnGatheringStateChange, this, std::placeholders::_1));
         peerconnection_->onSignalingStateChange (std::bind(&NetworkPeerTransport::OnSignalingStateChange, this, std::placeholders::_1));
@@ -486,16 +489,17 @@ void NetworkPeerTransport::OnDataChannel(std::shared_ptr<rtc::DataChannel> dc)
     std::cout << "OnDataChannel: " << dc->label().c_str() << std::endl;
 }
 
+#ifndef __EMSCRIPTEN__
 // When Receiving a New Track from Remote peer
 void NetworkPeerTransport::OnTrack(std::shared_ptr<rtc::Track> track)
 {
 
-
 }
+#endif
 
 void NetworkPeerTransport::OnStateChange(rtc::PeerConnection::State state)
 {
-    std::cout << "NetworkPeerTransport State: " << state << std::endl;
+    std::cout << "NetworkPeerTransport State: " << (int)state << std::endl;
 
     if (peerconnection_->state() == rtc::PeerConnection::State::Connected)
     {
@@ -518,12 +522,12 @@ void NetworkPeerTransport::OnStateChange(rtc::PeerConnection::State state)
 
 void NetworkPeerTransport::OnGatheringStateChange(rtc::PeerConnection::GatheringState state)
 {
-    std::cout << "NetworkPeerTransport Gathering State: " << state << std::endl;
+    std::cout << "NetworkPeerTransport Gathering State: " << (int)state << std::endl;
 }
 
 void NetworkPeerTransport::OnSignalingStateChange(rtc::PeerConnection::SignalingState state)
 {
-    std::cout << "NetworkPeerTransport SignalingState State: " << state << std::endl;
+    std::cout << "NetworkPeerTransport SignalingState State: " << (int)state << std::endl;
 }
 
 

@@ -65,13 +65,13 @@ public:
     void SetInitialVertexBufferSize(unsigned size) { initialVertexBufferSize_ = size; }
 
     /// Process octree raycast. May be called from a worker thread.
-    virtual void ProcessRayQuery(const RayOctreeQuery& query, PODVector<RayQueryResult>& results);
+    void ProcessRayQuery(const RayOctreeQuery& query, PODVector<RayQueryResult>& results) override;
     /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly re-entrantly.
-    virtual void UpdateBatches(const FrameInfo& frame);
+    void UpdateBatches(const FrameInfo& frame) override;
     /// Prepare geometry for rendering. Called from a worker thread if possible (no GPU update.)
-    virtual void UpdateGeometry(const FrameInfo& frame);
+    void UpdateGeometry(const FrameInfo& frame) override;
     /// Return whether a geometry update is necessary, and if it can happen in a worker thread.
-    virtual UpdateGeometryType GetUpdateGeometryType();
+    UpdateGeometryType GetUpdateGeometryType() override;
 
     /// Add Drawable2D.
     void AddDrawable(Drawable2D* drawable);
@@ -91,7 +91,7 @@ public:
 
 private:
     /// Recalculate the world-space bounding box.
-    virtual void OnWorldBoundingBoxUpdate();
+    void OnWorldBoundingBoxUpdate() override;
     /// Load default material for a texture and blend mode from material directory
     SharedPtr<Material> LoadDefaultMaterial(Texture2D* texture, BlendMode blendMode);
 

@@ -22,11 +22,11 @@ public:
 	MenuState(Context* context);
 	~MenuState();
 
-	virtual bool Initialize();
-	virtual void Begin();
-	virtual void End();
+	bool Initialize() override;
+	void Begin() override;
+	void End() override;
 
-    virtual void OnAccessMenuOpenFrame(bool state);
+    void OnAccessMenuOpenFrame(bool state) override;
 
     void GoLevel(int level);
 	void BeginNewLevel(GameLevelMode mode=LVL_NEW, unsigned seed=0);

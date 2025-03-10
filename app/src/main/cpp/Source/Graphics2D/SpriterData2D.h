@@ -292,7 +292,7 @@ struct MainlineKey : public TimeKey
     MainlineKey();
     virtual ~MainlineKey();
 
-    virtual bool Load(const pugi::xml_node& node);
+    bool Load(const pugi::xml_node& node) override;
 
     void Reset();
 
@@ -327,8 +327,8 @@ struct SpatialTimelineKey : TimelineKey
 
     SpatialTimelineKey(Timeline* timeline);
     virtual ~SpatialTimelineKey();
-    virtual bool Load(const pugi::xml_node& node);
-    virtual void Interpolate(const TimelineKey& other, float t);
+    bool Load(const pugi::xml_node& node) override;
+    void Interpolate(const TimelineKey& other, float t) override;
     SpatialTimelineKey& operator=(const SpatialTimelineKey& rhs);
 };
 
@@ -339,10 +339,10 @@ struct BoneTimelineKey : SpatialTimelineKey
     BoneTimelineKey(Timeline* timeline);
     virtual ~BoneTimelineKey();
 
-    virtual TimelineKey* Clone() const;
-    virtual void Copy(TimelineKey* copy) const;
-    virtual bool Load(const pugi::xml_node& node);
-    virtual void Interpolate(const TimelineKey& other, float t);
+    TimelineKey* Clone() const override;
+    void Copy(TimelineKey* copy) const override;
+    bool Load(const pugi::xml_node& node) override;
+    void Interpolate(const TimelineKey& other, float t) override;
     BoneTimelineKey& operator=(const BoneTimelineKey& rhs);
 };
 
@@ -364,10 +364,10 @@ struct SpriteTimelineKey : SpatialTimelineKey
     SpriteTimelineKey(Timeline* timeline);
     virtual ~SpriteTimelineKey();
 
-    virtual TimelineKey* Clone() const;
-    virtual void Copy(TimelineKey* copy) const;
-    virtual bool Load(const pugi::xml_node& node);
-    virtual void Interpolate(const TimelineKey& other, float t);
+    TimelineKey* Clone() const override;
+    void Copy(TimelineKey* copy) const override;
+    bool Load(const pugi::xml_node& node) override;
+    void Interpolate(const TimelineKey& other, float t) override;
     SpriteTimelineKey& operator=(const SpriteTimelineKey& rhs);
 };
 
@@ -383,10 +383,10 @@ struct BoxTimelineKey : SpatialTimelineKey
     BoxTimelineKey(Timeline* timeline);
     virtual ~BoxTimelineKey();
 
-    virtual TimelineKey* Clone() const;
-    virtual void Copy(TimelineKey* copy) const;
-    virtual bool Load(const pugi::xml_node& node);
-    virtual void Interpolate(const TimelineKey& other, float t);
+    TimelineKey* Clone() const override;
+    void Copy(TimelineKey* copy) const override;
+    bool Load(const pugi::xml_node& node) override;
+    void Interpolate(const TimelineKey& other, float t) override;
     BoxTimelineKey& operator=(const BoxTimelineKey& rhs);
 };
 
@@ -400,10 +400,10 @@ struct PointTimelineKey : SpatialTimelineKey
     PointTimelineKey(Timeline* timeline);
     virtual ~PointTimelineKey();
 
-    virtual TimelineKey* Clone() const;
-    virtual void Copy(TimelineKey* copy) const;
-    virtual bool Load(const pugi::xml_node& node);
-    virtual void Interpolate(const TimelineKey& other, float t);
+    TimelineKey* Clone() const override;
+    void Copy(TimelineKey* copy) const override;
+    bool Load(const pugi::xml_node& node) override;
+    void Interpolate(const TimelineKey& other, float t) override;
     PointTimelineKey& operator=(const PointTimelineKey& rhs);
 };
 

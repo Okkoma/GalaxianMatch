@@ -60,7 +60,7 @@ public:
     void SetSpeedFactor(float speedfactor);
     float GetSpeedFactor() const { return speedfactor_; }
 
-    void ApplyAttributes();
+    void ApplyAttributes() override;
 
     bool UpdateRefs(Scene* scene);
 
@@ -108,7 +108,7 @@ public:
     void SetAnimatedObjects(const String& value);
     String GetAnimatedObjects() const;
 
-    void ApplyAttributes();
+    void ApplyAttributes() override;
 
     static float GetDuration(unsigned key, SceneAction2D* action, SceneObject2D* object, float maxduration=MAXDURATION);
     static Vector3 GetPosition(unsigned key, SceneAction2D* action, SceneObject2D* object, float time, bool travelupdate=true);
@@ -172,11 +172,11 @@ public:
     static void RegisterObject(Context* context);
 
     /// Load from XML data. Return true if successful.
-    bool LoadXML(const XMLElement& source);
+    bool LoadXML(const XMLElement& source) override;
     /// Save as XML data. Return true if successful.
-    bool SaveXML(XMLElement& dest) const;
+    bool SaveXML(XMLElement& dest) const override;
 
-    virtual void ApplyAttributes();
+    void ApplyAttributes() override;
 
     void Update(float time);
     bool UpdateRefs(bool setPosition=false);
@@ -212,20 +212,20 @@ public:
     /// Register object factory.
     static void RegisterObject(Context* context);
 
-    virtual bool LoadXML(const XMLElement& source, bool setInstanceDefault = false, bool applyAttr = true);
+    bool LoadXML(const XMLElement& source) override;
     /// Save as XML data. Return true if successful.
-    virtual bool SaveXML(XMLElement& dest) const;
+    bool SaveXML(XMLElement& dest) const override;
 
-	virtual void OnSetEnabled();
+	void OnSetEnabled() override;
 
 	void SetRunning(bool state);
 
     /// Called before the first update. At this point all other components of the node should exist. Will also be called if update events are not wanted; in that case the event is immediately unsubscribed afterward.
-    virtual void DelayedStart();
+    void DelayedStart() override;
     /// Called when the component is detached from a scene node, usually on destruction. Note that you will no longer have access to the node and scene at that point.
-    virtual void Stop();
+    void Stop() override;
     /// Called on scene update, variable timestep.
-    virtual void Update(float timeStep);
+    void Update(float timeStep) override;
 
     void SetTime(float time);
     float GetTime() const { return elapsedTime_; }
@@ -255,7 +255,7 @@ public:
     Serializable* GetTimeLineActionPath(unsigned line, unsigned index) const;
 
 protected:
-   virtual void OnMarkedDirty(Node* node);
+   void OnMarkedDirty(Node* node) override;
 
 private:
     Timer timer_;

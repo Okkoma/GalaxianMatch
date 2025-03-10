@@ -1931,6 +1931,8 @@ void MatchGridInfo::Net_UpdateControl()
             ResetSelection();
         }
         break;
+    case NETCMD_END:
+        break;
     }
 
     netReceivedCommands_.PopFront();

@@ -33,11 +33,11 @@ public:
     static bool GetCinematicParts(int mode, int firstlevel, int selectedlevel);
     static void LaunchCinematicParts(int mode, const String& nextState=String::EMPTY);
 
-	virtual bool Initialize();
-	virtual void Begin();
-	virtual void End();
+	bool Initialize() override;
+	void Begin() override;
+	void End() override;
 
-	virtual void OnAccessMenuOpenFrame(bool state);
+	void OnAccessMenuOpenFrame(bool state) override;
 
 	void AddSceneFileToPlay(const String& filename);
     void ChangeCameraTo(Node* node);

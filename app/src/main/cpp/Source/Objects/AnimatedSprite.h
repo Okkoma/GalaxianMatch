@@ -29,9 +29,9 @@ public:
     void SwitchIndependentUpdate();
     void SetScale2D(float scale);
 
-    virtual void Update(float timeStep);
+    void Update(float timeStep) override;
 
-    virtual void GetBatches(PODVector<UIBatch>& batches, PODVector<float>& vertexData, const IntRect& currentScissor);
+    void GetBatches(PODVector<UIBatch>& batches, PODVector<float>& vertexData, const IntRect& currentScissor) override;
 
     ResourceRef GetAnimationSetAttr() const { return animatedSprite2D_.GetAnimationSetAttr() ; }
     const String& GetEntityName() const { return animatedSprite2D_.GetEntityName(); }

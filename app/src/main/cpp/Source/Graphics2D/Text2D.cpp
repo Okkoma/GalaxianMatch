@@ -466,6 +466,9 @@ void Text2D::UpdateTextBatches()
         case HA_RIGHT:
             offset.x_ -= (float)text_.GetWidth();
             break;
+
+        case HA_CUSTOM:
+            break;
         }
 
         switch (text_.GetVerticalAlignment())
@@ -480,6 +483,9 @@ void Text2D::UpdateTextBatches()
         case VA_BOTTOM:
             offset.y_ -= (float)text_.GetHeight();
             break;
+
+        case VA_CUSTOM:
+            break;            
         }
     }
 

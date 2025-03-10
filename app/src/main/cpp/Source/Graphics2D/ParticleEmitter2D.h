@@ -67,7 +67,7 @@ public:
     static void RegisterObject(Context* context);
 
     /// Handle enabled/disabled state change.
-    virtual void OnSetEnabled();
+    void OnSetEnabled() override;
 
     /// Set particle effect.
     void SetEffect(ParticleEffect2D* effect);
@@ -120,13 +120,13 @@ public:
 
 private:
     /// Handle scene being assigned.
-    virtual void OnSceneSet(Scene* scene);
+    void OnSceneSet(Scene* scene) override;
     /// Recalculate the world-space bounding box.
-    virtual void OnWorldBoundingBoxUpdate();
+    void OnWorldBoundingBoxUpdate() override;
     /// Handle draw order changed.
-    virtual void OnDrawOrderChanged();
+    void OnDrawOrderChanged() override;
     /// Update source batches.
-    virtual void UpdateSourceBatches();
+    void UpdateSourceBatches() override;
     /// Update material.
     void UpdateMaterial();
     /// Handle scene post update.

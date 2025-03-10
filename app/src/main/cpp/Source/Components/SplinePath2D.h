@@ -25,9 +25,9 @@ public:
     static void RegisterObject(Context* context);
 
     /// Apply Attributes to the SplinePath.
-    void ApplyAttributes();
+    void ApplyAttributes() override;
     /// Draw the Debug Geometry.
-    void DrawDebugGeometry(DebugRenderer* debug, bool depthTest);
+    void DrawDebugGeometry(DebugRenderer* debug, bool depthTest) override;
 
     /// Add a Vector2 to the SplinePath as a Control Point.
     void AddPoint(const Vector2& point, unsigned index = M_MAX_UNSIGNED);
@@ -71,9 +71,9 @@ public:
 
 protected:
     /// Listener to manage Control Point movement.
-    void OnMarkedDirty(Node* point);
+    void OnMarkedDirty(Node* point) override;
     /// Listener to manage Control Point enabling.
-    void OnNodeSetEnabled(Node* point);
+    void OnNodeSetEnabled(Node* point) override;
 
 private:
     /// Update the Node IDs of the Control Points.

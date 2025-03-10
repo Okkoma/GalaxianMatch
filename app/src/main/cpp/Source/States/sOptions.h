@@ -20,9 +20,9 @@ public:
 	OptionState(Context* context);
 	~OptionState();
 
-	virtual bool Initialize();
-	virtual void Begin();
-	virtual void End();
+	bool Initialize() override;
+	void Begin() override;
+	void End() override;
 
     bool IsFrameOpened() const { return framed_; }
 	bool IsParameterOpened() const;

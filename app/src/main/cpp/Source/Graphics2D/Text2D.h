@@ -25,9 +25,9 @@ public:
     static void RegisterObject(Context* context);
 
     /// Apply attribute changes that can not be applied immediately.
-    virtual void ApplyAttributes();
+    void ApplyAttributes() override;
     /// Handle enabled/disabled state change.
-    virtual void OnSetEnabled();
+    void OnSetEnabled() override;
 
     /// Set font by looking from resource cache by name and font size. Return true if successful.
     bool SetFont(const String& fontName, int size = DEFAULT_FONT_SIZE);
@@ -147,16 +147,16 @@ public:
     const Color& GetColorAttr() const { return text_.GetColorAttr(); }
 
     /// Only Used by Renderer2D
-    virtual const BoundingBox& GetWorldBoundingBox2D();
+    const BoundingBox& GetWorldBoundingBox2D() override;
 
 protected:
 
     /// Recalculate the world-space bounding box.
-    virtual void OnWorldBoundingBoxUpdate();
+    void OnWorldBoundingBoxUpdate() override;
     /// Handle draw order changed.
-    virtual void OnDrawOrderChanged();
+    void OnDrawOrderChanged() override;
     /// Update source batches.
-    virtual void UpdateSourceBatches();
+    void UpdateSourceBatches() override;
 
     void HandleChangeLanguage(StringHash eventType, VariantMap& eventData);
 

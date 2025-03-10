@@ -14,7 +14,7 @@ class TicTacToeLogic : public BossLogic
 
         static void RegisterObject(Context* context);
 
-        virtual void OnSetEnabled();
+        void OnSetEnabled() override;
 
     protected :
         void StartGame(char firstplayer);
@@ -22,8 +22,8 @@ class TicTacToeLogic : public BossLogic
         void OnBossStateChange(StringHash eventType, VariantMap& eventData);
         void HandleGame(StringHash eventType, VariantMap& eventData);
 
-        virtual void SubscribeToEvents();
-        virtual void UnsubscribeFromEvents();
+        void SubscribeToEvents();
+        void UnsubscribeFromEvents();
 
     private :
         bool ticTacToeMode_;

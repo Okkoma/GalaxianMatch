@@ -48,12 +48,12 @@ class BlastLogic : public Component
         void Start();
         void Stop();
 
-        virtual void OnSetEnabled();
+        void OnSetEnabled() override;
 
         void OnBeginContact(StringHash eventType, VariantMap& eventData);
 
     protected :
-        virtual void OnNodeSet(Node* node);
+        void OnNodeSet(Node* node) override;
 
     private :
 

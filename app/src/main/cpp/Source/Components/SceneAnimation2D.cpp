@@ -975,7 +975,7 @@ void SceneAnimation2D::RegisterObject(Context* context)
     context->RegisterFactory<SceneAnimation2D>();
 }
 
-bool SceneAnimation2D::LoadXML(const XMLElement& source, bool setInstanceDefault, bool applyAttr)
+bool SceneAnimation2D::LoadXML(const XMLElement& source)
 {
 //    if (!Serializable::LoadXML(source, setInstanceDefault, applyAttr))
     if (!Serializable::LoadXML(source))
