@@ -103,17 +103,18 @@ void SplashState::ResizeScreen()
         sprite->SetHotSpot(sprite->GetSize()/2);
         sprite->SetPosition(width / 2.f, height / 2.f);
     }
-    // Set Urho Logo
+    // Set U3d Logo
     sprite = sprites_[3];
     if (sprite->GetSize().x_ != (int)(width * 0.1f) || sprite->GetSize().y_ != (int)(height* 0.1f))
     {
+        const float borderx = width * 0.05f;
         texture = static_cast<Texture2D*>(sprite->GetTexture());
         float medsize = (width +  height) / 2.f;
-        IntVector2 size(medsize*0.15f, medsize*0.15f);
+        IntVector2 size(medsize*0.15f + borderx, medsize*0.15f);
         GameHelpers::ApplySizeRatio(texture->GetWidth(), texture->GetHeight(), size);
         sprite->SetSize(size);
         sprite->SetHotSpot(size.x_ / 2.f, size.y_ / 2.f);
-        sprite->SetPosition(width - (float)size.x_/2.f, height - (float)size.y_/2.f);
+        sprite->SetPosition(width - (float)size.x_/2.f - borderx, height - (float)size.y_/2.f);
     }
 
     for (unsigned i=0; i < sprites_.Size(); i++)
@@ -134,7 +135,7 @@ void SplashState::Create()
     SharedPtr<Texture2D> backtexture   = cache->GetTempResource<Texture2D>("Textures/splashback.webp");
     SharedPtr<Texture2D> splashtexture = cache->GetTempResource<Texture2D>("Textures/splasheffect.webp");
     SharedPtr<Texture2D> okkotexture   = cache->GetTempResource<Texture2D>("Textures/okkologo.webp");
-    SharedPtr<Texture2D> urhotexture   = cache->GetTempResource<Texture2D>("Textures/urho3dlogo.webp");
+    SharedPtr<Texture2D> urhotexture   = cache->GetTempResource<Texture2D>("Textures/u3dlogo.png");
 
     for (unsigned i=0; i < sprites_.Size(); ++i)
         ui->GetRoot()->RemoveChild(sprites_[i]);
@@ -224,7 +225,7 @@ void SplashState::Create()
         objectAnimation->AddAttributeAnimation("Opacity", alphaAnimation, WM_ONCE);
         sprites_[2]->SetObjectAnimation(objectAnimation);
     }
-    // Set Urho3D Logo animation
+    // Set U3D Logo animation
     if (urhotexture)
     {
         SharedPtr<ObjectAnimation> objectAnimation(new ObjectAnimation(context_));
