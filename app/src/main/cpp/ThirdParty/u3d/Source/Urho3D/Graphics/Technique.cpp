@@ -39,7 +39,7 @@ namespace Urho3D
 
 extern const char* cullModeNames[];
 
-const char* blendModeNames[] =
+URHO3D_API const char* blendModeNames[] =
 {
     "replace",
     "add",

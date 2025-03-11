@@ -39,7 +39,7 @@
 namespace Urho3D
 {
 
-const char* horizontalAlignments[] =
+URHO3D_API const char* horizontalAlignments[] =
 {
     "Left",
     "Center",
@@ -48,7 +48,7 @@ const char* horizontalAlignments[] =
     nullptr
 };
 
-const char* verticalAlignments[] =
+URHO3D_API const char* verticalAlignments[] =
 {
     "Top",
     "Center",

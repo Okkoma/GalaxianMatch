@@ -4,8 +4,10 @@
 
 #include <Urho3D/Math/MathDefs.h>
 
-#include <PugiXml/pugixml.hpp>
 #include <cstring>
+
+#define PUGIXML_HEADER_ONLY
+#include <PugiXml/pugixml.hpp>
 
 #include "SpriterData2D.h"
 

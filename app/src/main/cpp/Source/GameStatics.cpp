@@ -53,6 +53,8 @@
 #include <Urho3D/Physics2D/PhysicsWorld2D.h>
 
 #include <SDL/SDL.h>
+
+#define PUGIXML_HEADER_ONLY
 #include <Urho3D/ThirdParty/PugiXml/pugixml.hpp>
 
 #include "GameAttributes.h"

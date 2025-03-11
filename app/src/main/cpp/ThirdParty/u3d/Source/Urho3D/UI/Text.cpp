@@ -39,7 +39,7 @@
 namespace Urho3D
 {
 
-const char* textEffects[] =
+URHO3D_API const char* textEffects[] =
 {
     "None",
     "Shadow",
