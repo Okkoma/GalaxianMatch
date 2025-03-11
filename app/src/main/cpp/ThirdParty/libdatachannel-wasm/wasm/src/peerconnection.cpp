@@ -148,6 +148,8 @@ PeerConnection::PeerConnection(const Configuration &config) {
 
 PeerConnection::~PeerConnection() { rtcDeletePeerConnection(mId); }
 
+void PeerConnection::close() { rtcDeletePeerConnection(mId); }
+
 PeerConnection::State PeerConnection::state() const { return mState; }
 
 PeerConnection::GatheringState PeerConnection::gatheringState() const { return mGatheringState; }

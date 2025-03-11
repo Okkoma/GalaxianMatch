@@ -64,6 +64,9 @@ public:
 	PeerConnection();
 	PeerConnection(const Configuration &config);
 	~PeerConnection();
+	
+	// C.VILLE : add close
+	void close();
 
 	State state() const;
 	GatheringState gatheringState() const;
