@@ -1966,6 +1966,14 @@ macro (_setup_target)
     if (${TARGET_NAME}_HEADER_PATHNAME)
         enable_pch (${${TARGET_NAME}_HEADER_PATHNAME})
     endif ()
+    
+    # on MSVC with {fmt} header_only, we need to enable uni-code for Urho3D and targets dependents of Urho3D
+    if (MSVC)
+        if (${TARGET_NAME} STREQUAL Urho3D OR NOT IS_URHO3D)
+            target_compile_options (${TARGET_NAME} PUBLIC /utf-8)
+        endif ()
+    endif ()
+    
     # Extra compiler flags for Xcode which are dynamically changed based on active arch in order to support Mach-O universal binary targets
     # We don't add the ABI flag for Xcode because it automatically passes '-arch i386' compiler flag when targeting 32 bit which does the same thing as '-m32'
     if (XCODE)
