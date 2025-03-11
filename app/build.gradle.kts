@@ -35,8 +35,8 @@ android {
     defaultConfig {
         minSdk = 19
         targetSdk = 34
-        versionCode = 33
-        versionName = "1.033"
+        versionCode = 34
+        versionName = "1.034"
         multiDexEnabled = true
 
 //        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
@@ -46,7 +46,8 @@ android {
                     System.getenv("ANDROID_CCACHE")?.let { add("-D ANDROID_CCACHE=$it") }
                     arguments += listOf("-D URHO3D_LIB_TYPE=STATIC", "-D URHO3D_ANGELSCRIPT=0", "-D URHO3D_LUA=0", "-D URHO3D_LUAJIT=0")
                     arguments += listOf("-D URHO3D_NETWORK=0")
-                    arguments += listOf("-D WITH_ADS=1", "-D WITH_CINEMATICS=1", "-D WITH_LOOPTESTS=0")               
+                    arguments += listOf("-D SPACEMATCH_WITH_DEMOMODE=0", "-D SPACEMATCH_WITH_TIPS=0", "-D SPACEMATCH_WITH_ADS=1", 
+                                        "-D SPACEMATCH_WITH_CINEMATICS=1", "-D SPACEMATCH_WITH_LOOPTESTS=0" , "-D SPACEMATCH_WITH_NETWORK=0")                               
                 }
 
                 // Sets a flag to enable format macro constants for the C compiler.
@@ -121,12 +122,16 @@ android {
     }
 }
 
-val urhoGlDebugImpl by configurations.creating { isCanBeResolved = true }
-val urhoGlReleaseImpl by configurations.creating { isCanBeResolved = true }
+// We build urho3d as submodule:
+// We don't need to link anymore to a prebuild library 
+// => remove the dependencies
+
+//val urhoGlDebugImpl by configurations.creating { isCanBeResolved = true }
+//val urhoGlReleaseImpl by configurations.creating { isCanBeResolved = true }
 
 dependencies {
-    urhoGlDebugImpl("io.urho3d:urho3d-lib-glDebug:Unversioned-SM")
-    urhoGlReleaseImpl("io.urho3d:urho3d-lib-glRelease:Unversioned-SM")
+    //urhoGlDebugImpl("io.urho3d:urho3d-lib-glDebug:Unversioned-SM")
+    //urhoGlReleaseImpl("io.urho3d:urho3d-lib-glRelease:Unversioned-SM")
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
     implementation("androidx.core:core-ktx:1.3.2")
@@ -152,27 +157,27 @@ dependencies {
 
 // this is for compiling the java code (same java code for Gl or Vk), not for library dependency
 // just be sure that the urho version (Gl or Vk) that it's used here, is already in .m2 local repository
-configurations.debugImplementation.get().extendsFrom(urhoGlDebugImpl)
-configurations.releaseImplementation.get().extendsFrom(urhoGlReleaseImpl)
+//configurations.debugImplementation.get().extendsFrom(urhoGlDebugImpl)
+//configurations.releaseImplementation.get().extendsFrom(urhoGlReleaseImpl)
 
-afterEvaluate {
-    android.applicationVariants.forEach { component ->
-        val config = component.name.capitalize()
-        val unzipTaskName = "unzipJni$config"
-        tasks {
-            "generateJsonModel$config" {
-                dependsOn(unzipTaskName)
-            }
-            register<Copy>(unzipTaskName) {
-                val aar = configurations["urho${config}Impl"].resolve()
-                    .first { it.name.startsWith("urho3d-lib") }
-                from(zipTree(aar))
-                include("urho3d/**")
-                android.externalNativeBuild.cmake.buildStagingDirectory?.let { into(it) }
-            }
-        }
-    }
-}
+//afterEvaluate {
+//    android.applicationVariants.forEach { component ->
+//        val config = component.name.capitalize()
+//        val unzipTaskName = "unzipJni$config"
+//        tasks {
+//            "generateJsonModel$config" {
+//                dependsOn(unzipTaskName)
+//            }
+//            register<Copy>(unzipTaskName) {
+//                val aar = configurations["urho${config}Impl"].resolve()
+//                    .first { it.name.startsWith("urho3d-lib") }
+//                from(zipTree(aar))
+//                include("urho3d/**")
+//                android.externalNativeBuild.cmake.buildStagingDirectory?.let { into(it) }
+//            }
+//        }
+//    }
+//}
 
 tasks {
     register<Delete>("cleanAll") {

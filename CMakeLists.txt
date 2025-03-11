@@ -6,44 +6,50 @@ project (SpaceMatch)
 set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/app/src/main/cpp/ThirdParty/u3d)
 #set (URHO3D_HOME " ")
 
-include (${CMAKE_SOURCE_DIR}/cmake/Urho3D.cmake)
+#include (${CMAKE_SOURCE_DIR}/cmake/Urho3D.cmake)
 
-# Default Options
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-	# Release build as default
-	set (CMAKE_BUILD_TYPE Release)
+set (CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
+include (UrhoCommon)
 
-	# Default installation folder
-  	set_property (CACHE CMAKE_INSTALL_PREFIX PROPERTY VALUE ${CMAKE_SOURCE_DIR}/exe)
-	
-	# On windows, use DirectX11 backend
-	if (WIN32)
-	    set (URHO3D_D3D11 TRUE)
-	endif ()  
-endif()
+# For Android, Options are made in app/build.gradle.kts
+if (NOT ANDROID)
+    # Default Options
+    if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+	    # Release build as default
+	    set (CMAKE_BUILD_TYPE Release)
 
-# Disable libdatachannel media,examples and tests
-set (NO_MEDIA ON CACHE STRING "Disable media transport support" FORCE)
-set (NO_EXAMPLES ON CACHE STRING "Disable examples" FORCE)
-set (NO_TESTS ON CACHE STRING "Disable tests build" FORCE)
-mark_as_advanced (FORCE NO_MEDIA NO_EXAMPLES NO_TESTS)
+	    # Default installation folder
+      	set_property (CACHE CMAKE_INSTALL_PREFIX PROPERTY VALUE ${CMAKE_SOURCE_DIR}/exe)
+	    
+	    # On windows, use DirectX11 backend
+	    if (WIN32)
+	        set (URHO3D_D3D11 TRUE)
+	    endif ()  
+    endif()
 
-# see Urho3D engine options in cmake/Modules/UrhoCommon.cmake
+    # Disable libdatachannel media,examples and tests
+    set (NO_MEDIA ON CACHE STRING "Disable media transport support" FORCE)
+    set (NO_EXAMPLES ON CACHE STRING "Disable examples" FORCE)
+    set (NO_TESTS ON CACHE STRING "Disable tests build" FORCE)
+    mark_as_advanced (FORCE NO_MEDIA NO_EXAMPLES NO_TESTS)
 
-# Game options
-option (SPACEMATCH_WITH_DEMOMODE "Enable Demo Mode : only the 3 first constellations are playable" TRUE)
-option (SPACEMATCH_WITH_TIPS "Enable Keyboard Tips" TRUE)
-option (SPACEMATCH_WITH_ADS "Enable Android Ads" FALSE)
-option (SPACEMATCH_WITH_CINEMATICS "Enable Story Animations" TRUE)
-option (SPACEMATCH_WITH_LOOPTESTS "Enable Tests Loop on Android" FALSE)
-# Dev Game Options
-option (SPACEMATCH_WITH_NETWORK "Enable Network via websocket" TRUE)
-# Dev Test
-option (SPACEMATCH_WITH_TEST "Enable Test" FALSE)
+    # see Urho3D engine options in cmake/Modules/UrhoCommon.cmake
 
-if (SPACEMATCH_WITH_TEST)
-    include(CTest)
-    enable_testing()
+    # Game options
+    option (SPACEMATCH_WITH_DEMOMODE "Enable Demo Mode : only the 3 first constellations are playable" TRUE)
+    option (SPACEMATCH_WITH_TIPS "Enable Keyboard Tips" TRUE)
+    option (SPACEMATCH_WITH_ADS "Enable Android Ads" FALSE)
+    option (SPACEMATCH_WITH_CINEMATICS "Enable Story Animations" TRUE)
+    option (SPACEMATCH_WITH_LOOPTESTS "Enable Tests Loop on Android" FALSE)
+    # Dev Game Options
+    option (SPACEMATCH_WITH_NETWORK "Enable Network via websocket" TRUE)
+    # Dev Test
+    option (SPACEMATCH_WITH_TEST "Enable Test" FALSE)
+
+    if (SPACEMATCH_WITH_TEST)
+        include(CTest)
+        enable_testing()
+    endif ()
 endif ()
 
 if (URHO3D_HOME)
