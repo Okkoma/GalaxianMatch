@@ -47,15 +47,15 @@ int Localization::GetLanguageIndex(const String& language) const
     if (language.Empty())
     {
         URHO3D_LOGWARNING("Localization::GetLanguageIndex(language): language name is empty");
-        return 0;
+        return -1;
     }
     if (languages_.Empty())
     {
         URHO3D_LOGWARNING("Localization::GetLanguageIndex(language): no loaded languages");
-        return 0;
+        return -1;
     }
     const auto it = languages_.Find(language);
-    return it != languages_.End() ? it-languages_.Begin() : 0;
+    return it != languages_.End() ? it-languages_.Begin() : -1;
 }
 
 const String& Localization::GetLanguage() const

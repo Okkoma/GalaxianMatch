@@ -225,7 +225,7 @@ void Game::Setup()
             config.splashviewed_ = true;
 
         config.networkMode_ = "local";
-        config.language_ = 0;
+        config.language_ = -1;
         config.touchEnabled_ = false;
         config.forceTouch_ = false;
 
@@ -452,6 +452,10 @@ void Game::Start()
 	// Start Managers
     GameStatics::Start();
 
+    // Only set language after loading gamestate (done in GameStatics::Start)
+    // TODO : Emscripten update this later ... so maybe create an handle for all the cases
+    SetupLanguage();
+
     GameStatics::playerState_->musicEnabled_ = (int)extraConfig.musicEnabled_;
     GameStatics::playerState_->soundEnabled_ = (int)extraConfig.soundEnabled_;
 
@@ -512,6 +516,7 @@ void Game::Stop()
     /// GAME EXIT
 }
 
+
 void Game::SetupDirectories()
 {
     GameConfig* config = &GameStatics::gameConfig_;
@@ -554,6 +559,33 @@ void Game::SetupDirectories()
     config->appDir_ = fs->GetProgramDir();
 
     URHO3D_LOGINFOF("Game() - SetupDirectories : saveDir_=%s appDir_=%s ... OK !", saveDir.CString(), config->appDir_.CString());
+}
+
+void Game::SetupLanguage()
+{
+	Localization* l10n = GetSubsystem<Localization>();
+
+    // Load Localization files
+	l10n->LoadJSONFile("Texts/UI_messages.json");
+	l10n->LoadJSONFile("Texts/UI_dialogues.json");
+
+	// Auto-Detect local language
+    int lang = GameStatics::playerState_->language_;    
+    if (lang == -1)
+	{        
+        SDL_Locale* locale = SDL_GetPreferredLocales();
+        if (locale)
+        {
+            lang = l10n->GetLanguageIndex(locale->language);
+            URHO3D_LOGINFOF("Game - SetupLanguage : local language=%s index=%d", locale->language, lang);
+        }
+    }
+
+    // Default to en
+    GameStatics::playerState_->language_ = Clamp(lang, 0, l10n->GetNumLanguages()-1);
+    l10n->SetLanguage(GameStatics::playerState_->language_);
+
+    URHO3D_LOGINFOF("Game - SetupLanguage : entry langindex=%d - output language=%s(%d)", lang, l10n->GetLanguage().CString(), l10n->GetLanguageIndex());
 }
 
 void Game::SetupControllers()
@@ -649,21 +681,6 @@ void Game::SetupSubSystems()
 {
     GameConfig* config = &GameStatics::gameConfig_;
 
-    // Set Localization
-	Localization* l10n = GetSubsystem<Localization>();
-	l10n->LoadJSONFile("Texts/UI_messages.json");
-	l10n->LoadJSONFile("Texts/UI_dialogues.json");
-
-	// Set Local Language
-	SDL_Locale* locale = SDL_GetPreferredLocales();
-	if (locale)
-    {
-        int lang = l10n->GetLanguageIndex(String(SDL_GetPreferredLocales()->language));
-        if (lang != -1 && lang != GameStatics::playerState_->language_)
-            GameStatics::playerState_->language_ = lang;
-    }
-	l10n->SetLanguage(GameStatics::playerState_->language_);
-
 	UI* ui = GetSubsystem<UI>();
 	if (ui)
 	{
@@ -701,6 +718,7 @@ void Game::SetupSubSystems()
 
 	SubscribeToEvent(E_KEYDOWN, URHO3D_HANDLER(Game, HandleKeyDown));
 }
+
 
 void Game::ResetScreen()
 {

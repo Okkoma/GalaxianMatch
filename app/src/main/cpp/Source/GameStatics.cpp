@@ -153,7 +153,7 @@ Slot Slot::ITEMS_2COINS = Slot(COT::COINS, StringHash("coin2"), 2);
 /// Game Config
 
 GameConfig::GameConfig() :
-    language_(0),
+    language_(-1),
     frameLimiter_(0),
     entitiesLimiter_(-1),
     touchEnabled_(false),
@@ -776,6 +776,8 @@ static void UpdateGameState(GameStatics::GameState* gamestate, bool reset)
     
     GameStatics::CheckTimeForEarningStars();
     gamestate->UpdateStoryItems();
+
+    GameStatics::context_->GetSubsystem<Localization>()->SetLanguage(GameStatics::gameState_.pstate_.language_);
 }
 
 void GameStatics::GameState::Load()
@@ -1335,10 +1337,6 @@ void GameStatics::Start()
         gameState_.Reset();
 #endif
     }
-
-    // Change Localization after loading gameState_
-    Localization* l10n = context_->GetSubsystem<Localization>();
-	l10n->SetLanguage(GameStatics::playerState_->language_);
 
 #ifdef DUMP_SIMLATE_FIRST100LEVELS
     // Dump Leveling Simulation : 100first levels

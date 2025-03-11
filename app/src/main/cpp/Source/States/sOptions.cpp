@@ -679,6 +679,10 @@ void OptionState::WriteOptions()
     // Language
     list = uioptions_->GetChildStaticCast<DropDownList>(OPTION_LANGUAGE, true);
     if (list) GameStatics::playerState_->language_ = list->GetSelection();
+
+#if defined(ACTIVE_SERIALIZEGAMESTATE)
+    GameStatics::gameState_.Save();
+#endif
 }
 
 
