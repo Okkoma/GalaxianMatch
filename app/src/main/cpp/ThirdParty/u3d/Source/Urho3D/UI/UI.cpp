@@ -87,7 +87,7 @@ const float DEFAULT_TOOLTIP_DELAY = 0.5f;
 const int DEFAULT_DRAGBEGIN_DISTANCE = 5;
 const int DEFAULT_FONT_TEXTURE_MAX_SIZE = 2048;
 
-extern URHO3D_API const char* UI_CATEGORY = "UI";
+URHO3D_API const char* UI_CATEGORY = "UI";
 
 UI::UI(Context* context) :
     Object(context),

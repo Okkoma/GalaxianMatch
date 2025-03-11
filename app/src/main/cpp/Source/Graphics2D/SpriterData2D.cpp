@@ -6,8 +6,11 @@
 
 #include <cstring>
 
+#ifndef URHO3D_STATIC_DEFINE
 #define PUGIXML_HEADER_ONLY
+#endif
 #include <PugiXml/pugixml.hpp>
+
 
 #include "SpriterData2D.h"
 

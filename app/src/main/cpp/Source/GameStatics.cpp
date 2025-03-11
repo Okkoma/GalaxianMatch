@@ -54,8 +54,11 @@
 
 #include <SDL/SDL.h>
 
+#ifndef URHO3D_STATIC_DEFINE
 #define PUGIXML_HEADER_ONLY
-#include <Urho3D/ThirdParty/PugiXml/pugixml.hpp>
+#endif
+#include <PugiXml/pugixml.hpp>
+
 
 #include "GameAttributes.h"
 #include "GameRand.h"
