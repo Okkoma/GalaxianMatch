@@ -1866,6 +1866,8 @@ void MatchGridInfo::Net_UpdateControl()
 
     switch (cmd.cmd_)
     {
+    case NETCMD_START:
+        break;        
     case NETMATCH_SELECT:
         {
             ResetSelection();

@@ -95,7 +95,7 @@ void NetworkWebTransport::Disconnect(int waitMSec)
     if (websocket_ && websocket_->isOpen())
         websocket_->close();
     else
-        state_ == NetworkConnectionState::Disconnected;
+        state_ = NetworkConnectionState::Disconnected;
 
     newAvailablePeers_ = false;
     newConnectedPeers_ = false;
