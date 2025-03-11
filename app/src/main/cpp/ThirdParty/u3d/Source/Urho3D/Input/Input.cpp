@@ -159,7 +159,7 @@ EmscriptenInput::EmscriptenInput(Input* inputInst) :
     emscripten_set_focus_callback(EM_EMPTY, vInputInst, false, EmscriptenInput::HandleFocusChange);
     emscripten_set_focusin_callback(EM_EMPTY, vInputInst, false, EmscriptenInput::HandleFocusChange);
     emscripten_set_focusout_callback(EM_EMPTY, vInputInst, false, EmscriptenInput::HandleFocusChange);
-    
+
     // Handle SDL events
     SDL_AddEventWatch(EmscriptenInput::HandleSDLEvents, vInputInst);
 }

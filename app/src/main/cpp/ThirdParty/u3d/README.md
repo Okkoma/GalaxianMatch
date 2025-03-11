@@ -119,10 +119,10 @@ U3D uses the following third-party libraries:
 - AngelScript 2.35.1 WIP (http://www.angelcode.com/angelscript)
 - Boost 1.64.0 (http://www.boost.org) - only used for AngelScript generic bindings
 - Box2D 2.3.2 WIP (http://box2d.org)
-- Bullet 3.06+ (http://www.bulletphysics.org)
+- Bullet 3.26 (http://www.bulletphysics.org)
 - Civetweb 1.7 (https://github.com/civetweb/civetweb)
 - FreeType 2.8 (https://www.freetype.org)
-- {fmt} 9.1.0 (https://fmt.dev/)
+- {fmt} 11.1.4 (https://fmt.dev/)
 - GLEW 1.13.0 (http://glew.sourceforge.net)
 - SLikeNet (https://github.com/SLikeSoft/SLikeNet)
 - libcpuid 0.4.0+ (https://github.com/anrieff/libcpuid)

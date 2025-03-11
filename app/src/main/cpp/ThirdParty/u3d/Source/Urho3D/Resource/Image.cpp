@@ -1454,7 +1454,7 @@ bool Image::SaveWEBP(const String& fileName, float compression /* = 0.0f */) con
     // Check only general failure. WebPEncode() sets pic.error_code with specific error.
     if (!encodeResult)
     {
-        URHO3D_LOGERROR("WebP encoding failed (memory error?). WebPEncodingError = {}", pic.error_code);
+        URHO3D_LOGERROR("WebP encoding failed (memory error?). WebPEncodingError = {}", (int)pic.error_code);
         WebPPictureFree(&pic);
         WebPMemoryWriterClear(&wrt);
         return false;

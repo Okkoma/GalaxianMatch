@@ -547,8 +547,9 @@ String FileSystem::GetCurrentDir() const
 #else
     char path[MAX_PATH];
     path[0] = 0;
-    getcwd(path, MAX_PATH);
-    return AddTrailingSlash(String(path));
+    if (getcwd(path, MAX_PATH) != NULL)
+        return AddTrailingSlash(String(path));
+    return String::EMPTY;
 #endif
 }
 
@@ -718,8 +719,9 @@ String FileSystem::GetProgramDir() const
     memset(exeName, 0, MAX_PATH);
     pid_t pid = getpid();
     String link = "/proc/" + String(pid) + "/exe";
-    readlink(link.CString(), exeName, MAX_PATH);
-    return GetPath(String(exeName));
+    if (readlink(link.CString(), exeName, MAX_PATH) != -1)
+        return GetPath(String(exeName));
+    return String::EMPTY;
 #else
     return GetCurrentDir();
 #endif

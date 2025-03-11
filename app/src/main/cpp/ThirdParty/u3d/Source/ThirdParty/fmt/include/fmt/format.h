@@ -33,6 +33,9 @@
 #ifndef FMT_FORMAT_H_
 #define FMT_FORMAT_H_
 
+// URHO3D: Force fmt to be header only. Fixes issues with the shared library build.
+#define FMT_HEADER_ONLY
+
 #ifndef _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
 #  define _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
 #  define FMT_REMOVE_TRANSITIVE_INCLUDES
