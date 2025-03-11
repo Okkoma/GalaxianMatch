@@ -45,9 +45,6 @@ public:
     static Game* Get() { return game_; }
 
 private:
-    bool LoadGameConfig(const char* fileName, GameConfig* config);
-
-    void SetupLanguage();
     void SetupDirectories();
     void SetupControllers();
 	void SetupSubSystems();

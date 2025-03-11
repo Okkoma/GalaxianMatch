@@ -52,9 +52,9 @@
 #include <Urho3D/Physics2D/RigidBody2D.h>
 #include <Urho3D/Physics2D/PhysicsWorld2D.h>
 
-#include "Graphics2D.h"
+#include <SDL/SDL.h>
+#include <Urho3D/ThirdParty/PugiXml/pugixml.hpp>
 
-#include "GameOptions.h"
 #include "GameAttributes.h"
 #include "GameRand.h"
 #include "GameHelpers.h"
@@ -82,6 +82,32 @@
 #if defined(__EMSCRIPTEN__)
 #include <emscripten/emscripten.h>
 #include <emscripten/bind.h>
+
+EM_JS(int, GetBrowserCanvasWidth, (), {
+    const { width, height } = canvas.getBoundingClientRect();
+    return width;
+});
+
+EM_JS(int, GetBrowserCanvasHeight, (), {
+    const { width, height } = canvas.getBoundingClientRect();
+    return height;
+});
+
+EM_JS(int, GetBrowserWindowWidth, (), {
+    return window.innerWidth;
+});
+
+EM_JS(int, GetBrowserWindowHeight, (), {
+    return window.innerHeight;
+});
+
+EM_JS(int, GetDeviceScreenWidth, (), {
+    return Math.round(window.screen.width * window.devicePixelRatio)
+});
+
+EM_JS(int, GetDeviceScreenHeight, (), {
+    return Math.round(window.screen.height * window.devicePixelRatio)
+});
 #endif
 
 int UISIZE[NUMUIELEMENTSIZE];
@@ -182,6 +208,9 @@ GameConfig::GameConfig() :
 const int GameStatics::targetwidth_ = 540;
 const int GameStatics::targetheight_ = 960;
 GameConfig GameStatics::gameConfig_;
+#ifndef ACTIVE_SERIALIZEGAMESTATE
+ExtraConfig GameStatics::extraConfig_;
+#endif
 bool GameStatics::gameExit_ = false;
 bool GameStatics::preloading_;
 Sprite* GameStatics::preloaderIcon_ = nullptr;
@@ -326,6 +355,8 @@ void GameStatics::Initialize(Context* context)
     URHO3D_LOGINFO("GameStatics() - ----------------------------------------");
     URHO3D_LOGINFO("GameStatics() - Initialize  ....                       -");
     URHO3D_LOGINFO("GameStatics() - ----------------------------------------");
+
+    SDL_SetHint(SDL_HINT_ACCELEROMETER_AS_JOYSTICK, "0");
 
     GameStatics::context_ = context;
     GameStatics::graphics_ = context->GetSubsystem<Graphics>();
@@ -569,6 +600,221 @@ void GameStatics::CreatePreloaderIcon()
     URHO3D_LOGINFOF("GameStatics() - CreateLoaderIcon ... OK !");
 }
 
+
+bool GameStatics::LoadGameConfig(Context* context, VariantMap& engineparameters, GameConfig& config)
+{
+    // Doc File
+    pugi::xml_document doc;
+
+    bool success = false;
+    FileSystem* fs = context->GetSubsystem<FileSystem>();
+    if (fs)
+    {
+        String filename = fs->GetProgramDir() + Engine::GetParameter(engineparameters, "GameConfig", "engine_config.txt").GetString();
+        pugi::xml_parse_result result = doc.load_file(filename.CString());
+        if (result.status != pugi::status_ok)
+        {
+            config.logString += ToString("Apply engine_config.xml... Can't find %s file ... \n", filename.CString());
+            std::cout << result.description() << std::endl;
+        }
+        else
+            success = true;
+    }
+    else
+        config.logString += ToString("Apply engine_config.xml... No FileSystem ... \n");
+
+    if (success)
+    {
+        config.logString += ToString("Apply engine_config.xml... \n\n");
+        std::cout << config.logString.CString();
+
+        // Root Elem
+        pugi::xml_node root = doc.first_child();
+        for (pugi::xml_node paramElem = root.child("parameter"); paramElem; paramElem = paramElem.next_sibling("parameter"))
+        {
+            const String& name = paramElem.attribute("name").value();
+            if (engineparameters.Contains(name)) continue;
+
+            if (name == "WindowTitle" || name == "WindowIcon" || name == "ResourcePaths" || name == "LogName")
+            {
+                engineparameters[name] = paramElem.attribute("value").value();
+                config.logString += ToString("  engineparameters[%s] = %s \n", name.CString(),paramElem.attribute("value").value());
+                std::cout << config.logString.CString();
+    //            std::cout << "  engineparameters[" << name.CString() << "] = " << paramElem.attribute("value").value() << std::endl;
+            }
+            else if (name == "WindowWidth" || name == "WindowHeight" || name == "LogLevel" || name == "MaterialQuality" || name == "TextureQuality"
+                    || name == "MultiSample" || name == "TextureFilterMode")
+            {
+                engineparameters[name] = paramElem.attribute("value").as_int();
+                config.logString += ToString("  engineparameters[%s] = %d \n", name.CString(),paramElem.attribute("value").as_int());
+                std::cout << config.logString.CString();
+    //            std::cout << "  engineparameters[" << name.CString() << "] = " << paramElem.attribute("value").as_int() << std::endl;
+            }
+            else
+            {
+                engineparameters[name] = paramElem.attribute("value").as_bool();
+                config.logString += ToString("  engineparameters[%s] = %s \n", name.CString(),paramElem.attribute("value").as_bool()==1?"true":"false");
+                std::cout << config.logString.CString();
+    //            std::cout << "  engineparameters[" << name.CString() << "] = " << (paramElem.attribute("value").as_bool()==1?"true":"false") << std::endl;
+            }
+        }
+        std::cout << std::endl;
+        for (pugi::xml_node varElem = root.child("variable"); varElem; varElem = varElem.next_sibling("variable"))
+        {
+            const String& name = varElem.attribute("name").value();
+            if (name == "language_" || name == "frameLimiter_" || name == "networkServerPort_" || name == "testscenario_")
+            {
+                int value = varElem.attribute("value").as_int();
+                if (name == "language_")
+                    config.language_ = value;
+                else if (name == "frameLimiter_")
+                    config.frameLimiter_ = value;
+                else if (name == "networkServerPort_")
+                    config.networkServerPort_ = value;
+                else if (name == "testscenario_")
+                    GameStatics::playTest_ = value;
+
+                config.logString += ToString("  (Int) %s = %d \n", name.CString(), value);
+                std::cout << config.logString.CString();
+            }
+            else if (name == "initState_" || name == "sceneToLoad_" || name == "networkServerIP_" || name == "networkMode_")
+            {
+                const String& value = varElem.attribute("value").value();
+
+                if (name == "sceneToLoad_")
+                    ;
+                    //GameStatics::sceneToLoad_ = varElem.attribute("value").value();
+                else if (name == "initState_")
+                    config.initState_ = value;
+                else if (name == "networkServerIP_")
+                    config.networkServerIP_ = value;
+                else if (name == "networkMode_")
+                    config.networkMode_ = value;
+
+                config.logString += ToString("  (String) %s = %s \n", name.CString(), value.CString());
+                std::cout << config.logString.CString();
+            }
+            else
+            {
+                bool value = varElem.attribute("value").as_bool();
+                if (name == "touchEnabled_") config.touchEnabled_ = value;
+                else if (name == "forceTouch_") config.forceTouch_ = value;
+                else if (name == "HUDEnabled_") config.HUDEnabled_ = value;
+                else if (name == "ctrlCameraEnabled_") config.ctrlCameraEnabled_ = value;
+                else if (name == "debugRenderEnabled_") config.debugRenderEnabled_ = value;
+                else if (name == "physics3DEnabled_") config.physics3DEnabled_ = value;
+                else if (name == "physics2DEnabled_") config.physics2DEnabled_ = value;
+                else if (name == "enlightScene_") config.enlightScene_ = value;
+                else if (name == "debugPhysics_") config.debugPhysics_ = value;
+                else if (name == "debugLights_") config.debugLights_ = value;
+                else if (name == "debugUI_") config.debugUI_ = value;
+                else if (name == "debugAnimatedSprite2D") config.debugAnimatedSprite2D = value;
+            #ifndef ACTIVE_SERIALIZEGAMESTATE
+                else if (name == "SoundEnabled_") extraConfig.soundEnabled_ = value;
+                else if (name == "MusicEnabled_") extraConfig.musicEnabled_ = value;
+            #endif
+                config.logString += ToString("  (bool) %s = %s \n", name.CString(), value ? "true":"false");
+                std::cout << config.logString.CString();
+    //            std::cout << "  (bool) " << name.CString() << " = " << (value ? "true":"false") << std::endl;
+            }
+        }
+        config.logString += ToString("\n");
+        std::cout << std::endl;
+    }
+    else
+    {
+        engineparameters["WindowTitle"] = GameStatics::GAMENAME;
+        engineparameters["ResourcePaths"] = "CoreData;Data";
+        if (!engineparameters.Contains("LogName"))
+            engineparameters["LogName"] = GameStatics::GAMENAME + ".log";
+
+    #if defined(__ANDROID__) || defined(IOS)
+        engineparameters["WindowWidth"]  = 0;
+        engineparameters["WindowHeight"] = 0;
+        engineparameters["FullScreen"]   = true;
+        std::cout << "Apply default configuration Android / IOS" << std::endl;
+    #elif defined(__EMSCRIPTEN__)
+        const int sw = GetDeviceScreenWidth();
+        const int sh = GetDeviceScreenHeight();
+        // check screen ratio : use fullscreen on mobile device
+        const bool fullscreen = (float)sh > (float)sw * 1.5f;
+        int w = GetBrowserWindowWidth();
+        int h = GetBrowserWindowHeight();
+
+        std::cout << "Apply default configuration Web : window(" << w << " x " << h << ") screen(" << sw << " x " << sh << ") fullscreen=" << fullscreen << std::endl;
+
+        if (fullscreen)
+        {
+            w = sw;
+            h = sh;
+        }
+        engineparameters["WindowWidth"]  = w;
+        engineparameters["WindowHeight"] = h;
+        engineparameters["FullScreen"]   = fullscreen;
+    #else
+        engineparameters["WindowIcon"] = "Textures/icone.png";
+        engineparameters["WindowWidth"]  = GameStatics::targetwidth_;
+        engineparameters["WindowHeight"] = GameStatics::targetheight_;
+        engineparameters["FullScreen"]   = false;
+        std::cout << "Apply default configuration Desktop" << std::endl;
+    #endif
+
+        engineparameters["Orientations"] = "Portrait PortraitUpsideDown";
+        engineparameters["WorkerThreads"] = true;
+
+        engineparameters["WindowResizable"]  = true;
+        engineparameters["Headless"] = false;
+        engineparameters["Shadows"] = false;
+        engineparameters["TripleBuffer"] = true;
+        engineparameters["VSync"] = true;
+
+        /// LOGQUIET = false for DEBUG
+        engineparameters["LogQuiet"] = false;
+        engineparameters["LogLevel"] = 0;      // 0:LOGDEBUG 1: LOGINFO+LOGWARNING+LOGERROR 2: LOGWARNING+LOGERROR  3: LOGERROR ONLY
+
+        engineparameters["MaterialQuality"] = 0;
+        engineparameters["TextureQuality"] = 2;
+        engineparameters["TextureFilterMode"] = 1;
+        engineparameters["MultiSample"] = 1;
+
+        engineparameters["SoundBuffer"] = 100;
+        engineparameters["SoundMixRate"] = 44100;
+        engineparameters["SoundStereo"] = true;
+        engineparameters["SoundInterpolation"] = true;
+
+        if (config.splashviewed_)
+            config.initState_ = "MainMenu";
+        else
+            config.splashviewed_ = true;
+
+        config.networkMode_ = "local";
+        config.language_ = -1;
+        config.touchEnabled_ = false;
+        config.forceTouch_ = false;
+
+        config.HUDEnabled_ = false;
+        config.ctrlCameraEnabled_ = false;
+        config.physics3DEnabled_ = false;
+        config.physics2DEnabled_ = true;
+        config.enlightScene_ = false;
+
+        config.debugRenderEnabled_ = false;
+        config.debugPhysics_ = false;
+        config.debugLights_ = false;
+        config.debugUI_ = false;
+
+        config.frameLimiter_ = 0;
+    }
+
+    if (config.frameLimiter_)
+    {
+        engineparameters["FrameLimiter"] = true;
+        engineparameters["MaxFPS"] = config.frameLimiter_;
+    }
+
+    return success;
+}
+
 bool GameStatics::PreloadResources()
 {
 #ifdef ACTIVE_PRELOADER
@@ -773,11 +1019,11 @@ static void UpdateGameState(GameStatics::GameState* gamestate, bool reset)
 {
     if (reset)
         gamestate->Reset();
-    
+
     GameStatics::CheckTimeForEarningStars();
     gamestate->UpdateStoryItems();
 
-    GameStatics::context_->GetSubsystem<Localization>()->SetLanguage(GameStatics::gameState_.pstate_.language_);
+    GameStatics::CheckLanguage();
 }
 
 void GameStatics::GameState::Load()
@@ -789,11 +1035,12 @@ void GameStatics::GameState::Load()
         {
             GameState* gameState = static_cast<GameState*>(ref);
             if (data && size == sizeof(PlayerState))
-            {                
+            {
                 memcpy((void*)&gameState->pstate_, data, size);
                 bool checked = gameState->Check(false);
-                URHO3D_LOGERRORF(checked ? "GameState::Load : load from IndexedDB success !" : 
-                                           "GameState::Load : load from IndexedDB, but error in the check, reset gamestate !");                
+
+                URHO3D_LOGERRORF(checked ? "GameState::Load : load from IndexedDB success !" :
+                                           "GameState::Load : load from IndexedDB, but error in the check, reset gamestate !");
                 UpdateGameState(gameState, !checked);
             }
             else
@@ -824,7 +1071,7 @@ void GameStatics::GameState::Save()
     URHO3D_LOGINFOF("GameStatics::GameState() - Save : time=%u saveplaytime=%u ...", newtime, pstate_.lastplaytime);
 #if defined(__EMSCRIPTEN__)
     // Write to IndexedDB asynchronously for Emscripten
-    emscripten_idb_async_store("GALAXIANMATCH", "save.bin", &pstate_, sizeof(PlayerState), this, 
+    emscripten_idb_async_store("GALAXIANMATCH", "save.bin", &pstate_, sizeof(PlayerState), this,
         [](void* ref) // on_save
         {
             URHO3D_LOGINFO("GameStatics::GameState() - Save : ... IndexedDB OK !");
@@ -839,7 +1086,7 @@ void GameStatics::GameState::Save()
     // Normal file save
     GameHelpers::SaveData(context_, &pstate_, sizeof(PlayerState),
         String(gameConfig_.saveDir_ + String(savedGameFile_) + String(gameDataVersion_) + String(".bin")).CString());
-    URHO3D_LOGINFO("GameStatics::GameState() - Save : ... OK !"); 
+    URHO3D_LOGINFO("GameStatics::GameState() - Save : ... OK !");
 //    Dump();
 #endif
 #endif
@@ -1285,6 +1532,35 @@ void GameStatics::GameState::Dump() const
     URHO3D_LOGINFOF("GameStatics::GameState() - Dump : ... OK !");
 }
 
+void GameStatics::CheckLanguage()
+{
+	Localization* l10n = context_->GetSubsystem<Localization>();
+
+    // Load Localization files
+    if (!l10n->GetNumLanguages())
+	{
+        l10n->LoadJSONFile("Texts/UI_messages.json");
+	    l10n->LoadJSONFile("Texts/UI_dialogues.json");
+    }
+
+	// Auto-Detect local language
+    int lang = GameStatics::playerState_->language_;
+    if (lang == -1)
+	{
+        SDL_Locale* locale = SDL_GetPreferredLocales();
+        if (locale)
+        {
+            lang = l10n->GetLanguageIndex(locale->language);
+            URHO3D_LOGINFO("GameStatics - CheckLanguage : local {} {}", locale->language, lang);
+        }
+    }
+
+    // Default to en
+    GameStatics::playerState_->language_ = Clamp(lang, 0, l10n->GetNumLanguages()-1);
+    l10n->SetLanguage(GameStatics::playerState_->language_);
+
+    URHO3D_LOGINFO("GameStatics - CheckLanguage : entry langindex={} - output language={}({})", lang, l10n->GetLanguage(), l10n->GetLanguageIndex());
+}
 
 void GameStatics::CheckTimeForEarningStars()
 {
@@ -1337,6 +1613,11 @@ void GameStatics::Start()
         gameState_.Reset();
 #endif
     }
+
+#ifndef ACTIVE_SERIALIZEGAMESTATE
+    GameStatics::playerState_->musicEnabled_ = (int)GameStatics::extraConfig_.musicEnabled_;
+    GameStatics::playerState_->soundEnabled_ = (int)GameStatics::extraConfig_.soundEnabled_;
+#endif
 
 #ifdef DUMP_SIMLATE_FIRST100LEVELS
     // Dump Leveling Simulation : 100first levels

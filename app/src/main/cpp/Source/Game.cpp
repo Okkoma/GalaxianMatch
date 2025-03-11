@@ -1,8 +1,6 @@
 #include <iostream>
 #include <cstdio>
 
-#include <Urho3D/ThirdParty/PugiXml/pugixml.hpp>
-
 #include <Urho3D/Urho3D.h>
 
 #include <Urho3D/Core/CoreEvents.h>
@@ -69,40 +67,8 @@
 #include "sPlay.h"
 #include "sCinematic.h"
 
-#include <SDL/SDL.h>
-
 #include "Game.h"
 
-#if defined(__EMSCRIPTEN__)
-#include <emscripten/emscripten.h>
-#include <emscripten/bind.h>
-
-EM_JS(int, GetBrowserCanvasWidth, (), {
-    const { width, height } = canvas.getBoundingClientRect();
-    return width;
-});
-
-EM_JS(int, GetBrowserCanvasHeight, (), {
-    const { width, height } = canvas.getBoundingClientRect();
-    return height;
-});
-
-EM_JS(int, GetBrowserWindowWidth, (), {
-    return window.innerWidth;
-});
-
-EM_JS(int, GetBrowserWindowHeight, (), {
-    return window.innerHeight;
-});
-
-EM_JS(int, GetDeviceScreenWidth, (), {
-    return Math.round(window.screen.width * window.devicePixelRatio)
-});
-
-EM_JS(int, GetDeviceScreenHeight, (), {
-    return Math.round(window.screen.height * window.devicePixelRatio)
-});
-#endif
 
 URHO3D_DEFINE_APPLICATION_MAIN(Game);
 
@@ -153,240 +119,7 @@ UIDialog* Game::GetCompanion() const { return companionBox_; }
 
 void Game::Setup()
 {
-    GameConfig& config = GameStatics::gameConfig_;
-
-//    engineConfigApplied_ = false;
-    engineConfigApplied_ = LoadGameConfig(Engine::GetParameter(engineParameters_, "GameConfig", String("engine_config.xml")).GetString().CString(), &config);
-
-    if (!engineConfigApplied_)
-    {
-        engineParameters_["WindowTitle"] = GameStatics::GAMENAME;
-        engineParameters_["ResourcePaths"] = "CoreData;Data";
-        if (!engineParameters_.Contains("LogName"))
-            engineParameters_["LogName"] = GameStatics::GAMENAME + ".log";
-
-    #if defined(__ANDROID__) || defined(IOS)
-        engineParameters_["WindowWidth"]  = 0;
-        engineParameters_["WindowHeight"] = 0;
-        engineParameters_["FullScreen"]   = true;
-        std::cout << "Apply default configuration Android / IOS" << std::endl;
-    #elif defined(__EMSCRIPTEN__)
-        const int sw = GetDeviceScreenWidth();
-        const int sh = GetDeviceScreenHeight();
-        // check screen ratio : use fullscreen on mobile device
-        const bool fullscreen = (float)sh > (float)sw * 1.5f;
-        int w = GetBrowserWindowWidth();
-        int h = GetBrowserWindowHeight();
-
-        std::cout << "Apply default configuration Web : window(" << w << " x " << h << ") screen(" << sw << " x " << sh << ") fullscreen=" << fullscreen << std::endl;
-
-        if (fullscreen)
-        {
-            w = sw;
-            h = sh;
-        }
-        engineParameters_["WindowWidth"]  = w;
-        engineParameters_["WindowHeight"] = h;
-        engineParameters_["FullScreen"]   = fullscreen;
-    #else
-        engineParameters_["WindowIcon"] = "Textures/icone.png";
-        engineParameters_["WindowWidth"]  = GameStatics::targetwidth_;
-        engineParameters_["WindowHeight"] = GameStatics::targetheight_;
-        engineParameters_["FullScreen"]   = false;
-        std::cout << "Apply default configuration Desktop" << std::endl;
-    #endif
-
-        engineParameters_["Orientations"] = "Portrait PortraitUpsideDown";
-        engineParameters_["WorkerThreads"] = true;
-
-        engineParameters_["WindowResizable"]  = true;
-        engineParameters_["Headless"] = false;
-        engineParameters_["Shadows"] = false;
-        engineParameters_["TripleBuffer"] = true;
-        engineParameters_["VSync"] = true;
-
-        /// LOGQUIET = false for DEBUG
-        engineParameters_["LogQuiet"] = false;
-        engineParameters_["LogLevel"] = 0;      // 0:LOGDEBUG 1: LOGINFO+LOGWARNING+LOGERROR 2: LOGWARNING+LOGERROR  3: LOGERROR ONLY
-
-        engineParameters_["MaterialQuality"] = 0;
-        engineParameters_["TextureQuality"] = 2;
-        engineParameters_["TextureFilterMode"] = 1;
-        engineParameters_["MultiSample"] = 1;
-
-        engineParameters_["SoundBuffer"] = 100;
-        engineParameters_["SoundMixRate"] = 44100;
-        engineParameters_["SoundStereo"] = true;
-        engineParameters_["SoundInterpolation"] = true;
-
-        if (config.splashviewed_)
-            config.initState_ = "MainMenu";
-        else
-            config.splashviewed_ = true;
-
-        config.networkMode_ = "local";
-        config.language_ = -1;
-        config.touchEnabled_ = false;
-        config.forceTouch_ = false;
-
-        config.HUDEnabled_ = false;
-        config.ctrlCameraEnabled_ = false;
-        config.physics3DEnabled_ = false;
-        config.physics2DEnabled_ = true;
-        config.enlightScene_ = false;
-
-        config.debugRenderEnabled_ = false;
-        config.debugPhysics_ = false;
-        config.debugLights_ = false;
-        config.debugUI_ = false;
-
-        config.frameLimiter_ = 0;
-    }
-
-    if (config.frameLimiter_)
-    {
-        engineParameters_["FrameLimiter"] = true;
-        engineParameters_["MaxFPS"] = config.frameLimiter_;
-    }
-
-    SDL_SetHint(SDL_HINT_ACCELEROMETER_AS_JOYSTICK, "0");
-}
-
-struct ExtraConfig
-{
-    ExtraConfig() : soundEnabled_(true), musicEnabled_(true) { }
-    bool soundEnabled_;
-    bool musicEnabled_;
-};
-
-ExtraConfig extraConfig;
-
-bool Game::LoadGameConfig(const char* fileName, GameConfig* config)
-{
-    String filename;
-//
-//#if defined(__ANDROID__)
-//    filename = "/apk/" + filename;
-//#endif
-
-    FileSystem* fs = context_->GetSubsystem<FileSystem>();
-    if (!fs)
-    {
-        config->logString += ToString("Apply engine_config.xml... No FileSystem ... \n");
-        return false;
-    }
-
-    filename = fs->GetProgramDir() + fileName;
-
-    // Doc File
-    pugi::xml_document doc;
-    pugi::xml_parse_result result = doc.load_file(filename.CString());
-//    pugi::xml_parse_result result = doc.load_buffer_inplace_own(buffer, sizeFile);
-
-    if (result.status != pugi::status_ok)
-    {
-        config->logString += ToString("Apply engine_config.xml... Can't find %s file ... \n", filename.CString());
-        std::cout << result.description()  << std::endl;
-        return false;
-    }
-
-    config->logString += ToString("Apply engine_config.xml... \n\n");
-    std::cout << config->logString.CString();
-//    std::cout << "Apply engine_config.xml... "<< std::endl << std::endl;
-    // Root Elem
-    pugi::xml_node root = doc.first_child();
-
-    for (pugi::xml_node paramElem = root.child("parameter"); paramElem; paramElem = paramElem.next_sibling("parameter"))
-    {
-        const String& name = paramElem.attribute("name").value();
-        if (engineParameters_.Contains(name)) continue;
-
-        if (name == "WindowTitle" || name == "WindowIcon" || name == "ResourcePaths"
-            || name == "LogName")
-        {
-            engineParameters_[name] = paramElem.attribute("value").value();
-            config->logString += ToString("  engineParameters_[%s] = %s \n", name.CString(),paramElem.attribute("value").value());
-            std::cout << config->logString.CString();
-//            std::cout << "  engineParameters_[" << name.CString() << "] = " << paramElem.attribute("value").value() << std::endl;
-        }
-        else if (name == "WindowWidth" || name == "WindowHeight" || name == "LogLevel" || name == "MaterialQuality" || name == "TextureQuality"
-                 || name == "MultiSample" || name == "TextureFilterMode")
-        {
-            engineParameters_[name] = paramElem.attribute("value").as_int();
-            config->logString += ToString("  engineParameters_[%s] = %d \n", name.CString(),paramElem.attribute("value").as_int());
-            std::cout << config->logString.CString();
-//            std::cout << "  engineParameters_[" << name.CString() << "] = " << paramElem.attribute("value").as_int() << std::endl;
-        }
-        else
-        {
-            engineParameters_[name] = paramElem.attribute("value").as_bool();
-            config->logString += ToString("  engineParameters_[%s] = %s \n", name.CString(),paramElem.attribute("value").as_bool()==1?"true":"false");
-            std::cout << config->logString.CString();
-//            std::cout << "  engineParameters_[" << name.CString() << "] = " << (paramElem.attribute("value").as_bool()==1?"true":"false") << std::endl;
-        }
-    }
-    std::cout << std::endl;
-    for (pugi::xml_node varElem = root.child("variable"); varElem; varElem = varElem.next_sibling("variable"))
-    {
-        const String& name = varElem.attribute("name").value();
-        if (name == "language_" || name == "frameLimiter_" || name == "networkServerPort_" || name == "testscenario_")
-        {
-            int value = varElem.attribute("value").as_int();
-            if (name == "language_")
-                config->language_ = value;
-            else if (name == "frameLimiter_")
-                config->frameLimiter_ = value;
-            else if (name == "networkServerPort_")
-                config->networkServerPort_ = value;
-            else if (name == "testscenario_")
-                GameStatics::playTest_ = value;
-
-            config->logString += ToString("  (Int) %s = %d \n", name.CString(), value);
-            std::cout << config->logString.CString();
-        }
-        else if (name == "initState_" || name == "sceneToLoad_" || name == "networkServerIP_" || name == "networkMode_")
-        {
-            const String& value = varElem.attribute("value").value();
-
-            if (name == "sceneToLoad_")
-                ;
-                //GameStatics::sceneToLoad_ = varElem.attribute("value").value();
-            else if (name == "initState_")
-                config->initState_ = value;
-            else if (name == "networkServerIP_")
-                config->networkServerIP_ = value;
-            else if (name == "networkMode_")
-                config->networkMode_ = value;
-
-            config->logString += ToString("  (String) %s = %s \n", name.CString(), value.CString());
-            std::cout << config->logString.CString();
-        }
-        else
-        {
-            bool value = varElem.attribute("value").as_bool();
-            if (name == "touchEnabled_") config->touchEnabled_ = value;
-            else if (name == "forceTouch_") config->forceTouch_ = value;
-            else if (name == "HUDEnabled_") config->HUDEnabled_ = value;
-            else if (name == "ctrlCameraEnabled_") config->ctrlCameraEnabled_ = value;
-            else if (name == "debugRenderEnabled_") config->debugRenderEnabled_ = value;
-            else if (name == "physics3DEnabled_") config->physics3DEnabled_ = value;
-            else if (name == "physics2DEnabled_") config->physics2DEnabled_ = value;
-            else if (name == "enlightScene_") config->enlightScene_ = value;
-            else if (name == "debugPhysics_") config->debugPhysics_ = value;
-            else if (name == "debugLights_") config->debugLights_ = value;
-            else if (name == "debugUI_") config->debugUI_ = value;
-            else if (name == "debugAnimatedSprite2D") config->debugAnimatedSprite2D = value;
-            else if (name == "SoundEnabled_") extraConfig.soundEnabled_ = value;
-            else if (name == "MusicEnabled_") extraConfig.musicEnabled_ = value;
-            config->logString += ToString("  (bool) %s = %s \n", name.CString(), value ? "true":"false");
-            std::cout << config->logString.CString();
-//            std::cout << "  (bool) " << name.CString() << " = " << (value ? "true":"false") << std::endl;
-        }
-    }
-    config->logString += ToString("\n");
-    std::cout << std::endl;
-
-    return true;
+    engineConfigApplied_ = GameStatics::LoadGameConfig(context_, engineParameters_, GameStatics::gameConfig_);
 }
 
 void Game::Start()
@@ -451,13 +184,6 @@ void Game::Start()
 
 	// Start Managers
     GameStatics::Start();
-
-    // Only set language after loading gamestate (done in GameStatics::Start)
-    // TODO : Emscripten update this later ... so maybe create an handle for all the cases
-    SetupLanguage();
-
-    GameStatics::playerState_->musicEnabled_ = (int)extraConfig.musicEnabled_;
-    GameStatics::playerState_->soundEnabled_ = (int)extraConfig.soundEnabled_;
 
     options_ = ((OptionState*)GameStatics::stateManager_->GetState("Options"));
 
@@ -561,32 +287,6 @@ void Game::SetupDirectories()
     URHO3D_LOGINFOF("Game() - SetupDirectories : saveDir_=%s appDir_=%s ... OK !", saveDir.CString(), config->appDir_.CString());
 }
 
-void Game::SetupLanguage()
-{
-	Localization* l10n = GetSubsystem<Localization>();
-
-    // Load Localization files
-	l10n->LoadJSONFile("Texts/UI_messages.json");
-	l10n->LoadJSONFile("Texts/UI_dialogues.json");
-
-	// Auto-Detect local language
-    int lang = GameStatics::playerState_->language_;    
-    if (lang == -1)
-	{        
-        SDL_Locale* locale = SDL_GetPreferredLocales();
-        if (locale)
-        {
-            lang = l10n->GetLanguageIndex(locale->language);
-            URHO3D_LOGINFOF("Game - SetupLanguage : local language=%s index=%d", locale->language, lang);
-        }
-    }
-
-    // Default to en
-    GameStatics::playerState_->language_ = Clamp(lang, 0, l10n->GetNumLanguages()-1);
-    l10n->SetLanguage(GameStatics::playerState_->language_);
-
-    URHO3D_LOGINFOF("Game - SetupLanguage : entry langindex=%d - output language=%s(%d)", lang, l10n->GetLanguage().CString(), l10n->GetLanguageIndex());
-}
 
 void Game::SetupControllers()
 {

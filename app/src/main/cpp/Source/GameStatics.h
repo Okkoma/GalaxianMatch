@@ -171,6 +171,15 @@ struct GameConfig
     bool splashviewed_;
 };
 
+#ifndef ACTIVE_SERIALIZEGAMESTATE
+struct ExtraConfig
+{
+    ExtraConfig() : soundEnabled_(true), musicEnabled_(true) { }
+    bool soundEnabled_;
+    bool musicEnabled_;
+};
+#endif
+
 const unsigned STATE_MAINMENU  = StringHash("MainMenu").Value();
 const unsigned STATE_OPTIONS   = StringHash("Options").Value();
 const unsigned STATE_LEVELMAP  = StringHash("LevelMap").Value();
@@ -334,9 +343,13 @@ public:
 
     static void CreateUICursors();
     static void CreatePreloaderIcon();
+
+    static bool LoadGameConfig(Context* context, VariantMap& engineparameters, GameConfig& config);
     static bool PreloadResources();
     static bool UnloadResources();
     static bool IsPreloading() { return preloading_; }
+
+    static void CheckLanguage();
     static void CheckTimeForEarningStars();
     static void AddEarnStars(int qty);
 
@@ -382,6 +395,9 @@ public:
     static const int targetwidth_;
     static const int targetheight_;
     static GameConfig gameConfig_;
+#ifndef ACTIVE_SERIALIZEGAMESTATE
+    static ExtraConfig extraConfig_;
+#endif
     static bool gameExit_;
     static bool preloading_;
     static Sprite* preloaderIcon_;
