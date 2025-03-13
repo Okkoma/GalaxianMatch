@@ -200,7 +200,6 @@ cmake_dependent_option (TVOS "Setup build for tvOS platform" FALSE "XCODE" FALSE
 cmake_dependent_option (URHO3D_64BIT "Enable 64-bit build, the default is set based on the native ABI of the chosen compiler toolchain" 
                         "${NATIVE_64BIT}" "NOT MSVC AND NOT ANDROID AND NOT (ARM AND NOT IOS) AND NOT WEB AND NOT POWERPC" "${NATIVE_64BIT}")
 set (URHO3D_LIB_TYPE STATIC CACHE STRING "Specify Urho3D library type, possible values are STATIC (default); SHARED or MODULE(Web Only)")
-#cmake_dependent_option (URHO3D_LIB_TYPE "Specify Urho3D library type, possible values are STATIC (default) and SHARED" STATIC "NOT WEB" STATIC)
 cmake_dependent_option (URHO3D_PACKAGING "Enable resources packaging support" FALSE "NOT WEB" TRUE)
 if (ARM AND NOT ANDROID AND NOT RPI AND NOT APPLE)
     set (ARM_ABI_FLAGS "" CACHE STRING "Specify ABI compiler flags (ARM on Linux platform only); e.g. Orange-Pi Mini 2 could use '-mcpu=cortex-a7 -mfpu=neon-vfpv4'")
@@ -448,9 +447,10 @@ endif ()
 
 # Constrain the build option values in cmake-gui, if applicable
 if (NOT WEB)
-    set (SHARED SHARED)    
+    set (SHARED SHARED)
 endif ()
 if (WEB AND EMSCRIPTEN)
+    # TODO: do we need to build as module ?
     set (SHARED MODULE)
     set (SDL_THREADS ${URHO3D_THREADING})
     set (URHO3D_PACKAGING TRUE)  

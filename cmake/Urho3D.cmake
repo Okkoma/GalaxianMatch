@@ -42,7 +42,6 @@
 # TODO: finish the tag list generation in discover module
 # TODO: allow select crosscompiled build
 
-
 string (TOUPPER ${CMAKE_PROJECT_NAME} PROJECTNAME)
 
 # Find the Urho3D root path and source path from a presumed Urho3D subfolder.

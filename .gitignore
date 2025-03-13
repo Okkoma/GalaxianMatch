@@ -43,9 +43,6 @@ local.properties
 Local
 source-tool/
 
-bin-*/
-bin/server/node_*/
-
 app/src/main/java/
 app/src/main/Android*
 app/Android*
@@ -53,13 +50,11 @@ app/google*
 appn*/
 appt*/
 
+bin-*/
 exe/server/package-lock*
 exe/server/node*/
-exe/gl/
-exe/vk/
-exe/bin/CoreData/
-exe/bin/Data/
-exe/bin/Galaxian*
+exe/build*
+
 keystore.properties
 
 script/bake

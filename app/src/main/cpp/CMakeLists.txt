@@ -52,19 +52,19 @@ endforeach ()
 setup_main_executable ()
 
 set_target_properties(${TARGET_NAME} PROPERTIES CXX_STANDARD 17)
-
 target_include_directories (${TARGET_NAME} PRIVATE ${INC_DIRS})
-                                                  
-add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty)
 
 if (SPACEMATCH_WITH_NETWORK)
     if (WEB)
+        add_subdirectory (ThirdParty/libdatachannel-wasm EXCLUDE_FROM_ALL)
         target_link_libraries (${TARGET_NAME} datachannel-wasm)
     else ()
+        add_subdirectory (ThirdParty/libdatachannel EXCLUDE_FROM_ALL)
         target_link_libraries (${TARGET_NAME} datachannel-static)    
     endif ()
 endif ()
 
 if (SPACEMATCH_WITH_TEST)
+    add_subdirectory (ThirdParty/catch2)
     add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/Test)
 endif ()

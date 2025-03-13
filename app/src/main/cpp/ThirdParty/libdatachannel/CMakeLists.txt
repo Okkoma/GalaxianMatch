@@ -493,6 +493,3 @@ if(NOT NO_EXAMPLES)
 	add_subdirectory(examples/copy-paste-capi)
 endif()
 
-if (NOT URHO3D_MERGE_STATIC_LIBS)
-    install(TARGETS datachannel-static usrsctp plog juice-static EXPORT Urho3D ARCHIVE DESTINATION ${DEST_ARCHIVE_DIR_CONFIG})
-endif ()
