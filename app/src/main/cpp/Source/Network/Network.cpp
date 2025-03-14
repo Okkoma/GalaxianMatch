@@ -106,7 +106,10 @@ void Network::Connect(const String& adress, const String& identity)
 
         // check if already connected
         if (connection && connection->IsConnected())
+        {
+            URHO3D_LOGWARNINGF("Network::Connect() - already connected to %s %s ...", adress.CString(), identity.CString());
             return;
+        }
     }
 
     // Web Socket connecting
@@ -119,6 +122,10 @@ void Network::Connect(const String& adress, const String& identity)
         activeWsConnection_->Connect(adress, identity);
         state_ = NetworkConnectionState::Connecting;
         URHO3D_LOGINFOF("Network::Connect() - connecting to %s %s ...", adress.CString(), identity.CString());
+    }
+    else
+    {
+        URHO3D_LOGWARNINGF("Network::Connect() - no active ws connection to %s %s ...", adress.CString(), identity.CString());
     }
 }
 

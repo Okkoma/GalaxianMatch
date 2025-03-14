@@ -30,8 +30,8 @@
 	<variable name="forceTouch_" value ="false" />
 	<variable name="HUDEnabled_" value ="true" />
 	<variable name="networkMode_" value ="local" />
-	<variable name="networkServerIP_" value="10.0.0.4" />
-	<variable name="networkServerPort_" value="2345" />
+	<variable name="networkServerUrl_" value="127.0.0.1" />
+	<variable name="networkServerPort_" value="8100" />
 	<variable name="ctrlCameraEnabled_" value ="false" />
 	<variable name="debugRenderEnabled_" value ="true" />
 	<variable name="physics3DEnabled_" value ="false" />

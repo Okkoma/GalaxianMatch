@@ -191,6 +191,10 @@ GameConfig::GameConfig() :
     forceTouch_(false),  // force show touch Emulation
     HUDEnabled_(true),
 	networkMode_("auto"),
+    networkServerUrl_("127.0.0.1"),
+//    networkServerUrl_("okkomastudio.alwaysdata.net/wss"),
+    networkServerPort_("8000"),
+//    networkServerPort_("8100"), // SSL
     ctrlCameraEnabled_(false),
     debugRenderEnabled_(true),
     physics3DEnabled_(false),
@@ -438,11 +442,14 @@ void GameStatics::Initialize(Context* context)
 
     // Add Network vars
     netIdentity_ = GameHelpers::GetRandomString(10);
-    // TODO : set signaling server from gameconfig
-    netSignalingServer_ = "ws://127.0.0.1:8080/";
+    // set signaling server from gameconfig
+    bool ssl = !gameConfig_.networkServerPort_.Empty() && gameConfig_.networkServerPort_ != "8000";
+    netSignalingServer_ = (ssl ? "wss://" : "ws://") + gameConfig_.networkServerUrl_ + 
+                           ":" + gameConfig_.networkServerPort_ + "/";
 
     URHO3D_LOGINFO("GameStatics() - ---------------------------------------------------");
-    URHO3D_LOGINFOF("GameStatics() - Initialize .... netIdentity_=%s ... OK ! -", netIdentity_.CString());
+    URHO3D_LOGINFOF("GameStatics() - Initialize .... netSignalingServer_=%s netIdentity_=%s ... OK ! -", 
+                     netSignalingServer_.CString(), netIdentity_.CString());
     URHO3D_LOGINFO("GameStatics() - ---------------------------------------------------");
 }
 
@@ -615,7 +622,7 @@ bool GameStatics::LoadGameConfig(Context* context, VariantMap& engineparameters,
     FileSystem* fs = context->GetSubsystem<FileSystem>();
     if (fs)
     {
-        String filename = fs->GetProgramDir() + Engine::GetParameter(engineparameters, "GameConfig", "engine_config.txt").GetString();
+        String filename = fs->GetProgramDir() + Engine::GetParameter(engineparameters, "GameConfig", "engine_config.xml").GetString();
         pugi::xml_parse_result result = doc.load_file(filename.CString());
         if (result.status != pugi::status_ok)
         {
@@ -667,22 +674,21 @@ bool GameStatics::LoadGameConfig(Context* context, VariantMap& engineparameters,
         for (pugi::xml_node varElem = root.child("variable"); varElem; varElem = varElem.next_sibling("variable"))
         {
             const String& name = varElem.attribute("name").value();
-            if (name == "language_" || name == "frameLimiter_" || name == "networkServerPort_" || name == "testscenario_")
+            if (name == "language_" || name == "frameLimiter_" || name == "testscenario_")
             {
                 int value = varElem.attribute("value").as_int();
                 if (name == "language_")
                     config.language_ = value;
                 else if (name == "frameLimiter_")
                     config.frameLimiter_ = value;
-                else if (name == "networkServerPort_")
-                    config.networkServerPort_ = value;
                 else if (name == "testscenario_")
                     GameStatics::playTest_ = value;
 
                 config.logString += ToString("  (Int) %s = %d \n", name.CString(), value);
                 std::cout << config.logString.CString();
             }
-            else if (name == "initState_" || name == "sceneToLoad_" || name == "networkServerIP_" || name == "networkMode_")
+            else if (name == "initState_" || name == "sceneToLoad_" || name == "networkServerUrl_" ||
+                     name == "networkServerPort_" || name == "networkMode_")
             {
                 const String& value = varElem.attribute("value").value();
 
@@ -691,8 +697,10 @@ bool GameStatics::LoadGameConfig(Context* context, VariantMap& engineparameters,
                     //GameStatics::sceneToLoad_ = varElem.attribute("value").value();
                 else if (name == "initState_")
                     config.initState_ = value;
-                else if (name == "networkServerIP_")
-                    config.networkServerIP_ = value;
+                else if (name == "networkServerUrl_")
+                    config.networkServerUrl_ = value;
+                else if (name == "networkServerPort_")
+                    config.networkServerPort_ = value;                    
                 else if (name == "networkMode_")
                     config.networkMode_ = value;
 

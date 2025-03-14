@@ -144,8 +144,8 @@ struct GameConfig
     bool forceTouch_;
     bool HUDEnabled_;
 	String networkMode_;
-	String networkServerIP_;
-	int networkServerPort_;
+	String networkServerUrl_;
+    String networkServerPort_;
     bool ctrlCameraEnabled_;
     bool debugRenderEnabled_;
     bool physics3DEnabled_;

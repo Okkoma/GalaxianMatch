@@ -1,21 +1,27 @@
-
-const http = require('http');
+const https = require('https');
+const fs = require('fs');
 const websocket = require('websocket');
 
 const clientConnections = new Map(); // Map<clientid, connection>
 const clientInfos = new Map();       // Map<clientid, levelid>
 
-const httpServer = http.createServer((req, res) => {
-    console.log(`${req.method.toUpperCase()} ${req.url}`);
+// Charger les certificats SSL
+const options = {
+    key: fs.readFileSync('../web-pem/private-key.pem'),
+    cert: fs.readFileSync('../web-pem/certificate.pem')
+};
+
+const httpsServer = https.createServer(options, (req, res) => {
+    const date = new Date().toUTCString().replace(/GMT/, '');
+    console.log(`[${date}] ${req.method.toUpperCase()} ${req.url}`);
     res.writeHead(404, { 'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*' });
     res.end('Not Found');
 });
 
-const wsServer = new websocket.server({httpServer});
+const wsServer = new websocket.server({ httpServer: httpsServer });
 
 wsServer.on('request', (req) => {
-
-    const {path} = req.resourceURL;
+    const { path } = req.resourceURL;
     const splitted = path.split('/').slice(1);
     const clientid = splitted[0];
     const levelid = parseInt(splitted[1], 10) || -1;
@@ -24,14 +30,16 @@ wsServer.on('request', (req) => {
     clientConnections.set(clientid, connection);
     clientInfos.set(clientid, levelid);
 
-    console.log(`WebSocket request ${req.resourceURL} clientid=${clientid} levelid=${levelid}`);
+    const date = new Date().toUTCString().replace(/GMT/, '');
+    console.log(`[${date}] WebSocket request ${req.resourceURL} clientid=${clientid} levelid=${levelid}`);
 
     connection.on('message', (data) => {
+        const date = new Date().toUTCString().replace(/GMT/, '');
         if (data.type === 'utf8') {                  // receive an string message from a client
             const message = JSON.parse(data.utf8Data)
             const destId = message.id;
             const destConn = clientConnections.get(destId);
-            console.log(`Client ${clientid} << receive message = ${message}`);
+            console.log(`[${date}] Client ${clientid} << receive message = ${message}`);
 
             if (destConn) {                         // transfer the message to the destination client if exists
                 message.id = clientid;
@@ -43,7 +51,7 @@ wsServer.on('request', (req) => {
         } else if (data.type === 'binary' && levelid !== -1) {  // receive a binary message
             const iDestPeerId = data.binaryData.indexOf(0, 0);
             const destPeerId  = data.binaryData.toString('utf-8', 0, iDestPeerId > 0 ? iDestPeerId : 0);
-            console.log(`Client ${clientid} << receive binary data`);
+            console.log(`[${date}] Client ${clientid} << receive binary data`);
 
             if (destPeerId.length > 1) {            // peer id : specific message for a peer
                 const destConn = clientConnections.get(destPeerId);
@@ -51,7 +59,7 @@ wsServer.on('request', (req) => {
                     console.log(`... Transfer data to >> Client ${destPeerId}`);
                     destConn.sendBytes(data.binaryData);
                 } else
-                    console.error(`Client ${destPeerId} not found`);
+                    console.error(`[${date}] Client ${destPeerId} not found`);
             }
             else {                                  // broadcast message to clients with always excluding the sender
                 const iSrcPeerId  = data.binaryData.indexOf(0, iDestPeerId > 0 ? iDestPeerId+1 : 0);
@@ -78,7 +86,8 @@ wsServer.on('request', (req) => {
     });
 
     connection.on('close', () => {
-        console.error(`Client ${clientid} disconnected`);
+        const date = new Date().toUTCString().replace(/GMT/, '');
+        console.error(`[${date}] Client ${clientid} disconnected`);
         clientConnections.delete(clientid);
         clientInfos.delete(clientid);
         sendPeerInfos();
@@ -87,8 +96,8 @@ wsServer.on('request', (req) => {
     sendPeerInfos();
 });
 
-
 function sendPeerInfos() {
+    const date = new Date().toUTCString().replace(/GMT/, '');
     if (clientConnections.size > 0) {
         const data = JSON.stringify({ peers: Array.from(clientConnections.keys()), infos: Array.from(clientInfos.values())});
 
@@ -96,16 +105,17 @@ function sendPeerInfos() {
             connection.send(data);
         }
 
-        console.log(`WebSocket peersList Sent: ${data}`);
+        console.log(`[${date}] WebSocket peersList Sent: ${data}`);
     } else {
-        console.log(`WebSocket empty peersList`);
+        console.log(`[${date}] WebSocket empty peersList`);
     }
 }
 
 const hostname = process.env.IP || '127.0.0.1';
-const port = process.env.PORT || '8000';
+const port = process.env.PORT || '8100';
 
-httpServer.listen(port, hostname, () =>
-{
-    console.log(`Server listening on IP ${hostname} PORT ${port}`);
+httpsServer.listen(port, hostname, () => {
+    const date = new Date().toUTCString().replace(/GMT/, '');
+    console.log(`[${date}] Server listening on IP ${hostname} PORT ${port}`);
 });
+

@@ -53,6 +53,7 @@ appt*/
 bin-*/
 exe/server/package-lock*
 exe/server/node*/
+exe/server/pem*/
 exe/build*
 
 keystore.properties
