@@ -144,6 +144,10 @@ void Network::DisconnectAll(int waitMSec)
         return;
     }
 
+    URHO3D_LOGINFOF("Network() - DisconnectAll : ...");
+
+    UnsubscribeFromAllEvents();
+
     for (HashMap<String, SharedPtr<NetworkConnection> >::Iterator it = connections_.Begin(); it != connections_.End(); ++it)
         it->second_->Disconnect(waitMSec);
 
@@ -157,6 +161,8 @@ void Network::DisconnectAll(int waitMSec)
             Connect(action.adress_, action.identity_);
         delayActions_.Pop();
     }
+
+    URHO3D_LOGINFOF("Network() - DisconnectAll : ... OK !");
 }
 
 void Network::Disconnect(const String& adress, int waitMSec)
@@ -195,8 +201,8 @@ void Network::HandleBeginFrame(StringHash eventType, VariantMap& eventData)
     if (state_ == NetworkConnectionState::Disconnecting)
     {
         DisconnectAll();
+
         URHO3D_LOGINFOF("Network() - HandleBeginFrame : disconnecting ... finishing !");
-        UnsubscribeFromAllEvents();
         return;
     }
 
@@ -315,7 +321,7 @@ void Network::OnDisconnected(NetworkConnection* connection)
             }
             connections_.Erase(it);
 
-            std::cout << "disconnecting ws connection=" << connection;
+            std::cout << "disconnecting ws connection=" << connection << " numconnections=" << connections_.Size() << std::endl;
         }
     }
 
@@ -334,6 +340,14 @@ void Network::CleanCallBacks()
     onMessageReceivedCallBack_ = nullptr;
 }
 
+void Network::Dump() const
+{
+    URHO3D_LOGINFOF("Network::Dump() - state=%d", (int)state_);
+    for (auto pair = connections_.Begin(); pair !=connections_.End(); ++pair)
+    {
+        URHO3D_LOGINFOF("... connection=%s ptr=%u connected=%s", pair->first_.CString(), pair->second_.Get(), pair->second_.Get()->IsConnected()?"true":"false");
+    }
+}
 
 /// Network Peering Mode
 

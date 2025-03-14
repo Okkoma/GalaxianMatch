@@ -897,6 +897,14 @@ void Game::HandleKeyDown(StringHash eventType, VariantMap& eventData)
         if (console)
             console->Toggle();
     }
+#ifdef TEST_NETWORK
+    else if (keycode == KEY_T)
+    {
+        Network* network = Network::Get(false);
+        if (network)
+            network->Dump();
+    }
+#endif
 #ifdef URHO3D_PROFILING
     // Toggle debug HUD with F2
     else if (scancode == SCANCODE_F2)

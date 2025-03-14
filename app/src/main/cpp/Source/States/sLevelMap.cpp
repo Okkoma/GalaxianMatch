@@ -435,21 +435,21 @@ bool receivedPeerOffers_[NBMAXLVL];
 
 void LevelMapState::OnNetworkAvailablePeersUpdate(const PeerInfoVector* peers)
 {
+    URHO3D_LOGINFOF("LevelMapState() - OnNetworkAvailablePeersUpdate : peer size=%u ...", peers->Size());
+
+    unsigned numReceivedPeerOffers = 0U;
+    unsigned numLastReceivedPeerOffers = 0U;
+
+    // check previous state and update ui on change
+    for (unsigned i = firstMissionID_; i <= lastMissionID_; i++)
+        numLastReceivedPeerOffers += receivedPeerOffers_[i];
+
+    // reset the received peer offers
+    for (unsigned i = 0; i < NBMAXLVL; i++)
+        receivedPeerOffers_[i] = false;
+
     if (peers)
-    {
-        URHO3D_LOGINFOF("LevelMapState() - OnNetworkAvailablePeersUpdate : peer size=%u ...", peers->Size());
-
-        unsigned numReceivedPeerOffers = 0U;
-        unsigned numLastReceivedPeerOffers = 0U;
-
-        // check previous state and update ui on change  
-        for (unsigned i = firstMissionID_; i<= lastMissionID_; i++)
-            numLastReceivedPeerOffers += receivedPeerOffers_[i];
-
-        // reset the received peer offers                  
-        for (unsigned i = 0; i < NBMAXLVL; i++)
-            receivedPeerOffers_[i] = false;
-            
+    {    
         // for each peer offer, get the levelid
         for (unsigned i = 0; i < peers->Size(); i++)
         {
@@ -458,10 +458,10 @@ void LevelMapState::OnNetworkAvailablePeersUpdate(const PeerInfoVector* peers)
 
             if (peerinfo.level_ >= firstMissionID_ && peerinfo.level_ <= lastMissionID_)
                 numReceivedPeerOffers++;
-        }
-
-        receivedPeerUpdate_ = numReceivedPeerOffers || numLastReceivedPeerOffers;
+        }        
     }
+
+    receivedPeerUpdate_ = numReceivedPeerOffers || numLastReceivedPeerOffers;
 
     UpdatePeerOffers();
 }

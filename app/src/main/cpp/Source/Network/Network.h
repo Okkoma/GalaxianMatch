@@ -105,6 +105,8 @@ public:
     void OnConnected(std::function<void()> callback) { onConnectedCallBack_ = callback; }
     void CleanCallBacks();
 
+    void Dump() const;
+
 protected:
     virtual void OnConnected(NetworkConnection* connection);
     virtual void OnDisconnected(NetworkConnection* connection);

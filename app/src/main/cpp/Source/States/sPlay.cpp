@@ -2000,9 +2000,9 @@ void PlayState::HandleDuoToggled(StringHash eventType, VariantMap& eventData)
     }
     else
     {
-        URHO3D_LOGINFOF("PlayState() - HandleDuoToggled : unchecked !");
-
+        URHO3D_LOGINFOF("PlayState() - HandleDuoToggled : unchecked ...");
         OnDisconnectPeer();
+        URHO3D_LOGINFOF("PlayState() - HandleDuoToggled : unchecked ... OK !");
     }
 }
 
@@ -2084,7 +2084,8 @@ void PlayState::OnConnectPeer(const StringVector* peers)
 void PlayState::OnDisconnectPeer()
 {
     Network* network = Network::Get(false);
-    if (network)
+    // Always check if Connected first (need if reentrant due to HandleDuoToggled)
+    if (network && network->GetState() == NetworkConnectionState::Connected)
         network->DisconnectAll();
 
     if (!GameStatics::peerConnected_)
@@ -2103,6 +2104,8 @@ void PlayState::OnDisconnectPeer()
 
     if (sDuoChecked_)
         uiplay_->GetChildStaticCast<CheckBox>(String("duo"), true)->SetChecked(false);
+
+    URHO3D_LOGINFOF("PlayState() - OnDisconnectPeer ... OK !");
 }
 #endif
 
