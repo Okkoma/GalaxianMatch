@@ -621,7 +621,6 @@ void MenuState::HandleMenu(StringHash eventType, VariantMap& eventData)
     }
 
     /// Set Item Selection
-
     else if (eventType == E_JOYSTICKBUTTONDOWN)
     {
         int joyid = eventData[JoystickButtonDown::P_JOYSTICKID].GetInt();
@@ -636,12 +635,10 @@ void MenuState::HandleMenu(StringHash eventType, VariantMap& eventData)
         launch = (eventData[MouseButtonDown::P_BUTTON].GetInt() == MOUSEB_LEFT);
 
     /// Animate Items
-
     if (move)
         UpdateAnimButtons();
 
     /// Launch Selected Item
-
     if (launch)
         Launch(menustate_);
 }

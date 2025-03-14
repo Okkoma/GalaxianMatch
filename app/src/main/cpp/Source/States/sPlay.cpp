@@ -2083,16 +2083,18 @@ void PlayState::OnConnectPeer(const StringVector* peers)
 
 void PlayState::OnDisconnectPeer()
 {
-    if (!GameStatics::peerConnected_)
-        return;
-
     Network* network = Network::Get(false);
+    if (network)
+        network->DisconnectAll();
+
+    if (!GameStatics::peerConnected_)
+    {
+        URHO3D_LOGWARNINGF("PlayState() - OnDisconnectPeer ... no peer connected !");
+        return;
+    }
 
     URHO3D_LOGINFOF("PlayState() - OnDisconnectPeer ...");
     GameStatics::peerConnected_ = false;
-
-    if (network && network->GetState() == NetworkConnectionState::Connected)
-        network->DisconnectAll();
 
     if (MatchesManager::GetNumGrids() == 2)
     {

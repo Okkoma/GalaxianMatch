@@ -194,7 +194,7 @@ void NetworkWebTransport::OnMessageBytes(rtc::binary data)
     if (!peerTransport && type == "offer")
     {
         // TODO : issue with this => comment
-        /*
+/*
         if (!connection_->AcceptNewConnectPeers())
         {
             URHO3D_LOGINFOF("NetworkWebTransport::OnMessageBytes() : AutoconnectPeers don't need more %u peers : decline the offer !", connection_->GetTransports().Size()-1);
@@ -245,6 +245,8 @@ void NetworkWebTransport::OnMessageString(rtc::string data)
 
     rapidjson::Document doc;
     doc.Parse(data.c_str());
+    
+    newAvailablePeers_ = true;
 
     URHO3D_LOGINFOF("NetworkWebTransport::OnMessageString() ... %s", data.c_str());
     // we know that's the doc is an json object, so go through it and get the tables peers and infos if exist.

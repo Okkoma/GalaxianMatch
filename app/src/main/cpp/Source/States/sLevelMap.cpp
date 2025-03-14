@@ -435,14 +435,21 @@ bool receivedPeerOffers_[NBMAXLVL];
 
 void LevelMapState::OnNetworkAvailablePeersUpdate(const PeerInfoVector* peers)
 {
-    if (peers && peers->Size())
+    if (peers)
     {
         URHO3D_LOGINFOF("LevelMapState() - OnNetworkAvailablePeersUpdate : peer size=%u ...", peers->Size());
 
-        // reset the received peer offers
+        unsigned numReceivedPeerOffers = 0U;
+        unsigned numLastReceivedPeerOffers = 0U;
+
+        // check previous state and update ui on change  
+        for (unsigned i = firstMissionID_; i<= lastMissionID_; i++)
+            numLastReceivedPeerOffers += receivedPeerOffers_[i];
+
+        // reset the received peer offers                  
         for (unsigned i = 0; i < NBMAXLVL; i++)
             receivedPeerOffers_[i] = false;
-
+            
         // for each peer offer, get the levelid
         for (unsigned i = 0; i < peers->Size(); i++)
         {
@@ -450,11 +457,10 @@ void LevelMapState::OnNetworkAvailablePeersUpdate(const PeerInfoVector* peers)
             receivedPeerOffers_[peerinfo.level_] = true;
 
             if (peerinfo.level_ >= firstMissionID_ && peerinfo.level_ <= lastMissionID_)
-            {
-                // flag to update the ui
-                receivedPeerUpdate_ = true;
-            }
+                numReceivedPeerOffers++;
         }
+
+        receivedPeerUpdate_ = numReceivedPeerOffers || numLastReceivedPeerOffers;
     }
 
     UpdatePeerOffers();
@@ -1061,7 +1067,8 @@ bool LevelMapState::CreateScene(bool reset)
     }
 
     // Adjust LevelMaps Scene
-    float scale = 0.85f * GameHelpers::GetMaximizedScaleWithImageRatioKeeped(Vector2((float)GameStatics::targetwidth_, (float)GameStatics::targetheight_), levelGraph_->GetFrameSize());
+    float scale = 0.85f * GameHelpers::GetMaximizedScaleWithImageRatioKeeped(
+                Vector2((float)GameStatics::targetwidth_, (float)GameStatics::targetheight_), levelGraph_->GetFrameSize());
     levelscene->SetWorldScale(Vector3(scale, scale, 1.f));
 
     // Adjust Backgrounds
@@ -1078,7 +1085,8 @@ bool LevelMapState::CreateScene(bool reset)
     SetVisibleUI(true);
 
     // Go in PlanetMode if zone is unblocked only
-    if (planetMode_ == PlanetMode_Disable && (GameStatics::playerState_->zone == NBMAXZONE || GameStatics::playerState_->zonestates[GameStatics::playerState_->zone] < GameStatics::ZONE_UNBLOCKED))
+    if (planetMode_ == PlanetMode_Disable && (GameStatics::playerState_->zone == NBMAXZONE || 
+        GameStatics::playerState_->zonestates[GameStatics::playerState_->zone] < GameStatics::ZONE_UNBLOCKED))
     {
         selector_->SetPosition2D(selectablenodes_[selectedLevelID_-firstMissionID_]->GetPosition2D());
         GoToSelectedLevel();
@@ -1736,7 +1744,10 @@ void LevelMapState::UnsubscribeToNetworkEvents()
 {
     Network* network = Network::Get(false);
     if (network && network->IsConnected())
+    {        
         network->DisconnectAll();
+        URHO3D_LOGINFOF("LevelMapState::UnsubscribeToNetworkEvents() - this=%u Network Disconnected to signaling server !", this);
+    }
 }
 #endif
 

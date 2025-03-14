@@ -12,7 +12,7 @@ const options = {
 };
 
 const httpsServer = https.createServer(options, (req, res) => {
-    const date = new Date().toUTCString().replace(/GMT/, '');
+    const date = new Date().toUTCString().replace(' GMT', '');
     console.log(`[${date}] ${req.method.toUpperCase()} ${req.url}`);
     res.writeHead(404, { 'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*' });
     res.end('Not Found');
@@ -30,11 +30,11 @@ wsServer.on('request', (req) => {
     clientConnections.set(clientid, connection);
     clientInfos.set(clientid, levelid);
 
-    const date = new Date().toUTCString().replace(/GMT/, '');
+    const date = new Date().toUTCString().replace(' GMT', '');
     console.log(`[${date}] WebSocket request ${req.resourceURL} clientid=${clientid} levelid=${levelid}`);
 
     connection.on('message', (data) => {
-        const date = new Date().toUTCString().replace(/GMT/, '');
+        const date = new Date().toUTCString().replace(' GMT', '');
         if (data.type === 'utf8') {                  // receive an string message from a client
             const message = JSON.parse(data.utf8Data)
             const destId = message.id;
@@ -86,7 +86,7 @@ wsServer.on('request', (req) => {
     });
 
     connection.on('close', () => {
-        const date = new Date().toUTCString().replace(/GMT/, '');
+        const date = new Date().toUTCString().replace(' GMT', '');
         console.error(`[${date}] Client ${clientid} disconnected`);
         clientConnections.delete(clientid);
         clientInfos.delete(clientid);
@@ -97,7 +97,7 @@ wsServer.on('request', (req) => {
 });
 
 function sendPeerInfos() {
-    const date = new Date().toUTCString().replace(/GMT/, '');
+    const date = new Date().toUTCString().replace(' GMT', '');
     if (clientConnections.size > 0) {
         const data = JSON.stringify({ peers: Array.from(clientConnections.keys()), infos: Array.from(clientInfos.values())});
 
@@ -115,7 +115,7 @@ const hostname = process.env.IP || '127.0.0.1';
 const port = process.env.PORT || '8100';
 
 httpsServer.listen(port, hostname, () => {
-    const date = new Date().toUTCString().replace(/GMT/, '');
+    const date = new Date().toUTCString().replace(' GMT', '');
     console.log(`[${date}] Server listening on IP ${hostname} PORT ${port}`);
 });
 
