@@ -124,6 +124,7 @@ android {
 
 // We build urho3d as submodule:
 // We don't need to link anymore to a prebuild library 
+// => remove the dependencies to urho
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
@@ -147,7 +148,6 @@ dependencies {
 //    androidTestImplementation("androidx.test:runner:1.3.0")
 //    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
 }
-
 
 tasks {
     register<Delete>("cleanAll") {

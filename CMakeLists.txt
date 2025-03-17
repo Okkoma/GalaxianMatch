@@ -6,10 +6,10 @@ project (SpaceMatch)
 set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/app/src/main/cpp/ThirdParty/u3d)
 #set (URHO3D_HOME " ")
 
-#include (${CMAKE_SOURCE_DIR}/cmake/Urho3D.cmake)
+include (${CMAKE_SOURCE_DIR}/cmake/Urho3D.cmake)
 
-set (CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
-include (UrhoCommon)
+#set (CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
+#include (UrhoCommon)
 
 # For Android, Options are made in app/build.gradle.kts
 if (NOT ANDROID)

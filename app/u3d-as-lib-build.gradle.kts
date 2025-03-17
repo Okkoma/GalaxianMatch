@@ -122,10 +122,12 @@ android {
     }
 }
 
-// We build urho3d as submodule:
-// We don't need to link anymore to a prebuild library 
+val urhoGlDebugImpl by configurations.creating { isCanBeResolved = true }
+val urhoGlReleaseImpl by configurations.creating { isCanBeResolved = true }
 
 dependencies {
+    urhoGlDebugImpl("io.urho3d:urho3d-lib-glDebug:Unversioned-SM")
+    urhoGlReleaseImpl("io.urho3d:urho3d-lib-glRelease:Unversioned-SM")
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
     implementation("androidx.core:core-ktx:1.3.2")
@@ -148,6 +150,30 @@ dependencies {
 //    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
 }
 
+
+// this is for compiling the java code (same java code for Gl or Vk), not for library dependency
+// just be sure that the urho version (Gl or Vk) that it's used here, is already in .m2 local repository
+configurations.debugImplementation.get().extendsFrom(urhoGlDebugImpl)
+configurations.releaseImplementation.get().extendsFrom(urhoGlReleaseImpl)
+
+afterEvaluate {
+    android.applicationVariants.forEach { component ->
+        val config = component.name.capitalize()
+        val unzipTaskName = "unzipJni$config"
+        tasks {
+            "generateJsonModel$config" {
+                dependsOn(unzipTaskName)
+            }
+            register<Copy>(unzipTaskName) {
+                val aar = configurations["urho${config}Impl"].resolve()
+                    .first { it.name.startsWith("urho3d-lib") }
+                from(zipTree(aar))
+                include("urho3d/**")
+                android.externalNativeBuild.cmake.buildStagingDirectory?.let { into(it) }
+            }
+        }
+    }
+}
 
 tasks {
     register<Delete>("cleanAll") {
