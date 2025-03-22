@@ -162,7 +162,7 @@ endfunction ()
 # Launches a search process starting at "search_path" to find the filename "filename" inside a sub-folder "dirname"
 #   (excluding all sub-folders listed in "excludepaths" from the search for Unix-like systems only)
 function (urho_find_process search_path filename dirname excludepaths results errors)
-    message (" .. Searching for Urho3D directories in path = ${search_path} (this may take some time)")
+    #message (" .. Searching for Urho3D directories in path = ${search_path}")
     if (MSVC)
         string(REPLACE "/" "\\" dirname "${dirname}")
         execute_process (
@@ -217,7 +217,7 @@ macro (urho_find_sources_dirs)
             endif ()
         endforeach ()
     endif ()        
-    message (" ... num sources = ${NUM_SOURCE_DIRS}")
+    #message (" ... num sources = ${NUM_SOURCE_DIRS}")
 endmacro ()
 
 # Search in ${PROJECTNAME}_URHO3D_SEARCH_PATH for all occurrences of include/Urho3D/Urho3D.h
@@ -260,7 +260,7 @@ macro (urho_find_builds_dirs)
             endif ()
         endforeach ()
     endif ()
-    message (" ... num builds = ${NUM_SOURCE_DIRS}")
+    #message (" ... num builds = ${NUM_SOURCE_DIRS}")
 endmacro ()
 
 # Generate the tag list for ${PROJECTNAME}_URHO3D_SELECT
@@ -352,6 +352,7 @@ else ()
 endif ()
 
 if (SEARCH_URHO3D_ENABLE)
+    message ("-- URHO3D_DISCOVER ... search (this may take some time) ...")
     unset (${PROJECTNAME}_URHO3D_DIRS)
     unset (${PROJECTNAME}_URHO3D_DIRS CACHE)
     unset (${PROJECTNAME}_URHO3D_TAGS)

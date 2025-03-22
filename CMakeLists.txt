@@ -3,15 +3,15 @@ cmake_minimum_required(VERSION 3.10.2)
 project (SpaceMatch)
 
 #set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/app/src/main/cpp/ThirdParty/urho3d)
-set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/app/src/main/cpp/ThirdParty/u3d)
+#set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/app/src/main/cpp/ThirdParty/u3d)
 #set (URHO3D_HOME " ")
 
+set (GIT_U3D_REPO "https://github.com/Okkoma/U3D-GalaxianMatch.git")
+#set (GIT_U3D_REPO "/media/DATA/Dev/Projets/U3D-GalaxianMatch")
+        
 include (${CMAKE_SOURCE_DIR}/cmake/Urho3D.cmake)
 
-#set (CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
-#include (UrhoCommon)
-
-# For Android, Options are made in app/build.gradle.kts
+# For Android, Options are in app/build.gradle.kts
 if (NOT ANDROID)
     # Default Options
     if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
@@ -47,13 +47,13 @@ if (NOT ANDROID)
     option (SPACEMATCH_WITH_TEST "Enable Test" FALSE)
 
     if (SPACEMATCH_WITH_TEST)
-        include(CTest)
-        enable_testing()
+        include (CTest)
+        enable_testing ()
     endif ()
 endif ()
 
 if (URHO3D_HOME)
 	add_subdirectory (app/src/main/cpp ${ARGN})
 else ()
-    message ("!! GalaxianMatch - wait to add source because URHO3D_HOME is undefined here (check the cached var in UrhoCommon) !")
+    message ("!! GalaxianMatch - wait to add source because URHO3D_HOME is undefined here !")
 endif ()
