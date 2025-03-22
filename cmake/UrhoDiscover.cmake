@@ -331,6 +331,17 @@ macro (unset_cache_variables_without prefix)
     endforeach ()
 endmacro ()
 
+macro (urho_update_cached_dirs)
+    unset (${PROJECTNAME}_URHO3D_DIRS CACHE)
+    unset (${PROJECTNAME}_URHO3D_TAGS CACHE)
+    set (${PROJECTNAME}_URHO3D_DIRS ${${PROJECTNAME}_URHO3D_DIRS} CACHE INTERNAL "All available Urho3D directories")
+    set (${PROJECTNAME}_URHO3D_TAGS ${${PROJECTNAME}_URHO3D_TAGS} CACHE INTERNAL "All available Urho3D tags")
+    set (${PROJECTNAME}_URHO3D_SELECT "" CACHE STRING "Urho3D source/build tree selection" FORCE)
+    set_property (CACHE ${PROJECTNAME}_URHO3D_SELECT PROPERTY STRINGS ${${PROJECTNAME}_URHO3D_TAGS})    
+endmacro ()
+
+
+
 set (${PROJECTNAME}_URHO3D_SEARCH_PATH "" CACHE PATH "Root path for searching Urho3D")
 if (NOT ${PROJECTNAME}_URHO3D_SEARCH_PATH)
     if (URHO3D_SEARCH_PATH)
@@ -362,19 +373,16 @@ if (SEARCH_URHO3D_ENABLE)
 
     if (${PROJECTNAME}_URHO3D_DIRS)
         list (SORT ${PROJECTNAME}_URHO3D_DIRS)
-        urho_generate_tags_list (taglist)
+        urho_generate_tags_list (${PROJECTNAME}_URHO3D_TAGS)
     endif ()
 
     set (num_tags 0)
-    if (taglist)
-        list (LENGTH taglist num_tags)
+    if (${PROJECTNAME}_URHO3D_TAGS)
+        list (LENGTH ${PROJECTNAME}_URHO3D_TAGS num_tags)
     endif ()
     message (" ... Found ${num_tags} Urho3D directories!")
 
-    set (${PROJECTNAME}_URHO3D_DIRS ${${PROJECTNAME}_URHO3D_DIRS} CACHE INTERNAL "All available Urho3D directories")
-    set (${PROJECTNAME}_URHO3D_TAGS ${taglist} CACHE INTERNAL "All available Urho3D tags")
-    set (${PROJECTNAME}_URHO3D_SELECT "" CACHE STRING "Urho3D source/build tree selection" FORCE)
-    set_property (CACHE ${PROJECTNAME}_URHO3D_SELECT PROPERTY STRINGS ${${PROJECTNAME}_URHO3D_TAGS})
+    urho_update_cached_dirs()
 endif ()
 
 # Update the Urho3D directory selection
