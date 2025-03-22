@@ -437,12 +437,12 @@ void LevelMapState::OnNetworkAvailablePeersUpdate(const PeerInfoVector* peers)
 {
     URHO3D_LOGINFOF("LevelMapState() - OnNetworkAvailablePeersUpdate : peer size=%u ...", peers->Size());
 
-    unsigned numReceivedPeerOffers = 0U;
-    unsigned numLastReceivedPeerOffers = 0U;
+    int numReceivedPeerOffers = 0;
+    int numLastReceivedPeerOffers = 0;
 
     // check previous state and update ui on change
-    for (unsigned i = firstMissionID_; i <= lastMissionID_; i++)
-        numLastReceivedPeerOffers += receivedPeerOffers_[i];
+    for (int i = firstMissionID_; i <= lastMissionID_; i++)
+        numLastReceivedPeerOffers += (int)receivedPeerOffers_[i];
 
     // reset the received peer offers
     for (unsigned i = 0; i < NBMAXLVL; i++)
