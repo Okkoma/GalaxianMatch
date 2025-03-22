@@ -29,12 +29,12 @@
 
 # variables for fetch u3d:
 #
-# URHO3D_FETCH_CONDITION: can be "always" (default), "never", "if_u3d_not_found"
+# URHO3D_FETCH_CONDITION: can be "always", "never", "u3d_not_found"
 # GIT_U3D_REPO: can be an url or a local path
 # GIT_U3D_TAG: can be a commit hash, a branch name or a tag
 # by default use U3D-community repository
 
-set (DEFAULT_URHO3D_FETCH_CONDITION "always")
+set (DEFAULT_URHO3D_FETCH_CONDITION "u3d_not_found")
 set (DEFAULT_GIT_U3D_REPOSITORY "https://github.com/u3d-community/U3D.git")
 set (DEFAULT_GIT_U3D_TAG "master")
 
@@ -113,7 +113,7 @@ macro (urho_mark_as_advanced_options)
 endmacro ()
 
 # Fetch U3D from a git repository
-macro (urho_fetch_git)
+function (urho_fetch_git)
     if (NOT URHO3D_FETCH_CONDITION)
         set (URHO3D_FETCH_CONDITION ${DEFAULT_URHO3D_FETCH_CONDITION})
     endif ()
@@ -122,19 +122,19 @@ macro (urho_fetch_git)
     elseif (URHO3D_FETCH_CONDITION STREQUAL "never")
         message (DEBUG "URHO3D_FETCH_CONDITION set to never. Skip fetch!")
         return ()
-    elseif (URHO3D_FETCH_CONDITION STREQUAL "if_u3d_not_found" AND URHO3D_DISCOVER_EXISTS)
+    elseif (URHO3D_FETCH_CONDITION STREQUAL "u3d_not_found" AND URHO3D_DISCOVER_EXISTS)
         set (num_dirs 0)
         list (LENGTH ${PROJECTNAME}_URHO3D_DIRS num_dirs)
         if (num_dirs GREATER 0)
-            message (DEBUG "URHO3D_FETCH_CONDITION set to if_u3d_not_found. Skip fetch!")
+            message (DEBUG "URHO3D_FETCH_CONDITION set to u3d_not_found. Skip fetch!")
             return ()
         else ()
-            message (DEBUG "URHO3D_FETCH_CONDITION set to if_u3d_not_found. Fetch!")
+            message (DEBUG "URHO3D_FETCH_CONDITION set to u3d_not_found. Fetch!")
         endif ()
     endif ()
-    
+
     set (URHO3D_FETCH_DIR ${CMAKE_BINARY_DIR}/_deps/${URHO3D_TARGET_LOWER}-src)
-    
+
     if (NOT EXISTS "${URHO3D_FETCH_DIR}/README.md")
         if (NOT GIT_U3D_REPO)
             set (GIT_U3D_REPO ${DEFAULT_GIT_U3D_REPOSITORY})
@@ -143,7 +143,7 @@ macro (urho_fetch_git)
             set (GIT_U3D_TAG ${DEFAULT_GIT_U3D_TAG})
         endif ()
 
-        message (STATUS "Fetch U3D from ${GIT_U3D_REPO}:${GIT_U3D_TAG}") 
+        message (STATUS "Fetch U3D from ${GIT_U3D_REPO}:${GIT_U3D_TAG}")
         
         # cmake “fetchcontent” performs a first configuration step that causes a re-entrance problem with our urho modules.
         # We therefore prefer to run "git fetch" directly.
@@ -165,8 +165,7 @@ macro (urho_fetch_git)
             endif ()
         endif ()
     endif ()
-endmacro ()
-
+endfunction ()
 
 
 if (EXISTS ${CMAKE_SOURCE_DIR}/cmake)
@@ -217,23 +216,28 @@ if (URHO3D_PATCHER_EXISTS)
 endif ()
 
 # if URHO3D_HOME is empty or undefined, try to fetch source
-# Stop here, if none or some urho3d directories found.
 # if more than one directory found then let the developper selects manually via cmake-gui.
 if (NOT URHO3D_HOME)
     urho_fetch_git ()
-    if (${PROJECTNAME}_URHO3D_DIRS)
+    if (URHO3D_DISCOVER_EXISTS)
         set (num_tags 0)
         list (LENGTH ${PROJECTNAME}_URHO3D_DIRS num_tags)
-        if (num_tags EQUAL 1)            
-            set (URHO3D_HOME "${${PROJECTNAME}_URHO3D_DIRS}") # one result : use as default
-        elseif (num_tags EQUAL 0)
-            message ("!! did not find Urho3D content. Please set URHO3D_HOME manually in the project's CMakeLists.txt file and retry.")
-            return ()
-        else ()
-            message (STATUS "found ${num_tags} Urho3D folders. Please select one with cmake-gui.")
-            return ()
+        message ("find ${num_tags} ${${PROJECTNAME}_URHO3D_DIRS}")
+        if (num_tags GREATER 0)
+            if (num_tags EQUAL 1)
+                set (URHO3D_HOME "${${PROJECTNAME}_URHO3D_DIRS}") # one result : use as default  
+            else ()
+                message (STATUS "found ${num_tags} Urho3D folders. Please select one with cmake-gui.")
+                return ()
+            endif ()
         endif ()
     endif ()
+endif ()
+
+# Stop here, if none or some urho3d directories found.
+if (NOT URHO3D_HOME)
+    message ("!! did not find Urho3D content. Please set URHO3D_HOME manually in the project's CMakeLists.txt file and retry.")
+    return ()
 endif ()
 
 # At this point, URHO3D_HOME is defined.

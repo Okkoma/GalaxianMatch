@@ -162,7 +162,7 @@ endfunction ()
 # Launches a search process starting at "search_path" to find the filename "filename" inside a sub-folder "dirname"
 #   (excluding all sub-folders listed in "excludepaths" from the search for Unix-like systems only)
 function (urho_find_process search_path filename dirname excludepaths results errors)
-    #message (" .. Searching for Urho3D directories in path = ${search_path}")
+    message (DEBUG " .. Searching for Urho3D directories in path = ${search_path}")
     if (MSVC)
         string(REPLACE "/" "\\" dirname "${dirname}")
         execute_process (
@@ -217,7 +217,7 @@ macro (urho_find_sources_dirs)
             endif ()
         endforeach ()
     endif ()        
-    #message (" ... num sources = ${NUM_SOURCE_DIRS}")
+    message (DEBUG " ... num sources = ${NUM_SOURCE_DIRS}")
 endmacro ()
 
 # Search in ${PROJECTNAME}_URHO3D_SEARCH_PATH for all occurrences of include/Urho3D/Urho3D.h
@@ -260,7 +260,7 @@ macro (urho_find_builds_dirs)
             endif ()
         endforeach ()
     endif ()
-    #message (" ... num builds = ${NUM_SOURCE_DIRS}")
+    message (DEBUG " ... num builds = ${NUM_SOURCE_DIRS}")
 endmacro ()
 
 # Generate the tag list for ${PROJECTNAME}_URHO3D_SELECT
@@ -337,7 +337,7 @@ macro (urho_update_cached_dirs)
     set (${PROJECTNAME}_URHO3D_DIRS ${${PROJECTNAME}_URHO3D_DIRS} CACHE INTERNAL "All available Urho3D directories")
     set (${PROJECTNAME}_URHO3D_TAGS ${${PROJECTNAME}_URHO3D_TAGS} CACHE INTERNAL "All available Urho3D tags")
     set (${PROJECTNAME}_URHO3D_SELECT "" CACHE STRING "Urho3D source/build tree selection" FORCE)
-    set_property (CACHE ${PROJECTNAME}_URHO3D_SELECT PROPERTY STRINGS ${${PROJECTNAME}_URHO3D_TAGS})    
+    set_property (CACHE ${PROJECTNAME}_URHO3D_SELECT PROPERTY STRINGS ${${PROJECTNAME}_URHO3D_TAGS})
 endmacro ()
 
 
@@ -363,7 +363,7 @@ else ()
 endif ()
 
 if (SEARCH_URHO3D_ENABLE)
-    message ("-- URHO3D_DISCOVER ... search (this may take some time) ...")
+    message (STATUS "URHO3D_DISCOVER ... search (this may take some time) ...")
     unset (${PROJECTNAME}_URHO3D_DIRS)
     unset (${PROJECTNAME}_URHO3D_DIRS CACHE)
     unset (${PROJECTNAME}_URHO3D_TAGS)
