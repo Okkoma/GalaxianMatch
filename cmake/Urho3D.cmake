@@ -29,9 +29,14 @@
 
 # variables for fetch u3d:
 #
+# URHO3D_FETCH_CONDITION: can be "always" (default), "never", "if_u3d_not_found"
 # GIT_U3D_REPO: can be an url or a local path
 # GIT_U3D_TAG: can be a commit hash, a branch name or a tag
 # by default use U3D-community repository
+
+set (DEFAULT_URHO3D_FETCH_CONDITION "always")
+set (DEFAULT_GIT_U3D_REPOSITORY "https://github.com/u3d-community/U3D.git")
+set (DEFAULT_GIT_U3D_TAG "master")
 
 # Output variables:
 #
@@ -52,9 +57,6 @@ set (URHO3D_TARGET Urho3D)
 string (TOLOWER ${URHO3D_TARGET} URHO3D_TARGET_LOWER)
 string (TOUPPER ${CMAKE_PROJECT_NAME} PROJECTNAME)
 
-set (DEFAULT_GIT_U3D_REPOSITORY "https://github.com/u3d-community/U3D.git")
-set (DEFAULT_GIT_U3D_TAG "master")
-            
 # Find the Urho3D root path and source path from a presumed Urho3D subfolder.
 function (urho_find_origin dir root source origin)
     unset (${root} PARENT_SCOPE)
@@ -110,8 +112,27 @@ macro (urho_mark_as_advanced_options)
     endforeach ()
 endmacro ()
 
-# fetch U3D from a git repository
+# Fetch U3D from a git repository
 macro (urho_fetch_git)
+    if (NOT URHO3D_FETCH_CONDITION)
+        set (URHO3D_FETCH_CONDITION ${DEFAULT_URHO3D_FETCH_CONDITION})
+    endif ()
+    if (URHO3D_FETCH_CONDITION STREQUAL "always")
+        message (DEBUG "URHO3D_FETCH_CONDITION set to always. Fetch!")
+    elseif (URHO3D_FETCH_CONDITION STREQUAL "never")
+        message (DEBUG "URHO3D_FETCH_CONDITION set to never. Skip fetch!")
+        return ()
+    elseif (URHO3D_FETCH_CONDITION STREQUAL "if_u3d_not_found" AND URHO3D_DISCOVER_EXISTS)
+        set (num_dirs 0)
+        list (LENGTH ${PROJECTNAME}_URHO3D_DIRS num_dirs)
+        if (num_dirs GREATER 0)
+            message (DEBUG "URHO3D_FETCH_CONDITION set to if_u3d_not_found. Skip fetch!")
+            return ()
+        else ()
+            message (DEBUG "URHO3D_FETCH_CONDITION set to if_u3d_not_found. Fetch!")
+        endif ()
+    endif ()
+    
     set (URHO3D_FETCH_DIR ${CMAKE_BINARY_DIR}/_deps/${URHO3D_TARGET_LOWER}-src)
     
     if (NOT EXISTS "${URHO3D_FETCH_DIR}/README.md")
