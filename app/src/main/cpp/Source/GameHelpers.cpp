@@ -60,7 +60,6 @@
 #include "GameStatics.h"
 #include "GameUI.h"
 
-#include "AnimatedSprite.h"
 #include "InteractiveFrame.h"
 #include "TextMessage.h"
 #include "DelayInformer.h"
@@ -749,7 +748,7 @@ Node* GameHelpers::SpawnGOtoNode(Context* context, StringHash type, Node* scenen
 
     if (templatenode)
     {
-        Node* node = templatenode->CloneInside(scenenode, LOCAL);
+        Node* node = GameHelpers::CloneInside(templatenode, scenenode, LOCAL);
         node->SetVar(GOA::ENTITYCLONE, true);
         return node;
     }
@@ -832,7 +831,9 @@ void GameHelpers::SpawnParticleEffect(Context* context, const String& effectName
     }
 
     ParticleEmitter2D* particleEmitter = newNode->CreateComponent<ParticleEmitter2D>();
+#ifdef ACTIVE_CUSTOM_URHO    
     particleEmitter->SetLooped(false);
+#endif
     particleEmitter->SetEffect(particleEffect);
     particleEmitter->SetLayer(layer+1);
 
@@ -906,7 +907,7 @@ void GameHelpers::AddEffects(Node* root, int index, int num, float x, float y, f
 
     for (int i=0; i < num; i++)
     {
-        Node* effect = effects->CloneInside(root, LOCAL);
+        Node* effect = GameHelpers::CloneInside(effects, root, LOCAL);
         effect->SetWorldPosition(Vector3(x+Random(-0.3f,0.3f), y+i*0.3f, 0.f));
         effect->GetDerivedComponent<StaticSprite2D>()->SetLayer(layer);
         effect->SetEnabled(false);
@@ -978,7 +979,9 @@ AnimatedSprite2D* GameHelpers::AddAnimatedSprite2D(Node* root, const String& lab
     if (!entityname.Empty())
     {
         animated->SetEntity(entityname);
+#ifdef ACTIVE_CUSTOM_URHO        
         animated->SetSpriterAnimation(0);
+#endif
         animated->SetLayer(1);
     }
 
@@ -1141,14 +1144,104 @@ void GameHelpers::AddText3DFadeAnim(Node* rootNode, const String& text, Text* or
 
 
 /// UI Helpers
-
-void GameHelpers::ResetCamera()
+void GameHelpers::ResetCamera(bool forceortho)
 {
     URHO3D_LOGINFOF("GameHelpers() - ResetCamera !");
 
-    GameStatics::camera_->SetZoom(GameStatics::uiScale_);
-    GameStatics::cameraNode_->SetPosition(Vector3::ZERO);
-    GameStatics::ResetCamera();
+#ifdef CAMERA_ORTHOMODE
+    bool ortho = true;
+#else
+    bool ortho = false;
+#endif
+    if (forceortho || ortho)
+    {
+        GameStatics::camera_->SetZoom(GameStatics::uiScale_);
+        GameStatics::cameraNode_->SetRotation2D(0.f); 
+        GameStatics::cameraNode_->SetPosition(Vector3::ZERO);
+        GameStatics::ResetCamera(true);
+        return;
+    }
+    else
+    {
+        GameStatics::camera_->SetZoom(0.85f);
+        GameStatics::cameraNode_->SetRotation2D(0.f);          
+        GameStatics::cameraNode_->SetPosition(Vector3(0.f, 0.f, -10.f));
+        GameStatics::ResetCamera(false);
+    }
+}
+
+void GameHelpers::ResetStates()
+{
+#ifdef ACTIVE_CUSTOM_URHO
+    GameStatics::input_->ResetStates();
+#endif
+}
+
+Node* GameHelpers::CloneInside(Node* ref, Node* parent, Urho3D::CreateMode mode)
+{
+#ifdef ACTIVE_CUSTOM_URHO
+    return ref->CloneInside(parent, mode);
+#else
+    Node* node = ref->Clone(mode);
+    node->SetParent(parent);
+    return node;
+#endif
+}
+
+void GameHelpers::SetRenderer2DCheckVisibility(bool enable)
+{
+#ifdef ACTIVE_CUSTOM_URHO
+    GameStatics::renderer2d_->SetCheckVisibility(enable);
+#endif
+}
+
+bool GameHelpers::HasAnimation(AnimatedSprite2D* animatedSprite, const String& name)
+{
+#ifdef ACTIVE_CUSTOM_URHO
+    return animatedSprite->HasAnimation(name);
+#else
+    return animatedSprite->GetAnimationSet()->HasAnimation(name);
+#endif
+}
+
+void GameHelpers::SetTextColorInNode(Node* node, const Color& color)
+{
+#ifdef ACTIVE_CUSTOM_URHO
+    Text2D* text2d = node->GetComponent<Text2D>();
+    if (text2d)
+        text2d->SetColor(color);
+#endif
+    Text3D* text3d = node->GetComponent<Text3D>();
+    if (text3d)
+        text3d->SetColor(color);
+}
+
+void GameHelpers::GetPhysicElements(const Vector2& position, RigidBody2D*& body, CollisionShape2D*& shape, unsigned mask)
+{
+#ifdef ACTIVE_CUSTOM_URHO
+    GameStatics::rootScene_->GetComponent<PhysicsWorld2D>()->GetPhysicElements(position, body, shape, mask);
+#else
+    body = GameStatics::rootScene_->GetComponent<PhysicsWorld2D>()->GetRigidBody(position, mask);
+    shape = nullptr;
+#endif
+}
+
+bool GameHelpers::HasFinishedAnimation(AnimatedSprite2D* anim)
+{
+#ifdef ACTIVE_CUSTOM_URHO 
+    return anim->HasFinishedAnimation();
+#else
+    return true;
+#endif
+}
+
+bool GameHelpers::GetLooping(AnimatedSprite2D* anim)
+{
+#ifdef ACTIVE_CUSTOM_URHO 
+    return anim->GetSpriterInstance()->GetLooping();
+#else
+    return true;
+#endif
 }
 
 void GameHelpers::ApplySizeRatio(int w, int h, IntVector2& size)
@@ -1270,11 +1363,13 @@ InteractiveFrame* GameHelpers::AddInteractiveFrame(const String& framefile, Obje
     return frame;
 }
 
-AnimatedSprite* GameHelpers::AddAnimatedSpriteUI(UIElement* root, const String& label, const String& spritename, const String& entityname, const Vector2& position, float rotation)
+Animatable* GameHelpers::AddAnimatedSpriteUI(UIElement* root, const String& label, const String& spritename, const String& entityname, 
+                                                    const Vector2& position, float rotation, bool visible)
 {
+#ifdef ACTIVE_CUSTOM_URHO
     AnimationSet2D* animationset = GameStatics::context_->GetSubsystem<ResourceCache>()->GetResource<AnimationSet2D>(spritename);
     if (!animationset)
-        return 0;
+        return nullptr;
 
     AnimatedSprite* animatedSprite = root ? root->CreateChild<AnimatedSprite>() : new AnimatedSprite(GameStatics::context_);
     animatedSprite->SetName(label);
@@ -1288,8 +1383,11 @@ AnimatedSprite* GameHelpers::AddAnimatedSpriteUI(UIElement* root, const String& 
         animatedSprite->SetEntity(entityname);
 
     animatedSprite->SetAnimation(String::EMPTY);
-
+    animatedSprite->SetVisible(visible);
     return animatedSprite;
+#else
+    return nullptr;
+#endif
 }
 
 void GameHelpers::SetMoveAnimationUI(UIElement* elt, const IntVector2& from, const IntVector2& to, float start, float delay)
@@ -1517,18 +1615,33 @@ void GameHelpers::SetAdjustedToScreen(Node* node, float escale, float minscale, 
         return;
 
     float scale = 1.f;
-
+#ifdef ACTIVE_CUSTOM_URHO
     Drawable2D* drawable = node->GetDerivedComponent<Drawable2D>();
+    if (!drawable && node->GetChildren().Size())
+    {
+        drawable = node->GetChildren().Front()->GetDerivedComponent<Drawable2D>();
+        if (drawable)
+            scale *= Min(drawable->GetNode()->GetWorldScale().x_, drawable->GetNode()->GetWorldScale().y_);
+    }
+
     if (drawable)
         scale = maximize ? GetMaxAdjustedScale(GameStatics::fScreenSize_, drawable->GetDrawRectangle().Size()) :
                            GetMinAdjustedScale(GameStatics::fScreenSize_, drawable->GetDrawRectangle().Size());
+#else
+    StaticSprite2D* drawable = node->GetDerivedComponent<StaticSprite2D>();
+    if (!drawable && node->GetChildren().Size())
+        drawable = node->GetChildren().Front()->GetDerivedComponent<StaticSprite2D>();    
+    if (drawable)
+        scale = maximize ? GetMaxAdjustedScale(GameStatics::fScreenSize_, drawable->GetDrawRect().Size()) :
+                           GetMinAdjustedScale(GameStatics::fScreenSize_, drawable->GetDrawRect().Size());    
+#endif
     // don't reduce
     if (!maximize && scale < minscale)
         scale = minscale;
 
     node->SetWorldScale(scale * escale * Vector3::ONE);
 
-    URHO3D_LOGINFOF("GameHelpers() - SetAdjustedToScreen : node=%s(%u) entryscale=%F adjustscale=%F outputScale=%F",
+    URHO3D_LOGINFOF("GameHelpers() - SetAdjustedToScreen : node=%s(%u) entryscale=%f adjustscale=%f outputScale=%f",
                     node->GetName().CString(), node->GetID(), escale, scale, scale*escale);
 }
 

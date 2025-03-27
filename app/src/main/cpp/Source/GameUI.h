@@ -1,6 +1,5 @@
 #pragma once
 
-
 namespace Urho3D
 {
     class Object;
@@ -9,12 +8,12 @@ namespace Urho3D
     class Text;
 }
 
-class AnimatedSprite;
 class DelayAction;
 class DelayInformer;
 
-
 #include <Urho3D/UI/Menu.h>
+
+#include "Graphics2D.h"
 
 #include "GameHelpers.h"
 
@@ -144,7 +143,11 @@ private:
     WeakPtr<Sprite> rect_;
     WeakPtr<Text> title_;
     WeakPtr<Text> content_;
+#ifdef ACTIVE_CUSTOM_URHO    
     WeakPtr<AnimatedSprite> companion_;
+#else
+    WeakPtr<Sprite> companion_;
+#endif
     Vector2 panelOriginSize_;
 
     Vector2 framePosNormalized_;

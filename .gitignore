@@ -75,6 +75,9 @@ NOTE*.txt
 app/src/main/cpp/Test/Network/
 app/src/main/temp*
 
-
+# Remove Editor
+bin/Editor.sh
+bin/Urho3DPlayer
+bin/Data/Editor*/
 
 

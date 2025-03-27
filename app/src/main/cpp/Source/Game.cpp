@@ -65,7 +65,10 @@
 
 #include "sOptions.h"
 #include "sPlay.h"
+
+#ifdef ACTIVE_CUSTOM_URHO
 #include "sCinematic.h"
+#endif
 
 #include "Game.h"
 
@@ -81,6 +84,10 @@ WeakPtr<UIElement> headerHolder_;
 SharedPtr<UIDialog> dialogInfo_;
 SharedPtr<UIDialog> companionBox_;
 SharedPtr<SplashScreen> splashScreen_;
+
+bool debugCameraWithMouse_ = false;
+float cameraYaw_ = 0.f;
+float cameraPitch_ = 0.f;
 
 const float DELAY_INACTIVECURSOR = 10.f;
 float timerInactiveCursor_ = 0.f;
@@ -424,6 +431,9 @@ void Game::ResetScreen()
 {
     URHO3D_LOGINFO("Game() - ResetScreen ...");
 
+    debugCameraWithMouse_ = false;
+    GameHelpers::ResetCamera(false);
+
     GameStatics::SetGameScale();
 
     // Set Camera
@@ -651,10 +661,11 @@ void Game::SubscribeToAccessMenuEvents()
         button = popup->GetChild(String("shop"));
         if (button)
             game_->SubscribeToEvent(button, E_PRESSED, URHO3D_HANDLER(Game, HandleShowShop));
-
+#ifdef ACTIVE_CUSTOM_URHO
         button = popup->GetChild(String("cinematic"));
         if (button)
             game_->SubscribeToEvent(button, E_PRESSED, URHO3D_HANDLER(Game, HandleWatchCinematic));
+#endif            
     }
 }
 
@@ -675,9 +686,11 @@ void Game::UnsubscribeFromAccessMenuEvents()
         button = popup->GetChild(String("shop"));
         if (button)
             game_->UnsubscribeFromEvent(button, E_PRESSED);
+#ifdef ACTIVE_CUSTOM_URHO            
         button = popup->GetChild(String("cinematic"));
         if (button)
             game_->UnsubscribeFromEvent(button, E_PRESSED);
+#endif            
     }
 }
 
@@ -862,10 +875,12 @@ void Game::HandleShowShop(StringHash eventType, VariantMap& eventData)
 
 void Game::HandleWatchCinematic(StringHash eventType, VariantMap& eventData)
 {
+#ifdef ACTIVE_CUSTOM_URHO    
     URHO3D_LOGINFO("Game() - HandleWatchCinematic !");
 
     accessMenu_->ShowPopup(false);
     CinematicState::LaunchCinematicParts(CINEMATICSELECTIONMODE_REPLAY);
+#endif
 }
 
 void Game::HandleTouchBegin(StringHash eventType, VariantMap& eventData)
@@ -882,6 +897,15 @@ void Game::HandleKeyDown(StringHash eventType, VariantMap& eventData)
 	int scancode = eventData[P_SCANCODE].GetInt();
     int keycode = eventData[P_KEY].GetInt();
 
+#ifdef TEST_NETWORK
+    if (keycode == KEY_T)
+    {
+        Network* network = Network::Get(false);
+        if (network)
+            network->Dump();
+    }
+#endif
+
 	// Close console (if open)
     if (scancode == SCANCODE_ESCAPE)
 	{
@@ -897,14 +921,6 @@ void Game::HandleKeyDown(StringHash eventType, VariantMap& eventData)
         if (console)
             console->Toggle();
     }
-#ifdef TEST_NETWORK
-    else if (keycode == KEY_T)
-    {
-        Network* network = Network::Get(false);
-        if (network)
-            network->Dump();
-    }
-#endif
 #ifdef URHO3D_PROFILING
     // Toggle debug HUD with F2
     else if (scancode == SCANCODE_F2)
@@ -1452,4 +1468,33 @@ void Game::HandleSceneUpdate(StringHash eventType, VariantMap& eventData)
             companionBox_.Reset();
         }
     }
+
+    // Toggle Camera Control
+    //if (GameStatics::gameConfig_.debugViewEnabled_)
+    {
+        if (GameStatics::input_->GetKeyDown(KEY_CTRL))
+        {
+            if (!debugCameraWithMouse_)
+            {
+                // Set Initial Camera
+                cameraYaw_ = 0.f;
+                cameraPitch_ = 0.f;
+                debugCameraWithMouse_ = true;
+            }
+
+            // Move active camera
+            IntVector2 mouseMove = GameStatics::input_->GetMouseMove();
+            cameraYaw_ += 0.1f * mouseMove.x_;
+            cameraPitch_ += 0.1f * mouseMove.y_;
+            cameraPitch_ = Clamp(cameraPitch_, -90.f, 90.f);
+            GameStatics::cameraNode_->SetRotation(Quaternion(cameraPitch_, cameraYaw_, 0.f));
+        }
+        else if (debugCameraWithMouse_)
+        {
+            // Reset
+            ResetScreen();
+            URHO3D_LOGINFOF("Reset Camera Position cameraNode=%s !", GameStatics::camera_->GetNode()->GetPosition().ToString().CString());
+
+        }
+    }    
 }

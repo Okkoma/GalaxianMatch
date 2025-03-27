@@ -172,7 +172,7 @@ void PlayState::Begin()
 
     rootScene_->StopAsyncLoading();
 
-    rootScene_->GetComponent<Renderer2D>()->SetCheckVisibility(false);
+    GameHelpers::SetRenderer2DCheckVisibility(false);
 
     GameState::Begin();
 
@@ -198,7 +198,7 @@ void PlayState::End()
     GameStatics::peerConnected_ = false;
 #endif
 
-    rootScene_->GetComponent<Renderer2D>()->SetCheckVisibility(true);
+    GameHelpers::SetRenderer2DCheckVisibility(true);
 
     UnsubscribeFromEvent(E_POSTUPDATE);
 
@@ -603,7 +603,7 @@ void PlayState::EndScene()
 
     GameHelpers::CleanScene(GameStatics::rootScene_, GetStateId(), 0);
 
-    GetSubsystem<Input>()->ResetStates();
+    GameHelpers::ResetStates();
 
     URHO3D_LOGINFO("PlayState() - EndScene ... OK !");
 
@@ -1341,7 +1341,7 @@ void PlayState::HandleSceneLoading(StringHash eventType, VariantMap& eventData)
 
         GameStatics::SetStatus(PLAYSTATE_READY);
 
-        GameHelpers::ResetCamera();
+        GameHelpers::ResetCamera(true);
 
         if (GameStatics::tries_)
             GameHelpers::AddUIMessage(ToString("Mission %u", GameStatics::currentLevel_), false, "Fonts/BlueHighway.ttf", UISIZE[FONTSIZE_HUGE],
@@ -1703,6 +1703,7 @@ void PlayState::HandleUpdateMatchState(StringHash eventType, VariantMap& eventDa
     matchStateText->SetText(String(matchStateNames[MatchesManager::GetState()]));
 }
 
+#ifdef ACTIVE_CUSTOM_URHO
 void PlayState::CheckInputForDebug(Input* input)
 {
 //    if (input->GetMouseButtonDown(MOUSEB_LEFT))
@@ -1735,7 +1736,9 @@ void PlayState::CheckInputForDebug(Input* input)
         }
     }
 }
-
+#else
+void PlayState::CheckInputForDebug(Input* input) { ; }
+#endif
 
 void PlayState::HandleUpdate(StringHash eventType, VariantMap& eventData)
 {
@@ -1914,7 +1917,7 @@ void PlayState::HandleStop(StringHash eventType, VariantMap& eventData)
     {
         URHO3D_LOGINFO("PlayState() - HandleStop : bosslevel !");
 
-    #ifdef ACTIVE_CINEMATICS
+    #if defined(ACTIVE_CUSTOM_URHO) && defined(ACTIVE_CINEMATICS)
         stateManager_->PopStack(false);
         if (!CinematicState::SetCinematic(CINEMATICSELECTIONMODE_INTRO_OUTRO, GameStatics::GetMinLevelId(GameStatics::currentZone_), GameStatics::currentLevel_))
             stateManager_->SetActiveState("LevelMap");

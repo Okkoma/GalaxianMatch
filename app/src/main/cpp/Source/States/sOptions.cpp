@@ -136,7 +136,7 @@ void OptionState::Begin()
     ReadOptions();
 
     // Reset controls
-    GetSubsystem<Input>()->ResetStates();
+    GameHelpers::ResetStates();
 
     GameStatics::UpdateViews();
 
@@ -169,7 +169,7 @@ void OptionState::End()
 	UnsubscribeToEvents();
 
     // Reset controls
-    GetSubsystem<Input>()->ResetStates();
+    GameHelpers::ResetStates();
 
     GameHelpers::SetMoveAnimation(GameStatics::rootScene_->GetChild("Options"), Vector3::ZERO, Vector3(-10.f * stateManager_->GetStackMove(), 0.f, 0.f), 0.f, SWITCHSCREENTIME);
     GameHelpers::SetMoveAnimationUI(uioptions_, IntVector2::ZERO, IntVector2(-uioptions_->GetSize().x_, 0), 0.f, SWITCHSCREENTIME);

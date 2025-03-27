@@ -13,9 +13,7 @@
 #include "GameUI.h"
 
 #include "SplinePath2D.h"
-#include "SceneAnimation2D.h"
 
-#include "AnimatedSprite.h"
 #include "BossLogic.h"
 #include "TicTacToeLogic.h"
 #include "BlastLogic.h"
@@ -39,8 +37,9 @@ void RegisterGameLibrary(Context* context)
 {
     URHO3D_LOGINFO("RegisterGameLibrary : ... ");
 
+#if defined(ACTIVE_CUSTOM_URHO)
     RegisterGraphics2DLibrary(context);
-
+#endif
 #if defined(TEST_NETWORK)
     Network::RegisterLibrary(context);
 #endif
@@ -55,9 +54,7 @@ void RegisterGameLibrary(Context* context)
     GOE::InitEventTable();
 
     SplinePath2D::RegisterObject(context);
-    SceneAnimation2D::RegisterObject(context);
 
-    AnimatedSprite::RegisterObject(context);
     BossLogic::RegisterObject(context);
     TicTacToeLogic::RegisterObject(context);
     BlastLogic::RegisterObject(context);

@@ -254,12 +254,13 @@ void BossLogic::Start()
         if (animators_.Size())
         {
             body_ = animators_.Front()->GetNode()->GetComponent<RigidBody2D>();
-
+        #ifdef ACTIVE_CUSTOM_URHO
             for (unsigned i=0; i < animators_.Size(); i++)
             {
                 AnimatedSprite2D* animatedSprite = animators_[i];
                 animatedSprite->ApplyCharacterMap(String("unbreak"));
             }
+        #endif
         }
 
         // All nodes are enable, so need now to disable the nodes "TrigAttack" to prevent indesire attacks
@@ -332,7 +333,7 @@ void BossLogic::SetActive(bool state, bool alpha)
     {
         if (state)
             SetAlpha(0.f, 1.f, 2.f);
-        else if (!animators_.Front()->HasAnimation(animationNames_[DIE]))
+        else if (!GameHelpers::HasAnimation(animators_.Front(), animationNames_[DIE]))
             SetAlpha(animators_.Front()->GetAlpha(), 0.f, 3.f);
     }
 
@@ -396,7 +397,7 @@ bool BossLogic::SetState(int state)
             AnimatedSprite2D* animator = animators_[i];
             Node* node = animator->GetNode();
 
-            if (animator->HasAnimation(animName))
+            if (GameHelpers::HasAnimation(animator, animName))
             {
                 // for the first break, show all parts (boss13)
 //                if (state == BREAK1)
@@ -405,9 +406,11 @@ bool BossLogic::SetState(int state)
                 // if oldstate is a break state, apply character Map Break.
                 if (state >= BREAK1 && state <= BREAK5)
                 {
+                #ifdef ACTIVE_CUSTOM_URHO
                     if (!animator->IsCharacterMapApplied(animName))
                         animator->ApplyCharacterMap(animName);
                     else
+                #endif
                         newstate = HURT;
                 }
 
@@ -424,7 +427,9 @@ bool BossLogic::SetState(int state)
                 if (state >= BREAK1 && state <= BREAK5)
                 {
                     changestate = true;
+                #ifdef ACTIVE_CUSTOM_URHO
                     animator->ApplyCharacterMap(animName);
+                #endif
                     newstate = HURT;
                     animator->SetAnimation(animationNames_[newstate]);
                 }
@@ -591,8 +596,10 @@ void BossLogic::Hit(int dps, bool updateobjectives, bool forced)
     }
 }
 
+
 void BossLogic::OnSpawnEntity(StringHash eventType, VariantMap& eventData)
 {
+#ifdef ACTIVE_CUSTOM_URHO    
 //    URHO3D_LOGINFOF("BossLogic() - OnSpawnEntity : Node=%s(%u) ...", node_->GetName().CString(), node_->GetID());
     const EventTriggerInfo& triggerInfo = animators_[0]->GetEventTriggerInfo();
 
@@ -644,6 +651,7 @@ void BossLogic::OnSpawnEntity(StringHash eventType, VariantMap& eventData)
 
 //    URHO3D_LOGINFOF("BossLogic() - OnSpawnEntity : Node=%s(%u) ... spawn=%s(%u) zindex=%d ... OK !",
 //                    node_->GetName().CString(), node_->GetID(), node->GetName().CString(), node->GetID(), triggerInfo.zindex_);
+#endif
 }
 
 void BossLogic::OnUpdate(StringHash eventType, VariantMap& eventData)
@@ -657,8 +665,7 @@ void BossLogic::Update(float timestep)
     {
         // URHO3D_LOGINFOF("BossLogic() - Update : Node=%s(%u) ... state=%d path=%d actionTimer=%F looping=%u",
         //                 node_->GetName().CString(), node_->GetID(), state_, path_, actiontimer_, animators_.Front()->GetSpriterInstance()->GetLooping());
-
-        if (animators_.Front()->HasFinishedAnimation())
+        if (GameHelpers::HasFinishedAnimation(animators_.Front()))
         {
             if (GetCurrentLife() == 0)
             {
@@ -666,7 +673,7 @@ void BossLogic::Update(float timestep)
                 return;
             }
 
-            if (animators_.Front()->GetSpriterInstance()->GetLooping())
+            if (GameHelpers::GetLooping(animators_.Front()))
             {
                 numloops_++;
                 if (numloops_ >= maxLoopsByState_)
@@ -703,12 +710,13 @@ void BossLogic::Update(float timestep)
                 for (;;)
                 {
                     attackindex_ = (attackindex_+1) % numAttacks_;
+                #ifdef ACTIVE_CUSTOM_URHO
                     if (!attackBroken_ || !animators_[0]->IsCharacterMapApplied(String(animationNames_[BREAK1 + attackindex_])))
                     {
                         SetState(ATTACK1 + attackindex_);
                         break;
                     }
-
+                #endif
                     if (attackindex_ == 0)
                         break;
 

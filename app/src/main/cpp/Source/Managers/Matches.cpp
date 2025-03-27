@@ -703,7 +703,7 @@ void MatchGrid::InitializeTiles()
 
             WeakPtr<Node>& tile = tiles_(x, y);
             Node* groundobject = GOT::GetObject(got);          
-            tile = WeakPtr<Node>(groundobject->CloneInside(gridNode_, LOCAL));
+            tile = WeakPtr<Node>(GameHelpers::CloneInside(groundobject, gridNode_, LOCAL));
             if (tile)
             {
                 tile->SetVar(GOA::GOT, got);
@@ -735,7 +735,7 @@ void MatchGrid::InitializeTiles()
         {
             for (unsigned x=0; x < width_ ; x++)
             {
-                Node* node = GOT::GetObject(COT::GROUND1)->CloneInside(backgrid, LOCAL);
+                Node* node = GameHelpers::CloneInside(GOT::GetObject(COT::GROUND1), backgrid, LOCAL);
                 position.x_ = (float(2*int(x)-int(width_)) + 1.f) * halfTileSize;
                 position.y_ = (float(int(height_)-2*int(y)) - 1.f) * halfTileSize;
                 node->SetVar(GOA::GOT, COT::GROUND1);
@@ -764,7 +764,7 @@ void MatchGrid::InitializeTiles()
                 if (!grid_(x, 0).ground_)
                     continue;
 
-                Node* node = GOT::GetObject(COT::GROUND1)->CloneInside(backgrid, LOCAL);
+                Node* node = GameHelpers::CloneInside(GOT::GetObject(COT::GROUND1), backgrid, LOCAL);
                 if (node)
                 {
                     position.x_ = (float(2*int(x)-int(width_)) + 1.f) * halfTileSize;
@@ -828,7 +828,7 @@ void MatchGrid::InitializeWalls()
         {
             if (wallorientation & (1 << i))
             {
-                Node* wall = GOT::GetObject(got)->CloneInside(wallroot, LOCAL);
+                Node* wall = GameHelpers::CloneInside(GOT::GetObject(got), wallroot, LOCAL);
                 wall->SetVar(GOA::GOT, got);
                 wall->SetName(String(1 << i));
                 wall->SetPosition2D(WallPositions[i]);
@@ -1054,7 +1054,7 @@ Node* MatchGrid::AddPreviewObject(Match& match, GameRand& random)
     if (addPower)
     {
         StringHash bonustype(bonusesTypes[random.Get(bonusesTypes.Size())]);
-        object = GOT::GetObject(bonustype)->CloneInside(objectsNode_, LOCAL);
+        object = GameHelpers::CloneInside(GOT::GetObject(bonustype), objectsNode_, LOCAL);
         object->SetVar(GOA::GOT, bonustype);
         // set match type
         match.ctype_  = authorizedColors_[random.Get(authorizedColors_.Size())];
@@ -1067,7 +1067,7 @@ Node* MatchGrid::AddPreviewObject(Match& match, GameRand& random)
     {
         // set object
         StringHash rocktype = rocksTypes[random.Get(rocksTypes.Size())];
-        object = GOT::GetObject(rocktype)->CloneInside(objectsNode_, LOCAL);
+        object = GameHelpers::CloneInside(GOT::GetObject(rocktype), objectsNode_, LOCAL);
         object->SetVar(GOA::GOT, rocktype);
         // set match type
         match.ctype_    = ROCKS;
@@ -1090,7 +1090,7 @@ Node* MatchGrid::AddPreviewObject(Match& match, GameRand& random)
 
         // set object
         const StringHash& got = enemiesTypes[random.Get(enemiesTypes.Size())];
-        object = GOT::GetObject(got)->CloneInside(objectsNode_, LOCAL);
+        object = GameHelpers::CloneInside(GOT::GetObject(got), objectsNode_, LOCAL);
         object->SetVar(GOA::GOT, got);
         // set match type
         match.ctype_    = object->GetVar(GOA::MATCHTYPE).GetInt();
@@ -1132,7 +1132,7 @@ Node* MatchGrid::AddObject(Match& match, GameRand& random)
     if (addPower)
     {
         StringHash bonustype(bonusesTypes[random.Get(bonusesTypes.Size())]);
-        object = GOT::GetObject(bonustype)->CloneInside(objectsNode_, LOCAL);
+        object = GameHelpers::CloneInside(GOT::GetObject(bonustype), objectsNode_, LOCAL);
         object->SetVar(GOA::GOT, bonustype);
 //        int bonusindex = GameRand::GetRand(OBJRAND, bonusesTypes.Size());
 //        object = COT::GetObjectFromCategory(COT::POWERS, bonusindex)->CloneInside(objectsNode_, LOCAL);
@@ -1148,7 +1148,7 @@ Node* MatchGrid::AddObject(Match& match, GameRand& random)
     {
         // set object
         StringHash rocktype = rocksTypes[random.Get(rocksTypes.Size())];
-        object = GOT::GetObject(rocktype)->CloneInside(objectsNode_, LOCAL);
+        object = GameHelpers::CloneInside(GOT::GetObject(rocktype), objectsNode_, LOCAL);
         object->SetVar(GOA::GOT, rocktype);
         // set match type
         match.ctype_    = ROCKS;
@@ -1168,7 +1168,7 @@ Node* MatchGrid::AddObject(Match& match, GameRand& random)
 
         // set object
         const StringHash& got = enemiesTypes[random.Get(enemiesTypes.Size())];
-        object = GOT::GetObject(got)->CloneInside(objectsNode_, LOCAL);
+        object = GameHelpers::CloneInside(GOT::GetObject(got), objectsNode_, LOCAL);
         object->SetVar(GOA::GOT, got);
         // set match type
         match.ctype_    = object->GetVar(GOA::MATCHTYPE).GetInt();
@@ -1197,7 +1197,7 @@ void MatchGrid::AddObject(StringHash got, const Match& match, WeakPtr<Node>& obj
     if (!got.Value())
         return;
 
-    object = GOT::GetObject(got)->CloneInside(objectsNode_, LOCAL);
+    object = GameHelpers::CloneInside(GOT::GetObject(got), objectsNode_, LOCAL);
     if (object)
     {
         object->SetVar(GOA::GOT, got);
@@ -1266,7 +1266,7 @@ Node* MatchGrid::AddPowerBonus(Match* m, int bonusindex)
     // Remove Existing Object
     RemoveObject(object);
 
-    object = bonus->CloneInside(objectsNode_, LOCAL);
+    object = GameHelpers::CloneInside(bonus, objectsNode_, LOCAL);
     object->SetVar(GOA::GOT, bonustype);
     object->SetPosition(GetEntrance(match));
     object->SetScale(OBJECTSCALE);
@@ -1315,7 +1315,7 @@ Node* MatchGrid::AddItemBonus(Match& m, const StringHash& category, int bonusind
     // Remove Existing Object
     RemoveObject(object);
 
-    object = bonus->CloneInside(objectsNode_, LOCAL);
+    object = GameHelpers::CloneInside(bonus, objectsNode_, LOCAL);
     object->SetVar(GOA::GOT, bonustype);
     object->SetPosition(GetEntrance(match));
     object->SetScale(ITEMSCALE);
@@ -1348,7 +1348,7 @@ void MatchGrid::AddSuccessEffect(const Match& match)
         return;
     }
 
-    Node* node = effect->CloneInside(objectsNode_, LOCAL);
+    Node* node = GameHelpers::CloneInside(effect, objectsNode_, LOCAL);
     node->SetEnabled(true);
     node->SetPosition(objects_(match.x_, match.y_)->GetPosition());
 
@@ -1391,7 +1391,7 @@ void MatchGrid::AddObjectiveEffect(const Match& match)
         return;
     }
 
-    Node* node = effect->CloneInside(objectsNode_, LOCAL);
+    Node* node = GameHelpers::CloneInside(effect, objectsNode_, LOCAL);
     node->SetEnabled(true);
     node->SetPosition(objects_(match.x_, match.y_)->GetPosition());
     SetDrawOrder(match, node, OBJECTIVELAYER, true);
@@ -1431,7 +1431,7 @@ void MatchGrid::AddTouchEffect(const Vector2& position, float scale, float delay
         return;
     }
 
-    Node* node = effect->CloneInside(objectsNode_, LOCAL);
+    Node* node = GameHelpers::CloneInside(effect, objectsNode_, LOCAL);
     node->SetEnabled(true);
 
     // touch effect is in local gridnode==objectnode, position is worldposition so adjust scale
@@ -1473,7 +1473,7 @@ void MatchGrid::AddEffectInNode(Node* root, int e, float scale, float duration, 
         return;
     }
 
-    Node* node = effect->CloneInside(root, LOCAL);
+    Node* node = GameHelpers::CloneInside(effect, root, LOCAL);
     node->SetEnabled(true);
 
     StaticSprite2D* drawable = node->GetDerivedComponent<StaticSprite2D>();
@@ -1518,7 +1518,7 @@ void MatchGrid::AddPowerEffects(const Match& match)
             URHO3D_LOGWARNINGF("MatchGrid() - AddPowerEffects : no effect for %s !", match.ToString().CString());
             return;
         }
-        Node* node = effect->CloneInside(objectsNode_, LOCAL);
+        Node* node = GameHelpers::CloneInside(effect, objectsNode_, LOCAL);
         node->SetVar(GOA::FACTION, GO_Player);
         node->SetEnabled(true);
         node->SetPosition(position);
@@ -1545,7 +1545,7 @@ void MatchGrid::AddPowerEffects(const Match& match)
 
         if (match.effect_ & XEXPLOSION)
 		{
-			Node* node = explosion->CloneInside(objectsNode_, LOCAL);
+			Node* node = GameHelpers::CloneInside(explosion, objectsNode_, LOCAL);
 			node->SetVar(GOA::FACTION, GO_Player);
 			node->SetEnabled(true);
 			node->SetPosition(position);
@@ -1555,7 +1555,7 @@ void MatchGrid::AddPowerEffects(const Match& match)
         }
         if (match.effect_ & YEXPLOSION)
         {
-			Node* node = explosion->CloneInside(objectsNode_, LOCAL);
+			Node* node = GameHelpers::CloneInside(explosion, objectsNode_, LOCAL);
 			node->SetVar(GOA::FACTION, GO_Player);
 			node->SetEnabled(true);
 			node->SetPosition(position);
@@ -1775,12 +1775,13 @@ bool MatchGrid::SetEffectAnimation(Node* node)
 
 	float delay = EXPLOSIONDELAY + 0.1f;
 
+#ifdef ACTIVE_CUSTOM_URHO
 	if (drawable->IsInstanceOf<AnimatedSprite2D>())
 	{
 		AnimatedSprite2D* animated = static_cast<AnimatedSprite2D*>(drawable);
 		delay = animated->GetSpriterAnimation()->length_ + 0.1f;
 	}
-
+#endif
     SharedPtr<ObjectAnimation> objectAnimation(new ObjectAnimation(node->GetContext()));
     SharedPtr<ValueAnimation> alphaAnimation(new ValueAnimation(drawable->GetContext()));
     alphaAnimation->SetKeyFrame(0.f, drawable->GetAlpha());

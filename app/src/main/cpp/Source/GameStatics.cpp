@@ -419,7 +419,9 @@ void GameStatics::Initialize(Context* context)
 	stateManager_->RegisterState(new MenuState(context));
 	stateManager_->RegisterState(new LevelMapState(context));
 	stateManager_->RegisterState(new PlayState(context));
+#ifdef ACTIVE_CUSTOM_URHO
     stateManager_->RegisterState(new CinematicState(context));
+#endif    
     stateManager_->RegisterState(new OptionState(context));
 
     stateManager_->AddToStack("MainMenu");
@@ -444,11 +446,11 @@ void GameStatics::Initialize(Context* context)
     netIdentity_ = GameHelpers::GetRandomString(10);
     // set signaling server from gameconfig
     bool ssl = !gameConfig_.networkServerPort_.Empty() && gameConfig_.networkServerPort_ != "8000";
-    netSignalingServer_ = (ssl ? "wss://" : "ws://") + gameConfig_.networkServerUrl_ + 
+    netSignalingServer_ = (ssl ? "wss://" : "ws://") + gameConfig_.networkServerUrl_ +
                            ":" + gameConfig_.networkServerPort_ + "/";
 
     URHO3D_LOGINFO("GameStatics() - ---------------------------------------------------");
-    URHO3D_LOGINFOF("GameStatics() - Initialize .... netSignalingServer_=%s netIdentity_=%s ... OK ! -", 
+    URHO3D_LOGINFOF("GameStatics() - Initialize .... netSignalingServer_=%s netIdentity_=%s ... OK ! -",
                      netSignalingServer_.CString(), netIdentity_.CString());
     URHO3D_LOGINFO("GameStatics() - ---------------------------------------------------");
 }
@@ -538,7 +540,7 @@ void GameStatics::InitSoundChannels()
     }
 }
 
-void GameStatics::ResetCamera()
+void GameStatics::ResetCamera(bool ortho)
 {
     if (!cameraNode_)
     {
@@ -546,7 +548,7 @@ void GameStatics::ResetCamera()
         camera_ = cameraNode_->CreateComponent<Camera>(LOCAL);
     }
 
-    ChangeCameraTo(cameraNode_, true);
+    ChangeCameraTo(cameraNode_, ortho);
 }
 
 void GameStatics::ChangeCameraTo(Node* node, bool ortho)
@@ -700,7 +702,7 @@ bool GameStatics::LoadGameConfig(Context* context, VariantMap& engineparameters,
                 else if (name == "networkServerUrl_")
                     config.networkServerUrl_ = value;
                 else if (name == "networkServerPort_")
-                    config.networkServerPort_ = value;                    
+                    config.networkServerPort_ = value;
                 else if (name == "networkMode_")
                     config.networkMode_ = value;
 

@@ -2,7 +2,7 @@
 #include <cstdio>
 
 #include <Urho3D/Urho3D.h>
-
+#include <Urho3D/Graphics/Renderer.h>
 #include <Urho3D/IO/Log.h>
 
 #include "DefsGame.h"
@@ -34,11 +34,10 @@ void GameCommands::Launch(Context* context, const String& input)
 
     else if (inputLower == "statics")
         GameStatics::Dump();
-
+#ifdef ACTIVE_CUSTOM_URHO
     else if (inputLower == "render")
-    {
-        GameStatics::rootScene_->GetComponent<Renderer2D>()->Dump();
-    }
+        GameStatics::renderer2d_->Dump();
+#endif
     else if (inputs[0] == "setlevel")
     {
         int level = GameStatics::SetLevel(inputs.Size() > 1 ? ToInt(inputs[1]) : 1);

@@ -21,7 +21,6 @@
 #include <Urho3D/UI/Text.h>
 #include <Urho3D/UI/Sprite.h>
 
-#include "AnimatedSprite.h"
 #include "DelayInformer.h"
 #include "DelayAction.h"
 
@@ -187,8 +186,11 @@ void UIDialog::Set(UIElement* root, const String& layout)
 
         frame_ = panel_->GetChildStaticCast<Sprite>(String("Frame"), true);
         rect_ = frame_->GetChildStaticCast<Sprite>(String("Rect"), true);
+#ifdef ACTIVE_CUSTOM_URHO
         companion_ = frame_->GetChildStaticCast<AnimatedSprite>(String("Companion"), true);
-
+#else
+        companion_ = frame_->GetChildStaticCast<Sprite>(String("Companion"), true);
+#endif
         panelOriginSize_ = Vector2((float)panel_->GetSize().x_, (float)panel_->GetSize().y_);
         framePosNormalized_.x_ = frame_->GetPosition().x_ / (float)panel_->GetSize().x_;
         framePosNormalized_.y_ = frame_->GetPosition().y_ / (float)panel_->GetSize().y_;
@@ -578,12 +580,13 @@ void UIDialog::UpdateMessage()
                 title_->SetText(l10n->Get(currentmessage_.name_));
             if (content_)
                 content_->SetText(l10n->Get(currentmessage_.name_ + "_c"));
+        #ifdef ACTIVE_CUSTOM_URHO
             if (companion_ && !currentmessage_.companion_.Empty())
             {
                 companion_->SetEntity(currentmessage_.companion_);
                 companion_->SetAnimation("idle");
             }
-
+        #endif
             messageDirty_ = false;
         }
     }

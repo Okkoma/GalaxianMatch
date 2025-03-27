@@ -11,6 +11,8 @@ namespace Urho3D
 {
     class Camera;
     class UIElement;
+    class RigidBody2D;
+    class CollisionShape2D;
     class Sprite2D;
     class Font;
     class Text;
@@ -21,7 +23,6 @@ namespace Urho3D
 
 using namespace Urho3D;
 
-class AnimatedSprite;
 class TextMessage;
 class InteractiveFrame;
 
@@ -100,7 +101,6 @@ public:
     static void SetMoveAnimation(Node* node, const Vector3& from, const Vector3& to, float start, float delay);
 
     /// UI Helpers
-    static void ResetCamera();
     static void ApplySizeRatio(int w, int h, IntVector2& size);
     static void ApplySizeRatioMaximized(int w, int h, IntVector2& size);
     static void AddText3DFadeAnim(Node* rootNode, const String& text, Text* originaltext, const Vector3& deltamove, float fadetime, float scalefactor);
@@ -108,7 +108,7 @@ public:
     static TextMessage* AddUIMessage(const String& text, bool localize, const String& font, int fontsize, const Color& color, const IntVector2& position, float duration, float delaystart=0.f);
     static MessageBox* AddMessageBox(const String& title, const String& question, bool questionl10, const String& answer1, const String& answer2, Object* subscriber, EventHandler* handler, XMLFile* layoutFile = 0);
     static InteractiveFrame* AddInteractiveFrame(const String& framefile, Object* subscriber=0, EventHandler* handler=0, bool autostart=true);
-    static AnimatedSprite* AddAnimatedSpriteUI(UIElement* root, const String& label, const String& spritename, const String& entityname, const Vector2& position, float rotation=0.f);
+    static Animatable* AddAnimatedSpriteUI(UIElement* root, const String& label, const String& spritename, const String& entityname, const Vector2& position, float rotation=0.f, bool visible=true);
     static void SetMoveAnimationUI(UIElement* elt, const IntVector2& from, const IntVector2& to, float start, float delay);
     static void SetScaleAnimationUI(UIElement* elt, float from, float to, float mid, float start, float delay);
     static void FindParentWithAttribute(const StringHash& attribute, UIElement* element, UIElement*& parent, Variant& var);
@@ -118,6 +118,17 @@ public:
     /// Helper function to generate a random ID
     static String GetRandomString(unsigned size);
 
+    /// Helpers Compatiblity U3d mainstream - U3d custom
+    static void ResetCamera(bool forceortho);
+    static void ResetStates();
+    static Node* CloneInside(Node* ref, Node* parent, Urho3D::CreateMode mode = LOCAL);    
+    static void SetRenderer2DCheckVisibility(bool enable);
+    static bool HasAnimation(AnimatedSprite2D* animatedSprite, const String& name);
+    static void SetTextColorInNode(Node* node, const Color& color);
+    static void GetPhysicElements(const Vector2& position, RigidBody2D*& body, CollisionShape2D*& shape, unsigned mask);
+    static bool HasFinishedAnimation(AnimatedSprite2D* anim);
+    static bool GetLooping(AnimatedSprite2D* anim);
+    
 private:
     static void SetScaleChildRecursive(UIElement* elt, const Vector2& scale);
 

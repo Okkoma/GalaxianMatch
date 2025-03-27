@@ -12,7 +12,7 @@
 #include "GameEvents.h"
 #include "GameHelpers.h"
 #include "GameStatics.h"
-#include "AnimatedSprite.h"
+
 #include "DelayInformer.h"
 
 #include "DelayAction.h"
@@ -83,14 +83,17 @@ DelayAction* DelayAction::Set(StringHash eventType, StringHash eventTypeStop, fl
     if (actionType_ == PLAY_ANIMATION)
     {
         AnimatedSprite2D* animatedSprite = GameHelpers::AddAnimatedSprite2D(static_cast<Node*>(parent_.Get()), name_, animationfilename, name_, position, angle);
-        animatedSprite->GetNode()->SetEnabled(false);
-        object_ = SharedPtr<Animatable>(animatedSprite);
+        if (animatedSprite)
+        {
+            animatedSprite->GetNode()->SetEnabled(false);
+            object_ = SharedPtr<Animatable>(animatedSprite);
+        }
     }
     else
     {
-        AnimatedSprite* animatedSprite = GameHelpers::AddAnimatedSpriteUI(static_cast<UIElement*>(parent_.Get()), name_, animationfilename, name_, position, angle);
-        animatedSprite->SetVisible(false);
-        object_ = SharedPtr<Animatable>(animatedSprite);
+        Animatable* animatedSprite = GameHelpers::AddAnimatedSpriteUI(static_cast<UIElement*>(parent_.Get()), name_, animationfilename, name_, position, angle, false);
+        if (animatedSprite)
+            object_ = SharedPtr<Animatable>(animatedSprite);
     }
 
     return this;
@@ -221,10 +224,12 @@ void DelayAction::ExecuteAction()
                 parent_ = GameStatics::ui_->GetRoot()->GetChild(params_.parentname_, true);
             if (parent_)
             {
-                AnimatedSprite* animatedSprite = GameHelpers::AddAnimatedSpriteUI(static_cast<UIElement*>(parent_.Get()), name_, params_.animationfilename_, name_, params_.position_, params_.angle_);
-                object_ = SharedPtr<Animatable>(animatedSprite);
+                Animatable* animatedSprite = GameHelpers::AddAnimatedSpriteUI(static_cast<UIElement*>(parent_.Get()), name_, params_.animationfilename_, name_, params_.position_, params_.angle_);
+                if (animatedSprite)
+                    object_ = SharedPtr<Animatable>(animatedSprite);
             }
         }
+#ifdef ACTIVE_CUSTOM_URHO        
         if (object_)
         {
             AnimatedSprite* animatedSprite = static_cast<AnimatedSprite*>(object_.Get());
@@ -243,6 +248,7 @@ void DelayAction::ExecuteAction()
                                 animatedSprite->IsVisibleEffective() ? "true":"false");
             }
         }
+#endif
     }
         break;
 

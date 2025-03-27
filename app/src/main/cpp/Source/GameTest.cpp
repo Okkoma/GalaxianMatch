@@ -376,7 +376,7 @@ void InputPlayer::Start()
     {
         URHO3D_LOGINFOF("InputPlayer() - Start this=%u mode=%s", this, GameTestModeNames_[mode_]);
 
-        GameStatics::input_->ResetStates();
+        GameHelpers::ResetStates();
         timer_.Reset();
         ientry_ = 0;
         clickdone_ = false;
@@ -424,7 +424,7 @@ void InputPlayer::Stop()
     UnsubscribeFromAllEvents();
 
     GameStatics::playingTest_ = false;
-    GameStatics::input_->ResetStates();
+    GameHelpers::ResetStates();
 
     GameStatics::SetTouchEmulation(false);
 
@@ -825,7 +825,7 @@ void InputPlayer::HandlePlayTest(StringHash eventType, VariantMap& eventData)
         TestClickUp(testposition_);
 
         GameStatics::SetTouchEmulation(false);
-        GameStatics::input_->ResetStates();
+        GameHelpers::ResetStates();
         GameStatics::playingTest_ = false;
 
         URHO3D_LOGINFOF("InputPlayer() - HandlePlayTest : No more entries in the record => Stop the record !");
@@ -903,7 +903,7 @@ void InputPlayer::HandleRandomTest(StringHash eventType, VariantMap& eventData)
                 timer_.Reset();
                 delay_ = Random(TESTRANDOM_DELAYMIN, TESTRANDOM_DELAYMAX);
                 ientry_++;
-                GameStatics::input_->ResetStates();
+                GameHelpers::ResetStates();
             }
         }
     }

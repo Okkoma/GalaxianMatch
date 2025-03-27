@@ -227,14 +227,14 @@ void Tutorial::HandleTutorialLaunch(StringHash eventType, VariantMap& eventData)
     Node* content = frame_->GetNode()->GetChild("Content");
     String animationname(ToString("Power%d", tinfo.powerid_));
     AnimatedSprite2D* animated = content->GetComponent<AnimatedSprite2D>(LOCAL);
-    if (animated->HasAnimation(animationname))
+    if (GameHelpers::HasAnimation(animated, animationname))
         animated->SetAnimation(animationname);
     else
         animated->SetAnimation("NoPower");
 
     // Set the position of the frame to prevent the covering of the object 'power'
     IntRect framerect;
-    GameHelpers::OrthoWorldToScreen(framerect, frame_->GetNode()->GetChild("Frame")->GetComponent<StaticSprite2D>()->GetWorldBoundingBox2D());
+    GameHelpers::OrthoWorldToScreen(framerect, frame_->GetNode()->GetChild("Frame")->GetComponent<StaticSprite2D>()->GetWorldBoundingBox());
     IntVector2 position, framepos;
     GameHelpers::OrthoWorldToScreen(position, tinfo.node_);
     const int screenw = GameStatics::graphics_->GetWidth();

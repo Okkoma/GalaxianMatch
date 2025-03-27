@@ -249,7 +249,7 @@ bool LevelMapState::ResetMap(bool purge)
     URHO3D_LOGINFOF("LevelMapState() - ResetMap ... purge=%s       -", purge?"true":"false");
     URHO3D_LOGINFO("LevelMapState() - ----------------------------------------");
 
-    GameStatics::input_->ResetStates();
+    GameHelpers::ResetStates();
 
     if (switchPlanetModeInformer_ && !switchPlanetModeInformer_->Expired())
         switchPlanetModeInformer_->Free();
@@ -271,7 +271,7 @@ bool LevelMapState::ResetMap(bool purge)
         UnsubscribeToEvents();
         ResetUI();
 
-        GameHelpers::ResetCamera();
+        GameHelpers::ResetCamera(true);
     }
 
     // Update Default Components for the Scene
@@ -307,7 +307,7 @@ bool LevelMapState::ResetMap(bool purge)
     URHO3D_LOGINFO("LevelMapState() - ResetMap ... OK !                      -");
     URHO3D_LOGINFO("LevelMapState() - ----------------------------------------");
 
-#ifdef ACTIVE_CINEMATICS
+#if defined(ACTIVE_CUSTOM_URHO) && defined(ACTIVE_CINEMATICS)
     CinematicState::SetCinematic(CINEMATICSELECTIONMODE_INTRO_OUTRO, firstMissionID_, selectedLevelID_);
 #endif
 
@@ -506,7 +506,7 @@ void LevelMapState::SetMissionNodes(Node* root)
     for (unsigned i=0; i < points.Size(); i++)
     {
         // Create Mission Nodes
-        Node* node = missionDefaultNode->CloneInside(root, LOCAL);
+        Node* node = GameHelpers::CloneInside(missionDefaultNode, root, LOCAL);
         node->SetName(points[i]->name_);
         node->SetPosition2D(points[i]->position_);
 
@@ -567,7 +567,7 @@ void LevelMapState::SetMissionNodes(Node* root)
     // Set Selector
     if (!root->GetChild("Selector"))
     {
-        selector_ = missionDefaultNode->CloneInside(root, LOCAL);
+        selector_ = GameHelpers::CloneInside(missionDefaultNode, root, LOCAL);
 
         AnimatedSprite2D* animatedsprite = selector_->GetComponent<AnimatedSprite2D>();
         animatedsprite->SetLayer(LMLayer_Selector);
@@ -685,7 +685,7 @@ void LevelMapState::SetPlanetNodes(Node* root)
         {
             const LevelGraphPoint* point = points[i];
             // Create Planets Node
-            Node* node = defaultNode->CloneInside(root, LOCAL);
+            Node* node = GameHelpers::CloneInside(defaultNode, root, LOCAL);
             node->SetName(point->name_);
             node->SetScale2D(scale);
             node->SetPosition2D(point->position_);
@@ -868,7 +868,7 @@ void LevelMapState::UpdatePlanetSelection()
             {
                 bool hascinematic = false;
 
-            #ifdef ACTIVE_CINEMATICS
+            #if defined(ACTIVE_CUSTOM_URHO) && defined(ACTIVE_CINEMATICS)
                 if (CinematicState::GetCinematicParts(CINEMATICSELECTIONMODE_REPLAY, firstMissionID_, selectedLevelID_))
                 {
                 #ifdef ACTIVE_CINEMATICS_BUTTONONSCENE
@@ -1209,7 +1209,7 @@ void LevelMapState::SetEnableConstellation(bool enable)
     if (constellationNode)
     {
         AnimatedSprite2D* animation = constellationNode->GetComponent<AnimatedSprite2D>();
-        if (enable && animation && animation->HasAnimation("keep") && GameStatics::playerState_->zonestates[GameStatics::playerState_->zone-1] == GameStatics::CONSTELLATION_UNBLOCKED)
+        if (enable && animation && GameHelpers::HasAnimation(animation, "keep") && GameStatics::playerState_->zonestates[GameStatics::playerState_->zone-1] == GameStatics::CONSTELLATION_UNBLOCKED)
         {
             Node* missionpoints = mapscene_->GetChild("LevelScene")->GetChild("MissionPoints");
             constellationNode->SetScale2D(missionpoints->GetScale2D());
@@ -1552,7 +1552,7 @@ void LevelMapState::StartLevel()
 
     UnsubscribeToEvents();
 
-#ifdef ACTIVE_CINEMATICS
+#if defined(ACTIVE_CUSTOM_URHO) && defined(ACTIVE_CINEMATICS)
     if (!CinematicState::SetCinematic(CINEMATICSELECTIONMODE_LEVELSELECTED, firstMissionID_, selectedLevelID_, "Play"))
         stateManager_->PushToStack("Play");
 #else
@@ -1585,7 +1585,7 @@ void LevelMapState::StartState(int action)
     }
     else if (action == LEVELMAPACTION_GOTONEXTZONE)
     {
-    #ifdef DEMOMODE_MAXZONE
+    #if defined(ACTIVE_CUSTOM_URHO) && defined(DEMOMODE_MAXZONE)
         if (GameStatics::currentZone_ == DEMOMODE_MAXZONE)
         {
             if (!CinematicState::SetCinematic(CINEMATICSELECTIONMODE_TOBECONTINUED))
@@ -1595,7 +1595,7 @@ void LevelMapState::StartState(int action)
     #endif
         {
             GameStatics::SetLevel(lastMissionID_+1);
-        #ifdef ACTIVE_CINEMATICS
+        #if defined(ACTIVE_CUSTOM_URHO) && defined(ACTIVE_CINEMATICS)
             if (!CinematicState::SetCinematic(CINEMATICSELECTIONMODE_INTRO_OUTRO))
         #endif
             {
@@ -1611,7 +1611,7 @@ void LevelMapState::StartState(int action)
     }
     else if (action == LEVELMAPACTION_CINEMATICREPLAY)
     {
-    #ifdef ACTIVE_CINEMATICS
+    #if defined(ACTIVE_CUSTOM_URHO) && defined(ACTIVE_CINEMATICS)
         if (CinematicState::GetCinematicParts(CINEMATICSELECTIONMODE_REPLAY, firstMissionID_, selectedLevelID_))
         {
             // Show InteractiveFrame Confirmation Message
@@ -1762,9 +1762,10 @@ void LevelMapState::HandleConfirmCinematicLaunch(StringHash eventType, VariantMa
     UnsubscribeFromEvent(messageframe_, E_MESSAGEACK);
     if (messageframe_)
         messageframe_->Stop();
-
+#if defined(ACTIVE_CUSTOM_URHO)
 	if (eventData[MessageACK::P_OK].GetBool())
         CinematicState::LaunchCinematicParts(CINEMATICSELECTIONMODE_REPLAY);
+#endif        
 }
 
 void LevelMapState::HandleSceneUpdate(StringHash eventType, VariantMap& eventData)
@@ -1845,7 +1846,7 @@ void LevelMapState::HandleChangeSceneMode(StringHash eventType, VariantMap& even
     if (constellationNode)
     {
         AnimatedSprite2D* animation = constellationNode->GetComponent<AnimatedSprite2D>();
-        if (animation && animation->HasAnimation("keep") && GameStatics::playerState_->zonestates[GameStatics::playerState_->zone-1] == GameStatics::CONSTELLATION_UNBLOCKED)
+        if (animation && GameHelpers::HasAnimation(animation, "keep") && GameStatics::playerState_->zonestates[GameStatics::playerState_->zone-1] == GameStatics::CONSTELLATION_UNBLOCKED)
         {
             Node* missionpoints = mapscene_->GetChild("LevelScene")->GetChild("MissionPoints");
             constellationNode->SetScale2D(missionpoints->GetScale2D());
@@ -2119,7 +2120,7 @@ void LevelMapState::HandleSelection(StringHash eventType, VariantMap& eventData)
                         inside = true;
                         selectedLevelID_ = -1;
                         UpdateActionAnimations(deltay < 0 ? LEVELMAPACTION_GOTOPREVIOUSZONE : LEVELMAPACTION_GOTONEXTZONE);
-                        GameStatics::input_->ResetStates();
+                        GameHelpers::ResetStates();
                     }
                 }
                 // allow to change to a nearest planet/mission

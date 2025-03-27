@@ -19,6 +19,10 @@ void RegisterGraphics2DLibrary(Urho3D::Context* context)
     ParticleEffect2D::RegisterObject(context);
     ParticleEmitter2D::RegisterObject(context);
 
-    Text2D::RegisterObject(context);    
+    Text2D::RegisterObject(context);
+    
+    SceneAnimation2D::RegisterObject(context);
+
+    AnimatedSprite::RegisterObject(context);
 }
 

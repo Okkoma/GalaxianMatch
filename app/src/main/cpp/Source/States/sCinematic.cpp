@@ -235,7 +235,7 @@ void CinematicState::End()
 	UnsubscribeFromAllEvents();
 
     // Reset controls
-    GetSubsystem<Input>()->ResetStates();
+    GameHelpers::ResetStates();
 
 	// Call base class implementation
 	GameState::End();
@@ -398,7 +398,7 @@ bool CinematicState::LaunchSceneFile()
 
         SubscribeToEvents();
 
-        GameStatics::rootScene_->GetComponent<Renderer2D>()->SetCheckVisibility(false);
+        GameHelpers::SetRenderer2DCheckVisibility(false);
 
         URHO3D_LOGINFO("CinematicState() - LaunchSceneFile : ... OK !");
         return true;
@@ -411,7 +411,7 @@ void CinematicState::HandleDelayedStart(StringHash eventType, VariantMap& eventD
 {
 //    float delay = 0.5f;
 
-    GameHelpers::ResetCamera();
+    GameHelpers::ResetCamera(true);
 
     if (!scenefilenames_.Size())
     {
@@ -495,8 +495,8 @@ void CinematicState::Stop()
         if (localScene_)
             localScene_->SetEnabledRecursive(false);
 
-        GameStatics::ResetCamera();
-        GameStatics::rootScene_->GetComponent<Renderer2D>()->SetCheckVisibility(true);
+        GameHelpers::ResetCamera(true);
+        GameHelpers::SetRenderer2DCheckVisibility(true);
         stopped_ = true;
     }
 

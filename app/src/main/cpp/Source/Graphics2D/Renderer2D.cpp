@@ -75,9 +75,7 @@ Renderer2D::Renderer2D(Context* context) :
     SubscribeToEvent(E_BEGINVIEWUPDATE, URHO3D_HANDLER(Renderer2D, HandleBeginViewUpdate));
 }
 
-Renderer2D::~Renderer2D()
-{
-}
+Renderer2D::~Renderer2D() = default;
 
 void Renderer2D::RegisterObject(Context* context)
 {
@@ -227,15 +225,13 @@ void Renderer2D::UpdateGeometry(const FrameInfo& frame)
     if (viewBatchInfo.vertexBufferUpdateFrameNumber_ != frame.frameNumber_)
     {
         // update vertex buffers
-        for (int primitiveType=0; primitiveType<2; primitiveType++)
-        {
-            VertexBuffer* vertexBuffer = viewBatchInfo.vertexBuffer_[primitiveType];
-            unsigned vertexcount = viewBatchInfo.vertexCount_[primitiveType];
+		for (int primitiveType = 0; primitiveType < 2; primitiveType++)
+		{
+			unsigned vertexcount = viewBatchInfo.vertexCount_[primitiveType];
+			VertexBuffer* vertexBuffer = viewBatchInfo.vertexBuffer_[primitiveType];
 
-            if (vertexcount > vertexBuffer->GetVertexCount())
-            {
+			if (vertexBuffer->GetVertexCount() < vertexcount)
                 vertexBuffer->SetSize(vertexcount, MASK_VERTEX2D, true);
-            }
 
             if (vertexcount)
             {
@@ -264,7 +260,6 @@ void Renderer2D::UpdateGeometry(const FrameInfo& frame)
         viewBatchInfo.vertexBufferUpdateFrameNumber_ = frame.frameNumber_;
     }
 }
-
 
 UpdateGeometryType Renderer2D::GetUpdateGeometryType()
 {
@@ -332,20 +327,6 @@ bool Renderer2D::CheckVisibility(ViewBatchInfo2D* viewinfo, Drawable2D* drawable
     return viewinfo->frustum_->IsInsideFast(drawable->GetWorldBoundingBox2D()) != OUTSIDE;
 }
 
-void CheckDrawableVisibility(const WorkItem* item, unsigned threadIndex)
-{
-    ViewBatchInfo2D* viewinfo = reinterpret_cast<ViewBatchInfo2D*>(item->aux_);
-    Drawable2D** start = reinterpret_cast<Drawable2D**>(item->start_);
-    Drawable2D** end = reinterpret_cast<Drawable2D**>(item->end_);
-
-    while (start != end)
-    {
-        Drawable2D* drawable = *start++;
-        if (drawable->GetRenderer()->CheckVisibility(viewinfo, drawable))
-            drawable->MarkInView(viewinfo->frame_);
-    }
-}
-
 void Renderer2D::OnWorldBoundingBoxUpdate()
 {
     // Set a large dummy bounding box to ensure the renderer is rendered
@@ -372,7 +353,6 @@ SharedPtr<Material> Renderer2D::CreateMaterial(Texture2D* texture, BlendMode ble
         Pass* pass = tech->CreatePass("alpha");
         pass->SetVertexShader("Urho2D");
         pass->SetPixelShader("Urho2D");
-        pass->SetDepthTestMode(CMP_ALWAYS);
         pass->SetDepthWrite(false);
         pass->SetBlendMode(blendMode);
         techIt = cachedTechniques_.Insert(MakePair((int)blendMode, tech));
@@ -385,10 +365,23 @@ SharedPtr<Material> Renderer2D::CreateMaterial(Texture2D* texture, BlendMode ble
     return newMaterial;
 }
 
+void CheckDrawableVisibilityWork(const WorkItem* item, unsigned threadIndex)
+{
+    ViewBatchInfo2D* viewinfo = reinterpret_cast<ViewBatchInfo2D*>(item->aux_);
+    Drawable2D** start = reinterpret_cast<Drawable2D**>(item->start_);
+    Drawable2D** end = reinterpret_cast<Drawable2D**>(item->end_);
+
+    while (start != end)
+    {
+        Drawable2D* drawable = *start++;
+        if (drawable->GetRenderer()->CheckVisibility(viewinfo, drawable))
+            drawable->MarkInView(viewinfo->frame_);
+    }
+}
 
 void Renderer2D::HandleBeginViewUpdate(StringHash eventType, VariantMap& eventData)
 {
-    using namespace BeginViewRender;
+    using namespace BeginViewUpdate;
 
     // Check that we are updating the correct scene
     if (GetScene() != eventData[P_SCENE].GetPtr())
@@ -430,7 +423,7 @@ void Renderer2D::HandleBeginViewUpdate(StringHash eventType, VariantMap& eventDa
         {
             SharedPtr<WorkItem> item = queue->GetFreeItem();
             item->priority_ = M_MAX_UNSIGNED;
-            item->workFunction_ = CheckDrawableVisibility;
+            item->workFunction_ = CheckDrawableVisibilityWork;
             item->aux_ = currentViewBatchInfo_;
 
             PODVector<Drawable2D*>::Iterator end = drawables_.End();
@@ -466,12 +459,13 @@ void Renderer2D::HandleBeginViewUpdate(StringHash eventType, VariantMap& eventDa
     batches_.Resize(viewBatchInfo.batchCount_);
     for (unsigned i = 0; i < viewBatchInfo.batchCount_; ++i)
     {
+        batches_[i].distance_ = viewBatchInfo.distances_[i];
         batches_[i].material_ = viewBatchInfo.materials_[i];
         batches_[i].geometry_ = viewBatchInfo.geometries_[i];
     }
 }
 
-void Renderer2D::GetDrawables(PODVector<Drawable2D*>& dest, Node* node)
+void Renderer2D::GetDrawables(PODVector<Drawable2D*>& drawables, Node* node)
 {
     if (!node || !node->IsEnabled())
         return;
@@ -481,18 +475,21 @@ void Renderer2D::GetDrawables(PODVector<Drawable2D*>& dest, Node* node)
     {
         Drawable2D* drawable = dynamic_cast<Drawable2D*>(i->Get());
         if (drawable && drawable->IsEnabled())
-            dest.Push(drawable);
+            drawables.Push(drawable);
     }
 
     const Vector<SharedPtr<Node> >& children = node->GetChildren();
     for (Vector<SharedPtr<Node> >::ConstIterator i = children.Begin(); i != children.End(); ++i)
-        GetDrawables(dest, i->Get());
+        GetDrawables(drawables, i->Get());
 }
 
 static inline bool CompareSourceBatch2Ds(const SourceBatch2D* lhs, const SourceBatch2D* rhs)
 {
     if (lhs->drawOrder_ != rhs->drawOrder_)
         return lhs->drawOrder_ < rhs->drawOrder_;
+
+    if (lhs->distance_ != rhs->distance_)
+        return lhs->distance_ > rhs->distance_;
 
     if (lhs->material_ != rhs->material_)
         return lhs->material_->GetNameHash() < rhs->material_->GetNameHash();
@@ -527,24 +524,29 @@ void Renderer2D::UpdateViewBatchInfo(ViewBatchInfo2D& viewBatchInfo)
         for (unsigned b = 0; b < batches.Size(); ++b)
         {
             const SourceBatch2D* batch = batches[b];
-            if (batch && batch->material_ && !batch->vertices_.Empty())
+            if (batch && batch->material_ && batch->owner_ && !batch->vertices_.Empty())
+            {
                 sourceBatches.Push(batch);
+                sourceBatches.Back()->distance_ = camera->GetDistance(batch->owner_->GetNode()->GetWorldPosition());
+            }
         }
     }
 
     Sort(sourceBatches.Begin(), sourceBatches.End(), CompareSourceBatch2Ds);
 
     viewBatchInfo.batchCount_ = 0;
-    Material* currMaterial = 0;
+    Material* currMaterial = nullptr;
 
     unsigned iStart[2] = { 0, 0 };
     unsigned iCount[2] = { 0, 0 };
     unsigned vStart[2] = { 0, 0 };
     unsigned vCount[2] = { 0, 0 };
     int currType = sourceBatches.Size() ? sourceBatches[0]->quadvertices_ : QUAD2D;
+	float distance = M_INFINITY;
 
     for (unsigned b = 0; b < sourceBatches.Size(); ++b)
     {
+		distance = Min(distance, sourceBatches[b]->distance_);
         Material* material = sourceBatches[b]->material_;
         int primitiveType = sourceBatches[b]->quadvertices_;
         const Vector<Vertex2D>& vertices = sourceBatches[b]->vertices_;
@@ -554,11 +556,13 @@ void Renderer2D::UpdateViewBatchInfo(ViewBatchInfo2D& viewBatchInfo)
         {
             if (currMaterial)
             {
-                AddViewBatch(viewBatchInfo, currType, currMaterial, iStart[currType], iCount[currType], vStart[currType], vCount[currType]);
+                AddViewBatch(viewBatchInfo, currType, currMaterial, iStart[currType], iCount[currType],
+								vStart[currType], vCount[currType], distance);
                 iStart[primitiveType] += iCount[primitiveType];
                 iCount[primitiveType] = 0;
                 vStart[primitiveType] += vCount[primitiveType];
                 vCount[primitiveType] = 0;
+				distance = M_INFINITY;
             }
 
             currMaterial = material;
@@ -575,7 +579,8 @@ void Renderer2D::UpdateViewBatchInfo(ViewBatchInfo2D& viewBatchInfo)
 
     // Add the final batch if necessary
     if (currMaterial && vCount[currType])
-        AddViewBatch(viewBatchInfo, currType, currMaterial, iStart[currType], iCount[currType], vStart[currType], vCount[currType]);
+        AddViewBatch(viewBatchInfo, currType, currMaterial, iStart[currType], iCount[currType],
+						vStart[currType], vCount[currType], distance);
 
     for (int primitiveType=0; primitiveType<2; primitiveType++)
     {
@@ -587,14 +592,18 @@ void Renderer2D::UpdateViewBatchInfo(ViewBatchInfo2D& viewBatchInfo)
 }
 
 void Renderer2D::AddViewBatch(ViewBatchInfo2D& viewBatchInfo, int primitivetype, Material* material, unsigned indexStart, unsigned indexCount,
-    unsigned vertexStart, unsigned vertexCount)
+    unsigned vertexStart, unsigned vertexCount, float distance)
 {
     if (!material || indexCount == 0 || vertexCount == 0)
         return;
 
     if (viewBatchInfo.materials_.Size() <= viewBatchInfo.batchCount_)
+    {
         viewBatchInfo.materials_.Resize(viewBatchInfo.batchCount_ + 1);
+        viewBatchInfo.distances_.Resize(viewBatchInfo.batchCount_ + 1);
+    }
     viewBatchInfo.materials_[viewBatchInfo.batchCount_] = material;
+	viewBatchInfo.distances_[viewBatchInfo.batchCount_] = distance;
 
     // Allocate new geometry if necessary
     if (viewBatchInfo.geometries_.Size() <= viewBatchInfo.batchCount_)
@@ -622,15 +631,19 @@ void Renderer2D::Dump() const
         const ViewBatchInfo2D& viewbatchinfo = it->second_;
         URHO3D_LOGINFOF("Renderer2D() - Dump : viewBatchInfo[%d] camera=%u frustum2D=%u viewbatchinfoptr=%u numbatches=%u",
                         index, it->first_, viewbatchinfo.frustum_, &viewbatchinfo, viewbatchinfo.batchCount_);
+
+		for (unsigned i=0; i < viewbatchinfo.sourceBatches_.Size(); ++i)
+			URHO3D_LOGINFOF("  sourceBatches_[%d] dist=%f", i, viewbatchinfo.sourceBatches_[i]->distance_);
     }
+	URHO3D_LOGINFOF("Renderer2D() - Dump : firstiewbatchinfoptr=%u", &firstviewbatch);
     for (unsigned i=0; i < drawables_.Size(); i++)
     {
-        URHO3D_LOGINFOF("Renderer2D() - Dump : firstiewbatchinfoptr=%u", &firstviewbatch);
         bool visibility = CheckVisibility((ViewBatchInfo2D*)&firstviewbatch, drawables_[i]);
         if (visibility)
-            URHO3D_LOGINFOF("   -> drawable[%d] type=%s node=%s(%u) visible=%s drect=%s numbatchesToRender=%u", i,
+            URHO3D_LOGINFOF("   drawable[%d] type=%s node=%s(%u) dist=%f visible=%s drect=%s numbatches=%u", i,
                             drawables_[i]->GetTypeName().CString(),
                             drawables_[i]->GetNode()->GetName().CString(), drawables_[i]->GetNode()->GetID(),
+                            drawables_[i]->sourceBatches_[0].distance_,
                             visibility ? "true" : "false", drawables_[i]->GetDrawRectangle().ToString().CString(),
                             drawables_[i]->GetSourceBatchesToRender(firstcamera).Size());
     }

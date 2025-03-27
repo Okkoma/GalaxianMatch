@@ -87,6 +87,7 @@ AnimatedSprite2D::AnimatedSprite2D(Context* context) :
 {
     sourceBatches_.Reserve(10);
     sourceBatches_.Resize(1);
+	sourceBatches_[0].owner_ = this;
 
     triggerNodes_.Reserve(5);
     spriteInfoMapping_.Clear();
@@ -1506,6 +1507,7 @@ void AnimatedSprite2D::UpdateSourceBatchesSpriter(Vector<SourceBatch2D>* sourceB
     int iBatch = resetBatches ? 0 : sourceBatches.Size();
     sourceBatches.Resize(iBatch+1);
     sourceBatches[iBatch].vertices_.Clear();
+	sourceBatches[iBatch].owner_ = this;
     sourceBatches[iBatch].drawOrder_ = iBatch > 0 ? sourceBatches[iBatch-1].drawOrder_ + 1 : GetDrawOrder();
     if (iBatch > 0)
         sourceBatches[iBatch].material_ = material;
@@ -1665,6 +1667,7 @@ void AnimatedSprite2D::UpdateSourceBatchesSpriter_Custom(Vector<SourceBatch2D>* 
         sourceBatches[0].vertices_.Clear();
         sourceBatches[0].drawOrder_ = GetDrawOrder();
         sourceBatches[0].material_ = SharedPtr<Material>(material);
+		sourceBatches[0].owner_ = this;
     }
 
     int iBatch = sourceBatches.Size()-1;
@@ -1747,6 +1750,7 @@ void AnimatedSprite2D::UpdateSourceBatchesSpriter_Custom(Vector<SourceBatch2D>* 
             sourceBatches[iBatch].vertices_.Clear();
             sourceBatches[iBatch].drawOrder_ = sourceBatches[iBatch-1].drawOrder_+1;
             sourceBatches[iBatch].material_ = SharedPtr<Material>(material);
+			sourceBatches[iBatch].owner_ = this;
             prevMaterial = material;
         }
 

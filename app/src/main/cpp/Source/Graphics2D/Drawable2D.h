@@ -71,12 +71,15 @@ class Drawable2D : public Drawable
 {
     URHO3D_OBJECT(Drawable2D, Drawable);
 
+friend class Renderer2D;
+
 public:
     /// Construct.
-    Drawable2D(Context* context);
+    explicit Drawable2D(Context* context);
     /// Destruct.
-    ~Drawable2D();
+    ~Drawable2D() override;
     /// Register object factory. Drawable must be registered first.
+    /// @nobind
     static void RegisterObject(Context* context);
 
     /// Handle enabled/disabled state change.

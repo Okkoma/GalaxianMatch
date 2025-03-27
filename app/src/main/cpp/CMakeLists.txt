@@ -3,45 +3,68 @@ cmake_minimum_required(VERSION 3.10.2)
 # Define target name
 set (TARGET_NAME GalaxianMatch)
 
+set (SRC_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/Source")
+set (SRC_DIRS / /Components/ /GraphicEffects/ /Objects/ /ObjectsCore/ /Managers/ /Resources/)
+
+# Check for u3d-galaxian fork
+file (READ "${URHO3D_HOME}/README.md" lines)
+string (FIND "${lines}" "# U3D-GalaxianMatch" result)
+if (NOT ${result} EQUAL -1)
+    set (SPACEMATCH_WITH_CUSTOM_URHO TRUE)
+endif ()
+
 if (SPACEMATCH_WITH_DEMOMODE)
     message ("-- adding definition ACTIVE_DEMOMODE")
     add_definitions (-DACTIVE_DEMOMODE)
-endif()
+endif ()
 
 if (SPACEMATCH_WITH_TIPS)
     message ("-- adding definition ACTIVE_TIPS")
     add_definitions (-DACTIVE_TIPS)
-endif()
+endif ()
 
 if (SPACEMATCH_WITH_ADS)
     message ("-- adding definition ACTIVE_ADS")
     add_definitions (-DACTIVE_ADS)
-endif()
+endif ()
 
 if (SPACEMATCH_WITH_CINEMATICS)
     message ("-- adding definition ACTIVE_CINEMATICS")
     add_definitions (-DACTIVE_CINEMATICS)
-endif()
+endif ()
+
+if (SPACEMATCH_WITH_3D)
+    message ("-- adding definition ACTIVE_3D_MIX")
+    add_definitions (-DACTIVE_3D_MIX)
+endif ()
+
+if (SPACEMATCH_WITH_CUSTOM_URHO)
+    message ("-- adding definition ACTIVE_CUSTOM_URHO")
+    add_definitions (-DACTIVE_CUSTOM_URHO)
+endif ()
 
 if (SPACEMATCH_WITH_LOOPTESTS)
     message ("-- adding definition ACTIVE_GAMELOOPTESTING")
     add_definitions (-DACTIVE_GAMELOOPTESTING)
-endif()
+endif ()
 
 if (SPACEMATCH_WITH_NETWORK)
     message ("-- adding definition TEST_NETWORK")
     add_definitions (-DTEST_NETWORK)
+    list (APPEND SRC_DIRS /Network/)
 endif()
 
-# Define source files
-set (SRC_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/Source")
-set (SRC_DIRS / /Components/ /GraphicEffects/ /Graphics2D/ /Objects/ /ObjectsCore/ /States/ /Managers/ /Resources/)
-              
-if (SPACEMATCH_WITH_NETWORK)
-    list (APPEND SRC_DIRS /Network/)
-    list (APPEND INC_DIRS ${SRC_ROOT}/Network/)
+if (SPACEMATCH_WITH_CUSTOM_URHO)
+    list (APPEND SRC_DIRS /Graphics2D/)
+    list (APPEND SRC_DIRS /States/)
+else ()
+    list (APPEND SOURCE_FILES Source/States/sSplash.cpp Source/States/sMainMenu.cpp Source/States/sLevelMap.cpp
+                              Source/States/sOptions.cpp Source/States/sPlay.cpp)
+    list (APPEND INC_DIRS ${SRC_ROOT}/Graphics2D/)
+    list (APPEND INC_DIRS ${SRC_ROOT}/States/)
 endif ()
 
+# Define source files
 foreach (DIR ${SRC_DIRS})
     file (GLOB CPP_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" ./Source${DIR}*.cpp)
     list (APPEND SOURCE_FILES ${CPP_FILES})

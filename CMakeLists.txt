@@ -2,13 +2,12 @@ cmake_minimum_required(VERSION 3.10.2)
 
 project (SpaceMatch)
 
-#set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/app/src/main/cpp/ThirdParty/urho3d)
-#set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/app/src/main/cpp/ThirdParty/u3d)
-#set (URHO3D_HOME " ")
+#set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/../U3D-GalaxianMatch)
+#set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/../../U3D/U3D-okkoman-git)
+#set (GIT_U3D_REPO "/media/DATA/Dev/Projets/U3D-GalaxianMatch")
 
 set (GIT_U3D_REPO "https://github.com/Okkoma/U3D-GalaxianMatch.git")
-#set (GIT_U3D_REPO "/media/DATA/Dev/Projets/U3D-GalaxianMatch")
-        
+
 include (${CMAKE_SOURCE_DIR}/cmake/Urho3D.cmake)
 
 # For Android, Options are in app/build.gradle.kts
@@ -40,11 +39,13 @@ if (NOT ANDROID)
     option (SPACEMATCH_WITH_TIPS "Enable Keyboard Tips" TRUE)
     option (SPACEMATCH_WITH_ADS "Enable Android Ads" FALSE)
     option (SPACEMATCH_WITH_CINEMATICS "Enable Story Animations" TRUE)
-    option (SPACEMATCH_WITH_LOOPTESTS "Enable Tests Loop on Android" FALSE)
+    option (SPACEMATCH_WITH_3D "Enable some 3d features" TRUE)
     # Dev Game Options
     option (SPACEMATCH_WITH_NETWORK "Enable Network via websocket" TRUE)
+
     # Dev Test
     option (SPACEMATCH_WITH_TEST "Enable Test" FALSE)
+    option (SPACEMATCH_WITH_LOOPTESTS "Enable Tests Loop on Android" FALSE)
 
     if (SPACEMATCH_WITH_TEST)
         include (CTest)

@@ -66,7 +66,7 @@ const String InteractiveItemStateStr[NUM_ITERACTIVEITEMSTATE] =
     String("selected"), String("unselected")
 };
 
-const Vector3 BONUSPOSITION[5] = { Vector3::ZERO, Vector3(-1.f, 0.f, 0.f), Vector3(1.f, 0.f, 0.f), Vector3(-0.5f, -1.f, 0.f), Vector3(0.5f, -1.f, 0.f) };
+const Vector2 BONUSPOSITION[5] = { Vector2::ZERO, Vector2(-1.f, 0.f), Vector2(1.f, 0.f), Vector2(-0.5f, -1.f), Vector2(0.5f, -1.f) };
 
 const float ABILITYPOSITIONGAP = 1.f;
 
@@ -228,7 +228,8 @@ void InteractiveFrame::Start(bool force, bool instant)
         {
             unsigned maxbonus = Min(bonusItems_.Size(), 5);
             for (unsigned i=0; i < maxbonus; ++i)
-                GameHelpers::SetMoveAnimation(bonusItems_[i], positionentrancebonus_, BONUSPOSITION[i], bonusstarttime_ + 0.5f*float(i), 0.2f);
+                GameHelpers::SetMoveAnimation(bonusItems_[i], positionentrancebonus_, Vector3(BONUSPOSITION[i], 
+                                                positionentrancebonus_.z_), bonusstarttime_ + 0.5f*float(i), 0.2f);
 
             if (bonusEnabled_)
                 GameStatics::AddBonuses(GetBonuses(), this);
@@ -260,7 +261,8 @@ void InteractiveFrame::Start(bool force, bool instant)
         if (behavior_ == IB_MESSAGEBOX)
             MatchesManager::SetPhysicsEnable(false);
 
-        URHO3D_LOGINFOF("InteractiveFrame() - Start : this=%u %s Started behavior=%d breakinput=%s !", this, framename_.CString(), behavior_, breakinput_?"true":"false");
+        URHO3D_LOGINFOF("InteractiveFrame() - Start : this=%u %s Started behavior=%d breakinput=%s !", 
+                            this, framename_.CString(), behavior_, breakinput_?"true":"false");
 
         SendEvent(GAME_UIFRAME_START);
     }
@@ -325,32 +327,34 @@ void InteractiveFrame::Clean()
     URHO3D_LOGINFOF("InteractiveFrame() - Clean : %s remove nodes from scene !", framename_.CString());
 }
 
+const float CameraZDelta = 0.0f;
 
 void InteractiveFrame::SetScreenPosition(const IntVector2& position, bool instant)
 {
-    position_ = Vector3(GameHelpers::ScreenToWorld2D_FixedZoom(position));
+    position_ = Vector3(GameHelpers::ScreenToWorld2D_FixedZoom(position), GameStatics::cameraNode_->GetWorldPosition().z_ + CameraZDelta);
+    GameHelpers::SetAdjustedToScreen(node_, 1.f, 0.1f, false);
 
     if (instant)
     {
         if (!node_)
             Init();
-        node_->SetPosition(position_);
+        node_->SetPosition(position_);        
     }
 }
 
 void InteractiveFrame::SetScreenPositionEntrance(const IntVector2& position)
 {
-    positionexit_[0] = positionentrance_ = Vector3(GameHelpers::ScreenToWorld2D_FixedZoom(position));
+    positionexit_[0] = positionentrance_ = Vector3(GameHelpers::ScreenToWorld2D_FixedZoom(position), GameStatics::cameraNode_->GetWorldPosition().z_ + CameraZDelta);
 }
 
 void InteractiveFrame::SetScreenPositionExit(int index, const IntVector2& position)
 {
-    positionexit_[index] = Vector3(GameHelpers::ScreenToWorld2D_FixedZoom(position));
+    positionexit_[index] = Vector3(GameHelpers::ScreenToWorld2D_FixedZoom(position), GameStatics::cameraNode_->GetWorldPosition().z_ + CameraZDelta);
 }
 
 void InteractiveFrame::SetScreenPositionEntranceForBonus(const IntVector2& position)
 {
-    positionentrancebonus_ = Vector3(GameHelpers::ScreenToWorld2D_FixedZoom(position));
+    positionentrancebonus_ = Vector3(GameHelpers::ScreenToWorld2D_FixedZoom(position), GameStatics::cameraNode_->GetWorldPosition().z_ + CameraZDelta);
 }
 
 void InteractiveFrame::SetSelectionMode(int mode)
@@ -540,7 +544,7 @@ void InteractiveFrame::AddAbility(int ability, bool autostart)
         URHO3D_LOGINFOF("InteractiveFrame() - AddAbility : Create New Ability %d, insert index=%u!", ability, index);
 
         // Create node
-        node = GOT::GetObject(StringHash("Abilities"))->CloneInside(node_, LOCAL);
+        node = GameHelpers::CloneInside(GOT::GetObject(StringHash("Abilities")), node_, LOCAL);
         interactiveItems_.Push(node);
         abilities_.Insert(index, node);
 
@@ -674,7 +678,7 @@ void InteractiveFrame::AddBonus(const Slot& slot)
     Node* templatebonus = COT::GetObjectFromCategory(StringHash(slot.cat_), slot.indexcat_);
     if (templatebonus)
     {
-        Node* bonusitem = templatebonus->CloneInside(nodeBonus_, LOCAL);
+        Node* bonusitem = GameHelpers::CloneInside(templatebonus, nodeBonus_, LOCAL);
         URHO3D_LOGINFOF("InteractiveFrame() - AddBonus : slotqty=%d !!!", slot.qty_);
         if (slot.qty_ > 1 && bonusitem->GetVar(GOA::BONUS).GetInt() != slot.qty_)
         {
@@ -1106,6 +1110,7 @@ void InteractiveFrame::OnAbilityRemoved(StringHash eventType, VariantMap& eventD
 
 void InteractiveFrame::DrawDebugGeometry(DebugRenderer* debug, bool depthTest)
 {
+#ifdef ACTIVE_CUSTOM_URHO
     if (debug && node_)
     {
         debug->AddNode(node_, 1.f, false);
@@ -1115,4 +1120,5 @@ void InteractiveFrame::DrawDebugGeometry(DebugRenderer* debug, bool depthTest)
         rect.max_ = transform * abilityMoveRect_.max_;
         GameHelpers::DrawDebugRect(rect, debug, depthTest);
     }
+#endif
 }

@@ -325,10 +325,10 @@ void TicTacToeLogic::OnBossStateChange(StringHash eventType, VariantMap& eventDa
             moveAnimation->SetKeyFrame(TicTacToeAnimationTime, GameStatics::cameraNode_->GetPosition());
             objectAnimation->AddAttributeAnimation("Position", moveAnimation, WM_ONCE);
             node_->SetObjectAnimation(objectAnimation);
-
+#ifdef ACTIVE_CUSTOM_URHO
             animators_.Front()->ResetCharacterMapping();
             animators_.Front()->ApplyCharacterMap(String("static"));
-
+#endif
             node_->GetDerivedComponent<CollisionShape2D>()->SetEnabled(false);
             SetState(STATIC);
 
@@ -372,7 +372,7 @@ void TicTacToeLogic::HandleGame(StringHash eventType, VariantMap& eventData)
         Vector2 wposition = GameHelpers::ScreenToWorld2D(position);
         RigidBody2D* body;
         CollisionShape2D* shape;
-        GameStatics::rootScene_->GetComponent<PhysicsWorld2D>()->GetPhysicElements(wposition, body, shape, M_MAX_UNSIGNED);
+        GameHelpers::GetPhysicElements(wposition, body, shape, M_MAX_UNSIGNED);
         if (body == body_)
         {
             if (shape && shape->IsTrigger())
@@ -428,6 +428,7 @@ void TicTacToeLogic::HandleGame(StringHash eventType, VariantMap& eventData)
                 {
                     afficherPlateau(board_);
 
+                #ifdef ACTIVE_CUSTOM_URHO
                     // add the animation for the played case.
                     String animation = String("case") + String(case_+1);
                     String cmap = animation + String("_") + String(currentplayer_ == JoueurO ? "circle":"cross");
@@ -436,7 +437,7 @@ void TicTacToeLogic::HandleGame(StringHash eventType, VariantMap& eventData)
                         animators_.Front()->ApplyCharacterMap(cmap);
                         animators_.Front()->SetAnimation(animation);
                     }
-
+                #endif
                     // check for a winner
                     winner_ = verifierGagnant(board_);
 
@@ -467,7 +468,7 @@ void TicTacToeLogic::HandleGame(StringHash eventType, VariantMap& eventData)
                 if (case_ != -1)
                 {
                     afficherPlateau(board_);
-
+                #ifdef ACTIVE_CUSTOM_URHO
                     // add the animation for the played case.
                     String animation = String("case") + String(case_+1);
                     String cmap = animation + String("_") + String(firstplayer_ == JoueurO ? "circle":"cross");
@@ -476,7 +477,7 @@ void TicTacToeLogic::HandleGame(StringHash eventType, VariantMap& eventData)
                         animators_.Front()->ApplyCharacterMap(cmap);
                         animators_.Front()->SetAnimation(animation);
                     }
-
+                #endif
                     turnTime_ = 0.f;
                 }
 

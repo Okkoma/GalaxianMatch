@@ -336,7 +336,7 @@ public:
     static void SetTouchEmulation(bool enable);
 	static void InitMouse(Context* context);
     static void InitSoundChannels();
-    static void ResetCamera();
+    static void ResetCamera(bool ortho);
     static void ChangeCameraTo(Node* node, bool ortho=true);
     static void AllowInputs(bool state);
     static void UpdateViews();

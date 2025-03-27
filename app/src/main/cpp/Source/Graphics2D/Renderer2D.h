@@ -35,8 +35,10 @@ struct ViewBatchInfo2D
     unsigned batchUpdatedFrameNumber_;
     /// Source batches.
     PODVector<const SourceBatch2D*> sourceBatches_;
-    /// Batch count;
+    /// Batch count.
     unsigned batchCount_;
+    /// Distances.
+    PODVector<float> distances_;
     /// Materials.
     Vector<SharedPtr<Material> > materials_;
     /// Geometries.
@@ -52,14 +54,15 @@ class Renderer2D : public Drawable
 {
     URHO3D_OBJECT(Renderer2D, Drawable);
 
-    friend void CheckDrawableVisibility(const WorkItem* item, unsigned threadIndex);
+    friend void CheckDrawableVisibilityWork(const WorkItem* item, unsigned threadIndex);
 
 public:
     /// Construct.
-    Renderer2D(Context* context);
+    explicit Renderer2D(Context* context);
     /// Destruct.
-    ~Renderer2D();
+    ~Renderer2D() override;
     /// Register object factory.
+    /// @nobind
     static void RegisterObject(Context* context);
 
     void SetInitialVertexBufferSize(unsigned size) { initialVertexBufferSize_ = size; }
@@ -68,7 +71,7 @@ public:
     void ProcessRayQuery(const RayOctreeQuery& query, PODVector<RayQueryResult>& results) override;
     /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly re-entrantly.
     void UpdateBatches(const FrameInfo& frame) override;
-    /// Prepare geometry for rendering. Called from a worker thread if possible (no GPU update.)
+    /// Prepare geometry for rendering. Called from a worker thread if possible (no GPU update).
     void UpdateGeometry(const FrameInfo& frame) override;
     /// Return whether a geometry update is necessary, and if it can happen in a worker thread.
     UpdateGeometryType GetUpdateGeometryType() override;
@@ -105,7 +108,8 @@ private:
     /// Update view batch info.
     void UpdateViewBatchInfo(ViewBatchInfo2D& viewBatchInfo);
     /// Add view batch.
-    void AddViewBatch(ViewBatchInfo2D& viewBatchInfo, int primitivetype, Material* material, unsigned indexStart, unsigned indexCount, unsigned vertexStart, unsigned vertexCount);
+    void AddViewBatch(ViewBatchInfo2D& viewBatchInfo, int primitivetype, Material* material, unsigned indexStart, 
+						unsigned indexCount, unsigned vertexStart, unsigned vertexCount, float distance);
 
     unsigned initialVertexBufferSize_;
 

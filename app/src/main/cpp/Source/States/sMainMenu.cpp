@@ -85,7 +85,7 @@ void MenuState::Begin()
     URHO3D_LOGINFO("MainMenu() - ----------------------------------------");
 
     // Reset controls
-    GetSubsystem<Input>()->ResetStates();
+    GameHelpers::ResetStates();
 
     GameStatics::camera_->SetZoom(GameStatics::uiScale_);
     GameStatics::UpdateViews();
@@ -152,7 +152,7 @@ void MenuState::End()
 	UnsubscribeFromAllEvents();
 
     // Reset controls
-    GetSubsystem<Input>()->ResetStates();
+    GameHelpers::ResetStates();
 
 	// Call base class implementation
 	GameState::End();
@@ -176,15 +176,20 @@ void MenuState::CreateScene(bool setscene)
         // Load MainMenu Scene Animation
         titlescene_ = GameStatics::rootScene_->GetChild("title") ? GameStatics::rootScene_->GetChild("title") : GameStatics::rootScene_->CreateChild("title", LOCAL);
         Node* mainscene = titlescene_->GetChild("MainScene") ? titlescene_->GetChild("MainScene") : titlescene_->CreateChild("MainScene", LOCAL);
-
+    #ifdef ACTIVE_3D_MIX
+    #ifdef ACTIVE_CUSTOM_URHO
+        GameHelpers::LoadNodeXML(context_, mainscene, "UI/Menu3D-Text2D.xml", LOCAL);
+    #else
+        GameHelpers::LoadNodeXML(context_, mainscene, "UI/Menu3D-Text3D.xml", LOCAL);
+    #endif
+    #else
         GameHelpers::LoadNodeXML(context_, mainscene, "UI/Menu.xml", LOCAL);
+    #endif
     }
 
     // Entrance Animation
     GameHelpers::SetMoveAnimation(titlescene_, Vector3(-10.f, 0.f, 0.f), Vector3::ZERO, 0.f, SWITCHSCREENTIME);
     GameHelpers::SetMoveAnimationUI(uimenu_, IntVector2(-GameStatics::graphics_->GetWidth()/2, 0), IntVector2(0, 0), 0.f, SWITCHSCREENTIME);
-
-    GameStatics::cameraNode_->SetPosition(Vector3::ZERO);
 
     // Adjust Background To ScreenSize
 //    GameHelpers::SetAdjustedToScreen(titlescene_->GetChild("MainScene")->GetChild("MenuFrame"), 1.25f, 1.f, false);
@@ -275,7 +280,7 @@ void MenuState::BeginNewLevel(GameLevelMode mode, unsigned seed)
 //            playstate->SetSeed(seed);
 //    }
 
-#ifdef ACTIVE_CINEMATICS
+#if defined(ACTIVE_CUSTOM_URHO) && defined(ACTIVE_CINEMATICS)
     if (!CinematicState::SetCinematic(CINEMATICSELECTIONMODE_INTRO_OUTRO, 0, 0, "LevelMap"))
         stateManager_->PushToStack("LevelMap");
 #else
@@ -301,6 +306,8 @@ bool MenuState::IsNetworkReady() const
     return true;
 }
 
+SharedPtr<MessageBox> quitMessageBox_;
+
 void MenuState::Quit()
 {
 #if defined(__ANDROID__) || defined(IOS) || defined(TVOS)
@@ -313,8 +320,8 @@ void MenuState::Quit()
 		return;
     }
 
-    SharedPtr<MessageBox> messageBox = SharedPtr<MessageBox>(GameHelpers::AddMessageBox("gamequit", " ", false, "yes", "no", this, URHO3D_HANDLER(MenuState, HandleQuitMessageAck)));
-	messageBox->AddRef();
+    if (!quitMessageBox_)
+        quitMessageBox_ = SharedPtr<MessageBox>(GameHelpers::AddMessageBox("gamequit", " ", false, "yes", "no", this, URHO3D_HANDLER(MenuState, HandleQuitMessageAck)));
 
 //	Localization* l10n = GetSubsystem<Localization>();
 //	SharedPtr<Urho3D::MessageBox> messageBox(new Urho3D::MessageBox(context_, " ", l10n->Get("gamequit")));
@@ -351,7 +358,7 @@ void MenuState::UpdateAnimButtons()
         node->GetComponent<AnimatedSprite2D>()->SetAnimation(menustate_ == 1 ? "on" : "off");
         node = node->GetChild(0U);
         node->SetScale2D(menustate_ == 1 ? Vector2(1.2f,1.2f) : Vector2::ONE);
-        node->GetComponent<Text2D>()->SetColor(menustate_ == 1 ? Color::WHITE : Color::GRAY);
+        GameHelpers::SetTextColorInNode(node, menustate_ == 1 ? Color::WHITE : Color::GRAY);
     }
     node = mainscene->GetChild("ButtonVersus");
     if (node)
@@ -359,7 +366,7 @@ void MenuState::UpdateAnimButtons()
         node->GetComponent<AnimatedSprite2D>()->SetAnimation(menustate_ == 2 ? "on" : "off");
         node = node->GetChild(0U);
         node->SetScale2D(menustate_ == 2 ? Vector2(1.2f,1.2f) : Vector2::ONE);
-        node->GetComponent<Text2D>()->SetColor(menustate_ == 2 ? Color::WHITE : Color::GRAY);
+        GameHelpers::SetTextColorInNode(node, menustate_ == 2 ? Color::WHITE : Color::GRAY);
     }
 }
 
@@ -701,13 +708,14 @@ void MenuState::HandleScreenResized(StringHash eventType, VariantMap& eventData)
         URHO3D_LOGINFOF("MenuState() - HandleScreenResized : ui size=%d %d", width, height);
     }
 
-//    GameHelpers::SetAdjustedToScreen(titlescene_->GetChild("MainScene")->GetChild("MenuFrame"), 1.25f, 1.f, false);
     GameHelpers::SetAdjustedToScreen(titlescene_->GetChild("MainScene")->GetChild("MenuFrame"), 1.25f, 1.25f, false);
 }
 
 void MenuState::HandleQuitMessageAck(StringHash eventType, VariantMap& eventData)
 {
 	using namespace MessageACK;
+
+    quitMessageBox_.Reset();
 
 	if (eventData[P_OK].GetBool())
     {
@@ -716,7 +724,7 @@ void MenuState::HandleQuitMessageAck(StringHash eventType, VariantMap& eventData
     }
 
     // Initialize controls
-    GetSubsystem<Input>()->ResetStates();
+    GameHelpers::ResetStates();
 
     SubscribeToMenuEvents();
 }

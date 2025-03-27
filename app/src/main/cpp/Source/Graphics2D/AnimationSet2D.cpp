@@ -476,7 +476,6 @@ bool AnimationSet2D::EndLoadSpriter()
         String parentPath = GetParentPath(GetName());
 
 //        URHO3D_LOGINFOF("no SpriteSheet =>");
-
         for (unsigned folderid = 0; folderid < spriterData_->folders_.Size(); ++folderid)
         {
             Vector<SpriterInfoFile> spriteInfos;
