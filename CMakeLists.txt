@@ -19,7 +19,7 @@ if (NOT ANDROID)
 	    # On windows, use DirectX11 backend
 	    if (WIN32)
 	        set (URHO3D_D3D11 TRUE)
-	    endif ()  
+	    endif ()
     endif()
 
     # Disable libdatachannel media,examples and tests
@@ -38,7 +38,6 @@ if (NOT ANDROID)
     option (SPACEMATCH_WITH_3D "Enable some 3d features" TRUE)
     # Dev Game Options
     option (SPACEMATCH_WITH_NETWORK "Enable Network via websocket" TRUE)
-
     # Dev Test
     option (SPACEMATCH_WITH_TEST "Enable Test" FALSE)
     option (SPACEMATCH_WITH_LOOPTESTS "Enable Tests Loop on Android" FALSE)

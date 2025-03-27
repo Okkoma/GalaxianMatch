@@ -171,7 +171,6 @@ function (urho_fetch_git)
     endif ()
 endfunction ()
 
-message (STATUS "Building on: ${CMAKE_HOST_SYSTEM_NAME} for: ${CMAKE_SYSTEM_NAME}")
 
 if (EXISTS ${CMAKE_SOURCE_DIR}/cmake)
     set (PROJECT_CMAKE_DIR ${CMAKE_SOURCE_DIR}/cmake)

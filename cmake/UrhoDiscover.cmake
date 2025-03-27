@@ -70,7 +70,7 @@ function (get_build_target dir platform)
             if (match)
                 set (target "RPI_${CMAKE_MATCH_1}") # todo: get CMAKE_SYSTEM_NAME value
             elseif (${VAR} MATCHES "^ARM_PREFIX:STRING")
-                set (target "ARM") # todo: get CMAKE_SYSTEM_NAME value            
+                set (target "ARM") # todo: get CMAKE_SYSTEM_NAME value
             elseif (${VAR} MATCHES "^MINGW_PREFIX:STRING")
                 set (target "Windows")
             elseif (${VAR} MATCHES "^EMSCRIPTEN_SYSROOT:")
