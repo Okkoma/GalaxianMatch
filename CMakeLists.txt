@@ -14,12 +14,8 @@ include (${CMAKE_SOURCE_DIR}/cmake/Urho3D.cmake)
 if (NOT ANDROID)
     # Default Options
     if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-	    # Release build as default
-	    set (CMAKE_BUILD_TYPE Release)
-
 	    # Default installation folder
       	set_property (CACHE CMAKE_INSTALL_PREFIX PROPERTY VALUE ${CMAKE_SOURCE_DIR}/exe)
-	    
 	    # On windows, use DirectX11 backend
 	    if (WIN32)
 	        set (URHO3D_D3D11 TRUE)
@@ -58,3 +54,9 @@ if (URHO3D_HOME)
 else ()
     message ("!! GalaxianMatch - wait to add source because URHO3D_HOME is undefined here !")
 endif ()
+
+message (STATUS "Project configuration:")
+message (" ... Host      ${CMAKE_HOST_SYSTEM_NAME}")
+message (" ... Platform  ${CMAKE_SYSTEM_NAME}")
+message (" ... Build     ${CMAKE_BUILD_TYPE}")
+message (" ... Library   ${URHO3D_LIB_TYPE}")
