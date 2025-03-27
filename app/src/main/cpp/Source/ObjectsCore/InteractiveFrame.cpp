@@ -332,7 +332,7 @@ const float CameraZDelta = 0.0f;
 void InteractiveFrame::SetScreenPosition(const IntVector2& position, bool instant)
 {
     position_ = Vector3(GameHelpers::ScreenToWorld2D_FixedZoom(position), GameStatics::cameraNode_->GetWorldPosition().z_ + CameraZDelta);
-    GameHelpers::SetAdjustedToScreen(node_, 1.f, 0.1f, false);
+    //GameHelpers::SetAdjustedToScreen(node_, 1.f, 0.1f, false);
 
     if (instant)
     {
