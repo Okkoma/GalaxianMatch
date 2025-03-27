@@ -143,7 +143,7 @@ function (urho_fetch_git)
             set (GIT_U3D_TAG ${DEFAULT_GIT_U3D_TAG})
         endif ()
 
-        message (STATUS "Fetch U3D from ${GIT_U3D_REPO}:${GIT_U3D_TAG}")
+        message (STATUS "Fetching U3D from ${GIT_U3D_REPO}:${GIT_U3D_TAG}")
         
         # cmake “fetchcontent” performs a first configuration step that causes a re-entrance problem with our urho modules.
         # We therefore prefer to run "git fetch" directly.
@@ -151,9 +151,9 @@ function (urho_fetch_git)
         execute_process (COMMAND git init WORKING_DIRECTORY "${URHO3D_FETCH_DIR}" OUTPUT_QUIET ERROR_QUIET)
         execute_process (COMMAND git fetch --depth=1 "${GIT_U3D_REPO}" "${GIT_U3D_TAG}" WORKING_DIRECTORY "${URHO3D_FETCH_DIR}" OUTPUT_QUIET ERROR_QUIET)
         execute_process (COMMAND git reset --hard FETCH_HEAD WORKING_DIRECTORY "${URHO3D_FETCH_DIR}" OUTPUT_QUIET ERROR_QUIET)
-        message (STATUS "U3D fetched in ${URHO3D_FETCH_DIR}")
-
+        
         if (EXISTS "${URHO3D_FETCH_DIR}/README.md")
+            message (STATUS "Fetched in directory ${URHO3D_FETCH_DIR}")
             if (URHO3D_DISCOVER_EXISTS)
                 # add to UrhoDiscover dropdown list (URHO3D_SELECT) if exist
                 list (APPEND ${PROJECTNAME}_URHO3D_DIRS ${URHO3D_FETCH_DIR})
@@ -165,6 +165,8 @@ function (urho_fetch_git)
             # as default always select the fetched source
             set (URHO3D_HOME ${URHO3D_FETCH_DIR} PARENT_SCOPE)
             message (" ... Set URHO3D_HOME to ${URHO3D_FETCH_DIR}")
+        else ()
+            message ("!! Can't fetch content from this repository.")
         endif ()
     endif ()
 endfunction ()
