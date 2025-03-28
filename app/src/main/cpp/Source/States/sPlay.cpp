@@ -121,8 +121,7 @@ Vector<std::function<void()> > delayActions_;
 
 PlayState::PlayState(Context* context) :
     GameState(context, "Play"),
-    drawDebug_(false),
-    ctrlCameraWithMouse_(false)
+    drawDebug_(false)
 {
 //    URHO3D_LOGINFO("PlayState()");
     SetCleanerLocked(false);
@@ -247,8 +246,6 @@ void PlayState::ResetGameStates()
     Tutorial::Reset(GetContext());
     initialtries_ = GameStatics::tries_;
     initialmoves_ = GameStatics::moves_;
-    cameraYaw_ = 0.0f;
-    cameraPitch_ = 0.0f;
     GameStatics::numRemainObjectives_ = 0;
 }
 
@@ -634,14 +631,10 @@ void PlayState::Pause(bool enable, bool addmessagebox, bool autoUnpause)
         rootScene_->SetUpdateEnabled(false);
 
         if (addmessagebox)
-        {
             messageBox = SharedPtr<MessageBox>(GameHelpers::AddMessageBox("gamepause", "continue", true, "yes", "no", this, URHO3D_HANDLER(PlayState, OnPauseMessageAck)));
-            messageBox->AddRef();
-        }
+
         if (autoUnpause)
-        {
             SubscribeToEvent(GAME_UNPAUSE, URHO3D_HANDLER(PlayState, HandlePause));
-        }
 
         GameHelpers::SetMusicVolume(0.f);
         GameHelpers::SetSoundVolume(0.f);
@@ -1799,29 +1792,6 @@ void PlayState::HandleUpdate(StringHash eventType, VariantMap& eventData)
 
     if (input->GetKeyDown(KEY_LCTRL))
         CheckInputForDebug(input);
-
-    // Toggle Camera Control
-    if (GameStatics::gameConfig_.ctrlCameraEnabled_)
-    {
-        if (input->GetMouseButtonDown(MOUSEB_LEFT))
-        {
-            ctrlCameraWithMouse_ = true;
-            // Move camera with Mouse
-            IntVector2 mouseMove = input->GetMouseMove();
-            cameraYaw_ += 0.1f * mouseMove.x_;
-            cameraPitch_ += 0.1f * mouseMove.y_;
-            cameraPitch_ = Clamp(cameraPitch_, -90.0f, 90.0f);
-            cameraNode_->SetRotation(Quaternion(cameraPitch_, cameraYaw_, 0.0f));
-        }
-        else if (ctrlCameraWithMouse_)
-        {
-            ctrlCameraWithMouse_ = false;
-            // Reset camera's position
-            cameraYaw_ = 0.0f;
-            cameraPitch_ = 0.0f;
-            cameraNode_->SetRotation(Quaternion(cameraPitch_, cameraYaw_, 0.0f));
-        }
-    }
 
     // Don't Check Tips if the UI has a focused element (the console)
     if (GetSubsystem<UI>()->GetFocusElement())

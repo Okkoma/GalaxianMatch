@@ -1470,7 +1470,7 @@ void Game::HandleSceneUpdate(StringHash eventType, VariantMap& eventData)
     }
 
     // Toggle Camera Control
-    //if (GameStatics::gameConfig_.debugViewEnabled_)
+    if (GameStatics::gameConfig_.ctrlCameraEnabled_)
     {
         if (GameStatics::input_->GetKeyDown(KEY_CTRL))
         {

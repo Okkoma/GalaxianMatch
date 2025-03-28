@@ -873,7 +873,6 @@ void OptionState::HandleShopButtonClick(StringHash eventType, VariantMap& eventD
         // Open Validation Dialogue
         String question = ToString("%s (%u)", !l10n->Get(purchaseItemType_).Empty() ? l10n->Get(purchaseItemType_).CString() : purchaseItemType_.CString(), purchaseItemQty_);
         MessageBox_ = GameHelpers::AddMessageBox("purchase", question, false, "yes", "no", this, URHO3D_HANDLER(OptionState, OnShopMessageAck), GetSubsystem<ResourceCache>()->GetResource<XMLFile>("UI/ShopMessageBox.xml"));
-        MessageBox_->AddRef();
     }
     else
     {
@@ -891,7 +890,6 @@ void OptionState::OnShopMessageAck(StringHash eventType, VariantMap& eventData)
 	using namespace MessageACK;
 
     UnsubscribeFromEvent(E_MESSAGEACK);
-    MessageBox_->ReleaseRef();
     MessageBox_.Reset();
 
 	if (eventData[P_OK].GetBool())
@@ -916,7 +914,6 @@ void OptionState::OnGameResetMessageAck(StringHash eventType, VariantMap& eventD
 	using namespace MessageACK;
 
     UnsubscribeFromEvent(E_MESSAGEACK);
-    MessageBox_->ReleaseRef();
     MessageBox_.Reset();
 
 	if (eventData[P_OK].GetBool())
@@ -941,7 +938,6 @@ void OptionState::HandleGameReset(StringHash eventType, VariantMap& eventData)
     {
         // Open Confirm Dialogue
         MessageBox_ = GameHelpers::AddMessageBox("reset", "gamereset", true, "yes", "no", this, URHO3D_HANDLER(OptionState, OnGameResetMessageAck), GetSubsystem<ResourceCache>()->GetResource<XMLFile>("UI/ShopMessageBox.xml"));
-        MessageBox_->AddRef();
     }
 }
 

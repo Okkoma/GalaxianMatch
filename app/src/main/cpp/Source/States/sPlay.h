@@ -139,17 +139,10 @@ private:
 	Node* cameraNode_;
 	Camera* camera_;
 
-    float cameraYaw_;
-    float cameraPitch_;
-    Vector3 cameraMotion_;
-    float camMotionSpeed_;
-    float currentCamMotionSpeed_;
-
     bool activeGameLogic_;
     bool initMode_;
     bool restartMode_;
     bool drawDebug_;
-    bool ctrlCameraWithMouse_;
 	bool gameOver_;
 	bool paused_;
     bool toLoadGame_;
