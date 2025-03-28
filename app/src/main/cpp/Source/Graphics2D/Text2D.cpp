@@ -485,7 +485,7 @@ void Text2D::UpdateTextBatches()
             break;
 
         case VA_CUSTOM:
-            break;            
+            break;
         }
     }
 
@@ -537,7 +537,6 @@ void Text2D::UpdateTextMaterials(bool forceUpdate)
                 pass->SetVertexShader("Text");
                 pass->SetPixelShader("Text");
                 pass->SetBlendMode(BLEND_ALPHA);
-                pass->SetDepthTestMode(CMP_ALWAYS);
                 pass->SetDepthWrite(false);
                 material->SetTechnique(0, tech);
                 material->SetCullMode(CULL_NONE);
@@ -559,7 +558,7 @@ void Text2D::UpdateTextMaterials(bool forceUpdate)
             if (!material_)
             {
                 Technique* tech = material->GetTechnique(0);
-                Pass* pass = tech ? tech->GetPass("alpha") : (Pass*)0;
+                Pass* pass = tech ? tech->GetPass("alpha") : nullptr;
                 if (pass)
                 {
                     switch (GetTextEffect())
@@ -596,6 +595,22 @@ void Text2D::UpdateTextMaterials(bool forceUpdate)
 
             default:
                 break;
+            }
+        }
+        else
+        {
+            // If not SDF, set shader defines based on whether font texture is full RGB or just alpha
+            if (!material_)
+            {
+                Technique* tech = material->GetTechnique(0);
+                Pass* pass = tech ? tech->GetPass("alpha") : nullptr;
+                if (pass)
+                {
+                    if (texture && texture->GetFormat() == Graphics::GetAlphaFormat())
+                        pass->SetPixelShaderDefines("ALPHAMAP");
+                    else
+                        pass->SetPixelShaderDefines("");
+                }
             }
         }
     }
