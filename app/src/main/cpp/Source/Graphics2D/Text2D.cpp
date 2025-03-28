@@ -1,6 +1,7 @@
 #include <Urho3D/Urho3D.h>
 
 #include <Urho3D/Core/Context.h>
+#include <Urho3D/Graphics/Graphics.h>
 #include <Urho3D/Graphics/Material.h>
 #include <Urho3D/Graphics/Technique.h>
 #include <Urho3D/IO/Log.h>

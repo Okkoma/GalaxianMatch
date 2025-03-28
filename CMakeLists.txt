@@ -35,7 +35,7 @@ if (NOT ANDROID)
     option (SPACEMATCH_WITH_TIPS "Enable Keyboard Tips" TRUE)
     option (SPACEMATCH_WITH_ADS "Enable Android Ads" FALSE)
     option (SPACEMATCH_WITH_CINEMATICS "Enable Story Animations" TRUE)
-    option (SPACEMATCH_WITH_3D "Enable some 3d features" FALSE)
+    option (SPACEMATCH_WITH_3D "Enable some 3d features" TRUE)
     # Dev Game Options
     option (SPACEMATCH_WITH_NETWORK "Enable Network via websocket" TRUE)
     # Dev Test
