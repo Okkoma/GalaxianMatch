@@ -1614,32 +1614,18 @@ void GameHelpers::SetAdjustedToScreen(Node* node, float escale, float minscale, 
     if (!node)
         return;
 
-    float scale = 1.f;
 #ifdef ACTIVE_CUSTOM_URHO
-    Drawable2D* drawable = node->GetDerivedComponent<Drawable2D>();
-    if (!drawable && node->GetChildren().Size())
-    {
-        drawable = node->GetChildren().Front()->GetDerivedComponent<Drawable2D>();
-        if (drawable)
-            scale *= Min(drawable->GetNode()->GetWorldScale().x_, drawable->GetNode()->GetWorldScale().y_);
-    }
-
-    if (drawable)
-        scale = maximize ? GetMaxAdjustedScale(GameStatics::fScreenSize_, drawable->GetDrawRectangle().Size()) :
-                           GetMinAdjustedScale(GameStatics::fScreenSize_, drawable->GetDrawRectangle().Size());
+    Vector2 size = node->GetDerivedComponent<StaticSprite2D>()->GetDrawRectangle().Size();
 #else
-    StaticSprite2D* drawable = node->GetDerivedComponent<StaticSprite2D>();
-    if (!drawable && node->GetChildren().Size())
-        drawable = node->GetChildren().Front()->GetDerivedComponent<StaticSprite2D>();    
-    if (drawable)
-        scale = maximize ? GetMaxAdjustedScale(GameStatics::fScreenSize_, drawable->GetDrawRect().Size()) :
-                           GetMinAdjustedScale(GameStatics::fScreenSize_, drawable->GetDrawRect().Size());    
+    Vector2 size = node->GetDerivedComponent<StaticSprite2D>()->GetDrawRect().Size();
 #endif
+    float scale = maximize ? GetMaxAdjustedScale(GameStatics::fScreenSize_, size) : GetMinAdjustedScale(GameStatics::fScreenSize_, size);    
+
     // don't reduce
     if (!maximize && scale < minscale)
         scale = minscale;
 
-    node->SetWorldScale(scale * escale * Vector3::ONE);
+    node->SetScale(scale * escale * Vector3::ONE);
 
     URHO3D_LOGINFOF("GameHelpers() - SetAdjustedToScreen : node=%s(%u) entryscale=%f adjustscale=%f outputScale=%f",
                     node->GetName().CString(), node->GetID(), escale, scale, scale*escale);
