@@ -35,9 +35,9 @@ if [ -z "$EMSDK" ]; then
         exit 1
     fi
 
-    source $EMSCRIPTEN_ROOT_PATH/emsdk_env.sh
+    EMSDK_QUIET=1 source $EMSCRIPTEN_ROOT_PATH/emsdk_env.sh
 fi
 
-emcmake $(dirname $0)/cmake_generic.sh "$@" -D WEB=1 --no-warn-unused-cli
+emcmake $(dirname $0)/cmake_generic.sh "$@" -D WEB=1
 
 # vi: set ts=4 sw=4 expandtab:

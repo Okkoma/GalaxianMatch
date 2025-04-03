@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.10.2)
-
 # Define target name
 set (TARGET_NAME GalaxianMatch)
 
@@ -16,42 +14,42 @@ if (URHO3D_AS_SUBMODULE AND EXISTS ${URHO3D_ROOT_DIR}/README.md)
 endif ()
 
 if (SPACEMATCH_WITH_DEMOMODE)
-    message (STATUS "Adding definition ACTIVE_DEMOMODE")
+    message (STATUS "   ACTIVE_DEMOMODE")
     add_definitions (-DACTIVE_DEMOMODE)
 endif ()
 
 if (SPACEMATCH_WITH_TIPS)
-    message (STATUS "Adding definition ACTIVE_TIPS")
+    message (STATUS "   ACTIVE_TIPS")
     add_definitions (-DACTIVE_TIPS)
 endif ()
 
 if (SPACEMATCH_WITH_ADS)
-    message (STATUS "Adding definition ACTIVE_ADS")
+    message (STATUS "   ACTIVE_ADS")
     add_definitions (-DACTIVE_ADS)
 endif ()
 
 if (SPACEMATCH_WITH_CINEMATICS)
-    message (STATUS "Adding definition ACTIVE_CINEMATICS")
+    message (STATUS "   ACTIVE_CINEMATICS")
     add_definitions (-DACTIVE_CINEMATICS)
 endif ()
 
 if (SPACEMATCH_WITH_3D)
-    message (STATUS "Adding definition ACTIVE_3D_MIX")
+    message (STATUS "   ACTIVE_3D_MIX")
     add_definitions (-DACTIVE_3D_MIX)
 endif ()
 
 if (SPACEMATCH_WITH_CUSTOM_URHO)
-    message (STATUS "Adding definition ACTIVE_CUSTOM_URHO")
+    message (STATUS "   ACTIVE_CUSTOM_URHO")
     add_definitions (-DACTIVE_CUSTOM_URHO)
 endif ()
 
 if (SPACEMATCH_WITH_LOOPTESTS)
-    message (STATUS "Adding definition ACTIVE_GAMELOOPTESTING")
+    message (STATUS "   ACTIVE_GAMELOOPTESTING")
     add_definitions (-DACTIVE_GAMELOOPTESTING)
 endif ()
 
 if (SPACEMATCH_WITH_NETWORK)
-    message (STATUS "Adding definition TEST_NETWORK")
+    message (STATUS "   TEST_NETWORK")
     add_definitions (-DTEST_NETWORK)
     list (APPEND SRC_DIRS /Network/)
 endif()

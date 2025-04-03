@@ -1,7 +1,12 @@
 cmake_minimum_required(VERSION 3.10.2)
 
+# Policy CMP0127 to OLD behavior
+# TODO: check the conditions and modify to match with the NEW behavior.
+cmake_policy (SET CMP0127 OLD)
+
 project (SpaceMatch)
 
+#set (URHO3D_SEARCH_ROOT ${CMAKE_SOURCE_DIR}/../../U3D/U3D-okkoman-git)
 #set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/../U3D-GalaxianMatch)
 #set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/../../U3D/U3D-okkoman-git)
 #set (GIT_U3D_REPO "/media/DATA/Dev/Projets/U3D-GalaxianMatch")
@@ -48,14 +53,14 @@ if (NOT ANDROID)
     endif ()
 endif ()
 
+message (STATUS "Project configuration:")
+message (STATUS "   Host      ${CMAKE_HOST_SYSTEM_NAME}")
+message (STATUS "   Platform  ${CMAKE_SYSTEM_NAME}")
+
 if (URHO3D_HOME)
-	add_subdirectory (app/src/main/cpp ${ARGN})
+    message (STATUS "   Build     ${CMAKE_BUILD_TYPE}")
+    message (STATUS "   Library   ${URHO3D_LIB_TYPE}")
+    add_subdirectory (app/src/main/cpp ${ARGN})
 else ()
     message ("!! GalaxianMatch - wait to add source because URHO3D_HOME is undefined here !")
 endif ()
-
-message (STATUS "Project configuration:")
-message (" ... Host      ${CMAKE_HOST_SYSTEM_NAME}")
-message (" ... Platform  ${CMAKE_SYSTEM_NAME}")
-message (" ... Build     ${CMAKE_BUILD_TYPE}")
-message (" ... Library   ${URHO3D_LIB_TYPE}")

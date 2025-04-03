@@ -21,6 +21,10 @@
 # THE SOFTWARE.
 #
 
+# Policy CMP0127 to OLD behavior
+# TODO: check the conditions and modify to match with the NEW behavior.
+cmake_policy (SET CMP0127 OLD)
+
 set (URHOCOMMON_INUSE TRUE)
 
 # This ensures compatibility with older versions of Urho3D's CMake files.
@@ -38,7 +42,7 @@ if (NOT URHO3D_ROOT_DIR)
     # the "Urho3D.cmake" file will handle the variable configuration.
     elseif (NOT CMAKE_PROJECT_NAME MATCHES ^Urho3D-ExternalProject-)
         if (EXISTS ${CMAKE_SOURCE_DIR}/cmake/Urho3D.cmake)
-            include (${CMAKE_SOURCE_DIR}/cmake/Urho3D.cmake)
+            include (${CMAKE_SOURCE_DIR}/cmake/Urho3D.cmake)            
             if (NOT URHO3D_HOME AND NOT ANDROID)
                 return ()
             endif ()
