@@ -1,8 +1,9 @@
-# Use cases for Urho3D/UrhoDiscover CMake modules in an u3d project.
+# Use cases for the new Urho3D/UrhoDiscover CMake modules in an u3d project.
 
-- You use the provided cmake scripts or cmake directly in a terminal.
+- In addition to the U3D documentation "Using Urho3D library" https://u3d.io/docs/_using_library.html .
+- Use the provided cmake scripts or cmake directly in a terminal https://u3d.io/docs/_building.html#Build_Scripts .
 
---------------------------------------------------------------------------------
+---
 
 ## Use Case 1:
 
@@ -17,42 +18,45 @@ This is the classic way. The engine has been compiled once, and you use the u3d 
 - **Result:**
   - Project configured and ready to build against the prebuilt u3d library.
 
---------------------------------------------------------------------------------
+---
 
 ## Use Case 2:
 
 ### You want to build your project with your customized u3d source included in your project source.
 
-You can tweak the engine directly in your project: specific u3d compile options and custom sources (you surely do not include some u3d modules like Docs, Samples or Tools to reduce the build time).
+You can tweak the engine directly in your project: specific u3d compilation options and custom sources (you surely do not include some u3d modules like Docs, Samples or Tools to reduce the build time).
+
+**Note:** don't include u3d sources in app/src/main/cpp if app/CMakeLists.txt uses GLOB RECURSE to find the project sources. This will include u3d sources twice (for the u3d target and for your project target). Instead, put them in app/src/thirdparty/u3d.
 
 - **Settings:**
   - Don't set `URHO3D_HOME` as CMake argument `-D..`.
+  - For Android in app:build.gradle.kts, don't set `BUILD_STAGING_DIR` and `JNI_DIR`.
 - **Module behavior:**
   - The module searches for u3d sources in the project folder.
-  - If there are no u3d sources are included in the project folder, fallback to use case 4.
+  - If there are no u3d sources included, fallback to use case 4.
 - **Result:**
   - If the sources are found, the project is configured and ready to build from the u3d sources. u3d is built first, then the project.
 
---------------------------------------------------------------------------------
+---
 
 ## Use Case 3:
 
 ### You are cloning a project from a Git repository that depends on u3d sources.
 
-This is a convenient way to fetch u3d if you don't want to do it yourself. Clone the project and let it configure.
-It doesn't use "git submodule" but is compatible (due to the use case 2).
+This is a convenient way to fetch u3d if you don't want to do it yourself. Clone the project and let it configure itself.
 
 - **Settings:**
   - Don't set `URHO3D_HOME` as CMake argument `-D..`.
+  - For Android in app:build.gradle.kts, don't set `BUILD_STAGING_DIR` and `JNI_DIR`.
   - If the project uses a specific git repository for u3d, `GIT_U3D_REPO` should already be set in the `CMakeLists.txt` project file.
-  - Otherwise you have to set GIT_U3D_REPO.
+  - Otherwise you need to set GIT_U3D_REPO.
 - **Module behavior:**
   - The module tries to fetch u3d from GIT_U3D_REPO.
   - If the repository is not available, fallback to use case 4.
 - **Result:**
   - If the repository is available, same result as use case 2.
 
---------------------------------------------------------------------------------
+---
 
 ## Use Case 4:
 
@@ -78,5 +82,4 @@ This is not designed to switch from one target system (Windows) to another (Web)
 
 !!! Sorry, not compatible with Android Gradle. Go to use case 1.
 
---------------------------------------------------------------------------------
 

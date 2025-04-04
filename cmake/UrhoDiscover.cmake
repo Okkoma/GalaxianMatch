@@ -224,19 +224,19 @@ macro (urho_find_builds_dirs)
                 list (FIND ${PROJECTNAME}_URHO3D_DIRS "${DIR}" index)
                 if (NOT index EQUAL -1)
                     continue ()
-                endif ()                
+                endif ()
                 get_build_system (${DIR} system)
                 # always exclude libs that don't match the target system
-                if (NOT system MATCHES "${CMAKE_SYSTEM_NAME}" OR 
+                if (NOT system MATCHES "${CMAKE_SYSTEM_NAME}" OR
                     (ANDROID AND NOT system MATCHES "${CMAKE_ANDROID_ARCH_ABI}"))
                     message (DEBUG "	exclude library for ${system} in ${DIR}")
                     continue ()
                 endif ()
-                file (GLOB LIB_FILES LIST_DIRECTORIES FALSE
+                file (GLOB LIB_FILES LIST_DIRECTORIES FALSE 
                         "${DIR}/lib*/*Urho3D.a" "${DIR}/lib*/Urho3D/*Urho3D.a"
-                        "${DIR}/lib*/*Urho3D.lib" "${DIR}/lib*/Urho3D/*Urho3D.lib"
-                        "${DIR}/lib*/*Urho3D.so" "${DIR}/lib*/Urho3D/*Urho3D.so"
-                        "${DIR}/lib*/*Urho3D.dll*" "${DIR}/lib*/Urho3D/*Urho3D.dll*"
+                        "${DIR}/lib*/*Urho3D.lib" "${DIR}/lib*/Urho3D/*Urho3D.lib" 
+                        "${DIR}/lib*/*Urho3D.so" "${DIR}/lib*/Urho3D/*Urho3D.so" 
+                        "${DIR}/lib*/*Urho3D.dll*" "${DIR}/lib*/Urho3D/*Urho3D.dll*" 
                         "${DIR}/lib*/*Urho3D.dylib" "${DIR}/lib*/Urho3D/*Urho3D.dylib")
                 if (LIB_FILES)
                     message (STATUS "	library: found in ${DIR}")
@@ -262,9 +262,7 @@ function (urho_generate_tags_list taglist)
                 continue ()
             endif ()
             get_filename_component (shortpath ${root} NAME)
-            if (origin STREQUAL "source")
-                urho_get_revision("${root}" version)
-            elseif (origin STREQUAL "sdk")
+            if (origin STREQUAL "sdk")
                 file (STRINGS ${home}/include/Urho3D/Urho3D.h HeaderStrings)
                 set (libtype "SHARED")
                 # TODO: For the main Urho3D branch, URHO3D_STATIC_DEFINE is only set if MSVC
@@ -360,19 +358,6 @@ if (NOT "${${PROJECTNAME}_URHO3D_SELECT_LAST}" STREQUAL "${${PROJECTNAME}_URHO3D
     unset (URHO3D_SOURCE_DIR)
     unset (URHO3D_HOME)
     unset (URHO3D_HOME CACHE)
-    message ("RESET URHO3D_HOME")
-endif ()
-
-# For Android, if no BUILD_STAGING_DIR or JNI_DIR are set, try with ENV{URHO3D_HOME}
-if (ANDROID AND DEFINED ENV{URHO3D_HOME})
-    string (TOLOWER "${URHO3D_LIB_TYPE}" libtype)
-    if (NOT libtype)
-        set (libtype "static")
-    endif ()
-    if (EXISTS "$ENV{URHO3D_HOME}/android/urho3d-lib/.cxx/${libtype}")        
-        set (URHO3D_HOME $ENV{URHO3D_HOME} CACHE PATH "Urho3D source, build tree, or SDK directory" FORCE)
-        set (BUILD_STAGING_DIR ${URHO3D_HOME}/android/urho3d-lib/.cxx/${libtype})
-    endif ()
 endif ()
 
 # Set Urho3D home directory based on the selected folder

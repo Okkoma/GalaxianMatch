@@ -1,9 +1,5 @@
 cmake_minimum_required(VERSION 3.10.2)
 
-# Policy CMP0127 to OLD behavior
-# TODO: check the conditions and modify to match with the NEW behavior.
-cmake_policy (SET CMP0127 OLD)
-
 project (SpaceMatch)
 
 #set (URHO3D_SEARCH_ROOT ${CMAKE_SOURCE_DIR}/../../U3D/U3D-okkoman-git)
