@@ -90,9 +90,11 @@ else ()
         string (TOLOWER ${CMAKE_BUILD_TYPE} config)
         if (BUILD_STAGING_DIR)
             # Another special case where library location is already known to be in the build tree of Urho3D project
+            get_filename_component (BUILD_STAGING_DIR ${BUILD_STAGING_DIR}/cmake DIRECTORY)
             set (URHO3D_HOME ${BUILD_STAGING_DIR}/cmake/${config}/${ANDROID_ABI})
         elseif (JNI_DIR)
             # Using Urho3D AAR from Maven repository
+            get_filename_component (JNI_DIR ${JNI_DIR}/urho3d DIRECTORY)
             set (URHO3D_HOME ${JNI_DIR}/urho3d/${config}/${ANDROID_ABI})
         else ()
             message (FATAL_ERROR "Neither 'BUILD_STAGING_DIR' nor 'JNI_DIR' is set")
@@ -155,21 +157,12 @@ else ()
 
     # Set URHO3D_INCLUDE_DIRS
     if (URHO3D_BASE_INCLUDE_DIR)
-        get_filename_component (URHO3D_INCLUDE_DIRS ${URHO3D_BASE_INCLUDE_DIR} PATH)
+        get_filename_component (URHO3D_INCLUDE_DIRS ${URHO3D_BASE_INCLUDE_DIR} DIRECTORY)
         if (NOT URHO3D_HOME)
             # URHO3D_HOME is not set when using SDK installed on system-wide default location, so set it now
-            get_filename_component (URHO3D_HOME ${URHO3D_INCLUDE_DIRS} PATH)
+            get_filename_component (URHO3D_HOME ${URHO3D_INCLUDE_DIRS} DIRECTORY)
         endif ()
         list (APPEND URHO3D_INCLUDE_DIRS ${URHO3D_BASE_INCLUDE_DIR}/ThirdParty)
-        if (URHO3D_PHYSICS)
-            list (APPEND URHO3D_INCLUDE_DIRS ${URHO3D_BASE_INCLUDE_DIR}/ThirdParty/Bullet)
-        endif ()
-        if (URHO3D_LUA)
-            list (APPEND URHO3D_INCLUDE_DIRS ${URHO3D_BASE_INCLUDE_DIR}/ThirdParty/Lua${JIT})
-        endif ()
-        # Intentionally do not cache the URHO3D_VERSION as it has potential to change frequently
-        file (STRINGS "${URHO3D_BASE_INCLUDE_DIR}/librevision.h" URHO3D_VERSION REGEX "^const char\\* revision=\"[^\"]*\".*$")
-        string (REGEX REPLACE "^const char\\* revision=\"([^\"]*)\".*$" \\1 URHO3D_VERSION "${URHO3D_VERSION}")      # Stringify to guard against empty variable
     endif ()
 
     # Set URHO3D_LIBRARIES
@@ -328,7 +321,8 @@ else ()
         set (AUTO_DISCOVER_VARS
             URHO3D_STATIC_DEFINE URHO3D_OPENGL URHO3D_D3D11 URHO3D_SSE URHO3D_DATABASE_ODBC 
             URHO3D_DATABASE_SQLITE URHO3D_LUAJIT URHO3D_TESTING CLANG_PRE_STANDARD URHO3D_STATIC_RUNTIME 
-            URHO3D_SPINE WAYLAND_CLIENT
+            URHO3D_SPINE WAYLAND_CLIENT URHO3D_ANGELSCRIPT URHO3D_LUA URHO3D_LUAJIT URHO3D_IK URHO3D_NAVIGATION URHO3D_NETWORK 
+            URHO3D_PHYSICS URHO3D_PHYSICS2D URHO3D_URHO2D URHO3D_WEBP URHO3D_LOGGING URHO3D_PROFILING URHO3D_TRACY_PROFILING
         )
 
         if (EXPORT_HEADER MATCHES "#define AS_MAX_PORTABILITY")
@@ -360,11 +354,23 @@ else ()
             set (${VAR} ${AUTO_DISCOVERED_${VAR}})            
         endforeach ()
 
+        # Append Physics And Lua Thirdparty include dirs if their option are enabled
+        if (URHO3D_PHYSICS)
+            list (APPEND URHO3D_INCLUDE_DIRS ${URHO3D_BASE_INCLUDE_DIR}/ThirdParty/Bullet)
+        endif ()
+        if (URHO3D_LUA)
+            list (APPEND URHO3D_INCLUDE_DIRS ${URHO3D_BASE_INCLUDE_DIR}/ThirdParty/Lua${JIT})
+        endif ()
+
         # If both the non-debug and debug version of the libraries are found on Windows platform then use them both
         if (URHO3D_LIBRARIES_REL AND URHO3D_LIBRARIES_DBG)
             set (URHO3D_LIBRARIES ${URHO3D_LIBRARIES_REL} ${URHO3D_LIBRARIES_DBG})
         endif ()
     endif ()
+
+    # Intentionally do not cache the URHO3D_VERSION as it has potential to change frequently
+    file (STRINGS "${URHO3D_BASE_INCLUDE_DIR}/librevision.h" URHO3D_VERSION REGEX "^const char\\* revision=\"[^\"]*\".*$")
+    string (REGEX REPLACE "^const char\\* revision=\"([^\"]*)\".*$" \\1 URHO3D_VERSION "${URHO3D_VERSION}")      # Stringify to guard against empty variable
 
     # Restore CMake global settings
     if (CMAKE_FIND_LIBRARY_SUFFIXES_SAVED)

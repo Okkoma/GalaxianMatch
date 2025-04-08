@@ -207,12 +207,16 @@ if (NOT URHO3D_HOME)
     endif ()
     # More than one result: let the developer selects manually via cmake-gui.
     if (NUM_DIRS_FOUND GREATER 1)
+        message (FATAL_ERROR "NUM_DIRS_FOUND > 1")
         if (NOT ANDROID)
             message (STATUS "Found ${NUM_DIRS_FOUND} Urho3D folders. Please choose one with cmake-gui.")
             return ()
-        elseif (DEFINED ENV{URHO3D_HOME} AND EXISTS "$ENV{URHO3D_HOME}/android/urho3d-lib/.cxx/${URHO3D_LIBTYPE_LOWER}")
-            set (URHO3D_HOME $ENV{URHO3D_HOME}) # For Android, we reduce to ENV{URHO3D_HOME} result.
-            set (BUILD_STAGING_DIR ${URHO3D_HOME}/android/urho3d-lib/.cxx/${URHO3D_LIBTYPE_LOWER})
+        elseif (DEFINED ENV{URHO3D_HOME})
+            get_filename_component (home ${ENV{URHO3D_HOME}}/android DIRECTORY)
+            if (EXISTS "${home}/android/urho3d-lib/.cxx/${URHO3D_LIBTYPE_LOWER}") # For Android, we reduce to ENV{URHO3D_HOME} result.
+                set (URHO3D_HOME ${home}) 
+                set (BUILD_STAGING_DIR ${home}/android/urho3d-lib/.cxx/${URHO3D_LIBTYPE_LOWER})
+            endif ()
         endif ()
     elseif (NOT URHO3D_HOME) # Fetch from u3d-community if the fetch condition authorizes it
         message (STATUS "Fetch DEFAULT_GIT_U3D_REPOSITORY ...")
