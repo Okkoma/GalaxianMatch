@@ -58,17 +58,14 @@ jobs:
       if: matrix.os == 'ubuntu-latest' && matrix.target == 'linux'
       run: |
         sudo apt update
-        # check cache if restored
-        if [ -d "/var/cache/apt/archives" ]; then
-          echo "Restored Cache."
-        else
-          sudo apt install -y --no-install-recommends \
-            libglu1-mesa-dev libxcursor-dev libxi-dev libxinerama-dev \
-            libxrandr-dev libxrender-dev libxss-dev libxxf86vm-dev \
-            libasound2-dev libpulse-dev libibus-1.0-dev \
-            libdbus-1-dev libreadline6-dev libssl-dev libudev-dev
-        fi
-
+        dependencies="libglu1-mesa-dev libxcursor-dev libxi-dev libxinerama-dev \
+                      libxrandr-dev libxrender-dev libxss-dev libxxf86vm-dev \
+                      libasound2-dev libpulse-dev libibus-1.0-dev \
+                      libdbus-1-dev libreadline6-dev libssl-dev libudev-dev"
+        for dep in $dependencies; do
+          dpkg -s $dep &>/dev/null || sudo apt install -y --no-install-recommends $dep
+        done
+        
     - name: Cache Chocolatey packages
       if: matrix.os == 'windows-latest'
       uses: actions/cache@v3
