@@ -43,9 +43,6 @@ local.properties
 Local
 source-tool/
 
-app/src/main/java/
-app/src/main/Android*
-app/Android*
 app/google*
 appn*/
 appt*/
