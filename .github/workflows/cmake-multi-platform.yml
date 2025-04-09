@@ -45,30 +45,18 @@ jobs:
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
-    - name: Cache Linux dependencies
-      if: matrix.os == 'ubuntu-latest' && matrix.target == 'linux'
-      uses: actions/cache@v3
-      with:
-        path: /var/cache/apt
-        key: ${{ runner.os }}-apt-${{ hashFiles('**/apt-requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-apt-
-
-    - name: Setup Linux dependencies
-      if: matrix.os == 'ubuntu-latest' && matrix.target == 'linux'
+    - name: Setup Build Environnement Linux
       run: |
         sudo apt update
-        dependencies="libglu1-mesa-dev libxcursor-dev libxi-dev libxinerama-dev \
-                      libxrandr-dev libxrender-dev libxss-dev libxxf86vm-dev \
-                      libasound2-dev libpulse-dev libibus-1.0-dev \
-                      libdbus-1-dev libreadline6-dev libssl-dev libudev-dev"
-        for dep in $dependencies; do
-          dpkg -s $dep &>/dev/null || sudo apt install -y --no-install-recommends $dep
-        done
+        sudo apt install -y --no-install-recommends libglu1-mesa-dev libxcursor-dev libxi-dev libxinerama-dev
+        sudo apt install -y --no-install-recommends libxrandr-dev libxrender-dev libxss-dev libxxf86vm-dev
+        sudo apt install -y --no-install-recommends libasound2-dev libpulse-dev libibus-1.0-dev
+        sudo apt install -y --no-install-recommends libdbus-1-dev libreadline6-dev libssl-dev libudev-dev
+      if: matrix.os == 'ubuntu-latest'
         
     - name: Cache Chocolatey packages
       if: matrix.os == 'windows-latest'
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: C:\ProgramData\chocolatey\bin
         key: ${{ runner.os }}-choco-${{ hashFiles('**/choco-requirements.txt') }}
@@ -126,5 +114,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: android-apk
-        path: app/build/outputs/apk/release/*.apk
+        path: app/build/outputs/apk/gl/release/*.apk
 
