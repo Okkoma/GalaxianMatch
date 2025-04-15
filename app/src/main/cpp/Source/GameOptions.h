@@ -55,6 +55,10 @@
     //#define ACTIVE_CINEMATICS_BUTTONONSCENE
 #endif
 
+#if defined(_DEBUG) && defined(TEST_NETWORK)
+    #define DEBUG_NETWORK
+#endif
+
 #ifdef ACTIVE_GAMELOOPTESTING
 
     #define TESTMODE

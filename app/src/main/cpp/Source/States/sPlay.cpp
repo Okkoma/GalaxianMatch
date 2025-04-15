@@ -943,6 +943,19 @@ void PlayState::CreateUI()
         duocheck->SetPriority(499);
     }
 #endif
+#if defined(DEBUG_NETWORK)
+    // for Debug : Create NetIdentity label
+    Text* netIdLbl = uitexts->GetChildStaticCast<Text>(String("netId"));
+    if (!netIdLbl)
+    {
+        netIdLbl = uitexts->CreateChild<Text>();
+        netIdLbl->SetName("netId");
+        netIdLbl->SetFont(font, UISIZE[FONTSIZE_SMALL]);
+        netIdLbl->SetText(GameStatics::netIdentity_);
+        netIdLbl->SetPriority(500);
+        netIdLbl->SetPosition(width - netIdLbl->GetSize().x_, height - netIdLbl->GetSize().y_);
+    }
+#endif
     // update counter texts
     if (showHiScore_)
         hiscoreText->SetText(String(hiScore));
@@ -1037,6 +1050,11 @@ void PlayState::ResizeUI(bool instant)
     CheckBox* duocheck = uibuttons->GetChildStaticCast<CheckBox>(String("duo"));
     if (duocheck)
         duocheck->SetPosition(width - duocheck->GetSize().x_ - border/2, height - duocheck->GetSize().y_ - border/2);
+#endif
+#if defined(DEBUG_NETWORK)        
+    Text* netIdLbl = uitexts->GetChildStaticCast<Text>(String("netId"));        
+    if (netIdLbl)
+        netIdLbl->SetPosition(width - netIdLbl->GetSize().x_, height - netIdLbl->GetSize().y_);
 #endif
 
     ResizeAbilityPanel(instant);
