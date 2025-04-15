@@ -21,6 +21,10 @@
 # THE SOFTWARE.
 #
 
+if (POLICY CMP0127) # https://cmake.org/cmake/help/latest/policy/CMP0127.html
+    cmake_policy (SET CMP0127 NEW)
+endif ()
+
 set (URHOCOMMON_INUSE TRUE)
 
 # This ensures compatibility with older versions of Urho3D's CMake files.
@@ -791,8 +795,12 @@ else ()
             endif ()
         elseif (MINGW)
             # MinGW-specific setup
-            set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -static -static-libgcc -fno-keep-inline-dllexport")
-            set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static -static-libgcc -static-libstdc++ -fno-keep-inline-dllexport")
+            set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -static -static-libgcc")
+            set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static -static-libgcc -static-libstdc++")
+            if (CMAKE_CXX_COMPILER_ID MATCHES GNU) # this flag for specifi GCC compiler (not clang)
+                set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-keep-inline-dllexport")
+                set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-keep-inline-dllexport")
+            endif ()
             if (NOT URHO3D_64BIT)
                 set (CMAKE_C_FLAGS_RELEASE "-O2 -DNDEBUG")
                 set (CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
@@ -914,41 +922,25 @@ macro (create_symlink SOURCE DESTINATION)
         else ()
             set (ABS_DESTINATION ${CMAKE_BINARY_DIR}/${DESTINATION})
         endif ()
+    endif ()    
+    if (ARG_FALLBACK_TO_COPY)
+        set (ARG_FALLBACK_TO_COPY COPY_ON_ERROR)
     endif ()
-    if (CMAKE_HOST_WIN32)
-        if (IS_DIRECTORY ${ABS_SOURCE})
-            set (SLASH_D /D)
-        else ()
-            unset (SLASH_D)
-        endif ()
-        if (HAS_MKLINK)
-            if (NOT EXISTS ${ABS_DESTINATION})
-                # Have to use string-REPLACE as file-TO_NATIVE_PATH does not work as expected with MinGW on "backward slash" host system
-                string (REPLACE / \\ BACKWARD_ABS_DESTINATION ${ABS_DESTINATION})
-                string (REPLACE / \\ BACKWARD_ABS_SOURCE ${ABS_SOURCE})
-                execute_process (COMMAND cmd /C mklink ${SLASH_D} ${BACKWARD_ABS_DESTINATION} ${BACKWARD_ABS_SOURCE} OUTPUT_QUIET ERROR_QUIET)
-            endif ()
-        elseif (ARG_FALLBACK_TO_COPY)
-            if (SLASH_D)
-                set (COMMAND COMMAND ${CMAKE_COMMAND} -E copy_directory ${ABS_SOURCE} ${ABS_DESTINATION})
-            else ()
-                set (COMMAND COMMAND ${CMAKE_COMMAND} -E copy_if_different ${ABS_SOURCE} ${ABS_DESTINATION})
-            endif ()
-            # Fallback to copy only one time
-            execute_process (${COMMAND})
-            if (TARGET ${TARGET_NAME})
-                # Fallback to copy every time the target is built
-                add_custom_command (TARGET ${TARGET_NAME} POST_BUILD ${COMMAND})
-            endif ()
-        else ()
-            message (WARNING "Unable to create symbolic link on this host system, you may need to manually copy file/dir from \"${SOURCE}\" to \"${DESTINATION}\"")
-        endif ()
-    else ()
-        get_filename_component (DIRECTORY ${ABS_DESTINATION} DIRECTORY)
-        file (RELATIVE_PATH REL_SOURCE ${DIRECTORY} ${ABS_SOURCE})
-        execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${REL_SOURCE} ${ABS_DESTINATION})
+    file (CREATE_LINK ${ABS_SOURCE} ${ABS_DESTINATION} RESULT error ${ARG_FALLBACK_TO_COPY} SYMBOLIC)
+    if (error)
+        message (WARNING "Unable to create symbolic link on this host system, you may need to manually copy file/dir from \"${SOURCE}\" to \"${DESTINATION}\"")
+        message (WARNING "${error}")
     endif ()
 endmacro ()
+
+# Function for replacing a broken symlink
+function(check_and_replace_by_symlink TESTPATH TARGET)
+    get_filename_component (linkname ${TARGET} NAME)
+    set(fullLinkName "${TESTPATH}/${linkname}")
+    if (EXISTS ${fullLinkName} AND NOT IS_SYMLINK ${fullLinkName} AND NOT IS_DIRECTORY ${fullLinkName})
+        file (CREATE_LINK ${TARGET} ${fullLinkName} SYMBOLIC)
+    endif ()
+endfunction()
 
 # Macro for adding additional make clean files
 macro (add_make_clean_files)
