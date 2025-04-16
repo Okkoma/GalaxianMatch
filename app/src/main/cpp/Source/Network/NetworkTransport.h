@@ -59,7 +59,7 @@ public:
     NetworkTransportType GetType() const { return type_; }
     NetworkConnectionState GetState() const { return state_; }
     const String& GetIdentity() const { return identity_; }
-    const String& GetPeerId() const { return peerid_; }
+    const String& GetPeerId() const { return peerinfo_.peer_; }
     const StringHash& GetId() const { return id_; }
 
     bool HasIncomingPackets() const { return receivedPackets_; }
@@ -69,6 +69,7 @@ protected:
     NetworkTransportType type_ = NT_NONE;
     NetworkConnectionState state_ = NetworkConnectionState::Disconnected;
     String identity_;
+    PeerInfo peerinfo_;
     String peerid_;
     StringHash id_;
 

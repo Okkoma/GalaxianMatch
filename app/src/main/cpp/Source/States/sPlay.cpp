@@ -1986,7 +1986,7 @@ void PlayState::HandleDuoToggled(StringHash eventType, VariantMap& eventData)
         {
             network->Connect(GameStatics::netSignalingServer_, GameStatics::netIdentity_ + "/" + ToString("%d",GameStatics::currentLevel_));
             firstserverpong_ = true;
-//            network->GetConnection()->SetAutoConnectPeers(1);
+            network->GetConnection()->SetAutoConnectPeers(1);
         }
     }
     else
