@@ -30,8 +30,23 @@ enum NetworkTransportType : int
     NT_PEER
 };
 
+
+// TODO: Virtualize PeerInfo
+// Let the consumer (GameNetwork part) specialize this user class.
 struct PeerInfo
 {
+    void Parse(const String& infoStr)
+    {
+        Vector<String> infos = infoStr.Split('/');
+        peer_ = infos.Front();
+        level_ = infos.Size() > 1 ? ToInt(infos.Back()) : -1;
+    }
+    bool CanConnectWith(const PeerInfo& peerinfo) const 
+    {
+        return peer_ > peerinfo.peer_ && level_ == peerinfo.level_;
+    }
+    const String& GetPeer() const { return peer_; }
+
     String peer_;
     int level_;
 };
@@ -70,7 +85,6 @@ protected:
     NetworkConnectionState state_ = NetworkConnectionState::Disconnected;
     String identity_;
     PeerInfo peerinfo_;
-    String peerid_;
     StringHash id_;
 
     VectorBuffer preparedMessage_;
