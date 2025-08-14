@@ -19,6 +19,11 @@
 
 /// SceneAction2D
 
+void RegisterCinematics2DLibrary(Urho3D::Context* context)
+{
+    SceneAnimation2D::RegisterObject(context);
+}
+
 SceneObject2D::SceneObject2D(Context* context) :
     Serializable(context),
     speedfactor_(1.f),

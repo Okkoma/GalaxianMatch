@@ -264,3 +264,4 @@ private:
     Vector<SharedPtr<SceneTimeline2D> > timelines_;
 };
 
+void RegisterCinematics2DLibrary(Urho3D::Context* context);

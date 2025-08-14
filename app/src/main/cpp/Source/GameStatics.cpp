@@ -419,7 +419,7 @@ void GameStatics::Initialize(Context* context)
 	stateManager_->RegisterState(new MenuState(context));
 	stateManager_->RegisterState(new LevelMapState(context));
 	stateManager_->RegisterState(new PlayState(context));
-#ifdef ACTIVE_CUSTOM_URHO
+#ifdef ACTIVE_CINEMATICS
     stateManager_->RegisterState(new CinematicState(context));
 #endif    
     stateManager_->RegisterState(new OptionState(context));
@@ -1566,7 +1566,9 @@ void GameStatics::CheckLanguage()
         if (locale)
         {
             lang = l10n->GetLanguageIndex(locale->language);
-            URHO3D_LOGINFO("GameStatics - CheckLanguage : local {} {}", locale->language, lang);
+            // use {fmt} included in u3d
+            //URHO3D_LOGINFO("GameStatics - CheckLanguage : local {} {}", locale->language, lang);
+            URHO3D_LOGINFOF("GameStatics - CheckLanguage : local %s %d", locale->language, lang);
         }
     }
 
@@ -1574,7 +1576,9 @@ void GameStatics::CheckLanguage()
     GameStatics::playerState_->language_ = Clamp(lang, 0, l10n->GetNumLanguages()-1);
     l10n->SetLanguage(GameStatics::playerState_->language_);
 
-    URHO3D_LOGINFO("GameStatics - CheckLanguage : entry langindex={} - output language={}({})", lang, l10n->GetLanguage(), l10n->GetLanguageIndex());
+    // use {fmt} included in u3d
+    //URHO3D_LOGINFO("GameStatics - CheckLanguage : entry langindex={} - output language={}({})", lang, l10n->GetLanguage(), l10n->GetLanguageIndex());
+    URHO3D_LOGINFOF("GameStatics - CheckLanguage : entry langindex=%d - output language=%s(%d)", lang, l10n->GetLanguage(), l10n->GetLanguageIndex());
 }
 
 void GameStatics::CheckTimeForEarningStars()

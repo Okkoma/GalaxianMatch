@@ -66,7 +66,7 @@
 #include "sOptions.h"
 #include "sPlay.h"
 
-#ifdef ACTIVE_CUSTOM_URHO
+#ifdef ACTIVE_CINEMATICS
 #include "sCinematic.h"
 #endif
 
@@ -661,7 +661,7 @@ void Game::SubscribeToAccessMenuEvents()
         button = popup->GetChild(String("shop"));
         if (button)
             game_->SubscribeToEvent(button, E_PRESSED, URHO3D_HANDLER(Game, HandleShowShop));
-#ifdef ACTIVE_CUSTOM_URHO
+#ifdef ACTIVE_CINEMATICS
         button = popup->GetChild(String("cinematic"));
         if (button)
             game_->SubscribeToEvent(button, E_PRESSED, URHO3D_HANDLER(Game, HandleWatchCinematic));
@@ -686,7 +686,7 @@ void Game::UnsubscribeFromAccessMenuEvents()
         button = popup->GetChild(String("shop"));
         if (button)
             game_->UnsubscribeFromEvent(button, E_PRESSED);
-#ifdef ACTIVE_CUSTOM_URHO            
+#ifdef ACTIVE_CINEMATICS            
         button = popup->GetChild(String("cinematic"));
         if (button)
             game_->UnsubscribeFromEvent(button, E_PRESSED);
@@ -875,7 +875,7 @@ void Game::HandleShowShop(StringHash eventType, VariantMap& eventData)
 
 void Game::HandleWatchCinematic(StringHash eventType, VariantMap& eventData)
 {
-#ifdef ACTIVE_CUSTOM_URHO    
+#ifdef ACTIVE_CINEMATICS    
     URHO3D_LOGINFO("Game() - HandleWatchCinematic !");
 
     accessMenu_->ShowPopup(false);

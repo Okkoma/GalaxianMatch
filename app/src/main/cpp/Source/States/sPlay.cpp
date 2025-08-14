@@ -1905,7 +1905,7 @@ void PlayState::HandleStop(StringHash eventType, VariantMap& eventData)
     {
         URHO3D_LOGINFO("PlayState() - HandleStop : bosslevel !");
 
-    #if defined(ACTIVE_CUSTOM_URHO) && defined(ACTIVE_CINEMATICS)
+    #if defined(ACTIVE_CINEMATICS)
         stateManager_->PopStack(false);
         if (!CinematicState::SetCinematic(CINEMATICSELECTIONMODE_INTRO_OUTRO, GameStatics::GetMinLevelId(GameStatics::currentZone_), GameStatics::currentLevel_))
             stateManager_->SetActiveState("LevelMap");

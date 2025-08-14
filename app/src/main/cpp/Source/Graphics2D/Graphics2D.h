@@ -20,7 +20,6 @@
 
 #include "Text2D.h"
 #include "AnimatedSprite.h"
-#include "SceneAnimation2D.h"
 
 void RegisterGraphics2DLibrary(Urho3D::Context* context);
 

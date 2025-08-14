@@ -280,7 +280,7 @@ void MenuState::BeginNewLevel(GameLevelMode mode, unsigned seed)
 //            playstate->SetSeed(seed);
 //    }
 
-#if defined(ACTIVE_CUSTOM_URHO) && defined(ACTIVE_CINEMATICS)
+#if defined(ACTIVE_CINEMATICS)
     if (!CinematicState::SetCinematic(CINEMATICSELECTIONMODE_INTRO_OUTRO, 0, 0, "LevelMap"))
         stateManager_->PushToStack("LevelMap");
 #else

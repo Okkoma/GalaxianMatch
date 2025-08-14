@@ -27,6 +27,10 @@
 #include "Network.h"
 #endif
 
+#if defined(ACTIVE_SCENEANIMATION2D)
+#include "SceneAnimation2D.h"
+#endif
+
 #include "GameTest.h"
 
 #include "GameLibrary.h"
@@ -39,6 +43,9 @@ void RegisterGameLibrary(Context* context)
 
 #if defined(ACTIVE_CUSTOM_URHO)
     RegisterGraphics2DLibrary(context);
+#endif
+#if defined(ACTIVE_SCENEANIMATION2D)
+    RegisterCinematics2DLibrary(context);
 #endif
 #if defined(TEST_NETWORK)
     Network::RegisterLibrary(context);

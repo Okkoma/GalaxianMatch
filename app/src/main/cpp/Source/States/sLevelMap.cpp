@@ -307,7 +307,7 @@ bool LevelMapState::ResetMap(bool purge)
     URHO3D_LOGINFO("LevelMapState() - ResetMap ... OK !                      -");
     URHO3D_LOGINFO("LevelMapState() - ----------------------------------------");
 
-#if defined(ACTIVE_CUSTOM_URHO) && defined(ACTIVE_CINEMATICS)
+#if defined(ACTIVE_CINEMATICS)
     CinematicState::SetCinematic(CINEMATICSELECTIONMODE_INTRO_OUTRO, firstMissionID_, selectedLevelID_);
 #endif
 
@@ -868,7 +868,7 @@ void LevelMapState::UpdatePlanetSelection()
             {
                 bool hascinematic = false;
 
-            #if defined(ACTIVE_CUSTOM_URHO) && defined(ACTIVE_CINEMATICS)
+            #if defined(ACTIVE_CINEMATICS)
                 if (CinematicState::GetCinematicParts(CINEMATICSELECTIONMODE_REPLAY, firstMissionID_, selectedLevelID_))
                 {
                 #ifdef ACTIVE_CINEMATICS_BUTTONONSCENE
@@ -1552,7 +1552,7 @@ void LevelMapState::StartLevel()
 
     UnsubscribeToEvents();
 
-#if defined(ACTIVE_CUSTOM_URHO) && defined(ACTIVE_CINEMATICS)
+#if defined(ACTIVE_CINEMATICS)
     if (!CinematicState::SetCinematic(CINEMATICSELECTIONMODE_LEVELSELECTED, firstMissionID_, selectedLevelID_, "Play"))
         stateManager_->PushToStack("Play");
 #else
@@ -1585,7 +1585,7 @@ void LevelMapState::StartState(int action)
     }
     else if (action == LEVELMAPACTION_GOTONEXTZONE)
     {
-    #if defined(ACTIVE_CUSTOM_URHO) && defined(DEMOMODE_MAXZONE)
+    #if defined(ACTIVE_CINEMATICS) && defined(DEMOMODE_MAXZONE)
         if (GameStatics::currentZone_ == DEMOMODE_MAXZONE)
         {
             if (!CinematicState::SetCinematic(CINEMATICSELECTIONMODE_TOBECONTINUED))
@@ -1595,7 +1595,7 @@ void LevelMapState::StartState(int action)
     #endif
         {
             GameStatics::SetLevel(lastMissionID_+1);
-        #if defined(ACTIVE_CUSTOM_URHO) && defined(ACTIVE_CINEMATICS)
+        #if defined(ACTIVE_CINEMATICS)
             if (!CinematicState::SetCinematic(CINEMATICSELECTIONMODE_INTRO_OUTRO))
         #endif
             {
@@ -1611,7 +1611,7 @@ void LevelMapState::StartState(int action)
     }
     else if (action == LEVELMAPACTION_CINEMATICREPLAY)
     {
-    #if defined(ACTIVE_CUSTOM_URHO) && defined(ACTIVE_CINEMATICS)
+    #if defined(ACTIVE_CINEMATICS)
         if (CinematicState::GetCinematicParts(CINEMATICSELECTIONMODE_REPLAY, firstMissionID_, selectedLevelID_))
         {
             // Show InteractiveFrame Confirmation Message
@@ -1762,7 +1762,7 @@ void LevelMapState::HandleConfirmCinematicLaunch(StringHash eventType, VariantMa
     UnsubscribeFromEvent(messageframe_, E_MESSAGEACK);
     if (messageframe_)
         messageframe_->Stop();
-#if defined(ACTIVE_CUSTOM_URHO)
+#if defined(ACTIVE_CINEMATICS)
 	if (eventData[MessageACK::P_OK].GetBool())
         CinematicState::LaunchCinematicParts(CINEMATICSELECTIONMODE_REPLAY);
 #endif        

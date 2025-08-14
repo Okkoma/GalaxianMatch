@@ -35,7 +35,9 @@
 #include "GameAttributes.h"
 
 #include "SplashScreen.h"
+#ifdef ACTIVE_SCENEANIMATION2D
 #include "SceneAnimation2D.h"
+#endif
 
 #include "DelayInformer.h"
 
@@ -322,9 +324,10 @@ bool CinematicState::LaunchSceneFile()
 
     // Standard Mode
     SubscribeToEvent(this, CINEMATIC_STOP, URHO3D_HANDLER(CinematicState, HandleStop));
-
-    // try to get all SceneAnimation2D
+    
     animations_.Clear();
+#ifdef ACTIVE_SCENEANIMATION2D
+    // try to get all SceneAnimation2D
     PODVector<SceneAnimation2D*> sceneAnimations;
     localScene_->GetComponents<SceneAnimation2D>(sceneAnimations, true);
     if (sceneAnimations.Size())
@@ -339,6 +342,7 @@ bool CinematicState::LaunchSceneFile()
     }
     // no SceneAnimation2D, try with SCML animations or static images
     else
+#endif
     {
         PODVector<StaticSprite2D*> staticSprites;
         localScene_->GetDerivedComponents<StaticSprite2D>(staticSprites, true);
@@ -517,6 +521,7 @@ void CinematicState::HandleSceneUpdate(StringHash eventType, VariantMap& eventDa
     {
         if (animation_)
         {
+        #ifdef ACTIVE_SCENEANIMATION2D
             if (animation_->GetType() == SceneAnimation2D::GetTypeStatic())
             {
                 SceneAnimation2D* animation = static_cast<SceneAnimation2D*>(animation_.Get());
@@ -527,7 +532,9 @@ void CinematicState::HandleSceneUpdate(StringHash eventType, VariantMap& eventDa
                     ChangeToAnimation(animationIndex_+1);
                 }
             }
-            else if (animation_->GetType() == AnimatedSprite2D::GetTypeStatic())
+            else 
+        #endif
+            if (animation_->GetType() == AnimatedSprite2D::GetTypeStatic())
             {
                 AnimatedSprite2D* animation = static_cast<AnimatedSprite2D*>(animation_.Get());
                 if (animation->HasFinishedAnimation())
@@ -578,9 +585,10 @@ void CinematicState::SetPaused(bool state)
     paused_ = state;
 
     GameStatics::rootScene_->SetUpdateEnabled(!paused_);
-
+#ifdef ACTIVE_SCENEANIMATION2D
     if (animation_ && animation_->GetType() == SceneAnimation2D::GetTypeStatic())
         static_cast<SceneAnimation2D*>(animation_.Get())->SetRunning(!paused_);
+#endif
 }
 
 void CinematicState::OnAccessMenuOpenFrame(bool state)

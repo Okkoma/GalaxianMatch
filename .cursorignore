@@ -1,0 +1,17 @@
+# Add directories or file patterns to ignore during indexing (e.g. foo/ or *.csv)
+.*/*
+app/google-services.json
+keystore.properties
+appn*/
+appt*/
+build/*
+build-native/*
+backup/*
+bin/*
+bin-*/*
+exe/*
+restorelinks
+README.md
+.cursorignore
+.gitignore
+

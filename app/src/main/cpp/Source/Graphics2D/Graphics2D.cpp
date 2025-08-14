@@ -21,8 +21,6 @@ void RegisterGraphics2DLibrary(Urho3D::Context* context)
 
     Text2D::RegisterObject(context);
     
-    SceneAnimation2D::RegisterObject(context);
-
     AnimatedSprite::RegisterObject(context);
 }
 
