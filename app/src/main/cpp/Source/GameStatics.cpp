@@ -1578,7 +1578,7 @@ void GameStatics::CheckLanguage()
 
     // use {fmt} included in u3d
     //URHO3D_LOGINFO("GameStatics - CheckLanguage : entry langindex={} - output language={}({})", lang, l10n->GetLanguage(), l10n->GetLanguageIndex());
-    URHO3D_LOGINFOF("GameStatics - CheckLanguage : entry langindex=%d - output language=%s(%d)", lang, l10n->GetLanguage(), l10n->GetLanguageIndex());
+    URHO3D_LOGINFOF("GameStatics - CheckLanguage : entry langindex=%d - output language=%s(%d)", lang, l10n->GetLanguage().CString(), l10n->GetLanguageIndex());
 }
 
 void GameStatics::CheckTimeForEarningStars()
