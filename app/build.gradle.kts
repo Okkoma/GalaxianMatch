@@ -21,15 +21,15 @@ fun loadKeystoreProperties(file: File): Map<String, String> {
 
 android {
     namespace = "com.okkomastudio.galaxianmatch"
-    compileSdk = 34
+    compileSdk = 33
     ndkVersion = ndkSideBySideVersion
 
     defaultConfig {
         applicationId = "com.okkomastudio.galaxianmatch"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 34
-        versionName = "1.034"
+        versionName = "1.036"
         multiDexEnabled = true
 
         externalNativeBuild {
@@ -107,6 +107,7 @@ android {
                     isEnable = true
                     reset()
                     include("armeabi-v7a", "arm64-v8a")
+                    //include("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
                 }
             }
         }

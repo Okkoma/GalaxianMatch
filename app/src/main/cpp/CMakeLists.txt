@@ -83,6 +83,13 @@ setup_main_executable ()
 set_target_properties(${TARGET_NAME} PROPERTIES CXX_STANDARD 17)
 target_include_directories (${TARGET_NAME} PRIVATE ${INC_DIRS})
 
+# Google Android requirements (since API35) => 16ko page-size
+# see https://developer.android.com/guide/practices/page-sizes
+if (ANDROID)
+    target_link_options(${TARGET_NAME} PRIVATE "-Wl,-z,max-page-size=16384")
+    target_link_options(${TARGET_NAME} PRIVATE "-Wl,-z,common-page-size=16384")
+endif ()
+
 if (SPACEMATCH_WITH_NETWORK)
     if (WEB)
         add_subdirectory (ThirdParty/libdatachannel-wasm EXCLUDE_FROM_ALL)

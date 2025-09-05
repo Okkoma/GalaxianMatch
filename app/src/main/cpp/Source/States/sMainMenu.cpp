@@ -185,6 +185,19 @@ void MenuState::CreateScene(bool setscene)
     #else
         GameHelpers::LoadNodeXML(context_, mainscene, "UI/Menu.xml", LOCAL);
     #endif
+
+    #ifndef TEST_NETWORK
+        Node* buttonStory = mainscene->GetChild("ButtonStory");
+        if (buttonStory)
+        {
+            float dy = buttonStory->GetDerivedComponent<Drawable2D>()->GetWorldBoundingBox().Size().y_;
+            buttonStory->Translate(Vector3(0.f, -dy, 0.f), TS_LOCAL);
+        }
+
+        Node* buttonVersus = mainscene->GetChild("ButtonVersus");
+        if (buttonVersus)
+            buttonVersus->SetEnabledRecursive(false);
+    #endif
     }
 
     // Entrance Animation
@@ -360,6 +373,7 @@ void MenuState::UpdateAnimButtons()
         node->SetScale2D(menustate_ == 1 ? Vector2(1.2f,1.2f) : Vector2::ONE);
         GameHelpers::SetTextColorInNode(node, menustate_ == 1 ? Color::WHITE : Color::GRAY);
     }
+#ifdef TEST_NETWORK
     node = mainscene->GetChild("ButtonVersus");
     if (node)
     {
@@ -368,6 +382,7 @@ void MenuState::UpdateAnimButtons()
         node->SetScale2D(menustate_ == 2 ? Vector2(1.2f,1.2f) : Vector2::ONE);
         GameHelpers::SetTextColorInNode(node, menustate_ == 2 ? Color::WHITE : Color::GRAY);
     }
+#endif  
 }
 
 void MenuState::SetMenuColliderPositions()
@@ -400,7 +415,7 @@ void MenuState::SetMenuColliderPositions()
 //                            startRect_.ToString().CString(), uielt->GetPosition().ToString().CString(), uielt->GetSize().ToString().CString(), uielt->IsVisible()?"true":"false");
         }
     }
-
+#ifdef TEST_NETWORK
     node = mainscene->GetChild("ButtonVersus");
     if (node)
     {
@@ -420,7 +435,7 @@ void MenuState::SetMenuColliderPositions()
             uielt->SetPosition((float)optionsRect_.left_ / GameStatics::uiScale_, (float)optionsRect_.top_ / GameStatics::uiScale_);
         }
     }
-
+#endif
 }
 
 
@@ -640,6 +655,10 @@ void MenuState::HandleMenu(StringHash eventType, VariantMap& eventData)
 
     else if (eventType == E_MOUSEBUTTONDOWN)
         launch = (eventData[MouseButtonDown::P_BUTTON].GetInt() == MOUSEB_LEFT);
+
+#ifndef TEST_NETWORK
+    menustate_ = 1;
+#endif
 
     /// Animate Items
     if (move)

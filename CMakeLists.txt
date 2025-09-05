@@ -2,11 +2,18 @@ cmake_minimum_required(VERSION 3.10.2)
 
 project (SpaceMatch)
 
+set (APP_SRC app)
+#set (APP_SRC appnoads)
+
+# clangd helper
+#set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 #set (URHO3D_SEARCH_ROOT ${CMAKE_SOURCE_DIR}/../../U3D/U3D-okkoman-git)
 #set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/../U3D-GalaxianMatch)
 #set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/../../U3D/U3D-okkoman-git)
-#set (GIT_U3D_REPO "/media/DATA/Dev/Projets/U3D-GalaxianMatch")
+#set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/../Urho3D-GalaxianMatch)
 
+#set (GIT_U3D_REPO "/media/DATA/Dev/Projets/U3D-GalaxianMatch")
 set (GIT_U3D_REPO "https://github.com/Okkoma/U3D-GalaxianMatch.git")
 
 include (${CMAKE_SOURCE_DIR}/cmake/Urho3D.cmake)
@@ -56,7 +63,7 @@ message (STATUS "   Platform  ${CMAKE_SYSTEM_NAME}")
 if (URHO3D_HOME)
     message (STATUS "   Build     ${CMAKE_BUILD_TYPE}")
     message (STATUS "   Library   ${URHO3D_LIB_TYPE}")
-    add_subdirectory (app/src/main/cpp ${ARGN})
+    add_subdirectory (${APP_SRC}/src/main/cpp ${ARGN})
 else ()
     message ("!! GalaxianMatch - wait to add source because URHO3D_HOME is undefined here !")
 endif ()

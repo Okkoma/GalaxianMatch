@@ -40,8 +40,15 @@ A simple space-themed match-3 game and my first published game.
     ./script/cmake_emscripten.sh build-web
     cmake --build build-web --config Release
  
+
+## Android Build Instructions
+
+ Use the gradle build script:
  
-## Installation
+    ./gradlew bundle
+    
+    
+## Native Installation
 
 Once the build is complete, you can install the project using the appropriate installation command.
 
@@ -61,7 +68,7 @@ This project relies on the following third-party libraries:
 
 - U3D engine
   - includes SDL, Box2D, ETCPACK, FreeType, GLEW, LZ4, LibCpuId, Mustache, PugiXml, SQLite, STB, StanHull, WebP, nanodbc, rapidjson
-- libdatachannel
+  - libdatachannel
   - requires openssl
 
 
@@ -72,4 +79,4 @@ This project relies on the following third-party libraries:
 
 ## License
 
-This project is licensed under the MIT License. For more details, see the LICENSE file.
+For more details, see the LICENSE file.

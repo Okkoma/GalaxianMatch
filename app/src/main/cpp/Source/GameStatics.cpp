@@ -1201,6 +1201,7 @@ void GameStatics::GameState::Reset()
 
     UpdateStoryItems();
 
+    CheckLanguage();
 //    gameState_.Dump();
 }
 

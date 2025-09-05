@@ -46,11 +46,5 @@ tasks {
     register<Delete>("cleanAll") {
         dependsOn("clean")
     }
-
-    named("prepareKotlinBuildScriptModel") {
-        listOf("Debug", "Release").forEach {
-            dependsOn(":app:unzipJni$it")
-        }
-    }
 }
 

@@ -295,7 +295,16 @@ void OptionState::CreateShopUI()
         // Set TabbedWindows Colors and switch to the first Tab
         SetShopWindowColors(Color(0.5f, 0.5f, 0.5f, 1.f), Color(0.3f, 0.3f, 0.3f, 1.f), 0.8f);
     }
-
+#ifndef ACTIVE_ADS
+    if (uishopframe_)
+    {
+        UIElement* tabads = uishopframe_->GetChild(String("TabbedWindow"))->GetChild(String("TabSwitches"))->GetChild(String("Switch3"));
+        if (tabads)
+        {
+            tabads->SetVisible(false);
+        }
+    }
+#endif
     UpdateShopItems();
 
     URHO3D_LOGINFO("OptionState() - CreateShopUI ... OK !");

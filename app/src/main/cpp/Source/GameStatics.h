@@ -29,7 +29,7 @@ using namespace Urho3D;
 
 const int gameDataVersion_         = 1;
 const int gameVersion_             = 1;
-const int gameVersionMinor_        = 34;
+const int gameVersionMinor_        = 36;
 
 const int MAXABILITIES             = 6;
 const int MAXZONEOBJECTS           = 4;

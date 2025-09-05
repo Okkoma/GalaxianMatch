@@ -82,3 +82,4 @@ bin/Data/Editor*/
 # Remove Tooling
 bin/tool
 
+compile_commands.json
