@@ -44,8 +44,9 @@ Local
 source-tool/
 
 app/google*
-appn*/
-appt*/
+appads/
+appnocinematics/
+apptesting/
 
 bin-*/
 exe/server/package-lock*

@@ -28,12 +28,7 @@
         <!-- android:supportsRtl="true"> -->
         <!-- Example of setting SDL hints from AndroidManifest.xml: -->
         <meta-data android:name="SDL_ENV.SDL_ACCELEROMETER_AS_JOYSTICK" android:value="0"/>
-
-        <!-- AdMob App ID -->
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-xxxxxx"/>
-                               
+           
         <activity
             android:name=".GalaxianMatch"
             android:label="Galaxian Match"

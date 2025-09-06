@@ -3,15 +3,16 @@ cmake_minimum_required(VERSION 3.10.2)
 project (SpaceMatch)
 
 set (APP_SRC app)
-#set (APP_SRC appnoads)
+#set (APP_SRC appads)
 
 # clangd helper
 #set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 #set (URHO3D_SEARCH_ROOT ${CMAKE_SOURCE_DIR}/../../U3D/U3D-okkoman-git)
-#set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/../U3D-GalaxianMatch)
+
 #set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/../../U3D/U3D-okkoman-git)
 #set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/../Urho3D-GalaxianMatch)
+set (URHO3D_HOME ${CMAKE_SOURCE_DIR}/../U3D-GalaxianMatch)
 
 #set (GIT_U3D_REPO "/media/DATA/Dev/Projets/U3D-GalaxianMatch")
 set (GIT_U3D_REPO "https://github.com/Okkoma/U3D-GalaxianMatch.git")

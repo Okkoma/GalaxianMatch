@@ -1,3 +1,3 @@
 rootProject.name = "SpaceMatch"
 include(":app")
-//include(":app", ":appnoads", ":appnocinematics", ":apptesting")
+//include(":app", ":appads", ":appnocinematics", ":apptesting")

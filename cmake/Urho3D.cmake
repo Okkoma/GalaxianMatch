@@ -172,8 +172,8 @@ if (NOT EXISTS ${CMAKE_SOURCE_DIR}/cmake)
 endif ()
 # Android: Check for BUILD_STAGING_DIR and JNI_DIR
 if (ANDROID)
-    unset (URHO3D_HOME) # unset in this case, because gradle interprets ENV var. and from argument as the same
-    unset (URHO3D_HOME CACHE)
+    #unset (URHO3D_HOME) # unset in this case, because gradle interprets ENV var. and from argument as the same
+    #unset (URHO3D_HOME CACHE)
     if (BUILD_STAGING_DIR OR JNI_DIR) # FindUrho3D.cmake handles the following case.
         if (NOT URHOCOMMON_INUSE)
             include (${CMAKE_SOURCE_DIR}/cmake/Modules/UrhoCommon.cmake)
