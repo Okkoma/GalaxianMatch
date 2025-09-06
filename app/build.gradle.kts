@@ -51,8 +51,6 @@ android {
                 System.getenv("ANDROID_CCACHE")?.let {
                     arguments += "-DANDROID_CCACHE=$it"
                 }
-                cFlags += listOf("-std=c99")
-                cppFlags += listOf("-std=c++98")
                 targets.add("GalaxianMatch")
             }
         }
