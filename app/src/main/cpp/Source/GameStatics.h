@@ -327,6 +327,81 @@ enum CimematicPart
     CINEMATIC_TOBECONTINUED
 };
 
+enum UIStrings
+{
+    FRAME_BUTTON = 0,
+    MENU_BUTTON,    
+    CLOSE_BUTTON, 
+
+    ACCESSMENU,
+    ACCESSMENU_POPUP_BACK,
+    ACCESSMENU_POPUP_OPTIONS,
+    ACCESSMENU_POPUP_SHOP,
+    ACCESSMENU_POPUP_CINEMATIC,
+
+    PLAY_ROOT,
+
+    PLAY_BUTTONS,
+    PLAY_BUTTONS_MOVES,    
+    PLAY_BUTTONS_OBJECTIVES,
+    PLAY_BUTTONS_OBJECTIVE_0,
+    PLAY_BUTTONS_SHAKE,   
+    PLAY_BUTTONS_DUO, 
+    PLAY_TEXTS,
+    PLAY_TEXTS_LEVEL,
+
+    CINEMATIC_ROOT,
+
+    SHOP_TABBEDWINDOW,
+    SHOP_TABCONTAINER, 
+    SHOP_TABSWITCHES,
+    SHOP_TABSWITCH_2,
+    SHOP_TABSWITCH_3,
+    SHOP_COINS,
+    SHOP_ITEM_VALUE,
+    SHOP_ITEM_QTY,
+
+    HEADER_HOLDER,
+};
+
+const String UIStrings[] = 
+{
+    "FrameBtn",    
+    "menubutton", 
+    "closebutton",
+
+    "accessmenu", 
+    "back", 
+    "options", 
+    "shop", 
+    "cinematic",
+
+    "playrootui",
+
+    "uibuttons",
+    "movebutton",
+    "objectivezone",
+    "objectivebutton_0",
+    "shake",
+    "duo",
+    "uitexts",
+    "level",
+
+    "cinematicrootui",
+
+    "TabbedWindow",
+    "TabContainer",
+    "TabSwitches",
+    "Switch2",
+    "Switch3",
+    "coins",
+    "value",
+    "qty",
+
+    "HeaderHolder",
+};
+
+
 class GameStatics
 {
 public:

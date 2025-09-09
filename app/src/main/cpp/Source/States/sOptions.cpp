@@ -290,7 +290,7 @@ void OptionState::CreateShopUI()
         uishopframe_ = uishopframe->GetChild(0);
         uishopframe_->SetName(SHOP_ROOTUI);
 
-        numShopTabs_ = uishopframe_->GetChild(String("TabbedWindow"))->GetChild(String("TabSwitches"))->GetNumChildren();
+        numShopTabs_ = uishopframe_->GetChild(UIStrings[SHOP_TABBEDWINDOW])->GetChild(UIStrings[SHOP_TABSWITCHES])->GetNumChildren();
 
         // Set TabbedWindows Colors and switch to the first Tab
         SetShopWindowColors(Color(0.5f, 0.5f, 0.5f, 1.f), Color(0.3f, 0.3f, 0.3f, 1.f), 0.8f);
@@ -298,7 +298,7 @@ void OptionState::CreateShopUI()
 #ifndef ACTIVE_ADS
     if (uishopframe_)
     {
-        UIElement* tabads = uishopframe_->GetChild(String("TabbedWindow"))->GetChild(String("TabSwitches"))->GetChild(String("Switch3"));
+        UIElement* tabads = uishopframe_->GetChild(UIStrings[SHOP_TABBEDWINDOW])->GetChild(UIStrings[SHOP_TABSWITCHES])->GetChild(UIStrings[SHOP_TABSWITCH_3]);
         if (tabads)
         {
             tabads->SetVisible(false);
@@ -365,9 +365,9 @@ void OptionState::SetShopWindowColors(const Color& color1, const Color& color2, 
     uishopframe_->SetOpacity(opacity);
 
 //    for (unsigned i=1; i <= numShopTabs_; i++)
-//        uishopframe_->GetChild(String("TabbedWindow"))->GetChild(ToString("Tab%d", i))->GetChild(String("TabContainer"))->SetColor(shopFrontWindowColor_);
+//        uishopframe_->GetChild(UIStrings[SHOP_TABBEDWINDOW])->GetChild(ToString("Tab%d", i))->GetChild(UIStrings[SHOP_TABCONTAINER])->SetColor(shopFrontWindowColor_);
 
-    SwitchShopTab(uishopframe_->GetChild(String("TabbedWindow"))->GetChild(String("TabSwitches"))->GetChild(0));
+    SwitchShopTab(uishopframe_->GetChild(UIStrings[SHOP_TABBEDWINDOW])->GetChild(UIStrings[SHOP_TABSWITCHES])->GetChild(0));
 }
 
 void OptionState::SwitchShopTab(UIElement* uielement)
@@ -402,7 +402,7 @@ void OptionState::SwitchShopTab(UIElement* uielement)
         windowtab->BringToFront();
         windowtab->SetVisible(true);
 
-        purchaseItemCat_ = StringHash(windowtab->GetChild(String("TabContainer"))->GetChild(0)->GetName());
+        purchaseItemCat_ = StringHash(windowtab->GetChild(UIStrings[SHOP_TABCONTAINER])->GetChild(0)->GetName());
     }
 
     uielement->SetColor(shopFrontWindowColor_);
@@ -414,21 +414,21 @@ void OptionState::UpdateShopItems()
     URHO3D_LOGINFO("OptionState() - UpdateShopItems ... !");
 
     // Update Coin Text
-    Text* coins = static_cast<Text*>(uishopframe_->GetChild(String("Coins"), true));
+    Text* coins = static_cast<Text*>(uishopframe_->GetChild(UIStrings[SHOP_COINS], true));
     if (coins)
         coins->SetText(String(GameStatics::coins_));
 
     // Update Items Access
-    UIElement* shoproot = uishopframe_->GetChild(String("TabbedWindow"));
+    UIElement* shoproot = uishopframe_->GetChild(UIStrings[SHOP_TABBEDWINDOW]);
 
     for (unsigned i=1; i <= numShopTabs_; i++)
     {
-        UIElement* tabcontainer = shoproot->GetChild(ToString("Tab%d", i))->GetChild(String("TabContainer"))->GetChild(0);
+        UIElement* tabcontainer = shoproot->GetChild(ToString("Tab%d", i))->GetChild(UIStrings[SHOP_TABCONTAINER])->GetChild(0);
         bool checkunlockpower = (StringHash(tabcontainer->GetName()) == COT::POWERS);
         const Vector<SharedPtr<UIElement> >& buttons = tabcontainer->GetChildren();
         for (unsigned j=0; j < buttons.Size(); j++)
         {
-            UIElement* textvalue = buttons[j]->GetChild(String("value"));
+            UIElement* textvalue = buttons[j]->GetChild(UIStrings[SHOP_ITEM_VALUE]);
             if (!textvalue)
                 continue;
 
@@ -490,10 +490,10 @@ void OptionState::SetEnableShopItem(UIElement* itembutton, bool enabled)
 void OptionState::SetCloseButton(int frame, bool state)
 {
     if (frame == 0 && uioptionsframe_)
-        closebutton_ = uioptionsframe_->GetChild(String("closebutton"));
+        closebutton_ = uioptionsframe_->GetChild(UIStrings[CLOSE_BUTTON]);
 
     if (frame == 1 && uishopframe_)
-        closebutton_ = uishopframe_->GetChild(String("closebutton"));
+        closebutton_ = uishopframe_->GetChild(UIStrings[CLOSE_BUTTON]);
 
     if (closebutton_)
     {
@@ -729,7 +729,7 @@ void OptionState::SubscribeToEvents()
     }
     else
     {
-        UIElement* menubutton = uioptions_->GetChild(String("menubutton"));
+        UIElement* menubutton = uioptions_->GetChild(UIStrings[MENU_BUTTON]);
         if (menubutton)
             SubscribeToEvent(menubutton, E_PRESSED, URHO3D_HANDLER(OptionState, HandleReturnMenu));
     }
@@ -765,7 +765,7 @@ void OptionState::UnsubscribeToEvents()
     }
     else
     {
-        UIElement* menubutton = uioptions_->GetChild(String("menubutton"));
+        UIElement* menubutton = uioptions_->GetChild(UIStrings[MENU_BUTTON]);
         if (menubutton)
             UnsubscribeFromEvent(menubutton, E_PRESSED);
     }
@@ -773,12 +773,12 @@ void OptionState::UnsubscribeToEvents()
 
 void OptionState::SubscribeToShopEvents()
 {
-    UIElement* shoproot = uishopframe_->GetChild(String("TabbedWindow"));
+    UIElement* shoproot = uishopframe_->GetChild(UIStrings[SHOP_TABBEDWINDOW]);
 
     SubscribeToEvent(GAME_COINUPDATED, URHO3D_HANDLER(OptionState, HandleCoinsUpdated));
 
     // Subscribe to Tab Switches
-    const Vector<SharedPtr<UIElement> >& switches = shoproot->GetChild(String("TabSwitches"))->GetChildren();
+    const Vector<SharedPtr<UIElement> >& switches = shoproot->GetChild(UIStrings[SHOP_TABSWITCHES])->GetChildren();
     for (unsigned i=0; i < switches.Size(); i++)
     {
         if (switches[i])
@@ -788,7 +788,7 @@ void OptionState::SubscribeToShopEvents()
     // Subscribe to Tab Buttons
     for (unsigned i=1; i <= switches.Size(); i++)
     {
-        UIElement* tabcontainer = shoproot->GetChild(ToString("Tab%d", i))->GetChild(String("TabContainer"))->GetChild(0);
+        UIElement* tabcontainer = shoproot->GetChild(ToString("Tab%d", i))->GetChild(UIStrings[SHOP_TABCONTAINER])->GetChild(0);
         const Vector<SharedPtr<UIElement> >& buttons = tabcontainer->GetChildren();
         for (unsigned j=0; j < buttons.Size(); j++)
         {
@@ -800,12 +800,12 @@ void OptionState::SubscribeToShopEvents()
 
 void OptionState::UnsubscribeShopEvents()
 {
-    UIElement* shoproot = uishopframe_->GetChild(String("TabbedWindow"));
+    UIElement* shoproot = uishopframe_->GetChild(UIStrings[SHOP_TABBEDWINDOW]);
 
     UnsubscribeFromEvent(GAME_COINUPDATED);
 
     // Unsubscribe from Tab Switches
-    const Vector<SharedPtr<UIElement> >& switches = shoproot->GetChild(String("TabSwitches"))->GetChildren();
+    const Vector<SharedPtr<UIElement> >& switches = shoproot->GetChild(UIStrings[SHOP_TABSWITCHES])->GetChildren();
     for (unsigned i=0; i < switches.Size(); i++)
     {
         if (switches[i])
@@ -815,7 +815,7 @@ void OptionState::UnsubscribeShopEvents()
     // Unsubscribe to from Buttons
     for (unsigned i=1; i <= switches.Size(); i++)
     {
-        UIElement* tabcontainer = shoproot->GetChild(ToString("Tab%d", i))->GetChild(String("TabContainer"))->GetChild(0);
+        UIElement* tabcontainer = shoproot->GetChild(ToString("Tab%d", i))->GetChild(UIStrings[SHOP_TABCONTAINER])->GetChild(0);
         const Vector<SharedPtr<UIElement> >& buttons = tabcontainer->GetChildren();
         for (unsigned j=0; j < buttons.Size(); j++)
         {
@@ -846,7 +846,7 @@ void OptionState::HandleShopButtonClick(StringHash eventType, VariantMap& eventD
     // Get Value
     purchaseItemCoins_ = 0;
 
-    text = static_cast<Text*>(uielement->GetChild(String("value")));
+    text = static_cast<Text*>(uielement->GetChild(UIStrings[SHOP_ITEM_VALUE]));
     if (!text)
         return;
 
@@ -871,7 +871,7 @@ void OptionState::HandleShopButtonClick(StringHash eventType, VariantMap& eventD
 
     // Get Quantity
     purchaseItemQty_ = 1;
-    text = static_cast<Text*>(uielement->GetChild(String("qty")));
+    text = static_cast<Text*>(uielement->GetChild(UIStrings[SHOP_ITEM_QTY]));
     if (!text)
         return;
 

@@ -723,23 +723,23 @@ void PlayState::CreateUI()
         UIElement* uiroot = GetSubsystem<UI>()->GetRoot();
         uiroot->SetDefaultStyle(style);
 
-        uiplay_ = uiroot->CreateChild<UIElement>("playrootui");
+        uiplay_ = uiroot->CreateChild<UIElement>(UIStrings[PLAY_ROOT]);
         uiplay_->SetSize(width, height);
     }
 
     // Create UI Buttons
-    UIElement* uibuttons = uiplay_->GetChild(String("uibuttons"));
+    UIElement* uibuttons = uiplay_->GetChild(UIStrings[PLAY_BUTTONS]);
     if (!uibuttons)
-        uibuttons = uiplay_->CreateChild<UIElement>(String("uibuttons"));
+        uibuttons = uiplay_->CreateChild<UIElement>(UIStrings[PLAY_BUTTONS]);
 
     // Singe activated
     if (GameStatics::gameState_.storyitems_[1])
     {
         // Add Shake button
-        Button* button = uibuttons->GetChildStaticCast<Button>(String("shake"));
+        Button* button = uibuttons->GetChildStaticCast<Button>(UIStrings[PLAY_BUTTONS_SHAKE]);
         if (!button)
         {
-            Button* button = uibuttons->CreateChild<Button>("shake");
+            Button* button = uibuttons->CreateChild<Button>(UIStrings[PLAY_BUTTONS_SHAKE]);
             GameHelpers::SetImage(button, "2D/tiles.xml@shake");
             button->SetSize(IntVector2(80, 80));
             button->SetPriority(499);
@@ -762,10 +762,10 @@ void PlayState::CreateUI()
         triesSprite->SetVisible(false);
 
     // Create Move Button
-    if (!uibuttons->GetChild(String("movebutton")))
+    if (!uibuttons->GetChild(UIStrings[PLAY_BUTTONS_MOVES]))
     {
         Button* movebutton = uibuttons->CreateChild<Button>();
-        movebutton->SetName("movebutton");
+        movebutton->SetName(UIStrings[PLAY_BUTTONS_MOVES]);
         GameHelpers::SetImage(movebutton, "2D/tiles.xml@button1");
         movebutton->SetEnableAnchor(true);
         movebutton->SetMinOffset(IntVector2(border, UISIZE[TRIESUISIZE]+5));
@@ -775,11 +775,11 @@ void PlayState::CreateUI()
     }
 
     // Create objectives zone
-    UIElement* objectivezone = uibuttons->GetChild(String("objectivezone"));
+    UIElement* objectivezone = uibuttons->GetChild(UIStrings[PLAY_BUTTONS_OBJECTIVES]);
     if (objectivezone)
         objectivezone->RemoveAllChildren();
     else
-        objectivezone = uibuttons->CreateChild<UIElement>("objectivezone");
+        objectivezone = uibuttons->CreateChild<UIElement>(UIStrings[PLAY_BUTTONS_OBJECTIVES]);
 
     // Create Objectives
     const bool bosslevel = GameStatics::IsBossLevel();
@@ -821,9 +821,9 @@ void PlayState::CreateUI()
     URHO3D_LOGINFOF("PlayState() - CreateUI - Objectives added !");
 
     // Create UI Texts
-    UIElement* uitexts = uiplay_->GetChild(String("uitexts"));
+    UIElement* uitexts = uiplay_->GetChild(UIStrings[PLAY_TEXTS]);
     if (!uitexts)
-        uitexts = uiplay_->CreateChild<UIElement>(String("uitexts"));
+        uitexts = uiplay_->CreateChild<UIElement>(UIStrings[PLAY_TEXTS]);
 
     Font* font = cache->GetResource<Font>("Fonts/BlueHighway.ttf");
     // Create Debug Match State
@@ -855,10 +855,10 @@ void PlayState::CreateUI()
         triesText->SetVisible(false);
 
     // Create Level Text
-//    if (!uitexts->GetChild(String("level")))
+//    if (!uitexts->GetChild(UIStrings[PLAY_TEXTS_LEVEL]))
 //    {
 //        Text* levelText = uitexts->CreateChild<Text>();
-//        levelText->SetName("level");
+//        levelText->SetName(UIStrings[PLAY_TEXTS_LEVEL]);
 //        levelText->SetFont(font, UISIZE[FONTSIZE_SMALL]);
 //        levelText->SetEnableAnchor(true);
 //        levelText->SetMinOffset(IntVector2(width-border, 5));
@@ -899,7 +899,7 @@ void PlayState::CreateUI()
 
     if (!moveText)
     {
-        Button* button = uibuttons->GetChildStaticCast<Button>(String("movebutton"));
+        Button* button = uibuttons->GetChildStaticCast<Button>(UIStrings[PLAY_BUTTONS_MOVES]);
         moveText = uitexts->CreateChild<Text>();
         moveText->SetFont(font, fontsize);
         moveText->SetPosition(button->GetPosition().x_ + button->GetSize().x_ / 2, button->GetPosition().y_ + button->GetSize().y_ / 2);
@@ -927,11 +927,11 @@ void PlayState::CreateUI()
 
     // TEST NETWORK : Create Duo CheckBox
 #if defined(TEST_NETWORK)
-    CheckBox* duocheck = uibuttons->GetChildStaticCast<CheckBox>(String("duo"));
+    CheckBox* duocheck = uibuttons->GetChildStaticCast<CheckBox>(UIStrings[PLAY_BUTTONS_DUO]);
     if (!duocheck)
     {
         duocheck = uibuttons->CreateChild<CheckBox>();
-        duocheck->SetName("duo");
+        duocheck->SetName(UIStrings[PLAY_BUTTONS_DUO]);
         duocheck->SetTexture(GetSubsystem<ResourceCache>()->GetResource<Texture2D>("UI/accessmenu.webp"));
         duocheck->SetImageRect(IntRect(640, 0, 768, 128));
 //        duocheck->SetHoverOffset(0, 128);
@@ -983,12 +983,12 @@ void PlayState::ResizeUI(bool instant)
     const int height = GameStatics::ui_->GetRoot()->GetSize().y_;
     const int border = 20 * GameStatics::uiScale_;
 
-    uiplay_ = GameStatics::ui_->GetRoot()->GetChild(String("playrootui"));
+    uiplay_ = GameStatics::ui_->GetRoot()->GetChild(UIStrings[PLAY_ROOT]);
     uiplay_->SetSize(width, height);
-    UIElement* uitexts = uiplay_->GetChild(String("uitexts"));
-    UIElement* uibuttons = uiplay_->GetChild(String("uibuttons"));
+    UIElement* uitexts = uiplay_->GetChild(UIStrings[PLAY_TEXTS]);
+    UIElement* uibuttons = uiplay_->GetChild(UIStrings[PLAY_BUTTONS]);
 
-//    Text* levelText = static_cast<Text*>(uitexts->GetChild(String("level")));
+//    Text* levelText = static_cast<Text*>(uitexts->GetChild(UIStrings[PLAY_TEXTS_LEVEL]));
 //    if (levelText)
 //    {
 //        levelText->SetMinOffset(IntVector2(width-border, 5));
@@ -998,7 +998,7 @@ void PlayState::ResizeUI(bool instant)
     if (GameStatics::gameState_.storyitems_[1])
     {
         // Resize Shake button
-        Button* button = uibuttons->GetChildStaticCast<Button>(String("shake"));
+        Button* button = uibuttons->GetChildStaticCast<Button>(UIStrings[PLAY_BUTTONS_SHAKE]);
         button->SetPosition(width - button->GetSize().x_ - border/2, height - button->GetSize().y_ - border/2);
         //button->SetSize(IntVector2(80 * GameStatics::uiScale_, 80 * GameStatics::uiScale_));
     }
@@ -1006,14 +1006,14 @@ void PlayState::ResizeUI(bool instant)
     if (triesSprite)
         triesSprite->SetPosition(20.f, 1.f);
 
-    Button* movebutton = uibuttons->GetChildStaticCast<Button>(String("movebutton"));
+    Button* movebutton = uibuttons->GetChildStaticCast<Button>(UIStrings[PLAY_BUTTONS_MOVES]);
     if (movebutton)
     {
         movebutton->SetMinOffset(IntVector2(border, UISIZE[TRIESUISIZE]+5));
         movebutton->SetMaxOffset(IntVector2(border+UISIZE[BUTTONUISIZE], UISIZE[TRIESUISIZE]+5+UISIZE[BUTTONUISIZE]));
     }
 
-    UIElement* objectivezone = uibuttons->GetChild(String("objectivezone"));
+    UIElement* objectivezone = uibuttons->GetChild(UIStrings[PLAY_BUTTONS_OBJECTIVES]);
     const bool bosslevel = GameStatics::IsBossLevel();
     for (int i=0; i< numObjectives_; i++)
     {
@@ -1047,7 +1047,7 @@ void PlayState::ResizeUI(bool instant)
 
 #if defined(TEST_NETWORK)
     // TEST NETWORK : Move Duo Button
-    CheckBox* duocheck = uibuttons->GetChildStaticCast<CheckBox>(String("duo"));
+    CheckBox* duocheck = uibuttons->GetChildStaticCast<CheckBox>(UIStrings[PLAY_BUTTONS_DUO]);
     if (duocheck)
         duocheck->SetPosition(width - duocheck->GetSize().x_ - border/2, height - duocheck->GetSize().y_ - border/2);
 #endif
@@ -1066,7 +1066,7 @@ void PlayState::ResizeAbilityPanel(bool instant)
     if (abilitypanel_)
     {
         Graphics* graphics = GetSubsystem<Graphics>();
-        UIElement* menubutton = uiplay_->GetChild(String("accessmenu"));
+        UIElement* menubutton = uiplay_->GetChild(UIStrings[ACCESSMENU]);
 
         int menubuttonposition = (menubutton->GetPosition().y_) * GameStatics::uiScale_;
         int abilitysize = 60 * GameStatics::uiScale_;
@@ -1244,12 +1244,12 @@ void PlayState::SubscribeToEvents()
 
     if (GameStatics::gameState_.storyitems_[1])
     {
-        Button* button = static_cast<Button*>(uiplay_->GetChild(String("shake"), true));
+        Button* button = static_cast<Button*>(uiplay_->GetChild(UIStrings[PLAY_BUTTONS_SHAKE], true));
         SubscribeToEvent(button, E_PRESSED, URHO3D_HANDLER(PlayState, HandleShake));
     }
 
 #if defined(TEST_NETWORK)
-    CheckBox* duocheckbox = uiplay_->GetChildStaticCast<CheckBox>(String("duo"), true);
+    CheckBox* duocheckbox = uiplay_->GetChildStaticCast<CheckBox>(UIStrings[PLAY_BUTTONS_DUO], true);
     if (duocheckbox)
     {
         sDuoChecked_ = duocheckbox->IsChecked();
@@ -1464,7 +1464,7 @@ void PlayState::HandleBossAppears(StringHash eventType, VariantMap& eventData)
     // At start check if Inputs are allowed (AccessMenu not in use) before activate boss
     bosslogic->SetActive(GameStatics::allowInputs_, false);
 
-    UIElement* objectivezone = uiplay_->GetChild(String("objectivezone"), true);
+    UIElement* objectivezone = uiplay_->GetChild(UIStrings[PLAY_BUTTONS_OBJECTIVES], true);
     if (objectivezone)
     {
         SharedPtr<ObjectAnimation> objectAnimation(new ObjectAnimation(objectivezone->GetContext()));
@@ -1635,7 +1635,7 @@ void PlayState::UpdateObjectives(bool init)
 {
     GameStatics::numRemainObjectives_ = 0;
 
-    UIElement* objectivezone = uiplay_->GetChild(String("uibuttons"))->GetChild(String("objectivezone"));
+    UIElement* objectivezone = uiplay_->GetChild(UIStrings[PLAY_BUTTONS])->GetChild(UIStrings[PLAY_BUTTONS_OBJECTIVES]);
 
     for (int i=0; i < numObjectives_; i++)
     {
@@ -2094,7 +2094,7 @@ void PlayState::OnDisconnectPeer()
     }
 
     if (sDuoChecked_)
-        uiplay_->GetChildStaticCast<CheckBox>(String("duo"), true)->SetChecked(false);
+        uiplay_->GetChildStaticCast<CheckBox>(UIStrings[PLAY_BUTTONS_DUO], true)->SetChecked(false);
 
     URHO3D_LOGINFOF("PlayState() - OnDisconnectPeer ... OK !");
 }

@@ -391,8 +391,8 @@ bool CinematicState::LaunchSceneFile()
 
         if (GameStatics::ui_)
         {
-            String cinematicui = "cinematicrootui";
-            UIElement* uiroot = GameStatics::ui_->GetRoot()->GetChild(cinematicui) ? GameStatics::ui_->GetRoot()->GetChild(cinematicui) : GameStatics::ui_->GetRoot()->CreateChild<UIElement>(cinematicui, LOCAL);
+            const String& cui = UIStrings[CINEMATIC_ROOT];
+            UIElement* uiroot = GameStatics::ui_->GetRoot()->GetChild(cui) ? GameStatics::ui_->GetRoot()->GetChild(cui) : GameStatics::ui_->GetRoot()->CreateChild<UIElement>(cui, LOCAL);
             if (uiroot)
             {
                 uiroot->SetSize(GameStatics::graphics_->GetWidth(), GameStatics::graphics_->GetHeight());
@@ -488,7 +488,7 @@ void CinematicState::Stop()
 {
     scenefilenames_.Clear();
 
-    UIElement* uicinematic = GameStatics::ui_->GetRoot()->GetChild(String("cinematicrootui"));
+    UIElement* uicinematic = GameStatics::ui_->GetRoot()->GetChild(UIStrings[CINEMATIC_ROOT]);
     if (uicinematic)
         uicinematic->Remove();
 

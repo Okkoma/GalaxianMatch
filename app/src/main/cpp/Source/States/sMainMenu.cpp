@@ -255,7 +255,7 @@ void MenuState::CreateUI()
     Game::Get()->ShowHeader(uimenu_);
 
     // Test if access menu exists and remove it
-//    UIElement* accessMenu = GameStatics::ui_->GetRoot()->GetChild(String("accessmenu"), true);
+//    UIElement* accessMenu = GameStatics::ui_->GetRoot()->GetChild(UIStrings[ACCESSMENU], true);
 //    if (accessMenu)
 //    {
 //        UIElement* parent = accessMenu->GetParent();

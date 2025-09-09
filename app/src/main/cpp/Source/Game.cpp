@@ -475,13 +475,13 @@ void Game::ResetScreen()
 
 void Game::CreateMenuButton(UIElement* uiroot)
 {
-    if (!uiroot->GetChild(String("menubutton")))
+    if (!uiroot->GetChild(UIStrings[MENU_BUTTON]))
     {
         const int width = GameStatics::ui_->GetRoot()->GetSize().x_;
         const int height = GameStatics::uiScale_ < 1.f ? (int)floor((float)GameStatics::graphics_->GetHeight() / GameStatics::uiScale_) : GameStatics::ui_->GetRoot()->GetSize().y_;
         const int border = 10 * GameStatics::uiScale_;
         Button* button = uiroot->CreateChild<Button>();
-        button->SetName("menubutton");
+        button->SetName(UIStrings[MENU_BUTTON]);
         button->SetTexture(GetSubsystem<ResourceCache>()->GetResource<Texture2D>("UI/accessmenu.webp"));
         button->SetImageRect(IntRect(0, 0, 128, 128));
         button->SetEnableAnchor(true);
@@ -510,7 +510,7 @@ void Game::SetAccessMenuButtonVisible(int child, bool visible)
 
 void Game::CreateAccessMenu(UIElement* uiroot)
 {
-    if (!uiroot->GetChild(String("accessmenu")))
+    if (!uiroot->GetChild(UIStrings[ACCESSMENU]))
     {
         ResourceCache* cache = GetSubsystem<ResourceCache>();
         Texture2D* texture = cache->GetResource<Texture2D>("UI/accessmenu.webp");
@@ -519,22 +519,22 @@ void Game::CreateAccessMenu(UIElement* uiroot)
         Window* popup = uiroot->CreateChild<Window>();
         {
             // return mainmenu
-            Button* button1 = popup->CreateChild<Button>("back");
+            Button* button1 = popup->CreateChild<Button>(UIStrings[ACCESSMENU_POPUP_BACK]);
             button1->SetTexture(texture);
             button1->SetImageRect(IntRect(128, 0, 256, 128));
             button1->SetHoverOffset(0, 128);
             // access parameters/options
-            Button* button2 = popup->CreateChild<Button>("options");
+            Button* button2 = popup->CreateChild<Button>(UIStrings[ACCESSMENU_POPUP_OPTIONS]);
             button2->SetTexture(texture);
             button2->SetImageRect(IntRect(256, 0, 384, 128));
             button2->SetHoverOffset(0, 128);
             // access shop
-            Button* button3 = popup->CreateChild<Button>("shop");
+            Button* button3 = popup->CreateChild<Button>(UIStrings[ACCESSMENU_POPUP_SHOP]);
             button3->SetTexture(texture);
             button3->SetImageRect(IntRect(384, 0, 512, 128));
             button3->SetHoverOffset(0, 128);
             // access cinematic
-            Button* button4 = popup->CreateChild<Button>("cinematic");
+            Button* button4 = popup->CreateChild<Button>(UIStrings[ACCESSMENU_POPUP_CINEMATIC]);
             button4->SetTexture(texture);
             button4->SetImageRect(IntRect(512, 0, 640, 128));
             button4->SetHoverOffset(0, 128);
@@ -551,7 +551,7 @@ void Game::CreateAccessMenu(UIElement* uiroot)
         const int height = GameStatics::uiScale_ < 1.f ? (int)floor((float)GameStatics::graphics_->GetHeight() / GameStatics::uiScale_) : GameStatics::ui_->GetRoot()->GetSize().y_;
         const int border = 10 * GameStatics::uiScale_;
         accessMenu_ = uiroot->CreateChild<UIMenu>();
-        accessMenu_->SetName("accessmenu");
+        accessMenu_->SetName(UIStrings[ACCESSMENU]);
         accessMenu_->SetTexture(texture);
         accessMenu_->SetImageRect(IntRect(0, 0, 128, 128));
         accessMenu_->SetEnableAnchor(true);
@@ -571,7 +571,7 @@ void Game::CreateAccessMenu(UIElement* uiroot)
 
 void Game::ShowHeader(UIElement* uiroot)
 {
-    headerHolder_ = uiroot->GetChild(String("HeaderHolder"));
+    headerHolder_ = uiroot->GetChild(UIStrings[HEADER_HOLDER]);
 
     if (!headerHolder_)
     {
@@ -584,7 +584,7 @@ void Game::ShowHeader(UIElement* uiroot)
         SharedPtr<XMLFile> xmlfile(cache->GetResource<XMLFile>("UI/header.xml"));
         uiroot->LoadChildXML(xmlfile->GetRoot(), xmlfile);
 
-        headerHolder_ = uiroot->GetChild(String("HeaderHolder"));
+        headerHolder_ = uiroot->GetChild(UIStrings[HEADER_HOLDER]);
         if (headerHolder_)
         {
             headerHolder_->SetSize(GameStatics::graphics_->GetWidth() / GameStatics::uiScale_, 128);
@@ -628,7 +628,7 @@ void Game::ShowHeader(UIElement* uiroot)
 
 void Game::HideHeader(UIElement* uiroot)
 {
-    UIElement* holder = uiroot->GetChild(String("HeaderHolder"));
+    UIElement* holder = uiroot->GetChild(UIStrings[HEADER_HOLDER]);
     if (headerHolder_)
     {
         GameHelpers::SetMoveAnimationUI(holder, IntVector2::ZERO, IntVector2(0, -96), 0.f, SWITCHSCREENTIME/2);
@@ -641,7 +641,6 @@ void Game::HideHeader(UIElement* uiroot)
     }
 }
 
-
 void Game::SubscribeToAccessMenuEvents()
 {
     game_->SubscribeToEvent(GAME_STATEBACK, URHO3D_HANDLER(Game, HandleGoBack));
@@ -650,19 +649,19 @@ void Game::SubscribeToAccessMenuEvents()
     {
         UIElement* popup = accessMenu_->GetPopup();
         UIElement* button;
-        button = popup->GetChild(String("back"));
+        button = popup->GetChild(UIStrings[ACCESSMENU_POPUP_BACK]);
         if (button)
             game_->SubscribeToEvent(button, E_PRESSED, URHO3D_HANDLER(Game, HandleGoBack));
 
-        button = popup->GetChild(String("options"));
+        button = popup->GetChild(UIStrings[ACCESSMENU_POPUP_OPTIONS]);
         if (button)
             game_->SubscribeToEvent(button, E_PRESSED, URHO3D_HANDLER(Game, HandleShowOptions));
 
-        button = popup->GetChild(String("shop"));
+        button = popup->GetChild(UIStrings[ACCESSMENU_POPUP_SHOP]);
         if (button)
             game_->SubscribeToEvent(button, E_PRESSED, URHO3D_HANDLER(Game, HandleShowShop));
 #ifdef ACTIVE_CINEMATICS
-        button = popup->GetChild(String("cinematic"));
+        button = popup->GetChild(UIStrings[ACCESSMENU_POPUP_CINEMATIC]);
         if (button)
             game_->SubscribeToEvent(button, E_PRESSED, URHO3D_HANDLER(Game, HandleWatchCinematic));
 #endif            
@@ -677,17 +676,17 @@ void Game::UnsubscribeFromAccessMenuEvents()
     {
         UIElement* popup = accessMenu_->GetPopup();
         UIElement* button;
-        button = popup->GetChild(String("back"));
+        button = popup->GetChild(UIStrings[ACCESSMENU_POPUP_BACK]);
         if (button)
             game_->UnsubscribeFromEvent(button, E_PRESSED);
-        button = popup->GetChild(String("options"));
+        button = popup->GetChild(UIStrings[ACCESSMENU_POPUP_OPTIONS]);
         if (button)
             game_->UnsubscribeFromEvent(button, E_PRESSED);
-        button = popup->GetChild(String("shop"));
+        button = popup->GetChild(UIStrings[ACCESSMENU_POPUP_SHOP]);
         if (button)
             game_->UnsubscribeFromEvent(button, E_PRESSED);
 #ifdef ACTIVE_CINEMATICS            
-        button = popup->GetChild(String("cinematic"));
+        button = popup->GetChild(UIStrings[ACCESSMENU_POPUP_CINEMATIC]);
         if (button)
             game_->UnsubscribeFromEvent(button, E_PRESSED);
 #endif            
@@ -1220,7 +1219,7 @@ void Game::SetCompanionMessages()
                     message->AddEventAction(DelayAction::Get(MESSAGE_START, UIMENU_SHOWCONTENT, 1.00f, "UI/Companion/animatedcursors.scml", "cursor_arrow_ontop", accessMenu_, Vector2(0.f, -accessMenu_->GetSize().y_)));
                     UIElement* shopaccess = accessMenu_->GetPopup()->GetChild(2);
                     message->AddEventAction(DelayAction::Get(UIMENU_SHOWCONTENT, E_CLICK, 0.25f, "UI/Companion/animatedcursors.scml", "cursor_arrow_ontop", shopaccess, Vector2(-shopaccess->GetSize().x_ / 2, 0.f)));
-                    UIElement* poweraccess = options_->GetShop()->GetChild("Switch2", true);
+                    UIElement* poweraccess = options_->GetShop()->GetChild(UIStrings[SHOP_TABSWITCH_2], true);
                     message->AddEventAction(DelayAction::Get(UIMENU_SHOWCONTENT, E_CLICK, 0.25f, "UI/Companion/animatedcursors.scml", "cursor_arrow_ontop", poweraccess, Vector2(-poweraccess->GetSize().x_/2, -poweraccess->GetSize().y_)));
                 }
             }
@@ -1281,7 +1280,7 @@ void Game::SetCompanionMessages()
                 Message* message = companionBox_->AddMessage(STATE_PLAY, false, "tuto_objective", "capi");
                 if (message)
                 {
-                    UIElement* objective0 = GameStatics::ui_->GetRoot()->GetChild(String("playrootui"))->GetChild(String("objectivezone"), true)->GetChild(String("objectivebutton_0"));
+                    UIElement* objective0 = GameStatics::ui_->GetRoot()->GetChild(UIStrings[PLAY_ROOT])->GetChild(UIStrings[PLAY_BUTTONS_OBJECTIVES], true)->GetChild(UIStrings[PLAY_BUTTONS_OBJECTIVE_0]);
                     message->AddEventAction(DelayAction::Get(MESSAGE_START, MESSAGE_STOP, 1.00f, "UI/Companion/animatedcursors.scml", "cursor_arrow_onbottom", objective0, Vector2::ZERO));
                 }
                 companionBox_->AddMessage(STATE_PLAY, false, "tuto_msquare", "capi");
@@ -1297,7 +1296,7 @@ void Game::SetCompanionMessages()
                     message->AddEventAction(DelayAction::Get(MESSAGE_START, UIMENU_SHOWCONTENT, 0.f, "UI/Companion/animatedcursors.scml", "cursor_arrow_ontop", accessMenu_, Vector2(0.f, -accessMenu_->GetSize().y_)));
                     UIElement* shopaccess = accessMenu_->GetPopup()->GetChild(2);
                     message->AddEventAction(DelayAction::Get(UIMENU_SHOWCONTENT, E_CLICK, 0.f, "UI/Companion/animatedcursors.scml", "cursor_arrow_ontop", shopaccess, Vector2(-shopaccess->GetSize().x_ / 2, 0.f)));
-                    UIElement* poweraccess = options_->GetShop()->GetChild("Switch2", true);
+                    UIElement* poweraccess = options_->GetShop()->GetChild(UIStrings[SHOP_TABSWITCH_2], true);
                     message->AddEventAction(DelayAction::Get(UIMENU_SHOWCONTENT, E_CLICK, 0.f, "UI/Companion/animatedcursors.scml", "cursor_arrow_ontop", poweraccess, Vector2(-poweraccess->GetSize().x_/2, -poweraccess->GetSize().y_)));
                 }
             }

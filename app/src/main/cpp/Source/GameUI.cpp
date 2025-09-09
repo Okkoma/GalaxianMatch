@@ -614,7 +614,7 @@ void UIDialog::Resize()
         frame_->SetSize(panel_->GetSize().x_ * frameSizeNormalized_.x_, panel_->GetSize().y_ * frameSizeNormalized_.y_);
         frame_->SetHotSpot(frame_->GetSize()/2);
 
-        UIElement* framebtn = frame_->GetChild(String("FrameBtn"));
+        UIElement* framebtn = frame_->GetChild(UIStrings[FRAME_BUTTON]);
         if (framebtn)
             framebtn->SetSize(frame_->GetSize());
 
