@@ -48,7 +48,7 @@ jobs:
       id: extract_version
       shell: bash
       run: |
-        VERSION=$(sed -nE 's/.*project\s*\(\s*SpaceMatch\s+VERSION\s+([0-9]+\.[0-9]+\.[0-9]+).*/\1/p' CMakeLists.txt)
+        VERSION=$(sed -nE 's/.*project\s*\(\s*SpaceMatch\s+VERSION\s+([0-9]+\.[0-9]+).*/\1/p' CMakeLists.txt)
         echo "VERSION=$VERSION"
         echo "version=$VERSION" >> "$GITHUB_OUTPUT"
         
@@ -150,7 +150,7 @@ jobs:
         id: extract_version
         shell: bash
         run: |
-            VERSION=$(sed -nE 's/.*project\s*\(\s*SpaceMatch\s+VERSION\s+([0-9]+\.[0-9]+\.[0-9]+).*/\1/p' CMakeLists.txt)
+            VERSION=$(sed -nE 's/.*project\s*\(\s*SpaceMatch\s+VERSION\s+([0-9]+\.[0-9]+).*/\1/p' CMakeLists.txt)
             echo "VERSION=$VERSION"
             echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
@@ -167,4 +167,6 @@ jobs:
           name: "GalaxianMatch v${{ steps.extract_version.outputs.version }}"
           draft: false
           prerelease: true
-          files: ./artifacts/**/*.zip ./artifacts/**/*.apk
+          files: |
+            ./artifacts/**/*.zip
+            ./artifacts/**/*.apk
