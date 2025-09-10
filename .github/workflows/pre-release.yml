@@ -26,12 +26,6 @@ jobs:
             target: windows
 
           - os: ubuntu-latest
-            c_compiler: gcc
-            cpp_compiler: g++
-            build_type: Release
-            target: linux
-
-          - os: ubuntu-latest
             c_compiler: clang
             cpp_compiler: clang++
             build_type: Release
@@ -171,5 +165,6 @@ jobs:
           files: |
             ./artifacts/**/*.zip
             ./artifacts/**/*.apk
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}            
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
