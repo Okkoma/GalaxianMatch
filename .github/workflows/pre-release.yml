@@ -143,6 +143,8 @@ jobs:
   release:
     runs-on: ubuntu-latest
     needs: build
+    permissions:
+      contents: write    
     steps:
       - uses: actions/checkout@v4
 
@@ -162,7 +164,6 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          token: ${{ secrets.RELEASE_TOKEN }}
           tag_name: v${{ steps.extract_version.outputs.version }}
           name: "GalaxianMatch v${{ steps.extract_version.outputs.version }}"
           draft: false
@@ -170,3 +171,5 @@ jobs:
           files: |
             ./artifacts/**/*.zip
             ./artifacts/**/*.apk
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}            
