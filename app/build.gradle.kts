@@ -1,3 +1,5 @@
+import java.util.regex.Pattern
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -19,6 +21,33 @@ fun loadKeystoreProperties(file: File): Map<String, String> {
     }
 }
 
+// Parse Version from CMakeLists.txt
+fun parseAppVersion(cmakeFilePath: String): String {
+    val cmakeFile = File(cmakeFilePath + "CMakeLists.txt")
+    if (!cmakeFile.exists()) {
+        throw GradleException("❌ ${cmakeFile.absolutePath} not found !")
+    }
+
+    val cmakeContent = cmakeFile.readText()
+    val regex = Pattern.compile("""project\s*\(.*VERSION\s*([\d.]+)\)""")
+    val matcher = regex.matcher(cmakeContent)
+
+    return if (matcher.find()) {
+        matcher.group(1)   
+    } else {
+        throw GradleException("❌ no version in ${cmakeFile.absolutePath} !")
+    }
+}
+
+// Transform version to versionCode
+fun toVersionCode(version: String): Int {
+    val parts = version.split(".")
+    val major = parts.getOrNull(0)?.toIntOrNull() ?: 1
+    val minor = parts.getOrNull(1)?.toIntOrNull() ?: 0
+    val code = minor
+    return code
+}
+
 android {
     namespace = "com.okkomastudio.galaxianmatch"
     compileSdk = 33
@@ -28,8 +57,9 @@ android {
         applicationId = "com.okkomastudio.galaxianmatch"
         minSdk = 21
         targetSdk = 35
-        versionCode = 37
-        versionName = "1.037-demo"
+        val appVersion = parseAppVersion("${projectDir}/../")
+        versionCode = toVersionCode(appVersion)
+        versionName = "$appVersion-demo"
         multiDexEnabled = false
 
         externalNativeBuild {
@@ -153,5 +183,19 @@ dependencies {
 tasks.register<Delete>("cleanAll") {
     dependsOn("clean")
     delete(android.externalNativeBuild.cmake.buildStagingDirectory)
+}
+
+tasks.register("printVersion") {
+    group = "versioning"
+    description = "Show version"
+
+    doLast {
+        val appVersion = parseAppVersion("${projectDir}/../")
+        val code = toVersionCode(appVersion)
+        val name = "$appVersion-demo"
+        println("📦 ApplicationId : com.okkomastudio.galaxianmatch")
+        println("   versionCode = $code")
+        println("   versionName = $name")
+    }
 }
 

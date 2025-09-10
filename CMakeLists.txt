@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.2)
 
-project (SpaceMatch)
+project (SpaceMatch VERSION 1.037)
 
 set (APP_SRC app)
 #set (APP_SRC appads)
@@ -65,6 +65,29 @@ if (URHO3D_HOME)
     message (STATUS "   Build     ${CMAKE_BUILD_TYPE}")
     message (STATUS "   Library   ${URHO3D_LIB_TYPE}")
     add_subdirectory (${APP_SRC}/src/main/cpp ${ARGN})
+
+    # Install
+    if (NOT ANDROID)
+        # install stuff is included in UrhoCommon module
+        if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT) # Default installation folder	
+            set_property (CACHE CMAKE_INSTALL_PREFIX PROPERTY VALUE ${CMAKE_SOURCE_DIR}/exe)
+        endif ()
+        install (FILES ${CMAKE_SOURCE_DIR}/LICENSE DESTINATION .)
+        install (FILES ${CMAKE_SOURCE_DIR}/bin/Data/EngineConfig/default.xml DESTINATION bin RENAME engine_config.xml)
+
+        # CPack
+        set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "Galaxian Match - a space-themed match3 game")
+        set (CPACK_PACKAGE_VENDOR "https://github.com/Okkoma")
+        set (CPACK_PACKAGE_CONTACT "okkoman0xx0@gmail.com")
+        set (CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+        set (CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+        set (CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
+        set (CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/LICENSE)
+        set (CPACK_SYSTEM_NAME ${CMAKE_SYSTEM_NAME})
+        set (CPACK_PACKAGE_FILE_NAME "GalaxianMatch-${CMAKE_SYSTEM_NAME}-${CPACK_PACKAGE_VERSION}")
+        set (CPACK_GENERATOR ZIP)
+        include (CPack)
+    endif ()
 else ()
     message ("!! GalaxianMatch - wait to add source because URHO3D_HOME is undefined here !")
 endif ()
