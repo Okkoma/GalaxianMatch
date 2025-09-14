@@ -394,7 +394,7 @@ const String UIStrings[] =
     "TabSwitches",
     "Switch2",
     "Switch3",
-    "coins",
+    "Coins",
     "value",
     "qty",
 
