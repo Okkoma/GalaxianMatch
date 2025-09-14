@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.2)
 
-project (SpaceMatch VERSION 1.037)
+project (SpaceMatch VERSION 1.038)
 
 set (APP_SRC app)
 #set (APP_SRC appads)
