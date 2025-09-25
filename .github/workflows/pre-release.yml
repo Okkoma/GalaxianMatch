@@ -84,19 +84,24 @@ jobs:
     - name: Export Keystore Info
       if: matrix.target == 'android'
       run: |
-        echo "KEYSTORE_FILE=$GITHUB_WORKSPACE/release.keystore" >> $GITHUB_ENV
-        echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> $GITHUB_ENV
-        echo "KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> $GITHUB_ENV
-        echo "KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> $GITHUB_ENV
-        echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > $GITHUB_WORKSPACE/release.keystore
-    
-    - name: Make gradlew executable
-      if: matrix.target == 'android'
-      run: chmod +x ./gradlew
+        KEYSTORE_PATH="/tmp/release.keystore"
+        echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > "$KEYSTORE_PATH"
+        chmod 600 "$KEYSTORE_PATH"
+        echo "KEYSTORE_FILE=$KEYSTORE_PATH" >> $GITHUB_ENV
 
     - name: Build (Android)
       if: matrix.target == 'android'
-      run: ./gradlew assembleRelease
+      run: |
+        chmod +x ./gradlew
+        ./gradlew assembleRelease \
+          -Pandroid.injected.signing.store.file=$KEYSTORE_FILE \
+          -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
+          -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
+          -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+
+    - name: Cleanup Keystore
+      if: matrix.target == 'android' && always()
+      run: rm -f "$KEYSTORE_FILE"
 
     - name: Configure CMake (Linux/Windows)
       if: matrix.target != 'android'
@@ -124,7 +129,7 @@ jobs:
       with:
         name: ${{ matrix.target }}-release-package
         path: app/build/outputs/apk/gl/release/*.apk
-        
+
     - name: Upload (Linux/Windows) artifacts
       uses: actions/upload-artifact@v4
       with:
@@ -138,7 +143,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      contents: write    
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
