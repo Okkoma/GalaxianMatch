@@ -109,10 +109,4 @@ jobs:
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       run: ctest --build-config ${{ matrix.build_type }}
 
-    - name: Upload APK artifact
-      if: matrix.target == 'android'
-      uses: actions/upload-artifact@v4
-      with:
-        name: android-apk
-        path: app/build/outputs/apk/gl/release/*.apk
 
