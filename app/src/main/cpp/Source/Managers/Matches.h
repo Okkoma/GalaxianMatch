@@ -10,6 +10,7 @@ namespace Urho3D
 
 using namespace Urho3D;
 
+#include "MatchesDefs.h"
 #include "MemoryObjects.h"
 #include "GameRand.h"
 
@@ -63,7 +64,7 @@ static const float HINTANGLE = 5.f;
 static const unsigned UPDATERAMPSDELAY = 2400U;
 #endif
 
-const float halfTileSize    = 34.f * PIXEL_SIZE;
+const float halfTileSize    = 34.f;
 const Vector3 OBJECTSCALE   = Vector3(0.45f, 0.45f, 1.f);
 const Vector3 ITEMSCALE     = Vector3(0.45f, 0.45f, 1.f);
 
@@ -270,6 +271,8 @@ public :
     bool operator ==(const Match& rhs) const { return x_ == rhs.x_ && y_ == rhs.y_; }
     bool operator !=(const Match& rhs) const { return x_ != rhs.x_ || y_ != rhs.y_; }
 
+    void Set(unsigned char color, signed char object, unsigned char effect, unsigned char qty=1) { ctype_ = color; otype_ = object; effect_ = effect; qty_ = qty; }
+
     union
     {
         struct
@@ -335,6 +338,7 @@ public :
     void SetLayout(int dimension, GridLayout layout, HorizontalAlignment halign, VerticalAlignment valign, bool randomwalls);
     void SetGridRect(const Rect& rect) { gridRect_ = rect; }
     void SetGridColor(const Color& color) { gridColor_ = color; }
+    void SetObjectives(Vector<MatchObjective>& objectives) { objectives_ = objectives; }
     void Create(Vector<Match*>& newmatches);
 
     void Load(VectorBuffer& buffer);
@@ -407,6 +411,7 @@ public :
     bool GetMatches(Match* entry, Vector<Match*>& destroymatches, Vector<Match*>& successmatches, Vector<Match*>& activablebonuses, Vector<Match*>& brokenrocks, Vector<WallInfo>& hittedwalls);
     void GetHints(unsigned imatch, Vector<Vector<Match*> >& hintstable);
     Match* GetMatch(Node* node);
+    Match& GetMatch(int x, int y);
     Node* GetObject(const Match& m) const;
     Node* GetObject(int x, int y) const;
     Node* GetGridNode() const { return gridNode_; }
@@ -417,6 +422,8 @@ public :
 
     Vector3 CalculateMatchPosition(int x, int y) const;
 
+    HashMap<Animatable*, String>& GetMessages() { return messagesToPost_; }
+
 private:
     friend class MatchesManager;
     friend class MatchGridInfo;
@@ -424,13 +431,16 @@ private:
     void CleanSavedMatches();
 
     void RandomizeWalls();
-
+    
+    void InitializeMatches();
     void InitializeTypes();
-    void InitializeTiles();
-    void InitializeWalls();
-    void InitializeObjects(Vector<Match*>& newmatches);
+    void InitializeTiles(Node* gridNode);
+    void InitializeWalls(Node* gridNode);
+    void InitializeObjects(Node* scene, Vector<Match*>& newmatches);
 
     void SetObjects(const PODVector<StringHash>& gots, const PODVector<StringHash>& previewgots);
+
+    signed char GetObjectiveIndex(StringHash got);
 
     Vector3 GetEntrance(const Match& match) const;
 
@@ -444,13 +454,15 @@ private:
 
     bool GetBonusesInMatches(const Vector<Match*>& matches, Vector<Match*>& bonuses, const IntVector2& effect, int mask=M_MAX_INT);
     Match* GetFirstBonusInMatches(const Vector<Match*>& matches, const IntVector2& effect, int mask=M_MAX_INT);
+    
+    void GetMinMaxX(Vector<Match*>& matches, Match*& min, Match*& max);
+    void GetMinMaxY(Vector<Match*>& matches, Match*& min, Match*& max);
 
     void CheckMatches_Horizontal(const Match& entry, Vector<Match*>& matches);
     void CheckMatches_Vertical(const Match& entry, Vector<Match*>& matches);
     void CheckMatches_Horizontal_Bonus(const Match& entry, Vector<Match*>& matches);
     void CheckMatches_Vertical_Bonus(const Match& entry, Vector<Match*>& matches);
     void CheckMatches_Squares(const Match& entry, Vector<Match*>& matches);
-    void CheckMatches_L(const Match& entry, Vector<Match*>& matches);
     void CheckMatches_NeighborHood(const Match& entry, Vector<Match*>& matches);
 
     void CheckHints_Explosion(Match& X, Vector<Vector<Match*> >& hints);
@@ -466,6 +478,8 @@ private:
     Rect gridRect_;
     Color gridColor_;
     unsigned char previewLines_;
+    Vector<MatchObjective> objectives_;
+    HashMap<Animatable*, String> messagesToPost_;
 
     /// Grounds and Walls
     Matrix2D<GridTile> grid_;
@@ -486,6 +500,7 @@ private:
 
     /// Temporary Saved Matches
     Match savedM1_, savedM2_;
+    Match matchEmpty_;
     bool permutation_;
 
     /// Matches Options

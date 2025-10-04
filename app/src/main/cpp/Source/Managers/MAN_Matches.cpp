@@ -34,6 +34,7 @@
 #include "GameEvents.h"
 #include "TimerRemover.h"
 #include "sPlay.h"
+#include "Game.h"
 
 #if defined(TEST_NETWORK)
 #include "Network.h"
@@ -239,7 +240,7 @@ void MatchesManager::UpdateGridPositions()
 {
     URHO3D_LOGINFO("MatchesManager() - UpdateGridPositions : ... ");
 
-    const float tilesize = 2.f * halfTileSize;
+    const float tilesize = 2.f * halfTileSize * PIXEL_SIZE;
     float totalgridsizex = 0.f;
     float totalgridsizey = 0.f;
 
@@ -266,10 +267,10 @@ void MatchesManager::UpdateGridPositions()
     for (int i = 0; i < manager_->gridinfos_.Size(); i++)
     {
         // the node position of a grid is on the center of the grid
-        gridposition[i].x_ = position + halfTileSize * (float)GetGrid(i).width_;
-        gridposition[i].y_ = -halfTileSize;// - halfTileSize * (float)GetGrid(i).height_;
+        gridposition[i].x_ = position + halfTileSize * PIXEL_SIZE* (float)GetGrid(i).width_;
+        gridposition[i].y_ = -halfTileSize * PIXEL_SIZE;
 
-        position = gridposition[i].x_ + halfTileSize * (float)GetGrid(i).width_ + tilesize;
+        position = gridposition[i].x_ + halfTileSize * PIXEL_SIZE * (float)GetGrid(i).width_ + tilesize;
     }
 
     float zoom = Min((float)GameStatics::graphics_->GetWidth() * PIXEL_SIZE / totalgridsizex,
@@ -283,8 +284,8 @@ void MatchesManager::UpdateGridPositions()
         MatchGrid& grid = GetGrid(i);
 
         Rect rect;
-        rect.min_ = Vector2(gridposition[i].x_ - float(grid.width_) * halfTileSize, gridposition[i].y_ - float(grid.height_) * halfTileSize);
-        rect.max_ = Vector2(gridposition[i].x_ + float(grid.width_) * halfTileSize, gridposition[i].y_ + float(grid.height_) * halfTileSize);
+        rect.min_ = Vector2(gridposition[i].x_ - float(grid.width_) * halfTileSize * PIXEL_SIZE, gridposition[i].y_ - float(grid.height_) * halfTileSize * PIXEL_SIZE);
+        rect.max_ = Vector2(gridposition[i].x_ + float(grid.width_) * halfTileSize * PIXEL_SIZE, gridposition[i].y_ + float(grid.height_) * halfTileSize * PIXEL_SIZE);
 
 //        if (sceneScale_ < 1.f)
         {
@@ -496,7 +497,7 @@ void MatchesManager::CheckAllowShake()
 
         if (!shakebuttonFrame)
         {
-            shakebuttonFrame = GameHelpers::AddInteractiveFrame("UI/InteractiveFrame/GameShakeMatches.xml", manager_,
+            shakebuttonFrame = AddInteractiveFrame("UI/InteractiveFrame/GameShakeMatches.xml", manager_,
                                                                 new Urho3D::EventHandlerImpl<MatchesManager>(manager_, &MatchesManager::HandleShakeButtonPressedAck), false);
             shakebuttonFrame->SetBehavior(IB_BUTTON);
         }
@@ -934,6 +935,7 @@ void MatchGridInfo::Create()
 
     mgrid_.ClearObjects();
     mgrid_.SetLayout(MatchesManager::Get()->gridsize_, MatchesManager::Get()->gridlayout_, HA_CENTER, VA_CENTER, true);
+    mgrid_.SetObjectives(objectives_);
 
     InputMoveThreshold = Max(3, GameStatics::graphics_->GetWidth() / 10 / Max(MatchesManager::Get()->gridsize_, 5));
 
@@ -957,7 +959,7 @@ void MatchGridInfo::SpawnObjects()
     startMatches_.Clear();
 
     mgrid_.ClearObjects(false);
-    mgrid_.InitializeObjects(startMatches_);
+    mgrid_.InitializeObjects(GameStatics::rootScene_, startMatches_);
 
     ResetState();
     ResetHints();
@@ -2549,6 +2551,29 @@ void MatchGridInfo::Update_Initial()
     }
 }
 
+void MatchGridInfo::ProcessMessagesFromGrid()
+{
+    HashMap<Animatable*, String>& gridmessages = mgrid_.GetMessages();
+    if (gridmessages.Size())
+    {
+        if (mgrid_.gridid_ == 0 && Game::Get()->GetCompanion())
+        {
+            for (HashMap<Animatable*, String>::KeyValue& message : gridmessages)
+            {
+                String& m = message.second_;
+                if (Game::Get()->GetCompanion()->IsNewMessage(m))
+                {
+                    if (m.StartsWith("tuto_rocks"))                    
+                        Game::Get()->GetCompanion()->AddMessage(STATE_PLAY, true, m, "jona", 0.f, "UI/Companion/animatedcursors.scml", "cursor_arrow_ontop", message.first_, Vector2::ZERO);                    
+                    else if (m.StartsWith("tuto_walls"))                    
+                        Game::Get()->GetCompanion()->AddMessage(STATE_PLAY, true, m, "jona", 0.f, "UI/Companion/animatedcursors.scml", "cursor_arrow_ontop", message.first_, Vector2::ZERO);                    
+                }
+            }
+        }
+        gridmessages.Clear();
+    }
+}
+
 void MatchGridInfo::Update()
 {
     if (state_ == CancelMove)
@@ -2608,6 +2633,8 @@ void MatchGridInfo::Update()
 
     if (state_ != SuccessMatch && GameStatics::allowInputs_)
         UpdateHints();
+
+    ProcessMessagesFromGrid();
 }
 
 void MatchGridInfo::Update_Boss()
@@ -2669,6 +2696,8 @@ void MatchGridInfo::Update_Boss()
 
     if (state_ != SuccessMatch && GameStatics::allowInputs_)
         UpdateHints();
+
+    ProcessMessagesFromGrid();
 }
 
 #ifdef ACTIVE_TESTMODE
@@ -2738,6 +2767,8 @@ void MatchGridInfo::Update_Test()
 
     if (state_ != SuccessMatch && GameStatics::allowInputs_)
         UpdateHints();
+
+    ProcessMessagesFromGrid();
 }
 #endif
 

@@ -24,7 +24,6 @@ namespace Urho3D
 using namespace Urho3D;
 
 class TextMessage;
-class InteractiveFrame;
 
 enum
 {
@@ -107,7 +106,6 @@ public:
     static void AddTextFadeAnim(UIElement* uiroot, const String& text, Text* originaltext, const IntVector2& deltamove, float fadetime, float scalefactor);
     static TextMessage* AddUIMessage(const String& text, bool localize, const String& font, int fontsize, const Color& color, const IntVector2& position, float duration, float delaystart=0.f);
     static MessageBox* AddMessageBox(const String& title, const String& question, bool questionl10, const String& answer1, const String& answer2, Object* subscriber, EventHandler* handler, XMLFile* layoutFile = 0);
-    static InteractiveFrame* AddInteractiveFrame(const String& framefile, Object* subscriber=0, EventHandler* handler=0, bool autostart=true);
     static Animatable* AddAnimatedSpriteUI(UIElement* root, const String& label, const String& spritename, const String& entityname, const Vector2& position, float rotation=0.f, bool visible=true);
     static void SetMoveAnimationUI(UIElement* elt, const IntVector2& from, const IntVector2& to, float start, float delay);
     static void SetScaleAnimationUI(UIElement* elt, float from, float to, float mid, float start, float delay);

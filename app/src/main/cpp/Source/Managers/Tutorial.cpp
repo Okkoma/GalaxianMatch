@@ -219,7 +219,7 @@ void Tutorial::HandleTutorialLaunch(StringHash eventType, VariantMap& eventData)
         frame_->Stop();
 
     // Add Tutorial Frame
-    frame_ = GameHelpers::AddInteractiveFrame("UI/Tutorial/GameTutorialFrame.xml");
+    frame_ = AddInteractiveFrame("UI/Tutorial/GameTutorialFrame.xml");
     frame_->SetBehavior(IB_BUTTON);
     frame_->SetLayer(TUTORIALLAYER);
 

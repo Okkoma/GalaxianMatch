@@ -140,3 +140,5 @@ private:
     static HashMap<String, Vector<SharedPtr<InteractiveFrame> > > instances_;
 };
 
+InteractiveFrame* AddInteractiveFrame(const String& framefile, Object* subscriber=0, EventHandler* handler=0, bool autostart=true);
+

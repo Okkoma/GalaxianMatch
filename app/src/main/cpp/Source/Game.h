@@ -4,6 +4,9 @@
 
 #include "DefsJNI.h"
 
+#include "GameUI.h"
+
+
 using namespace Urho3D;
 
 namespace Urho3D
@@ -13,7 +16,6 @@ namespace Urho3D
 }
 
 struct GameConfig;
-class UIDialog;
 
 class Game : public Application
 {
@@ -37,9 +39,9 @@ public:
     void SubscribeToAccessMenuEvents();
     void UnsubscribeFromAccessMenuEvents();
 
-    UIElement* GetAccessMenu() const;
+    UIElement* GetAccessMenu() const { return accessMenu_.Get(); }
+    UIDialog* GetCompanion() const { return companionBox_.Get(); }
 
-    UIDialog* GetCompanion() const;
     void SetCompanionMessages();
 
     static Game* Get() { return game_; }
@@ -74,5 +76,14 @@ private:
 
     static Game* game_;
 
+    WeakPtr<UIMenu> accessMenu_;    
+    SharedPtr<UIDialog> companionBox_;
+
+    bool debugCameraWithMouse_{false};
+    float cameraYaw_{0.f};
+    float cameraPitch_{0.f};
+    float timerInactiveCursor_{0.f};
+
+    int numClicksOutsideCompanionBox_ = 0;
     float delayCompanion_;
 };

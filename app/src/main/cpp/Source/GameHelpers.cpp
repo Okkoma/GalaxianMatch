@@ -60,7 +60,6 @@
 #include "GameStatics.h"
 #include "GameUI.h"
 
-#include "InteractiveFrame.h"
 #include "TextMessage.h"
 #include "DelayInformer.h"
 #include "TimerRemover.h"
@@ -1339,28 +1338,6 @@ MessageBox* GameHelpers::AddMessageBox(const String& title, const String& questi
 
 
 	return 0;
-}
-
-InteractiveFrame* GameHelpers::AddInteractiveFrame(const String& framefile, Object* subscriber, EventHandler* handler, bool autostart)
-{
-    InteractiveFrame* frame = InteractiveFrame::Get(framefile, true);
-    if (frame)
-    {
-        if (!frame->GetNode())
-            frame->Init();
-
-        if (subscriber && handler)
-        {
-            subscriber->SubscribeToEvent(frame, E_MESSAGEACK, handler);
-            if (autostart)
-                frame->Start(false, false);
-        }
-
-        if (!frame->GetNode())
-            frame->Init();
-    }
-
-    return frame;
 }
 
 Animatable* GameHelpers::AddAnimatedSpriteUI(UIElement* root, const String& label, const String& spritename, const String& entityname, 

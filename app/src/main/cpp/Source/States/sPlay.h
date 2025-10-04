@@ -6,6 +6,7 @@
 #include "Network.h"
 #endif
 
+#include "GameStatics.h"
 #include "GameStateManager.h"
 
 
@@ -120,6 +121,7 @@ private:
 
     void HandleScreenResized(StringHash eventType, VariantMap& eventData);
 
+    int UpdateMissionScores(GameStatics::GameState& gamestate, int missionid);
     void UpdateObjectives(bool init=false);
     void PutBonusesInPlayerState(const Vector<int>& bonuses);
 

@@ -66,18 +66,11 @@
 #include "GameEvents.h"
 
 #include "GameStateManager.h"
-#include "sSplash.h"
-#include "sMainMenu.h"
-#include "sLevelMap.h"
-#include "sPlay.h"
-#include "sCinematic.h"
-#include "sOptions.h"
 
 #include "DelayAction.h"
 #include "DelayInformer.h"
 #include "TimerRemover.h"
 #include "TextMessage.h"
-#include "InteractiveFrame.h"
 
 #include "Matches.h"
 #include "MAN_Matches.h"
@@ -415,32 +408,6 @@ void GameStatics::Initialize(Context* context)
 
     // Create Game State Manager
 	stateManager_ = new GameStateManager(context);
-	stateManager_->RegisterState(new SplashState(context));
-	stateManager_->RegisterState(new MenuState(context));
-	stateManager_->RegisterState(new LevelMapState(context));
-	stateManager_->RegisterState(new PlayState(context));
-#ifdef ACTIVE_CINEMATICS
-    stateManager_->RegisterState(new CinematicState(context));
-#endif    
-    stateManager_->RegisterState(new OptionState(context));
-
-    stateManager_->AddToStack("MainMenu");
-
-//    if (!GameStatics::playerState_->firstCinematicPlayed)
-//    {
-//        CinematicState* cinematicstate = (CinematicState*)stateManager_->GetState("Cinematic");
-//        cinematicstate->SetSceneFile("Data/Cinematic/Intro/test4.xml");
-//        stateManager_->AddToStack("Cinematic");
-//        GameStatics::playerState_->firstCinematicPlayed = true;
-//    }
-
-    if (gameConfig_.initState_.Empty() && !GameStatics::playTest_)
-    {
-        URHO3D_LOGINFO("GameStatics() - Initialize ... : Add Default State : Splash ...");
-        stateManager_->AddToStack("Splash");
-    }
-    else
-        URHO3D_LOGINFO("GameStatics() - Initialize ... : Add Default State : MainMenu ...");
 
     // Add Network vars
     netIdentity_ = GameHelpers::GetRandomString(10);
@@ -1371,69 +1338,6 @@ unsigned GameStatics::GameState::GetNextLevel(int currentlevel) const
     return nextlevel;
 }
 
-int GameStatics::GameState::UpdateMissionScores(int missionid)
-{
-    MissionState& mstate = pstate_.missionstates[missionid-1];
-
-    // Get Metrics
-    unsigned numObjectives = MatchesManager::GetObjectives().Size();
-    for (unsigned i=0; i < MAXOBJECTIVES; i++)
-    {
-        if (i < MatchesManager::GetObjectives().Size())
-            mstate.objectives_[i] = MatchesManager::GetObjectives()[i];
-        else
-            mstate.objectives_[i].Reset();
-    }
-    mstate.numMovesUsed_ = MatchesManager::GetNumMovesUsed();
-    mstate.elapsedTime_ = MatchesManager::GetElapsedTime();
-
-    // Calculate the score : 0...3 stars
-    mstate.score_ = 0;
-
-    // critere1 : coeff 2 - ratio de mouvements = nombre de mouvements utilisés / nombre des mouvements à réalisés pour faire des match3 et gagner
-    float sumScoreObjectives = 0.f;
-    for (unsigned i=0; i < numObjectives; i++)
-        sumScoreObjectives += mstate.objectives_[i].target_;
-    float crit1 = sumScoreObjectives ? mstate.numMovesUsed_ / (sumScoreObjectives / 3) : 10.f;
-    URHO3D_LOGINFOF("GameStatics::GameState() - UpdateMissionScores : mission=%d crit1=%F", missionid, crit1);
-    if (crit1 <= 0.25f)
-        crit1 = 3.f;
-    else if (crit1 <= 0.5f)
-        crit1 = 2.f;
-    else if (crit1 <= 1.f)
-        crit1 = 1.f;
-    else
-        crit1 = 0.f;
-
-    // critere2 : coeff 1 - ratio d'équilibre = les scores des objectifs sont équilibrés => equilibre = moyenne des ecarts entre objectifs.
-    float crit2 = 0.f;
-    if (numObjectives > 1)
-    {
-        for (unsigned i=0; i < numObjectives; i++)
-            crit2 += (float)(mstate.objectives_[i].count_ - mstate.objectives_[i].target_) / mstate.objectives_[i].target_;
-        crit2 /= numObjectives;
-
-        URHO3D_LOGINFOF("GameStatics::GameState() - UpdateMissionScores : mission=%d crit2=%F", missionid, crit2);
-        // depassement inf à +50%
-        if (crit2 <= 0.5f)
-            crit2 = 3.f;
-        // depassement inf à +100%
-        else if (crit2 <= 1.5f)
-            crit2 = 2.f;
-        // depassement inf à +200%
-        else if (crit2 <= 3.f)
-            crit2 = 1.f;
-        else
-            crit2 = 0.f;
-    }
-
-    mstate.score_ = Clamp((int)Round((crit1 * 2 + crit2) / 3), 0, 3);
-
-    URHO3D_LOGINFOF("GameStatics::GameState() - UpdateMissionScores : mission=%d nummoves=%d score=%d score1=%F score2=%F", missionid, mstate.numMovesUsed_, mstate.score_, crit1, crit2);
-
-    return mstate.score_;
-}
-
 bool GameStatics::GameState::UpdateMission(int missionid, int state)
 {
     MissionState& m = pstate_.missionstates[missionid-1];
@@ -1695,8 +1599,6 @@ void GameStatics::Stop()
     GameStatics::gameExit_ = true;
 
     gameState_.Save();
-
-    InteractiveFrame::Reset();
 
     // Stop current State (Menu, Play etc...) and delete Manager
     if (stateManager_)

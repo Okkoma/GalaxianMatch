@@ -114,6 +114,8 @@ public:
     bool FindMatches(const Vector<Match*>& tocheck);
     void ApplySuccessMatches();
 
+    void ProcessMessagesFromGrid();
+
     void RemoveMatchAndCollapse(const Match& match);
     void AcquireItems(const Match& match);
     void AcquirePower(const Match& match);

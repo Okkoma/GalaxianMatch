@@ -74,6 +74,29 @@ int InteractiveFrame::numRunningInstances_ = 0;
 bool InteractiveFrame::allowInputs_ = true;
 HashMap<String, Vector<SharedPtr<InteractiveFrame> > > InteractiveFrame::instances_;
 
+
+InteractiveFrame* AddInteractiveFrame(const String& framefile, Object* subscriber, EventHandler* handler, bool autostart)
+{
+    InteractiveFrame* frame = InteractiveFrame::Get(framefile, true);
+    if (frame)
+    {
+        if (!frame->GetNode())
+            frame->Init();
+
+        if (subscriber && handler)
+        {
+            subscriber->SubscribeToEvent(frame, E_MESSAGEACK, handler);
+            if (autostart)
+                frame->Start(false, false);
+        }
+
+        if (!frame->GetNode())
+            frame->Init();
+    }
+
+    return frame;
+}
+
 InteractiveFrame::InteractiveFrame(Context* context, const String& layoutnodefile) :
     Object(context), exitindex_(0), layer_(10000), state_(IFrame_Cleaned), releaseSelectionContactEnd_(true), breakinput_(false), bonusEnabled_(false),
     behavior_(IB_MESSAGEBOX), selectionMode_(0), clicsOnSelection_(0), autostarttime_(0.f), autostoptime_(0.f), bonusstarttime_(0.5f)

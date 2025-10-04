@@ -49,7 +49,6 @@
 #include "GameStatics.h"
 #include "GameHelpers.h"
 #include "GameCommands.h"
-#include "GameUI.h"
 #include "GameTest.h"
 
 #if defined(TEST_NETWORK)
@@ -63,9 +62,12 @@
 
 #include "SplashScreen.h"
 
-#include "sOptions.h"
+#include "GameStateManager.h"
+#include "sSplash.h"
+#include "sMainMenu.h"
+#include "sLevelMap.h"
 #include "sPlay.h"
-
+#include "sOptions.h"
 #ifdef ACTIVE_CINEMATICS
 #include "sCinematic.h"
 #endif
@@ -79,24 +81,14 @@ URHO3D_DEFINE_APPLICATION_MAIN(Game);
 extern int UISIZE[NUMUIELEMENTSIZE];
 static bool engineConfigApplied_;
 
-WeakPtr<UIMenu> accessMenu_;
+const float DELAY_INACTIVECURSOR = 10.f;
+const unsigned NumMaxClicksEnd = 1U;
+
 WeakPtr<UIElement> headerHolder_;
 SharedPtr<UIDialog> dialogInfo_;
-SharedPtr<UIDialog> companionBox_;
 SharedPtr<SplashScreen> splashScreen_;
 
-bool debugCameraWithMouse_ = false;
-float cameraYaw_ = 0.f;
-float cameraPitch_ = 0.f;
-
-const float DELAY_INACTIVECURSOR = 10.f;
-float timerInactiveCursor_ = 0.f;
-
-const unsigned NumMaxClicksEnd = 1U;
-int numClicksOutsideCompanionBox_ = 0;
-
-OptionState* options_;
-
+OptionState* options_; 
 Game* Game::game_;
 
 
@@ -119,10 +111,6 @@ Game::~Game()
     URHO3D_LOGINFO("Game() - ~Game                                  -");
     URHO3D_LOGINFO("Game() - ----------------------------------------");
 }
-
-UIElement* Game::GetAccessMenu() const { return accessMenu_; }
-
-UIDialog* Game::GetCompanion() const { return companionBox_; }
 
 void Game::Setup()
 {
@@ -158,6 +146,35 @@ void Game::Start()
 
 	// Create All Statics : Camera, Scene
 	GameStatics::Initialize(context_);
+
+    // Fill State Manager
+	GameStatics::stateManager_->RegisterState(new SplashState(context_));
+	GameStatics::stateManager_->RegisterState(new MenuState(context_));
+	GameStatics::stateManager_->RegisterState(new LevelMapState(context_));
+	GameStatics::stateManager_->RegisterState(new PlayState(context_));
+#ifdef ACTIVE_CINEMATICS
+    GameStatics::stateManager_->RegisterState(new CinematicState(context_));
+#endif    
+    GameStatics::stateManager_->RegisterState(new OptionState(context_));
+
+    GameStatics::stateManager_->AddToStack("MainMenu");
+
+//    if (!GameStatics::playerState_->firstCinematicPlayed)
+//    {
+//        CinematicState* cinematicstate = (CinematicState*)stateManager_->GetState("Cinematic");
+//        cinematicstate->SetSceneFile("Data/Cinematic/Intro/test4.xml");
+//        stateManager_->AddToStack("Cinematic");
+//        GameStatics::playerState_->firstCinematicPlayed = true;
+//    }
+
+    if (GameStatics::gameConfig_.initState_.Empty() && !GameStatics::playTest_)
+    {
+        URHO3D_LOGINFO("Game() - Add Default State : Splash ...");
+        GameStatics::stateManager_->AddToStack("Splash");
+    }
+    else
+        URHO3D_LOGINFO("Game() - Add Default State : MainMenu ...");
+
 
 //    URHO3D_LOGINFOF("Game() - texture capacity = %d", GameStatics::graphics_->GetMaxTextureSize());
 
@@ -215,6 +232,8 @@ void Game::Stop()
     if (GameStatics::gameConfig_.touchEnabled_)
         GameStatics::input_->RemoveScreenJoystick(GameStatics::gameConfig_.screenJoystickID_);
 
+    InteractiveFrame::Reset();
+    
     GameStatics::Stop();
 
 	UnRegisterGameLibrary(context_);

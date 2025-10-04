@@ -4,6 +4,8 @@
 #define NBMAXZONE 13
 #define NBMAXMESSAGES 150
 
+#include "MatchesDefs.h"
+
 #include "GameOptions.h"
 
 #include "Graphics2D.h"
@@ -232,16 +234,6 @@ struct LevelInfo
     int nomorematchaction_;
     bool hints_;
     int newpowers_[MAXNEWPOWERSBYLVL];
-};
-
-struct MatchObjective
-{
-    void Reset() { type_ = StringHash::ZERO; target_ = 0; count_ = 0; ctype_ = 0; }
-
-    StringHash type_;
-    int target_;
-    int count_;
-    unsigned char ctype_;
 };
 
 enum UIElementSize
@@ -596,7 +588,6 @@ public:
         void GetMissionState(int missionid, MissionState& mission);
         unsigned GetNextLevel(int currentlevel=0) const;
         bool UpdateMission(int missionid, int state=-1);
-        int UpdateMissionScores(int missionid);
         void UnlockPowers(int missionid, PODVector<int>& unlockedpowers);
         void UpdateStoryItems();
         void ResetTutorialState();

@@ -2150,6 +2150,69 @@ void PlayState::OnAccessMenuOpenFrame(bool state)
     SetBossActive(!state);
 }
 
+int PlayState::UpdateMissionScores(GameStatics::GameState& gamestate, int missionid)
+{
+    GameStatics::MissionState& mstate = gamestate.pstate_.missionstates[missionid-1];
+
+    // Get Metrics
+    unsigned numObjectives = MatchesManager::GetObjectives().Size();
+    for (unsigned i=0; i < MAXOBJECTIVES; i++)
+    {
+        if (i < MatchesManager::GetObjectives().Size())
+            mstate.objectives_[i] = MatchesManager::GetObjectives()[i];
+        else
+            mstate.objectives_[i].Reset();
+    }
+    mstate.numMovesUsed_ = MatchesManager::GetNumMovesUsed();
+    mstate.elapsedTime_ = MatchesManager::GetElapsedTime();
+
+    // Calculate the score : 0...3 stars
+    mstate.score_ = 0;
+
+    // critere1 : coeff 2 - ratio de mouvements = nombre de mouvements utilisés / nombre des mouvements à réalisés pour faire des match3 et gagner
+    float sumScoreObjectives = 0.f;
+    for (unsigned i=0; i < numObjectives; i++)
+        sumScoreObjectives += mstate.objectives_[i].target_;
+    float crit1 = sumScoreObjectives ? mstate.numMovesUsed_ / (sumScoreObjectives / 3) : 10.f;
+    URHO3D_LOGINFOF("PlayState() - UpdateMissionScores : mission=%d crit1=%F", missionid, crit1);
+    if (crit1 <= 0.25f)
+        crit1 = 3.f;
+    else if (crit1 <= 0.5f)
+        crit1 = 2.f;
+    else if (crit1 <= 1.f)
+        crit1 = 1.f;
+    else
+        crit1 = 0.f;
+
+    // critere2 : coeff 1 - ratio d'équilibre = les scores des objectifs sont équilibrés => equilibre = moyenne des ecarts entre objectifs.
+    float crit2 = 0.f;
+    if (numObjectives > 1)
+    {
+        for (unsigned i=0; i < numObjectives; i++)
+            crit2 += (float)(mstate.objectives_[i].count_ - mstate.objectives_[i].target_) / mstate.objectives_[i].target_;
+        crit2 /= numObjectives;
+
+        URHO3D_LOGINFOF("PlayState() - UpdateMissionScores : mission=%d crit2=%F", missionid, crit2);
+        // depassement inf à +50%
+        if (crit2 <= 0.5f)
+            crit2 = 3.f;
+        // depassement inf à +100%
+        else if (crit2 <= 1.5f)
+            crit2 = 2.f;
+        // depassement inf à +200%
+        else if (crit2 <= 3.f)
+            crit2 = 1.f;
+        else
+            crit2 = 0.f;
+    }
+
+    mstate.score_ = Clamp((int)Round((crit1 * 2 + crit2) / 3), 0, 3);
+
+    URHO3D_LOGINFOF("PlayState() - UpdateMissionScores : mission=%d nummoves=%d score=%d score1=%F score2=%F", missionid, mstate.numMovesUsed_, mstate.score_, crit1, crit2);
+
+    return mstate.score_;
+}
+
 void PlayState::OnLevelWin(StringHash eventType, VariantMap& eventData)
 {
     URHO3D_LOGINFO("PlayState() - OnLevelWin ...");
@@ -2161,7 +2224,7 @@ void PlayState::OnLevelWin(StringHash eventType, VariantMap& eventData)
     GameStatics::MissionState initialMissionState;
     GameStatics::gameState_.GetMissionState(GameStatics::currentLevel_, initialMissionState);
 
-    int score = GameStatics::gameState_.UpdateMissionScores(GameStatics::currentLevel_);
+    int score = UpdateMissionScores(GameStatics::gameState_, GameStatics::currentLevel_);
     bool completedmission = GameStatics::gameState_.UpdateMission(GameStatics::currentLevel_, GameStatics::MissionState::MISSION_COMPLETED);
     bool unblockconstellation = GameStatics::CanUnblockConstellation(GameStatics::playerState_->zone);
     unsigned numitems = MatchesManager::GetAllItemsOnGrid();
@@ -2239,7 +2302,7 @@ void PlayState::OnLevelWin(StringHash eventType, VariantMap& eventData)
     // Add Gain Frame
     {
         framelayout = unblockconstellation || bosslevel ? "UI/InteractiveFrame/ZoneWinFrame.xml" : "UI/InteractiveFrame/GainFrame.xml";
-        frame = GameHelpers::AddInteractiveFrame(framelayout, this, URHO3D_HANDLER(PlayState, OnWinMessageAck), false);
+        frame = AddInteractiveFrame(framelayout, this, URHO3D_HANDLER(PlayState, OnWinMessageAck), false);
         frame->SetScreenPositionEntrance(IntVector2(-300, graphics->GetHeight()/2));
         frame->SetScreenPosition(IntVector2(graphics->GetWidth()/2, graphics->GetHeight()/2));
         frame->SetScreenPositionExit(0, IntVector2(-300, graphics->GetHeight()/2));

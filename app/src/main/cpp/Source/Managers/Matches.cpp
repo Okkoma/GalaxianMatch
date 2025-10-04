@@ -31,7 +31,6 @@
 #include "GameUI.h"
 
 #include "MAN_Matches.h"
-#include "Tutorial.h"
 
 #include "Matches.h"
 
@@ -439,8 +438,10 @@ void MatchGrid::SetLayout(int dimension, GridLayout layout, HorizontalAlignment 
         break;
     }
 
-    size_ = width_*height_;
+    size_ = width_ * height_;
 
+    InitializeMatches();
+    
     if (randomwalls && GridTile::WALLCHANCE && layout < L_MAXSTANDARDLAYOUT)
         RandomizeWalls();
 }
@@ -549,8 +550,8 @@ void MatchGrid::Load(VectorBuffer& buffer)
     if (objectsNode_)
         objectsNode_->RemoveAllChildren();
 
-    InitializeTiles();
-    InitializeWalls();
+    InitializeTiles(gridNode_);
+    InitializeWalls(gridNode_);
     SetObjects(gots, previewgots);
 }
 
@@ -590,6 +591,32 @@ void MatchGrid::Create(Vector<Match*>& newmatches)
     for (int i=0; i < NUMMATCHRULES; i++)
         activedRules_[i] = true;
 
+    String gridname;
+    gridname.AppendWithFormat("Grid%d", gridid_);
+
+    InitializeTypes();
+
+    Node* scene = GameStatics::rootScene_ ? GameStatics::rootScene_->GetChild("Scene") : nullptr;
+    if (scene)
+    {
+        gridNode_ = scene->GetChild(gridname, LOCAL);
+        if (!gridNode_)
+            gridNode_ = scene->CreateChild(gridname, LOCAL);
+
+        if (gridNode_)
+        {
+            InitializeTiles(gridNode_);
+            InitializeWalls(gridNode_);
+        }
+
+        InitializeObjects(scene, newmatches);
+    }
+
+    URHO3D_LOGINFO("MatchGrid() - Create : ... OK !");
+}
+
+void MatchGrid::InitializeMatches()
+{
     matches_.Resize(width_, height_);
     for (unsigned y=0; y < height_; y++)
     {
@@ -616,13 +643,6 @@ void MatchGrid::Create(Vector<Match*>& newmatches)
             }
         }
     }
-
-    InitializeTiles();
-    InitializeWalls();
-    InitializeTypes();
-    InitializeObjects(newmatches);
-
-    URHO3D_LOGINFO("MatchGrid() - Create : ... OK !");
 }
 
 void MatchGrid::InitializeTypes()
@@ -661,18 +681,11 @@ void MatchGrid::InitializeTypes()
     URHO3D_LOGINFO("MatchGrid() - InitializeTypes : ... OK !");
 }
 
-static const Vector2 WallPositions[] = { Vector2(0.f, halfTileSize), Vector2(-halfTileSize, 0.f), Vector2(halfTileSize, 0.f), Vector2(0.f, -halfTileSize) };
+static const Vector2 WallPositions[] = { Vector2(0.f, halfTileSize * PIXEL_SIZE), Vector2(-halfTileSize * PIXEL_SIZE, 0.f), Vector2(halfTileSize * PIXEL_SIZE, 0.f), Vector2(0.f, -halfTileSize * PIXEL_SIZE) };
 static const float   WallRotations[] = { 0.f, 90.f, 90.f, 0.f };
 
-void MatchGrid::InitializeTiles()
-{
-    Node* scene = GameStatics::rootScene_->GetChild("Scene");
-    String gridname;
-    gridname.AppendWithFormat("Grid%d", gridid_);
-    gridNode_ = scene->GetChild(gridname, LOCAL);
-    if (!gridNode_)
-        gridNode_ = scene->CreateChild(gridname, LOCAL);
-
+void MatchGrid::InitializeTiles(Node* gridNode)
+{    
     const Vector<StringHash>& groundtypes = COT::GetObjectsInCategory(COT::GROUND2);
     if (!groundtypes.Size())
     {
@@ -684,7 +697,7 @@ void MatchGrid::InitializeTiles()
     tiles_.Resize(width_, height_);
 
     URHO3D_LOGINFOF("MatchGrid() - InitializeTiles : ... gridNode=%s(%u) groundtypes=%u", 
-        gridNode_ ? gridNode_->GetName().CString() : "NULL", gridNode_ ? gridNode_->GetID() : 0, groundtypes.Size());
+        gridNode ? gridNode->GetName().CString() : "NULL", gridNode ? gridNode->GetID() : 0, groundtypes.Size());
 
     unsigned char feature;
     Vector3 position;
@@ -703,12 +716,12 @@ void MatchGrid::InitializeTiles()
 
             WeakPtr<Node>& tile = tiles_(x, y);
             Node* groundobject = GOT::GetObject(got);          
-            tile = WeakPtr<Node>(GameHelpers::CloneInside(groundobject, gridNode_, LOCAL));
+            tile = WeakPtr<Node>(GameHelpers::CloneInside(groundobject, gridNode, LOCAL));
             if (tile)
             {
                 tile->SetVar(GOA::GOT, got);
-                position.x_ = (float(2*int(x)-int(width_)) + 1.f) * halfTileSize;
-                position.y_ = (float(int(height_)-2*int(y)) - 1.f) * halfTileSize;
+                position.x_ = (float(2*int(x)-int(width_)) + 1.f) * halfTileSize * PIXEL_SIZE;
+                position.y_ = (float(int(height_)-2*int(y)) - 1.f) * halfTileSize * PIXEL_SIZE;
                 tile->SetPosition(position);
                 tile->SetEnabled(true);
                 tile->SetVar(GOA::GRIDCOORD, IntVector3(x, y, gridid_));
@@ -728,7 +741,7 @@ void MatchGrid::InitializeTiles()
     if (GameStatics::GetLevelInfo().mode_ == BOSSMODE)
     {
         const Vector<StringHash>& groundtypes = COT::GetObjectsInCategory(COT::GROUND1);
-        Node* backgrid = gridNode_->CreateChild("backgrid", LOCAL);
+        Node* backgrid = gridNode->CreateChild("backgrid", LOCAL);
         Vector3 position;
 
         for (unsigned y=0; y < height_; y++)
@@ -736,8 +749,8 @@ void MatchGrid::InitializeTiles()
             for (unsigned x=0; x < width_ ; x++)
             {
                 Node* node = GameHelpers::CloneInside(GOT::GetObject(COT::GROUND1), backgrid, LOCAL);
-                position.x_ = (float(2*int(x)-int(width_)) + 1.f) * halfTileSize;
-                position.y_ = (float(int(height_)-2*int(y)) - 1.f) * halfTileSize;
+                position.x_ = (float(2*int(x)-int(width_)) + 1.f) * halfTileSize * PIXEL_SIZE;
+                position.y_ = (float(int(height_)-2*int(y)) - 1.f) * halfTileSize * PIXEL_SIZE;
                 node->SetVar(GOA::GOT, COT::GROUND1);
                 node->SetPosition(position);
                 node->SetEnabled(true);
@@ -755,7 +768,7 @@ void MatchGrid::InitializeTiles()
 
     if (previewLines_)
     {
-        Node* backgrid = gridNode_->CreateChild("previewgrid", LOCAL);
+        Node* backgrid = gridNode->CreateChild("previewgrid", LOCAL);
 
         for (unsigned y=0; y < previewLines_; y++)
         {
@@ -767,8 +780,8 @@ void MatchGrid::InitializeTiles()
                 Node* node = GameHelpers::CloneInside(GOT::GetObject(COT::GROUND1), backgrid, LOCAL);
                 if (node)
                 {
-                    position.x_ = (float(2*int(x)-int(width_)) + 1.f) * halfTileSize;
-                    position.y_ = (float(int(height_+previewLines_+1)-2*int(y)) - 1.f) * halfTileSize;
+                    position.x_ = (float(2*int(x)-int(width_)) + 1.f) * halfTileSize * PIXEL_SIZE;
+                    position.y_ = (float(int(height_+previewLines_+1)-2*int(y)) - 1.f) * halfTileSize * PIXEL_SIZE;
                     node->SetVar(GOA::GOT, COT::GROUND1);
                     node->SetPosition(position);
                     node->SetEnabled(true);
@@ -790,7 +803,7 @@ void MatchGrid::InitializeTiles()
     URHO3D_LOGINFO("MatchGrid() - InitializeTiles ... OK !");
 }
 
-void MatchGrid::InitializeWalls()
+void MatchGrid::InitializeWalls(Node* gridNode)
 {
     URHO3D_LOGINFOF("MatchGrid() - InitializeWalls : ... ");
 
@@ -802,53 +815,57 @@ void MatchGrid::InitializeWalls()
     float angle;
 
     PODVector<Node*> wallnodes;
-
     for (unsigned y=0; y < height_; y++)
-    for (unsigned x=0; x < width_ ; x++)
     {
-        WeakPtr<Node>& wallroot = walls_(x,y);
-        wallroot.Reset();
-
-        walltype = grid_(x,y).walltype_;
-
-        if (!walltype)
-            continue;
-
-        position.x_ = (float(2*int(x)-int(width_)) + 1.f) * halfTileSize;
-        position.y_ = (float(int(height_)-2*int(y)) - 1.f) * halfTileSize;
-
-        wallroot = gridNode_->CreateChild("Wall", LOCAL);
-        wallroot->SetPosition(position);
-
-        URHO3D_LOGINFOF("MatchGrid() - InitializeWalls : add walltype=%u at (%d, %d) !", walltype, x, y);
-
-        wallorientation = grid_(x,y).wallorientation_;
-        StringHash got = walltypes[--walltype];
-        for (int i=0; i < 4; i++)
+        for (unsigned x=0; x < width_ ; x++)
         {
-            if (wallorientation & (1 << i))
+            WeakPtr<Node>& wallroot = walls_(x,y);
+            wallroot.Reset();
+
+            walltype = grid_(x,y).walltype_;
+
+            if (!walltype)
+                continue;
+
+            position.x_ = (float(2*int(x)-int(width_)) + 1.f) * halfTileSize * PIXEL_SIZE;
+            position.y_ = (float(int(height_)-2*int(y)) - 1.f) * halfTileSize * PIXEL_SIZE;
+
+            wallroot = gridNode->CreateChild("Wall", LOCAL);
+            wallroot->SetPosition(position);
+
+            URHO3D_LOGINFOF("MatchGrid() - InitializeWalls : add walltype=%u at (%d, %d) !", walltype, x, y);
+
+            wallorientation = grid_(x,y).wallorientation_;
+            StringHash got = walltypes[--walltype];
+            for (int i=0; i < 4; i++)
             {
-                Node* wall = GameHelpers::CloneInside(GOT::GetObject(got), wallroot, LOCAL);
-                wall->SetVar(GOA::GOT, got);
-                wall->SetName(String(1 << i));
-                wall->SetPosition2D(WallPositions[i]);
-                wall->SetRotation2D(WallRotations[i]);
-                wall->SetEnabled(true);
-                wallnodes.Push(wall);
+                if (wallorientation & (1 << i))
+                {
+                    Node* wall = GameHelpers::CloneInside(GOT::GetObject(got), wallroot, LOCAL);
+                    wall->SetVar(GOA::GOT, got);
+                    wall->SetName(String(1 << i));
+                    wall->SetPosition2D(WallPositions[i]);
+                    wall->SetRotation2D(WallRotations[i]);
+                    wall->SetEnabled(true);
+                    wallnodes.Push(wall);
+                }
             }
         }
     }
 
-    if (wallnodes.Size() && Game::Get()->GetCompanion() && Game::Get()->GetCompanion()->IsNewMessage("tuto_walls_01"))
-        Game::Get()->GetCompanion()->AddMessage(STATE_PLAY, true, "tuto_walls_01", "jona", 0.f, "UI/Companion/animatedcursors.scml", "cursor_arrow_ontop", wallnodes.Front(), Vector2::ZERO);
+    if (wallnodes.Size())
+        messagesToPost_[wallnodes.Front()] = "tuto_walls_01";
+
+    //if (wallnodes.Size() && Game::Get()->GetCompanion() && Game::Get()->GetCompanion()->IsNewMessage("tuto_walls_01"))
+    //    Game::Get()->GetCompanion()->AddMessage(STATE_PLAY, true, "tuto_walls_01", "jona", 0.f, "UI/Companion/animatedcursors.scml", "cursor_arrow_ontop", wallnodes.Front(), Vector2::ZERO);
 
     URHO3D_LOGINFOF("MatchGrid() - InitializeWalls : ... OK !");
 }
 
-void MatchGrid::InitializeObjects(Vector<Match*>& newmatches)
+void MatchGrid::InitializeObjects(Node* scene, Vector<Match*>& newmatches)
 {
     URHO3D_LOGINFO("MatchGrid() - InitializeObjects ... ");
-    Node* scene = GameStatics::rootScene_->GetChild("Scene");
+
     String objectsname;
     objectsname.AppendWithFormat("Objects%d", gridid_);
     objectsNode_ = scene->GetChild(objectsname, LOCAL);
@@ -1074,11 +1091,8 @@ Node* MatchGrid::AddPreviewObject(Match& match, GameRand& random)
         match.otype_    = -1;
         match.effect_   = NOEFFECT;
 
-        if (Game::Get()->GetCompanion() && Game::Get()->GetCompanion()->IsNewMessage("tuto_rocks_01"))
-        {
-            Game::Get()->GetCompanion()->AddMessage(STATE_PLAY, true, "tuto_rocks_01", "jona", 0.f, "UI/Companion/animatedcursors.scml", "cursor_arrow_ontop", object.Get(), Vector2::ZERO);
-            Game::Get()->GetCompanion()->AddMessage(STATE_PLAY, true, "tuto_rocks_02", "jona", 0.f, "UI/Companion/animatedcursors.scml", "cursor_arrow_ontop", object.Get(), Vector2::ZERO);
-        }
+        messagesToPost_[object.Get()] = "tuto_rocks_01";
+        messagesToPost_[object.Get()] = "tuto_rocks_02";
     }
     else
     {
@@ -1094,7 +1108,7 @@ Node* MatchGrid::AddPreviewObject(Match& match, GameRand& random)
         object->SetVar(GOA::GOT, got);
         // set match type
         match.ctype_    = object->GetVar(GOA::MATCHTYPE).GetInt();
-        match.otype_    = MatchesManager::GetObjectiveIndex(got, gridid_);
+        match.otype_    = GetObjectiveIndex(got);
         match.effect_   = NOEFFECT;
 
 //		URHO3D_LOGINFOF("MatchGrid() - AddPreviewObject : ennemy match=%s !", match.ToString().CString());
@@ -1155,11 +1169,14 @@ Node* MatchGrid::AddObject(Match& match, GameRand& random)
         match.otype_    = -1;
         match.effect_   = NOEFFECT;
 
-        if (Game::Get()->GetCompanion() && Game::Get()->GetCompanion()->IsNewMessage("tuto_rocks_01"))
-        {
-            Game::Get()->GetCompanion()->AddMessage(STATE_PLAY, true, "tuto_rocks_01", "jona", 0.f, "UI/Companion/animatedcursors.scml", "cursor_arrow_ontop", object.Get(), Vector2::ZERO);
-            Game::Get()->GetCompanion()->AddMessage(STATE_PLAY, true, "tuto_rocks_02", "jona", 0.f, "UI/Companion/animatedcursors.scml", "cursor_arrow_ontop", object.Get(), Vector2::ZERO);
-        }
+        messagesToPost_[object.Get()] = "tuto_rocks_01";
+        messagesToPost_[object.Get()] = "tuto_rocks_02";
+
+        // if (Game::Get()->GetCompanion() && Game::Get()->GetCompanion()->IsNewMessage("tuto_rocks_01"))
+        // {
+            // Game::Get()->GetCompanion()->AddMessage(STATE_PLAY, true, "tuto_rocks_01", "jona", 0.f, "UI/Companion/animatedcursors.scml", "cursor_arrow_ontop", object.Get(), Vector2::ZERO);
+            // Game::Get()->GetCompanion()->AddMessage(STATE_PLAY, true, "tuto_rocks_02", "jona", 0.f, "UI/Companion/animatedcursors.scml", "cursor_arrow_ontop", object.Get(), Vector2::ZERO);
+        // }
     }
     else
     {
@@ -1172,7 +1189,7 @@ Node* MatchGrid::AddObject(Match& match, GameRand& random)
         object->SetVar(GOA::GOT, got);
         // set match type
         match.ctype_    = object->GetVar(GOA::MATCHTYPE).GetInt();
-        match.otype_    = MatchesManager::GetObjectiveIndex(got, gridid_);
+        match.otype_    = GetObjectiveIndex(got);
         match.effect_   = NOEFFECT;
 
 //		URHO3D_LOGINFOF("MatchGrid() - AddObject : ennemy match=%s !", match.ToString().CString());
@@ -1998,9 +2015,12 @@ void MatchGrid::ConfirmPermute()
         return;
     }
 
-    WeakPtr<Node> tmpobject = objects_(savedM1_.x_, savedM1_.y_);
-    objects_(savedM1_.x_, savedM1_.y_) = objects_(savedM2_.x_, savedM2_.y_);
-    objects_(savedM2_.x_, savedM2_.y_) = tmpobject;
+    if (objects_.Size())
+    {
+        WeakPtr<Node> tmpobject = objects_(savedM1_.x_, savedM1_.y_);
+        objects_(savedM1_.x_, savedM1_.y_) = objects_(savedM2_.x_, savedM2_.y_);
+        objects_(savedM2_.x_, savedM2_.y_) = tmpobject;
+    }
 
     permutation_ = false;
 
@@ -2132,10 +2152,20 @@ Vector3 MatchGrid::CalculateMatchPosition(int x, int y) const
 {
     Vector3 position;
 
-    position.x_ = (2.f*(float)x-(float)width_+1.f) * halfTileSize;
-    position.y_ = ((float)height_-2.f*(float)y-1.f) * halfTileSize;
+    position.x_ = (2.f*(float)x-(float)width_+1.f) * halfTileSize * PIXEL_SIZE;
+    position.y_ = ((float)height_-2.f*(float)y-1.f) * halfTileSize * PIXEL_SIZE;
 
     return position;
+}
+
+signed char MatchGrid::GetObjectiveIndex(StringHash got)
+{
+    for (Vector<MatchObjective >::ConstIterator it = objectives_.Begin(); it != objectives_.End(); ++it)
+    {
+        if (it->type_ == got)
+            return it - objectives_.Begin();
+    }
+    return -1;
 }
 
 // return an top entrance local position in grid node (no scene scaled) for a match
@@ -2143,8 +2173,8 @@ Vector3 MatchGrid::GetEntrance(const Match& match) const
 {
     Vector3 position;
 
-    position.x_ = (float(2*int(match.x_)-int(width_)) + 1.f) * halfTileSize;
-    position.y_ = float(height_) * halfTileSize;
+    position.x_ = (float(2*int(match.x_)-int(width_)) + 1.f) * halfTileSize * PIXEL_SIZE;
+    position.y_ = float(height_) * halfTileSize * PIXEL_SIZE;
 
     // add a variation : prevent all node from a column on the same entrance
     position.y_ -= float(2*match.y_) * PIXEL_SIZE;
@@ -2364,6 +2394,11 @@ Match* MatchGrid::GetMatch(Node* object)
     return 0;
 }
 
+Match& MatchGrid::GetMatch(int x, int y)
+{
+    return x < width_ &&  y < height_ ? matches_(x, y) : matchEmpty_; 
+}
+
 Node* MatchGrid::GetObject(const Match& m) const
 {
     return objects_(m.x_, m.y_).Get();
@@ -2371,11 +2406,43 @@ Node* MatchGrid::GetObject(const Match& m) const
 
 Node* MatchGrid::GetObject(int x, int y) const
 {
-    return width_ * height_ > 0 ? objects_(x, y).Get() : 0;
+    return x < width_ &&  y < height_ ? objects_(x, y).Get() : 0;
 }
 
 
 /// MATCHES
+
+void MatchGrid::GetMinMaxX(Vector<Match*>& matches, Match*& min, Match*& max)
+{
+    if (!matches.Size())
+        return;
+        
+    min = matches.Front();
+    max = matches.Back();
+    for (Match* m : matches)
+    {
+        if (m->x_ < min->x_)
+            min = m;
+        else if (m->x_ > max->x_)
+            max = m;
+    }
+}
+
+void MatchGrid::GetMinMaxY(Vector<Match*>& matches, Match*& min, Match*& max)
+{
+    if (!matches.Size())
+        return;
+
+    min = matches.Front();
+    max = matches.Back();
+    for (Match* m : matches)
+    {
+        if (m->y_ < min->y_)
+            min = m;
+        else if (m->y_ > max->y_)
+            max = m;
+    }
+}
 
 bool MatchGrid::GetMatches(Match* match, Vector<Match*>& destroymatches, Vector<Match*>& successmatches, Vector<Match*>& activablebonuses, Vector<Match*>& brokenrocks, Vector<WallInfo>& hittedwalls)
 {
@@ -2523,241 +2590,322 @@ bool MatchGrid::GetMatches(Match* match, Vector<Match*>& destroymatches, Vector<
         }
     }
 
-    if (!freeDirectionExplosion_)
-    {
-        bool horizBonusActive = false;
-
-        // Horizontal Matches
-        if (activedRules_[HORIZONTALMATCH])
-        {
-            Vector<Match*> matchesh;
-
-            matchesh.Push(&entry);
-            CheckMatches_Horizontal(entry, matchesh);
-
-            if (matchesh.Size() >= Match::MINIMALMATCHES)
-            {
-                Match::AddDistinctEntries(matchesh, successmatches);
-
-                Vector<Match*> bonuses;
-                if (GetBonusesInMatches(matchesh, bonuses, DIRECTIONALEXPLOSION))
-                {
-                    // Check HorizontalBomb in the matches
-                    Match* firstpower = GetFirstBonusInMatches(bonuses, DIRECTIONALEXPLOSION, XEXPLOSION);
-
-                    if (firstpower)
-                    {
-                        URHO3D_LOGINFOF("MatchGrid() - GetMatches : entry=%s - HORIZONTAL HasPowers=%u !", entry.ToString().CString(), bonuses.Size());
-
-                        matchesh.Clear();
-
-                        GetAllHorizontalMatches(entry, matchesh, brokenrocks, &hittedwalls);
-
-                        horizBonusActive = true;
-
-                        if (bonuses.Size() == 1)
-                        {
-                            firstpower->effect_ &= ~YEXPLOSION;
-                        }
-                        else
-                        {
-                            for (Vector<Match*>::ConstIterator it=bonuses.Begin(); it!=bonuses.End(); ++it)
-                            {
-                                Match* power = *it;
-
-                                if (power == firstpower)
-                                    continue;
-
-                                if (IsPower(*power, DIRECTIONALEXPLOSION, XEXPLOSION))
-                                {
-                                    GetAllVerticalMatches(*power, matchesh, brokenrocks, &hittedwalls);
-                                    power->effect_ &= ~XEXPLOSION;
-                                }
-                            }
-                        }
-
-                        activablebonuses.Push(bonuses);
-                    }
-                }
-
-                Match::AddDistinctEntries(matchesh, destroymatches);
-
-                URHO3D_LOGINFOF("MatchGrid() - GetMatches : entry=%s - HORIZONTAL NumMatches=%u SUCCESS !", entry.ToString().CString(), matchesh.Size());
-            }
-        }
-
-        // Vertical Matches
-        if (activedRules_[VERTICALMATCH])
-        {
-            Vector<Match*> matchesv;
-
-            matchesv.Push(&entry);
-            CheckMatches_Vertical(entry, matchesv);
-
-            if (matchesv.Size() >= Match::MINIMALMATCHES)
-            {
-                Match::AddDistinctEntries(matchesv, successmatches);
-
-                // Check VerticalBomb in the matches
-                Vector<Match*> bonuses;
-                if (GetBonusesInMatches(matchesv, bonuses, DIRECTIONALEXPLOSION))
-                {
-                    // Check HorizontalBomb in the matches
-                    Match* firstpower = GetFirstBonusInMatches(bonuses, DIRECTIONALEXPLOSION, YEXPLOSION);
-
-                    if (firstpower)
-                    {
-                        URHO3D_LOGINFOF("MatchGrid() - GetMatches : entry=%s - VERTICAL HasPowers=%u !", entry.ToString().CString(), bonuses.Size());
-
-                        matchesv.Clear();
-
-                        GetAllVerticalMatches(entry, matchesv, brokenrocks, &hittedwalls);
-
-                        if (!horizBonusActive && bonuses.Size() == 1)
-                            firstpower->effect_ &= ~XEXPLOSION;
-                        else
-                        {
-                            for (Vector<Match*>::ConstIterator it=bonuses.Begin(); it!=bonuses.End(); ++it)
-                            {
-                                Match* power = *it;
-
-                                if (power == firstpower)
-                                    continue;
-
-                                if (IsPower(*power, DIRECTIONALEXPLOSION, YEXPLOSION))
-                                {
-                                    GetAllHorizontalMatches(*power, matchesv, brokenrocks, &hittedwalls);
-                                    power->effect_ &= ~YEXPLOSION;
-                                }
-                            }
-                        }
-
-                        activablebonuses.Push(bonuses);
-                    }
-                }
-
-    //            if (GetBonusesInMatches(matchesv, bonuses, DIRECTIONALEXPLOSION, YEXPLOSION))
-    //            {
-    //                matchesv.Clear();
-    //
-    //                GetAllVerticalMatches(entry, matchesv, brokenrocks, &hittedwalls);
-    //
-    //                activablebonuses.Push(bonuses);
-    //
-    //                Match* bonus = *bonuses.Begin();
-    //
-    //                if (!horizBonusActive)
-    //                    bonus->effect_ &= ~XEXPLOSION;
-    //
-    //                for (Vector<Match*>::ConstIterator it=bonuses.Begin()+1; it!=bonuses.End(); ++it)
-    //                {
-    //                    GetAllHorizontalMatches(**it, matchesv, brokenrocks, &hittedwalls);
-    //                    (*it)->effect_ &= ~YEXPLOSION;
-    //                }
-    //            }
-
-                Match::AddDistinctEntries(matchesv, destroymatches);
-
-                URHO3D_LOGINFOF("MatchGrid() - GetMatches : entry=%s - VERTICAL NumMatches=%u SUCCESS !", entry.ToString().CString(), matchesv.Size());
-            }
-        }
-    }
-    else
-    {
-        Vector<Match*> matchesh;
-        Vector<Match*> matchesv;
-
-        // Horizontal Matches
-        if (activedRules_[HORIZONTALMATCH])
-        {
-            matchesh.Push(&entry);
-            CheckMatches_Horizontal(entry, matchesh);
-
-            if (matchesh.Size() >= Match::MINIMALMATCHES)
-            {
-                unsigned nummatches = matchesh.Size();
-
-                Match::AddDistinctEntries(matchesh, successmatches);
-                Match::AddDistinctEntries(matchesh, destroymatches);
-
-                Vector<Match*> bonuses;
-                if (GetBonusesInMatches(matchesh, bonuses, DIRECTIONALEXPLOSION))
-                {
-                    for (Vector<Match*>::ConstIterator it=bonuses.Begin(); it!=bonuses.End(); ++it)
-                    {
-                        Match* power = *it;
-                        if (IsPower(*power, DIRECTIONALEXPLOSION, XEXPLOSION))
-                        {
-                            GetAllHorizontalMatches(*power, matchesh, brokenrocks, &hittedwalls);
-                            Match::AddDistinctEntries(matchesh, destroymatches);
-                            nummatches += matchesh.Size();
-                        }
-                        if (IsPower(*power, DIRECTIONALEXPLOSION, YEXPLOSION))
-                        {
-                            GetAllVerticalMatches(*power, matchesv, brokenrocks, &hittedwalls);
-                            Match::AddDistinctEntries(matchesv, destroymatches);
-                            nummatches += matchesv.Size();
-                        }
-                    }
-
-                    activablebonuses.Push(bonuses);
-                }
-
-                URHO3D_LOGINFOF("MatchGrid() - GetMatches : entry=%s - free HORIZONTAL NumMatches=%u SUCCESS !", entry.ToString().CString(), nummatches);
-            }
-        }
-
-        // Vertical Matches
-        if (activedRules_[VERTICALMATCH])
-        {
-            matchesh.Clear();
-            matchesv.Clear();
-
-            matchesv.Push(&entry);
-            CheckMatches_Vertical(entry, matchesv);
-
-            if (matchesv.Size() >= Match::MINIMALMATCHES)
-            {
-                unsigned nummatches = matchesv.Size();
-
-                Match::AddDistinctEntries(matchesv, successmatches);
-                Match::AddDistinctEntries(matchesv, destroymatches);
-
-                Vector<Match*> bonuses;
-                if (GetBonusesInMatches(matchesv, bonuses, DIRECTIONALEXPLOSION))
-                {
-                    for (Vector<Match*>::ConstIterator it=bonuses.Begin(); it!=bonuses.End(); ++it)
-                    {
-                        Match* power = *it;
-                        if (IsPower(*power, DIRECTIONALEXPLOSION, XEXPLOSION))
-                        {
-                            GetAllHorizontalMatches(*power, matchesh, brokenrocks, &hittedwalls);
-                            Match::AddDistinctEntries(matchesh, destroymatches);
-                            nummatches += matchesh.Size();
-                        }
-                        if (IsPower(*power, DIRECTIONALEXPLOSION, YEXPLOSION))
-                        {
-                            GetAllVerticalMatches(*power, matchesv, brokenrocks, &hittedwalls);
-                            Match::AddDistinctEntries(matchesv, destroymatches);
-                            nummatches += matchesv.Size();
-                        }
-                    }
-
-                    activablebonuses.Push(bonuses);
-                }
-
-                URHO3D_LOGINFOF("MatchGrid() - GetMatches : entry=%s - free VERTICAL NumMatches=%u SUCCESS !", entry.ToString().CString(), nummatches);
-            }
-        }
-    }
-
+    bool foundL = false;
     // "L" Matches
     if (activedRules_[LMATCH])
     {
-        /// TODO
-        Vector<Match*> matchesl;
+        Vector<Match*> matchesh;
+        Vector<Match*> matchesv;
+        Match* minbound;
+        Match* maxbound;
+
+        // Start checking horizontal
+        matchesh.Push(&entry);
+        CheckMatches_Horizontal(entry, matchesh);
+        if (matchesh.Size() >= Match::MINIMALMATCHES)
+        {
+            GetMinMaxX(matchesh, minbound, maxbound);
+            matchesv.Push(minbound);
+            CheckMatches_Vertical(*minbound, matchesv);
+            foundL = (matchesv.Size() > 1);
+            if (!foundL)
+            {
+                matchesv.Clear();
+                matchesv.Push(maxbound);
+                CheckMatches_Vertical(*maxbound, matchesv);
+                foundL = (matchesv.Size() > 1);
+            } 
+        }
+
+        // Start checking vertical
+        if (!foundL)
+        {
+            matchesh.Clear();
+            matchesv.Clear();
+            matchesv.Push(&entry);
+            CheckMatches_Vertical(entry, matchesv);
+            if (matchesv.Size() >= Match::MINIMALMATCHES)
+            {
+                GetMinMaxY(matchesv, minbound, maxbound);
+                matchesh.Push(minbound);
+                CheckMatches_Horizontal(*minbound, matchesh);
+                foundL = (matchesh.Size() > 1);
+                if (!foundL)
+                {
+                    matchesh.Clear();
+                    matchesh.Push(maxbound);
+                    CheckMatches_Horizontal(*maxbound, matchesh);
+                    foundL = (matchesh.Size() > 1);
+                }                
+            }            
+        }
+
+        if (foundL)
+        {
+            unsigned nummatches = matchesh.Size() + matchesv.Size() - 1;
+
+            Match::AddDistinctEntries(matchesh, successmatches);
+            Match::AddDistinctEntries(matchesh, destroymatches);
+            Match::AddDistinctEntries(matchesv, successmatches);
+            Match::AddDistinctEntries(matchesv, destroymatches);
+
+            Vector<Match*> bonuses;
+            if (GetBonusesInMatches(matchesh, bonuses, DIRECTIONALEXPLOSION))
+            {
+                for (Vector<Match*>::ConstIterator it=bonuses.Begin(); it!=bonuses.End(); ++it)
+                {
+                    Match* power = *it;
+                    if (IsPower(*power, DIRECTIONALEXPLOSION, XEXPLOSION))
+                    {
+                        GetAllHorizontalMatches(*power, matchesh, brokenrocks, &hittedwalls);
+                        Match::AddDistinctEntries(matchesh, destroymatches);
+                        nummatches += matchesh.Size();
+                    }
+                    if (IsPower(*power, DIRECTIONALEXPLOSION, YEXPLOSION))
+                    {
+                        GetAllVerticalMatches(*power, matchesv, brokenrocks, &hittedwalls);
+                        Match::AddDistinctEntries(matchesv, destroymatches);
+                        nummatches += matchesv.Size();
+                    }
+                }
+
+                activablebonuses.Push(bonuses);
+            }
+
+            URHO3D_LOGINFOF("MatchGrid() - GetMatches : entry=%s - L MATCH NumMatches=%u SUCCESS !", entry.ToString().CString(), nummatches);
+        }
     }
 
+    if (!foundL)
+    {
+        if (!freeDirectionExplosion_)
+        {
+            bool horizBonusActive = false;
+
+            // Horizontal Matches
+            if (activedRules_[HORIZONTALMATCH])
+            {
+                Vector<Match*> matchesh;
+
+                matchesh.Push(&entry);
+                CheckMatches_Horizontal(entry, matchesh);
+
+                if (matchesh.Size() >= Match::MINIMALMATCHES)
+                {
+                    Match::AddDistinctEntries(matchesh, successmatches);
+
+                    Vector<Match*> bonuses;
+                    if (GetBonusesInMatches(matchesh, bonuses, DIRECTIONALEXPLOSION))
+                    {
+                        // Check HorizontalBomb in the matches
+                        Match* firstpower = GetFirstBonusInMatches(bonuses, DIRECTIONALEXPLOSION, XEXPLOSION);
+
+                        if (firstpower)
+                        {
+                            URHO3D_LOGINFOF("MatchGrid() - GetMatches : entry=%s - HORIZONTAL HasPowers=%u !", entry.ToString().CString(), bonuses.Size());
+
+                            matchesh.Clear();
+
+                            GetAllHorizontalMatches(entry, matchesh, brokenrocks, &hittedwalls);
+
+                            horizBonusActive = true;
+
+                            if (bonuses.Size() == 1)
+                            {
+                                firstpower->effect_ &= ~YEXPLOSION;
+                            }
+                            else
+                            {
+                                for (Vector<Match*>::ConstIterator it=bonuses.Begin(); it!=bonuses.End(); ++it)
+                                {
+                                    Match* power = *it;
+
+                                    if (power == firstpower)
+                                        continue;
+
+                                    if (IsPower(*power, DIRECTIONALEXPLOSION, XEXPLOSION))
+                                    {
+                                        GetAllVerticalMatches(*power, matchesh, brokenrocks, &hittedwalls);
+                                        power->effect_ &= ~XEXPLOSION;
+                                    }
+                                }
+                            }
+
+                            activablebonuses.Push(bonuses);
+                        }
+                    }
+
+                    Match::AddDistinctEntries(matchesh, destroymatches);
+
+                    URHO3D_LOGINFOF("MatchGrid() - GetMatches : entry=%s - HORIZONTAL NumMatches=%u SUCCESS !", entry.ToString().CString(), matchesh.Size());
+                }
+            }
+
+            // Vertical Matches
+            if (activedRules_[VERTICALMATCH])
+            {
+                Vector<Match*> matchesv;
+
+                matchesv.Push(&entry);
+                CheckMatches_Vertical(entry, matchesv);
+
+                if (matchesv.Size() >= Match::MINIMALMATCHES)
+                {
+                    Match::AddDistinctEntries(matchesv, successmatches);
+
+                    // Check VerticalBomb in the matches
+                    Vector<Match*> bonuses;
+                    if (GetBonusesInMatches(matchesv, bonuses, DIRECTIONALEXPLOSION))
+                    {
+                        // Check HorizontalBomb in the matches
+                        Match* firstpower = GetFirstBonusInMatches(bonuses, DIRECTIONALEXPLOSION, YEXPLOSION);
+
+                        if (firstpower)
+                        {
+                            URHO3D_LOGINFOF("MatchGrid() - GetMatches : entry=%s - VERTICAL HasPowers=%u !", entry.ToString().CString(), bonuses.Size());
+
+                            matchesv.Clear();
+
+                            GetAllVerticalMatches(entry, matchesv, brokenrocks, &hittedwalls);
+
+                            if (!horizBonusActive && bonuses.Size() == 1)
+                                firstpower->effect_ &= ~XEXPLOSION;
+                            else
+                            {
+                                for (Vector<Match*>::ConstIterator it=bonuses.Begin(); it!=bonuses.End(); ++it)
+                                {
+                                    Match* power = *it;
+
+                                    if (power == firstpower)
+                                        continue;
+
+                                    if (IsPower(*power, DIRECTIONALEXPLOSION, YEXPLOSION))
+                                    {
+                                        GetAllHorizontalMatches(*power, matchesv, brokenrocks, &hittedwalls);
+                                        power->effect_ &= ~YEXPLOSION;
+                                    }
+                                }
+                            }
+
+                            activablebonuses.Push(bonuses);
+                        }
+                    }
+
+        //            if (GetBonusesInMatches(matchesv, bonuses, DIRECTIONALEXPLOSION, YEXPLOSION))
+        //            {
+        //                matchesv.Clear();
+        //
+        //                GetAllVerticalMatches(entry, matchesv, brokenrocks, &hittedwalls);
+        //
+        //                activablebonuses.Push(bonuses);
+        //
+        //                Match* bonus = *bonuses.Begin();
+        //
+        //                if (!horizBonusActive)
+        //                    bonus->effect_ &= ~XEXPLOSION;
+        //
+        //                for (Vector<Match*>::ConstIterator it=bonuses.Begin()+1; it!=bonuses.End(); ++it)
+        //                {
+        //                    GetAllHorizontalMatches(**it, matchesv, brokenrocks, &hittedwalls);
+        //                    (*it)->effect_ &= ~YEXPLOSION;
+        //                }
+        //            }
+
+                    Match::AddDistinctEntries(matchesv, destroymatches);
+
+                    URHO3D_LOGINFOF("MatchGrid() - GetMatches : entry=%s - VERTICAL NumMatches=%u SUCCESS !", entry.ToString().CString(), matchesv.Size());
+                }
+            }
+        }
+        else
+        {
+            Vector<Match*> matchesh;
+            Vector<Match*> matchesv;
+
+            // Horizontal Matches
+            if (activedRules_[HORIZONTALMATCH])
+            {
+                matchesh.Push(&entry);
+                CheckMatches_Horizontal(entry, matchesh);
+
+                if (matchesh.Size() >= Match::MINIMALMATCHES)
+                {
+                    unsigned nummatches = matchesh.Size();
+
+                    Match::AddDistinctEntries(matchesh, successmatches);
+                    Match::AddDistinctEntries(matchesh, destroymatches);
+
+                    Vector<Match*> bonuses;
+                    if (GetBonusesInMatches(matchesh, bonuses, DIRECTIONALEXPLOSION))
+                    {
+                        for (Vector<Match*>::ConstIterator it=bonuses.Begin(); it!=bonuses.End(); ++it)
+                        {
+                            Match* power = *it;
+                            if (IsPower(*power, DIRECTIONALEXPLOSION, XEXPLOSION))
+                            {
+                                GetAllHorizontalMatches(*power, matchesh, brokenrocks, &hittedwalls);
+                                Match::AddDistinctEntries(matchesh, destroymatches);
+                                nummatches += matchesh.Size();
+                            }
+                            if (IsPower(*power, DIRECTIONALEXPLOSION, YEXPLOSION))
+                            {
+                                GetAllVerticalMatches(*power, matchesv, brokenrocks, &hittedwalls);
+                                Match::AddDistinctEntries(matchesv, destroymatches);
+                                nummatches += matchesv.Size();
+                            }
+                        }
+
+                        activablebonuses.Push(bonuses);
+                    }
+
+                    URHO3D_LOGINFOF("MatchGrid() - GetMatches : entry=%s - free HORIZONTAL NumMatches=%u SUCCESS !", entry.ToString().CString(), nummatches);
+                }
+            }
+
+            // Vertical Matches
+            if (activedRules_[VERTICALMATCH])
+            {
+                matchesh.Clear();
+                matchesv.Clear();
+
+                matchesv.Push(&entry);
+                CheckMatches_Vertical(entry, matchesv);
+
+                if (matchesv.Size() >= Match::MINIMALMATCHES)
+                {
+                    unsigned nummatches = matchesv.Size();
+
+                    Match::AddDistinctEntries(matchesv, successmatches);
+                    Match::AddDistinctEntries(matchesv, destroymatches);
+
+                    Vector<Match*> bonuses;
+                    if (GetBonusesInMatches(matchesv, bonuses, DIRECTIONALEXPLOSION))
+                    {
+                        for (Vector<Match*>::ConstIterator it=bonuses.Begin(); it!=bonuses.End(); ++it)
+                        {
+                            Match* power = *it;
+                            if (IsPower(*power, DIRECTIONALEXPLOSION, XEXPLOSION))
+                            {
+                                GetAllHorizontalMatches(*power, matchesh, brokenrocks, &hittedwalls);
+                                Match::AddDistinctEntries(matchesh, destroymatches);
+                                nummatches += matchesh.Size();
+                            }
+                            if (IsPower(*power, DIRECTIONALEXPLOSION, YEXPLOSION))
+                            {
+                                GetAllVerticalMatches(*power, matchesv, brokenrocks, &hittedwalls);
+                                Match::AddDistinctEntries(matchesv, destroymatches);
+                                nummatches += matchesv.Size();
+                            }
+                        }
+
+                        activablebonuses.Push(bonuses);
+                    }
+
+                    URHO3D_LOGINFOF("MatchGrid() - GetMatches : entry=%s - free VERTICAL NumMatches=%u SUCCESS !", entry.ToString().CString(), nummatches);
+                }
+            }
+        }
+    }
     return destroymatches.Size() >= Match::MINIMALMATCHES;
 }
 
@@ -2973,11 +3121,6 @@ void MatchGrid::CheckMatches_Squares(const Match& entry, Vector<Match*>& matches
         matches.Push(&matches_(entry.x_-1, entry.y_-1));
         matches.Push(&matches_(entry.x_, entry.y_-1));
     }
-}
-
-void MatchGrid::CheckMatches_L(const Match& entry, Vector<Match*>& matches)
-{
-    /// TODO
 }
 
 void MatchGrid::CheckMatches_NeighborHood(const Match& entry, Vector<Match*>& matches)
