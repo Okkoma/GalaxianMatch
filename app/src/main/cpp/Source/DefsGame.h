@@ -7,8 +7,6 @@
 #include <Urho3D/Scene/Scene.h>
 #include <Urho3D/Engine/Application.h>
 
-#include "DefsJNI.h"
-
 #include "Graphics2D.h"
 
 #include "MemoryObjects.h"
@@ -51,3 +49,4 @@ struct GOTInfo
 };
 
 const String TRIGATTACK("Trig_Attack");
+

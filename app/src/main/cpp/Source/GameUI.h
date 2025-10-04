@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Urho3D/UI/Menu.h>
+
 namespace Urho3D
 {
     class Object;
@@ -10,8 +12,6 @@ namespace Urho3D
 
 class DelayAction;
 class DelayInformer;
-
-#include <Urho3D/UI/Menu.h>
 
 #include "Graphics2D.h"
 

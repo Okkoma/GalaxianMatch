@@ -46,6 +46,8 @@
 
 #include "MAN_Matches.h"
 
+#include "DefsJNI.h"
+
 #include "sOptions.h"
 
 //const String OPTIONS_XML("UI/Options1.xml);
