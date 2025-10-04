@@ -1,7 +1,9 @@
 #include <Urho3D/Urho3D.h>
 #include <Urho3D/Core/Context.h>
-#include "../../Source/Components/SplinePath2D.h"
 #include <catch2/catch_test_macros.hpp>
+
+#include "SplinePath2D.h"
+
 
 TEST_CASE("SplinePath2D Test", "[components]") {
     Urho3D::Context context;

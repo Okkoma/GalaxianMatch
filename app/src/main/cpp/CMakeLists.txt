@@ -100,7 +100,3 @@ if (SPACEMATCH_WITH_NETWORK)
     endif ()
 endif ()
 
-if (SPACEMATCH_WITH_TEST)
-    add_subdirectory (ThirdParty/catch2)
-    add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/Test)
-endif ()
