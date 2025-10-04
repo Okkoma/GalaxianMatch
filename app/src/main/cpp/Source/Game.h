@@ -1,11 +1,6 @@
 #pragma once
 
-#include <Urho3D/Engine/Application.h>
-
-#include "DefsJNI.h"
-
 #include "GameUI.h"
-
 
 using namespace Urho3D;
 

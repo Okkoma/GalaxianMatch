@@ -5,6 +5,9 @@
 #include <Urho3D/Core/Context.h>
 #include <Urho3D/Scene/Node.h>
 #include <Urho3D/Scene/Scene.h>
+#include <Urho3D/Engine/Application.h>
+
+#include "DefsJNI.h"
 
 #include "Graphics2D.h"
 
@@ -14,6 +17,7 @@
 #ifdef WIN32
 #undef MessageBox
 #undef GetObject
+#undef TRANSPARENT
 #endif
 
 #ifdef __ANDROID__
