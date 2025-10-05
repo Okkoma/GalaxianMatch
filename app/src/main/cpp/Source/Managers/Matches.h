@@ -326,6 +326,8 @@ public :
     /// taille des bricks
     static void SetGridUnit(float size) { gridunit_ = size; }
     static void SetAuthorizedTypes(const StringHash& category, const Vector<StringHash>& types);
+    static void SetDefaultActivedRules(bool enabled);
+    static void SetActivedRule(int rule, bool enabled=true);
 
     void SetId(int id) { gridid_ = id; }
     void ClearGrid();
@@ -410,6 +412,7 @@ public :
     void GetActivableBonuses(Vector<Match*>& matches, Vector<Match*>& activablebonuses);
     bool GetMatches(Match* entry, Vector<Match*>& destroymatches, Vector<Match*>& successmatches, Vector<Match*>& activablebonuses, Vector<Match*>& brokenrocks, Vector<WallInfo>& hittedwalls);
     void GetHints(unsigned imatch, Vector<Vector<Match*> >& hintstable);
+    unsigned GetIndex(int gridx, int gridy) const;
     Match* GetMatch(Node* node);
     Match& GetMatch(int x, int y);
     Node* GetObject(const Match& m) const;
@@ -457,6 +460,7 @@ private:
     
     void GetMinMaxX(Vector<Match*>& matches, Match*& min, Match*& max);
     void GetMinMaxY(Vector<Match*>& matches, Match*& min, Match*& max);
+    Vector<Match*> GetSameMatches(Vector<Match*>& m1, Vector<Match*>& m2);
 
     void CheckMatches_Horizontal(const Match& entry, Vector<Match*>& matches);
     void CheckMatches_Vertical(const Match& entry, Vector<Match*>& matches);
@@ -469,7 +473,8 @@ private:
     void CheckHints_Horizontal(Match& X, Vector<Vector<Match*> >& hints);
     void CheckHints_Vertical(Match& X, Vector<Vector<Match*> >& hints);
     void CheckHints_Square(Match& X, Vector<Vector<Match*> >& hints);
-
+    void CheckHints_L(Match& X, Vector<Vector<Match*> >& hints);
+    
     /// Grid Infos
     int gridid_;
     unsigned char dimension_, width_, height_;
@@ -509,6 +514,7 @@ private:
     /// Authorized Objects
     static HashMap<StringHash, Vector<StringHash> > authorizedTypes_;
     static Vector<int> authorizedColors_;
+    static bool activedRules_[NUMMATCHRULES];
 
     static float gridunit_;
     static int optionSameType_;

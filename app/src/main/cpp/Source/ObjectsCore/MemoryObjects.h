@@ -110,6 +110,7 @@ public:
     const size_t Height() const { return height_; }
     const size_t Width() const { return width_; }
     const size_t Size() const { return storage_.Size(); }
+    unsigned Index(unsigned x, unsigned y) const { return y * width_ + x; }
     T* Buffer() { return &storage_[0]; }
 
 private:

@@ -66,7 +66,7 @@ const char* ColorTypeNames[] =
 const GridTile GridTile::EMPTY = GridTile();
 int GridTile::WALLCHANCE = 0;
 
-bool activedRules_[NUMMATCHRULES];
+
 
 const Quaternion HINTROTATE_MIN = Quaternion(-30.f);
 const Quaternion HINTROTATE_MAX = Quaternion(30.f);
@@ -110,7 +110,7 @@ void Match::DumpMatches(Vector<Match*>& matches)
 {
     String s;
     for (Vector<Match*>::ConstIterator it=matches.Begin(); it!=matches.End(); ++it)
-        s += String((long unsigned)(void*)(*it)) + " - ";
+        s += String((long long unsigned)(void*)(*it)) + " - ";
 
     URHO3D_LOGINFOF("Match() - DumpMatches : Num=%u Matches=%s", matches.Size(), s.CString());
 }
@@ -120,7 +120,7 @@ int MatchGrid::optionSameType_     = 0;
 int MatchGrid::optionCheckMatches_ = 0;
 HashMap<StringHash, Vector<StringHash> > MatchGrid::authorizedTypes_;
 Vector<int> MatchGrid::authorizedColors_;
-
+bool MatchGrid::activedRules_[NUMMATCHRULES];
 
 MatchGrid::MatchGrid()
 {
@@ -209,6 +209,8 @@ void MatchGrid::SetPhysicsEnable(bool enable)
 
 void MatchGrid::SetLayout(int dimension, GridLayout layout, HorizontalAlignment halign, VerticalAlignment valign, bool randomwalls)
 {
+    SetDefaultActivedRules(true);
+
     width_ = height_ = 0;
 
     dimension_ = Clamp(dimension, Match::MINDIMENSION, Match::MAXDIMENSION);
@@ -485,6 +487,17 @@ void MatchGrid::SetAuthorizedTypes(const StringHash& category, const Vector<Stri
     MatchGrid::authorizedTypes_[category] = types;
 }
 
+void MatchGrid::SetDefaultActivedRules(bool enabled)
+{
+    for (int i=0; i < NUMMATCHRULES; i++)
+        activedRules_[i] = enabled;
+}
+
+void MatchGrid::SetActivedRule(int rule, bool enabled)
+{
+    activedRules_[rule] = enabled;
+}
+
 
 void MatchGrid::Load(VectorBuffer& buffer)
 {
@@ -587,9 +600,6 @@ void MatchGrid::Save(VectorBuffer& buffer)
 void MatchGrid::Create(Vector<Match*>& newmatches)
 {
     URHO3D_LOGINFO("MatchGrid() - Create : ...");
-
-    for (int i=0; i < NUMMATCHRULES; i++)
-        activedRules_[i] = true;
 
     String gridname;
     gridname.AppendWithFormat("Grid%d", gridid_);
@@ -2444,6 +2454,20 @@ void MatchGrid::GetMinMaxY(Vector<Match*>& matches, Match*& min, Match*& max)
     }
 }
 
+Vector<Match*> MatchGrid::GetSameMatches(Vector<Match*>& m1, Vector<Match*>& m2)
+{
+    Vector<Match*> s;
+    for (Match* match1 : m1)
+    {
+        for (Match* match2 : m2)
+        {
+            if (match1 == match2)
+                s.Push(match1);
+        }
+    }
+    return s;
+}
+
 bool MatchGrid::GetMatches(Match* match, Vector<Match*>& destroymatches, Vector<Match*>& successmatches, Vector<Match*>& activablebonuses, Vector<Match*>& brokenrocks, Vector<WallInfo>& hittedwalls)
 {
     if (!grid_(match->x_, match->y_).ground_)
@@ -2580,11 +2604,12 @@ bool MatchGrid::GetMatches(Match* match, Vector<Match*>& destroymatches, Vector<
         if (matchesq.Size() > Match::MINIMALMATCHES)
         {
             Match::AddDistinctEntries(matchesq, successmatches);
-
-			// TODO
-//            entry.effect_ = SQREXPLOSION;
-//            Match::AddDistinctEntry(&entry, activablebonuses);
             Match::AddDistinctEntries(matchesq, destroymatches);
+
+            // TODO
+            //entry.effect_ = SQREXPLOSION;
+            entry.effect_ = XYEXPLOSION;
+            Match::AddDistinctEntry(&entry, activablebonuses);
 
             URHO3D_LOGINFOF("MatchGrid() - GetMatches : entry=%s - SQUAREMATCH NumMatches=%u SUCCESS !", entry.ToString().CString(), matchesq.Size());
         }
@@ -2649,27 +2674,11 @@ bool MatchGrid::GetMatches(Match* match, Vector<Match*>& destroymatches, Vector<
             Match::AddDistinctEntries(matchesv, successmatches);
             Match::AddDistinctEntries(matchesv, destroymatches);
 
-            Vector<Match*> bonuses;
-            if (GetBonusesInMatches(matchesh, bonuses, DIRECTIONALEXPLOSION))
+            Vector<Match*> sames = GetSameMatches(matchesh, matchesv);
+            if (sames.Size())
             {
-                for (Vector<Match*>::ConstIterator it=bonuses.Begin(); it!=bonuses.End(); ++it)
-                {
-                    Match* power = *it;
-                    if (IsPower(*power, DIRECTIONALEXPLOSION, XEXPLOSION))
-                    {
-                        GetAllHorizontalMatches(*power, matchesh, brokenrocks, &hittedwalls);
-                        Match::AddDistinctEntries(matchesh, destroymatches);
-                        nummatches += matchesh.Size();
-                    }
-                    if (IsPower(*power, DIRECTIONALEXPLOSION, YEXPLOSION))
-                    {
-                        GetAllVerticalMatches(*power, matchesv, brokenrocks, &hittedwalls);
-                        Match::AddDistinctEntries(matchesv, destroymatches);
-                        nummatches += matchesv.Size();
-                    }
-                }
-
-                activablebonuses.Push(bonuses);
+                sames.Front()->effect_ = XYEXPLOSION;
+                Match::AddDistinctEntry(sames.Front(), activablebonuses);
             }
 
             URHO3D_LOGINFOF("MatchGrid() - GetMatches : entry=%s - L MATCH NumMatches=%u SUCCESS !", entry.ToString().CString(), nummatches);
@@ -3220,9 +3229,14 @@ bool MatchGrid::IsPowerActivable(Match& X)
     Vector<Vector<Match*> > hintstable;
 
     CheckHints_Explosion(X, hintstable);
-    CheckHints_Square(X, hintstable);
-    CheckHints_Horizontal(X, hintstable);
-    CheckHints_Vertical(X, hintstable);
+    if (activedRules_[SQUAREMATCH])
+        CheckHints_Square(X, hintstable);
+    if (activedRules_[LMATCH])
+        CheckHints_L(X, hintstable);
+    if (activedRules_[HORIZONTALMATCH])
+        CheckHints_Horizontal(X, hintstable);
+    if (activedRules_[VERTICALMATCH])
+        CheckHints_Vertical(X, hintstable);
 
     return hintstable.Size();
 }
@@ -3241,13 +3255,16 @@ void MatchGrid::GetHints(unsigned imatch, Vector<Vector<Match*> >& hintstable)
     else
     {
         unsigned oldhintsize = hintstable.Size();
-
+        
         CheckHints_Explosion(X, hintstable);
-        CheckHints_Square(X, hintstable);
-        CheckHints_Horizontal(X, hintstable);
-        CheckHints_Vertical(X, hintstable);
-        /// TODO
-        // CheckHints_L(X, hintstable);
+        if (activedRules_[SQUAREMATCH])
+            CheckHints_Square(X, hintstable);
+        if (activedRules_[LMATCH])
+            CheckHints_L(X, hintstable);
+        if (activedRules_[HORIZONTALMATCH])
+            CheckHints_Horizontal(X, hintstable);
+        if (activedRules_[VERTICALMATCH])
+            CheckHints_Vertical(X, hintstable);
 
         // Add Power Tutorial
         if (GameStatics::playerState_->tutorialEnabled_ && IsPower(X) && hintstable.Size() > oldhintsize)
@@ -3275,6 +3292,10 @@ void MatchGrid::GetHints(unsigned imatch, Vector<Vector<Match*> >& hintstable)
     }
 }
 
+unsigned MatchGrid::GetIndex(int x, int y) const
+{
+    return grid_.Index(x, y);
+}
 
 void MatchGrid::CheckHints_Explosion(Match& X, Vector<Vector<Match*> >& hints)
 {
@@ -3966,6 +3987,321 @@ void MatchGrid::CheckHints_Square(Match& X, Vector<Vector<Match*> >& hints)
             hints.Push(matches);
         }
     }
+}
+
+void MatchGrid::CheckHints_L(Match& X, Vector<Vector<Match*> >& hints)
+{
+    // =============================================
+    // L HORIZONTAUX
+    // =============================================
+
+    // L horizontal bas-droite
+    // X Y Z .
+    // . . v W
+    if (X.y_ < height_-1 && X.x_ < width_-3)
+    {
+        Match& Y = matches_(X.x_+1, X.y_);
+        Match& Z = matches_(X.x_+2, X.y_);
+        Match& v = matches_(X.x_+2, X.y_+1);
+        Match& W = matches_(X.x_+3, X.y_+1);
+
+        if (HaveSameMatchType(X, Y, Z, W) && IsSelectableObject(v) &&
+            HasNoWalls(X, WO_WALLRIGHT) && HasNoWalls(Y, WO_WALLLEFT | WO_WALLRIGHT) &&
+            HasNoWalls(Z, WO_WALLLEFT | WO_WALLSOUTH) && HasNoWalls(W, WO_WALLLEFT) &&
+            HasNoWalls(v, WO_WALLNORTH | WO_WALLRIGHT))
+        {
+            Vector<Match*> matches;
+            matches.Push(&X);
+            matches.Push(&Y);
+            matches.Push(&Z);
+            matches.Push(&W);
+            hints.Push(matches);
+        }
+    }
+    
+    // L horizontal bas-gauche
+    // . Z Y X
+    // W v . .
+    if (X.y_ < height_-1 && X.x_ > 2)
+    {
+        Match& Y = matches_(X.x_-1, X.y_);
+        Match& Z = matches_(X.x_-2, X.y_);
+        Match& v = matches_(X.x_-2, X.y_+1);
+        Match& W = matches_(X.x_-3, X.y_+1);
+        
+        if (HaveSameMatchType(X, Y, Z, W) && IsSelectableObject(v) &&
+            HasNoWalls(X, WO_WALLLEFT) && HasNoWalls(Y, WO_WALLRIGHT | WO_WALLLEFT) &&
+            HasNoWalls(Z, WO_WALLRIGHT | WO_WALLSOUTH) && HasNoWalls(W, WO_WALLRIGHT) &&
+            HasNoWalls(v, WO_WALLNORTH | WO_WALLLEFT))
+        {
+            Vector<Match*> matches;
+            matches.Push(&X);
+            matches.Push(&Y);
+            matches.Push(&Z);
+            matches.Push(&W);
+            hints.Push(matches);
+        }
+    }
+    
+    // L horizontal haut-droite
+    // . . v W
+    // X Y Z .
+    if (X.y_ > 0 && X.x_ < width_-3)
+    {
+        Match& Y = matches_(X.x_+1, X.y_);
+        Match& Z = matches_(X.x_+2, X.y_);
+        Match& v = matches_(X.x_+2, X.y_-1);
+        Match& W = matches_(X.x_+3, X.y_-1);
+        
+        if (HaveSameMatchType(X, Y, Z, W) && IsSelectableObject(v) &&
+            HasNoWalls(X, WO_WALLRIGHT) && HasNoWalls(Y, WO_WALLLEFT | WO_WALLRIGHT) &&
+            HasNoWalls(Z, WO_WALLLEFT | WO_WALLNORTH) && HasNoWalls(W, WO_WALLLEFT) &&
+            HasNoWalls(v, WO_WALLSOUTH | WO_WALLRIGHT))
+        {
+            Vector<Match*> matches;
+            matches.Push(&X);
+            matches.Push(&Y);
+            matches.Push(&Z);
+            matches.Push(&W);
+            hints.Push(matches);
+        }
+    }
+    
+    // L horizontal haut-gauche
+    // W v . .
+    // . Z Y X
+    if (X.y_ > 0 && X.x_ > 2)
+    {
+        Match& Y = matches_(X.x_-1, X.y_);
+        Match& Z = matches_(X.x_-2, X.y_);
+        Match& v = matches_(X.x_-2, X.y_-1);
+        Match& W = matches_(X.x_-3, X.y_-1);
+        
+        if (HaveSameMatchType(X, Y, Z, W) && IsSelectableObject(v) &&
+            HasNoWalls(X, WO_WALLLEFT) && HasNoWalls(Y, WO_WALLRIGHT | WO_WALLLEFT) &&
+            HasNoWalls(Z, WO_WALLRIGHT | WO_WALLNORTH) && HasNoWalls(W, WO_WALLRIGHT) &&
+            HasNoWalls(v, WO_WALLSOUTH | WO_WALLLEFT))
+        {
+            Vector<Match*> matches;
+            matches.Push(&X);
+            matches.Push(&Y);
+            matches.Push(&Z);
+            matches.Push(&W);
+            hints.Push(matches);
+        }
+    }
+    
+    // L horizontal bas-droite miroir
+    // . . v
+    // X Y W
+    // . . Z
+    if (X.y_ > 0 && X.y_ < height_-1 && X.x_ < width_-2)
+    {
+        Match& Y = matches_(X.x_+1, X.y_);
+        Match& W = matches_(X.x_+2, X.y_);
+        Match& v = matches_(X.x_+2, X.y_-1);
+        Match& Z = matches_(X.x_+2, X.y_+1);
+        
+        if (HaveSameMatchType(X, Y, Z, W) && IsSelectableObject(v) &&
+            HasNoWalls(X, WO_WALLRIGHT) && HasNoWalls(Y, WO_WALLLEFT | WO_WALLRIGHT) &&
+            HasNoWalls(W, WO_WALLLEFT | WO_WALLNORTH | WO_WALLSOUTH) && HasNoWalls(Z, WO_WALLNORTH) &&
+            HasNoWalls(v, WO_WALLSOUTH | WO_WALLNORTH | WO_WALLLEFT))
+        {
+            Vector<Match*> matches;
+            matches.Push(&X);
+            matches.Push(&Y);
+            matches.Push(&W);
+            matches.Push(&Z);
+            hints.Push(matches);
+        }
+    }
+    
+    // L horizontal bas-gauche miroir
+    // v . .
+    // W Y X
+    // Z . .
+    if (X.y_ > 0 && X.y_ < height_-1 && X.x_ > 1)
+    {
+        Match& Y = matches_(X.x_-1, X.y_);
+        Match& W = matches_(X.x_-2, X.y_);
+        Match& v = matches_(X.x_-2, X.y_-1);
+        Match& Z = matches_(X.x_-2, X.y_+1);
+        
+        if (HaveSameMatchType(X, Y, Z, W) && IsSelectableObject(v) &&
+            HasNoWalls(X, WO_WALLLEFT) && HasNoWalls(Y, WO_WALLRIGHT | WO_WALLLEFT) &&
+            HasNoWalls(W, WO_WALLRIGHT | WO_WALLNORTH | WO_WALLSOUTH) && HasNoWalls(Z, WO_WALLNORTH) &&
+            HasNoWalls(v, WO_WALLSOUTH | WO_WALLNORTH | WO_WALLRIGHT))
+        {
+            Vector<Match*> matches;
+            matches.Push(&X);
+            matches.Push(&Y);
+            matches.Push(&W);
+            matches.Push(&Z);
+            hints.Push(matches);
+        }
+    }
+    
+    // L horizontal haut-droite miroir
+    // . . Z
+    // X Y W
+    // . . v
+    if (X.y_ > 0 && X.y_ < height_-1 && X.x_ < width_-2)
+    {
+        Match& Y = matches_(X.x_+1, X.y_);
+        Match& W = matches_(X.x_+2, X.y_);
+        Match& Z = matches_(X.x_+2, X.y_-1);
+        Match& v = matches_(X.x_+2, X.y_+1);
+        
+        if (HaveSameMatchType(X, Y, Z, W) && IsSelectableObject(v) &&
+            HasNoWalls(X, WO_WALLRIGHT) && HasNoWalls(Y, WO_WALLLEFT | WO_WALLRIGHT) &&
+            HasNoWalls(W, WO_WALLLEFT | WO_WALLNORTH | WO_WALLSOUTH) && HasNoWalls(Z, WO_WALLSOUTH) &&
+            HasNoWalls(v, WO_WALLSOUTH | WO_WALLNORTH | WO_WALLLEFT))
+        {
+            Vector<Match*> matches;
+            matches.Push(&X);
+            matches.Push(&Y);
+            matches.Push(&W);
+            matches.Push(&Z);
+            hints.Push(matches);
+        }
+    }
+        
+    // L horizontal haut-gauche miroir
+    // Z . .
+    // W Y X
+    // v . .
+    if (X.y_ > 0 && X.y_ < height_-1 && X.x_ > 1)
+    {
+        Match& Y = matches_(X.x_-1, X.y_);
+        Match& W = matches_(X.x_-2, X.y_);
+        Match& Z = matches_(X.x_-2, X.y_-1);
+        Match& v = matches_(X.x_-2, X.y_+1);
+        
+        if (HaveSameMatchType(X, Y, Z, W) && IsSelectableObject(v) &&
+            HasNoWalls(X, WO_WALLLEFT) && HasNoWalls(Y, WO_WALLRIGHT | WO_WALLLEFT) &&
+            HasNoWalls(W, WO_WALLRIGHT | WO_WALLNORTH | WO_WALLSOUTH) && HasNoWalls(Z, WO_WALLSOUTH) &&
+            HasNoWalls(v, WO_WALLSOUTH | WO_WALLNORTH | WO_WALLRIGHT))
+        {
+            Vector<Match*> matches;
+            matches.Push(&X);
+            matches.Push(&Y);
+            matches.Push(&W);
+            matches.Push(&Z);
+            hints.Push(matches);
+        }
+    }
+
+    // =============================================
+    // L VERTICAUX (debout) 
+    // =============================================
+            
+    // L vertical bas-droite 
+    // X .
+    // Y .
+    // Z W
+    // . v
+    if (X.y_ < height_-3 && X.x_ < width_-1)
+    {
+        Match& Y = matches_(X.x_, X.y_+1);
+        Match& Z = matches_(X.x_, X.y_+2);
+        Match& W = matches_(X.x_+1, X.y_+2);
+        Match& v = matches_(X.x_+1, X.y_+3);
+            
+        if (HaveSameMatchType(X, Y, Z, W) && IsSelectableObject(v) &&
+            HasNoWalls(X, WO_WALLSOUTH) && HasNoWalls(Y, WO_WALLNORTH | WO_WALLSOUTH) &&
+            HasNoWalls(Z, WO_WALLNORTH | WO_WALLSOUTH | WO_WALLRIGHT) && HasNoWalls(W, WO_WALLLEFT) &&
+            HasNoWalls(v, WO_WALLNORTH | WO_WALLLEFT))
+        {
+            Vector<Match*> matches;
+            matches.Push(&X);
+            matches.Push(&Y);
+            matches.Push(&Z);
+            matches.Push(&W);
+            hints.Push(matches);
+        }
+    }
+        
+    // L vertical bas-gauche
+    // . X
+    // . Y
+    // W Z
+    // v .
+    if (X.y_ < height_-3 && X.x_ > 0)
+    {
+        Match& Y = matches_(X.x_, X.y_+1);
+        Match& Z = matches_(X.x_, X.y_+2);
+        Match& W = matches_(X.x_-1, X.y_+2);
+        Match& v = matches_(X.x_-1, X.y_+3);
+            
+        if (HaveSameMatchType(X, Y, Z, W) && IsSelectableObject(v) &&
+            HasNoWalls(X, WO_WALLSOUTH) && HasNoWalls(Y, WO_WALLNORTH | WO_WALLSOUTH) &&
+            HasNoWalls(Z, WO_WALLNORTH | WO_WALLSOUTH | WO_WALLLEFT) && HasNoWalls(W, WO_WALLRIGHT) &&
+            HasNoWalls(v, WO_WALLNORTH | WO_WALLRIGHT))
+        {
+            Vector<Match*> matches;
+            matches.Push(&X);
+            matches.Push(&Y);
+            matches.Push(&Z);
+            matches.Push(&W);
+            hints.Push(matches);
+        }
+    }
+        
+    // L vertical haut-droite
+    // . v
+    // Z W
+    // Y .
+    // X .
+    if (X.y_ > 2 && X.x_ < width_-1)
+    {
+        Match& Y = matches_(X.x_, X.y_-1);
+        Match& Z = matches_(X.x_, X.y_-2);
+        Match& W = matches_(X.x_+1, X.y_-2);
+        Match& v = matches_(X.x_+1, X.y_-3);
+            
+        if (HaveSameMatchType(X, Y, Z, W) && IsSelectableObject(v) &&
+            HasNoWalls(X, WO_WALLNORTH) && HasNoWalls(Y, WO_WALLNORTH | WO_WALLSOUTH) &&
+            HasNoWalls(Z, WO_WALLNORTH | WO_WALLSOUTH | WO_WALLRIGHT) && HasNoWalls(W, WO_WALLLEFT) &&
+            HasNoWalls(v, WO_WALLSOUTH | WO_WALLLEFT))
+        {
+            Vector<Match*> matches;
+            matches.Push(&X);
+            matches.Push(&Y);
+            matches.Push(&Z);
+            matches.Push(&W);
+            hints.Push(matches);
+        }
+    }
+        
+    // L vertical haut-gauche
+    // v .
+    // W Z
+    // . Y
+    // . X
+    if (X.y_ > 2 && X.x_ > 0)
+    {
+        Match& Y = matches_(X.x_, X.y_-1);
+        Match& Z = matches_(X.x_, X.y_-2);
+        Match& W = matches_(X.x_-1, X.y_-2);
+        Match& v = matches_(X.x_-1, X.y_-3);
+            
+        if (HaveSameMatchType(X, Y, Z, W) && IsSelectableObject(v) &&
+            HasNoWalls(X, WO_WALLNORTH) && HasNoWalls(Y, WO_WALLNORTH | WO_WALLSOUTH) &&
+            HasNoWalls(Z, WO_WALLNORTH | WO_WALLSOUTH | WO_WALLLEFT) && HasNoWalls(W, WO_WALLRIGHT) &&
+            HasNoWalls(v, WO_WALLSOUTH | WO_WALLRIGHT))
+        {
+            Vector<Match*> matches;
+            matches.Push(&X);
+            matches.Push(&Y);
+            matches.Push(&Z);
+            matches.Push(&W);
+            hints.Push(matches);
+        }
+    }
+
+    // TODO : finish the cases
+    
+
 }
 
 

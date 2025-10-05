@@ -164,3 +164,30 @@ TEST_CASE("GetMatches - L shape (3 + 2 avec angle commun)")
     REQUIRE(successmatches.Size() >= 4);
     REQUIRE(destroymatches.Size() >= 4);
 }
+
+
+TEST_CASE("GetHints - L shape")
+{
+    MatchGrid grid;
+    grid.SetLayout(7, L_Square, HA_LEFT, VA_TOP, false);
+    grid.SetDefaultActivedRules(false);
+    grid.SetActivedRule(LMATCH);
+
+    Vector<Match*> newmatches;
+    grid.Create(newmatches);
+    grid.ClearObjects(false);
+
+    // L horizontal bas-droite
+    // X Y Z .
+    // . . v W
+    grid.GetMatch(2, 2).Set(PURPLE, -1, NOEFFECT); // X
+    grid.GetMatch(3, 2).Set(PURPLE, -1, NOEFFECT); // Y
+    grid.GetMatch(4, 2).Set(PURPLE, -1, NOEFFECT); // Z
+    grid.GetMatch(4, 3).Set(RED, -1, NOEFFECT); // v
+    grid.GetMatch(5, 3).Set(PURPLE, -1, NOEFFECT); // W
+
+    Vector<Vector<Match*> > hintstable;
+    grid.GetHints(grid.GetIndex(2,2), hintstable);
+
+    REQUIRE(hintstable.Size() == 1);
+}
